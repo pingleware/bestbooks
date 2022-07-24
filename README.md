@@ -4,4 +4,4 @@ An open-source accounting framework used to build a full fledge accounting bookk
 # New Architecture
 BestBooks is being redesigned to a client-server-desktop model, where the server-deesktop applications operates behind a firewall while the client provides relevant data to the server-desktop.
 
-![New Architectire](assets/new-architecure.png "New Architecture")
+![New Architectire](./assets/new-architecure.png "New Architecture")
