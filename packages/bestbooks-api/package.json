@@ -1,6 +1,6 @@
 {
   "name": "@patrick-ingle/bestbooks-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "API module for BestBooks Accounting Application Framework",
   "main": "index.js",
   "scripts": {
@@ -10,9 +10,9 @@
   "author": "PressPage Entertainment Inc <presspage.entertainment@gmail.com>",
   "license": "CC-BY-4.0",
   "bugs": {
-    "url": "https://github.com/pingleware/bestbooks/issues"
+    "url": "https://support.pingleware.work"
   },
-  "homepage": "https://pingleware.github.io/bestbooks/api",
+  "homepage": "https://github.com/pingleware/bestbooks-api",
   "private": false,
   "engines": {
     "node": ">=6.0.0"

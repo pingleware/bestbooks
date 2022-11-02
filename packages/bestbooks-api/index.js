@@ -11,7 +11,7 @@ rest.use(express.json());
 rest.use(express.urlencoded({ extended: true }));
 
 rest.get("bestbooks/v2/version/", function(req, res){
-
+    res.json({status: 'error', message: 'NOT IMPLEMENTED'});
 });
 rest.get("bestbooks/v2/chartofaccounts/", function(req, res){
     const coa = new core.ChartOfAccounts();
