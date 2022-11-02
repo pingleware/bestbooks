@@ -1,0 +1,27 @@
+{
+  "name": "@pingleware/bestbooks-reports",
+  "version": "1.0.0",
+  "description": "Reports module for BestBooks Accounting Application Framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [],
+  "author": "PressPage Entertainment Inc <presspage.entertainment@gmail.com>",
+  "license": "CC-BY-4.0",
+  "bugs": {
+    "url": "https://github.com/pingleware/bestbooks-reports/issues"
+  },
+  "homepage": "https://pingleware.github.io/bestbooks-reports",
+  "private": false,
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "engineStrict": true,
+  "devDependencies": {
+    "mocha": "^10.1.0"
+  },
+  "dependencies": {
+    "@patrick-ingle/bestbooks-core": "^1.0.0"
+  }
+}
