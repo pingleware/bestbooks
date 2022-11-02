@@ -1,0 +1,4 @@
+bestbooks.db
+node_modules/
+cli/
+test/
