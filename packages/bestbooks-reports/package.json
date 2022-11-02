@@ -1,5 +1,5 @@
 {
-  "name": "@pingleware/bestbooks-reports",
+  "name": "@patrick-ingle/bestbooks-reports",
   "version": "1.0.0",
   "description": "Reports module for BestBooks Accounting Application Framework",
   "main": "index.js",
