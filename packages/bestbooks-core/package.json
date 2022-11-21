@@ -14,9 +14,9 @@
   "author": "PressPage Entertainment Inc DBA PINGLEWARE <maintainers@pingleware.work>",
   "license": "CC-BY-4.0",
   "bugs": {
-    "url": "https://github.com/pingleware/bestbooks/issues"
+    "url": "https://support.pingleware.work"
   },
-  "homepage": "https://pingleware.github.io/bestbooks/core",
+  "homepage": "https://ithub.com/pingleware/bestbooks-core",
   "private": false,
   "engines": {
     "node": ">=6.0.0"
