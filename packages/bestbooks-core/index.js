@@ -26,6 +26,8 @@ const Revenue = require('./revenue');
 const OwnersEquity = require('./ownersEquity');
 // derived from Revenue class
 const Income = require('./income');
+// comapny
+const Company = require('./company');
 
 module.exports = {
     Model: Model,
@@ -43,5 +45,6 @@ module.exports = {
     Equity: Equity,
     Revenue: Revenue,
     OwnersEquity: OwnersEquity,
-    Income: Income
+    Income: Income,
+    Company: Company
 }
