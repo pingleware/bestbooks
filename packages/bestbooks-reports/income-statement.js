@@ -1,6 +1,6 @@
 "use strict"
 
-const core = require('@patrick-ingle/bestbooks-core');
+const core = require('@pingleware/bestbooks-core');
 const Report = require('./report');
 
 class IncomeStatement extends Report {
