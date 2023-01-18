@@ -1,5 +1,5 @@
 {
-  "name": "@patrick-ingle/bestbooks-import",
+  "name": "@pingleware/bestbooks-import",
   "version": "1.0.0",
   "description": "Import module for BestBooks Accounting Application Framework",
   "main": "index.js",
@@ -22,6 +22,6 @@
     "mocha": "^10.1.0"
   },
   "dependencies": {
-    "@patrick-ingle/bestbooks-core": "^1.0.0"
+    "@pingleware/bestbooks-core": "^1.0.0"
   }
 }

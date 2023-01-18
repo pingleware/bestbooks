@@ -1,6 +1,6 @@
 "use strict"
 
-const code = require("@patrick-ingle/bestbooks-core");
+const code = require("@pingleware/bestbooks-core");
 
 async function import_csv() {
     return "NOT IMPLEMENTED";
