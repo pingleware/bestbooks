@@ -1,5 +1,5 @@
 {
-  "name": "@patrick-ingle/bestbooks-core",
+  "name": "@pingleware/bestbooks-core",
   "version": "1.0.0",
   "description": "The core component for BestBooks Accounting Application Framework",
   "main": "index.js",
