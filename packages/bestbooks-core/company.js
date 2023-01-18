@@ -28,7 +28,7 @@ class Company {
         return this.name;
     }
 
-    static async createLedgerTable() {
+    static async createTable() {
         try {
             var sql = `CREATE TABLE IF NOT EXISTS "company" (
                 "id" INTEGER,
