@@ -18,28 +18,83 @@
         <div class="w3-container" id="main">
             <br/><br/><br/>
             <fieldset>
-                <legend>Sales</legend>
+                <legend onclick="expand('sales-dropdown')" style="cursor:pointer;">Sales</legend>
+                <ul class="w3-ul" id="sales-dropdown" style="display:none;">
+                    <li><a href="#" class="w3-button w3-block w3-black">Estimates</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Invoices</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Recurring Invoices</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Payments</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Customer Statements</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Customers</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Products &amp; Invoices</a></li>
+                </ul>
             </fieldset>
             <fieldset>
-                <legend>Purchases</legend>
+                <legend onclick="expand('purchases-dropdown')" style="cursor:pointer;">Purchases</legend>
+                <ul class="w3-ul" id="purchases-dropdown" style="display:none;">
+                    <li><a href="#" class="w3-button w3-block w3-black">Bills</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Receipts</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Vendors</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Products &amp; Services</a></li>
+                </ul>
             </fieldset>
             <fieldset>
-                <legend>Inventory</legend>
+                <legend onclick="expand('inventory-dropdown')" style="cursor:pointer;">Inventory</legend>
+                <ul class="w3-ul" id="inventory-dropdown" style="display:none;">
+                    <li><a href="#" class="w3-button w3-block w3-black">Products</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Services</a></li>
+                </ul>
             </fieldset>
             <fieldset>
-                <legend>Accounting</legend>
+                <legend onclick="expand('accounting-dropdown')" style="cursor:pointer;">Accounting</legend>
+                <ul class="w3-ul" id="accounting-dropdown" style="display:none;">
+                    <li><a href="#" class="w3-button w3-block w3-black">Transactions</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Chart of Accounts</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Journals</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Starting Balances</a></li>
+                </ul>
             </fieldset>
             <fieldset>
-                <legend>Payroll</legend>
+                <legend onclick="expand('banking-dropdown')" style="cursor:pointer;">Banking</legend>
+                <ul class="w3-ul" id="banking-dropdown" style="display:none;">
+                    <li><a href="#" class="w3-button w3-block w3-black">Accounts</a></li>
+                </ul>
             </fieldset>
             <fieldset>
-                <legend>Reports</legend>
+                <legend onclick="expand('payroll-dropdown')" style="cursor:pointer;">Payroll</legend>
+                <ul class="w3-ul" id="payroll-dropdown" style="display:none;">
+                    <li><a href="#" class="w3-button w3-block w3-black">Onboard</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Manage</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Pay</a></li>
+                </ul>
+            </fieldset>
+            <fieldset>
+                <legend onclick="expand('reports-dropdown')" style="cursor:pointer;">Reports</legend>
+                <ul class="w3-ul" id="reports-dropdown" style="display:none;">
+                    <li><a href="#" class="w3-button w3-block w3-black">Balance Sheet</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Income Statement</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Aged Receivables</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Aged Payables</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Trial Balances</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">General Ledger</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Account Transactions</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Income by Customer</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Expense by Vendor</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Sales Tax Report</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Payroll Wage &amp; Tax Report</a></li>
+                </ul>
             </fieldset>
             <fieldset>
                 <legend>Settings</legend>
+                <ul class="w3-ul">
+                    <li><a href="#" class="w3-button w3-block w3-black">Settings</a></li>
+                </ul>
             </fieldset>
             <fieldset>
                 <legend>Help</legend>
+                <ul class="w3-ul">
+                    <li><a href="#" class="w3-button w3-block w3-black">Help</a></li>
+                </ul>
             </fieldset>
             <br/><br/><br/>
         </div>
@@ -99,6 +154,15 @@
                     document.getElementById('year').innerHTML = `2022-${year}`;
                 } else {
                     document.getElementById('year').innerHTML = year;
+                }
+            }
+
+            function expand(element_id) {
+                var element = document.getElementById(element_id);
+                if (element.style.display == "none") {
+                    element.style.display = "block";
+                } else {
+                    element.style.display = "none";
                 }
             }
         </script>
