@@ -32,13 +32,9 @@ class Company {
     }
 
     getCompanies(callback) {
-        this.companies = [];
         var sql = `SELECT * FROM company;`;
         this.model.query(sql, function(result){
-            if (result.length > 0) {
-                this.companies = result;
-            }
-            callback(this.companies);
+            callback(result);
         });
     }
 

@@ -35,7 +35,7 @@
  
      query(sql, callback) {
          this.db.all(sql, (err, rows) => {
-             if (err) throw new Error(err);
+             if (err) callback([]);
              callback(rows);
          });
      }
