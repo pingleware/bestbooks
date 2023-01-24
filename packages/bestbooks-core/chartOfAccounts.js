@@ -19,13 +19,13 @@ class ChartOfAccounts {
         //this.getList();
     }
 
-    async add(name,type) {
+    async add(name,type,company_id=0) {
         try {
             //if (!this.accounts[name]) {
                 this.accounts[name] = type;
                 this.count = this.accounts.length;
 
-                let company_id = localStorage.getItem('company_id') + Number(0);
+                //let company_id = localStorage.getItem('company_id') + Number(0);
                 var account = this.getAccountTypeCode(type);
                 console.log(account);
                 var new_code = `SELECT count(id)+${account[1]} AS code FROM accounts WHERE base_type='${account[0]}'`;
