@@ -14,9 +14,38 @@
         <div class="w3-container w3-blue w3-top">
             <h4>BestBooks<sup>&trade;</sup> Accounting Application Framework</h4>
         </div>
-        <!-- Main Panel -->
-        <div class="w3-container" id="main">
+        <!-- Company Panel -->
+        <div class="w3-container" id="company">
             <br/><br/><br/>
+            <fieldset>
+                <legend>Select Company</legend>
+                <select class="w3-input w3-block" id="company-list"></select>
+                <br/>
+                <button onclick="document.getElementById('add-company-dialog').style.display='block';" class="w3-button w3-block w3-green">Add Company</button>
+            </fieldset>
+            <br/><br/><br/>
+        </div>
+        <!-- Add Company Dialog -->
+        <div id="add-company-dialog" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container w3-white">
+                    <h2 class="w3-green">Add Company</h2>
+                    <label for="company-name">Name</label>
+                    <input type="text" id="company-name" class="w3-input w3-block" value="" />
+                    <label for="company-note">Note(s)</label>
+                    <textarea class="w3-input w3-block" rows="5" id="company-note"></textarea>
+                    <br/>
+                    <button class="w3-button w3-block w3-black" id="add-company">Submit</button>
+                    <br/>
+                    <button class="w3-button w3-block w3-orange" onclick="document.getElementById('add-company-dialog').style.display='none';">Cancel</button>
+                    <br/>
+                </div>
+            </div>
+        </div>
+        <!-- Main Panel -->
+        <div class="w3-container" id="main" style="display:none;">
+            <br/><br/><br/>
+            <div>Company: <b id="main-company-name"></b></div>
             <fieldset>
                 <legend onclick="expand('sales-dropdown')" style="cursor:pointer;">Sales</legend>
                 <ul class="w3-ul" id="sales-dropdown" style="display:none;">
@@ -145,7 +174,10 @@
             </p>
         </div>        
         <!-- JavaScript -->
+        <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
+            var company = { id: 0, name: ''};
+
             window.onload = function() {
                 document.getElementById('version').innerHTML = 'Version ' + localStorage.getItem('version');
 
@@ -155,7 +187,40 @@
                 } else {
                     document.getElementById('year').innerHTML = year;
                 }
+
+                var companies = localStorage.getItem("companies");
+                if (companies.length > 0) {
+                    companies = JSON.parse(localStorage.getItem("companies"));
+                }
+                console.log(companies)
+                document.getElementById("company-list").innerHTML = '<option value="">Select</option>';
+                companies.forEach(function(company){
+                    if (company.name !== "undefined") {
+                        var option = document.createElement('option');
+                        option.value = company.id;
+                        option.innerHTML = company.name;
+                        option.setAttribute("data-name",company.name);
+                        document.getElementById("company-list").appendChild(option);
+                    }
+                })
             }
+
+            document.getElementById("company-list").addEventListener("change", function(e){
+                e.preventDefault();
+                if (this.value !== "") {
+                    company.id = this.value;
+                    company.name = this.options[this.selectedIndex].getAttribute("data-name");
+
+                    document.getElementById("main-company-name").innerHTML = company.name;
+
+                    document.getElementById("company").style.display = "none";
+                    document.getElementById("main").style.display = "block";
+                } else {
+                    company.id = 0;
+                    company.name = '';
+                }
+                console.log(company);
+            })
 
             function expand(element_id) {
                 var element = document.getElementById(element_id);
@@ -165,6 +230,17 @@
                     element.style.display = "none";
                 }
             }
+
+            document.getElementById("add-company").addEventListener("click", function(e){
+                e.preventDefault();
+                var data = {
+                    name: document.getElementById("company-name").value,
+                    note: document.getElementById('company-note').value
+                }
+                SendIPC('add_company',JSON.stringify(data),function(channel,event,result){
+                    console.log(result);
+                })
+            })
         </script>
     </body>
 </html>

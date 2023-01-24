@@ -1,7 +1,7 @@
 const {contextBridge, ipcRenderer} = require("electron");
 
 let validChannels = [
-  "error","open_browser"
+  "error","open_browser","add_company"
 ];
 
 contextBridge.exposeInMainWorld("api", {
@@ -27,3 +27,14 @@ contextBridge.exposeInMainWorld("api", {
 
 var pjson = require('./package.json');
 localStorage.setItem('version', pjson.version);
+
+// Create new tables, if needed?
+const { ChartOfAccounts, Journal, Company} = require('@pingleware/bestbooks-core');
+const company = new Company();
+new Journal();
+new ChartOfAccounts();
+
+company.getCompanies(function(companies){
+  console.log(companies)
+  localStorage.setItem('companies',JSON.stringify(companies));
+})

@@ -35,9 +35,9 @@ var argv = yargs(hideBin(process.argv))
 })
 .option('menu', {
     alias: 'm',
-    type: 'boolean',
+    type: 'string',
     description: 'turns menu on or off',
-    default: false,
+    default: 'off',
     required: false
 })
 .parse()
@@ -77,7 +77,7 @@ function createWindow () {
         mainWindow = null
     });
 
-    if (!menu) {
+    if (menu !== "on") {
         mainWindow.setMenu(null);
     }
 
@@ -116,6 +116,21 @@ ipcMain.on('error', function(evt, data){
     console.log(data);
     mainWindow.webContents.send('error',data);
 });
+
+ipcMain.on('add_company', async function(evt, json){
+    var data = JSON.parse(json);
+    console.log(data);
+    const {Company} = require('@pingleware/bestbooks-core');
+    var company = new Company();
+    company.addCompany(data.name,data.note,
+        function(lastID, changes){
+            var result = {
+                lastID: lastID,
+                changes: changes
+            };
+            mainWindow.webContents.send('add_company',JSON.stringify(result));
+        });
+})
 
 // BESTBOOKS API Server
 const {start_server} = require('@pingleware/bestbooks-api');
