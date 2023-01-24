@@ -50,11 +50,26 @@ class ChartOfAccounts {
         }
     }
 
-    async in_use(name) {
+    in_use(name,callback) {
         try {
-            var sql = `SELECT * FROM journal WHERE account='${name}';`;
+            var sql = `SELECT COUNT(id) AS count FROM journal WHERE account='${name}';`;
+            this.model.query(sql, function(results){
+                if (results[0].count > 0) {
+                    callback(true);
+                } else {
+                    callback(false);
+                }
+            })
+        } catch(error) {
+            console.error(error);
+        }
+    }
+
+    async in_use_sync(name) {
+        try {
+            var sql = `SELECT COUNT(id) AS count FROM journal WHERE account='${name}';`;
             var rows = await this.model.querySync(sql);
-            if (rows.length > 0) {
+            if (rows[0].count > 0) {
                 return true;
             }
             return false;
@@ -67,9 +82,36 @@ class ChartOfAccounts {
         return this.count;
     }
 
-    async getList() {
+    getList(company_id=0,callback) {
+        try {
+            //var sql = `SELECT id,name,type,code FROM accounts;`;
+            var sql = `SELECT a.id,a.name,a.type,a.code,
+            (SELECT COUNT(j.id) FROM journal  j JOIN accounts a ON j.account = a.name) AS count,
+            IFNULL((SELECT  j.debit-j.credit  FROM journal j JOIN accounts a ON j.account=a.name) ,0.00) AS balance 
+            FROM accounts `;
+            if (company_id > 0) {
+                //sql = `SELECT id,name,type,code,false AS in_use FROM accounts WHERE company_id=${company_id};`;
+                //sql = `SELECT a.id,a.name,a.type,a.code,(SELECT COUNT(id) FROM journal WHERE account='UBER') AS count,IFNULL((SELECT  debit-credit  FROM journal WHERE account='UBER') ,0.00) AS balance FROM accounts  a WHERE a.company_id=1`;
+                sql = `SELECT a.id,a.name,a.type,a.code,
+                (SELECT COUNT(j.id) FROM journal  j JOIN accounts a ON j.account = a.name) AS count,
+                IFNULL((SELECT  j.debit-j.credit  FROM journal j JOIN accounts a ON j.account=a.name) ,0.00) AS balance 
+                FROM accounts  a WHERE a.company_id=${company_id}`;
+            }
+            this.model.query(sql,function(accounts){
+                callback(accounts);
+            });
+        } catch(error) {
+            console.error(error);
+        }
+    }
+
+    async getListSync(company_id=0) {
         try {
             var sql = `SELECT name,type FROM accounts;`;
+
+            if (company_id > 0) {
+                sql = `SELECT name,type FROM accounts WHERE company_id=${company_id};`;
+            }
             return await this.model.querySync(sql);
         } catch(error) {
             console.error(error);
