@@ -46,6 +46,7 @@
         <div class="w3-container" id="main" style="display:none;">
             <br/><br/><br/>
             <div>Company: <b id="main-company-name"></b></div>
+            <div>Timezone: <b id="main-company-timezone"></b></div>
             <fieldset>
                 <legend onclick="expand('sales-dropdown')" style="cursor:pointer;">Sales</legend>
                 <ul class="w3-ul" id="sales-dropdown" style="display:none;">
@@ -78,7 +79,7 @@
                 <legend onclick="expand('accounting-dropdown')" style="cursor:pointer;">Accounting</legend>
                 <ul class="w3-ul" id="accounting-dropdown" style="display:none;">
                     <li><a href="#" class="w3-button w3-block w3-black">Transactions</a></li>
-                    <li><a href="#" class="w3-button w3-block w3-black">Chart of Accounts</a></li>
+                    <li><a href="#" id="accounting-chartofaccounts-button" class="w3-button w3-block w3-black">Chart of Accounts</a></li>
                     <li><a href="#" class="w3-button w3-block w3-black">Journals</a></li>
                     <li><a href="#" class="w3-button w3-block w3-black">Starting Balances</a></li>
                 </ul>
@@ -125,8 +126,49 @@
                     <li><a href="#" class="w3-button w3-block w3-black">Help</a></li>
                 </ul>
             </fieldset>
+            <button id="main-back" class="w3-button w3-block w3-orange">Back</button>
             <br/><br/><br/>
         </div>
+        <!-- Accounting Transactions -->
+        <div id="accounting-transactions" class="w3-container" style="display:none;"></div>
+        <!-- Accounting Chart of Accounts -->
+        <div id="accounting-chartofaccounts" class="w3-container" style="display:none;">
+            <br/><br/><br/>
+            <input type="button" id="add_account" value="Add Account" class="w3-button w3-block w3-blue" />
+            <br/>
+            <button class="w3-button w3-block w3-orange" id="accounting-chartofaccounts-back">Back</button>
+            <table class="w3-table w3-striped w3-block w3-responsive" id="chartofaccounts-table" style="table-layout:fixed;">
+                <tr>
+                    <th width="20%">ID</th>
+                    <th width="20%">Name</th>
+                    <th width="20%">Type</th>
+                    <th width="20%">Balance</th>
+                    <th width="20%">In-Use</th>
+                </tr>
+            </table>
+            <div class="w3-modal" id="accounting-chartofaccounts-addnew">
+                <div class="w3-modal-content">
+                    <div class="w3-container w3-white">
+                        <h2 class="w3-green">Add New Account</h2>
+                        <label for="addnew-name">Name</label>
+                        <input type="text" class="w3-input w3-block" id="addnew-name" value="" />
+                        <label for="addnew-type">Type</label>
+                        <select class="w3-input w3-block" id="addnew-type"></select>
+                        <br/>
+                        <button id="addnew-now" class="w3-button w3-block w3-black">Save</button>
+                        <br/>
+                        <button class="w3-button w3-block w3-orange" onclick="document.getElementById('accounting-chartofaccounts-addnew').style.display='none';">Cancel</button>
+                        <br/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Accounting Jornals -->
+        <div id="accounting-journals" class="w3-container" style="display:none;"></div>
+        <!-- Accounting Starting Balances -->
+        <div id="accounting-starting-balances" class="w3-container" style="display:none;"></div>
+        <!-- Accounting Budget -->
+        <div id="accounting-budget" class="w3-container" style="display:none;"></div>
         <!-- SUCCESS DIALOG -->
         <div id="success-dialog" class="w3-modal">
             <div class="w3-modal-content">
@@ -211,7 +253,13 @@
                     company.id = this.value;
                     company.name = this.options[this.selectedIndex].getAttribute("data-name");
 
+                    localStorage.setItem("company_id",company.id);
+
                     document.getElementById("main-company-name").innerHTML = company.name;
+
+                    var split = new Date().toString().split(" ");
+                    var timeZoneFormatted = split[5];
+                    document.getElementById("main-company-timezone").innerHTML = timeZoneFormatted;
 
                     document.getElementById("company").style.display = "none";
                     document.getElementById("main").style.display = "block";
@@ -239,7 +287,81 @@
                 }
                 SendIPC('add_company',JSON.stringify(data),function(channel,event,result){
                     console.log(result);
+                    document.getElementById('company-name').value='';
+                    document.getElementById('company-note').value='';
+                    document.getElementById('add-company-dialog').style.display='none';
                 })
+            });
+            document.getElementById("main-back").addEventListener("click",function(e){
+                company.id = 0;
+                company.name = '';
+
+                document.getElementById("company-list").value = "";
+
+                document.getElementById("main").style.display = "none";
+                document.getElementById("company").style.display = "block";
+
+                e.preventDefault();
+            });
+            document.getElementById("accounting-chartofaccounts-button").addEventListener("click",function(e){
+                e.preventDefault();
+                getAccounts(function(results){
+                    console.log(results);
+                    var accounts = JSON.parse(results);
+                    accounts.forEach(function(account){
+                        console.log(account);
+                        var checked = `No, <button data-id="${account.name}" class="w3-button w3-red">Delete</button>`;
+                        if (account.in_use == 1) {
+                            checked = 'Yes';
+                        }
+                        document.getElementById("chartofaccounts-table").innerHTML += `<tr>
+                            <td>${account.id}</td>
+                            <td>${account.name}</td>
+                            <td>${account.type}</td>
+                            <td>$ 0.00</td>
+                            <td>${checked}</td>
+                            </tr>`;
+                    });
+                })
+                document.getElementById("main").style.display = "none";
+                document.getElementById("accounting-chartofaccounts").style.display = "block";
+            });
+            document.getElementById("accounting-chartofaccounts-back").addEventListener("click",function(e){
+                e.preventDefault();
+                document.getElementById("accounting-chartofaccounts").style.display = "none";
+                document.getElementById("main").style.display = "block";
+            })
+            function getAccounts(callback) {
+                SendIPC("get_accounts_by_company",company.id,function(channel,event,results){
+                    callback(results);
+                });
+            }
+            document.getElementById("add_account").addEventListener("click",function(e){
+                e.preventDefault();
+                var account_types = Object.keys(JSON.parse(localStorage.getItem("accountTypes"),true));
+                console.log(account_types);
+                account_types.forEach(function(account_type){
+                    var option = document.createElement('option');
+                    option.value = account_type;
+                    option.innerHTML = account_type;
+                    document.getElementById("addnew-type").appendChild(option);
+                });
+                document.getElementById('accounting-chartofaccounts-addnew').style.display='block';
+            });
+            document.getElementById("addnew-now").addEventListener("click", function(e){
+                e.preventDefault();
+                var data = {
+                    name: document.getElementById("addnew-name").value,
+                    type: document.getElementById("addnew-type").value,
+                    company: company.id
+                };
+                console.log(data);
+                SendIPC("add_account",JSON.stringify(data),function(channel,event,result){
+                    console.log(result);
+                    document.getElementById("addnew-name").value = "";
+                    document.getElementById("addnew-type").value = "Unknown";
+                    document.getElementById('accounting-chartofaccounts-addnew').style.display='none';
+                });
             })
         </script>
     </body>

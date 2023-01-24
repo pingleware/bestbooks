@@ -130,6 +130,22 @@ ipcMain.on('add_company', async function(evt, json){
             };
             mainWindow.webContents.send('add_company',JSON.stringify(result));
         });
+});
+
+ipcMain.on("add_account", function(evt, json){
+    var data = JSON.parse(json);
+    const { ChartOfAccounts } = require("@pingleware/bestbooks-core");
+    var coa = new ChartOfAccounts();
+    let lastID = coa.add(data.name,data.type,data.company);
+    mainWindow.webContents.send('add_account',JSON.stringify(lastID));
+});
+
+ipcMain.on("get_accounts_by_company", function(evt, company_id){
+    const { ChartOfAccounts } = require("@pingleware/bestbooks-core");
+    var coa = new ChartOfAccounts();
+    coa.getList(company_id, function(accounts){
+        mainWindow.webContents.send("get_accounts_by_company",JSON.stringify(accounts));
+    });
 })
 
 // BESTBOOKS API Server
