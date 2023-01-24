@@ -14,7 +14,11 @@
  
      constructor() {
          this.filePath = path.join(__dirname,'bestbooks.db');
-         this.db = new sqlite3.Database(this.filePath);
+         this.db = new sqlite3.Database(this.filePath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, 
+            (err) => { 
+             // do your thing 
+             console.error(err);
+            });         
      }
  
      getFilePath() {

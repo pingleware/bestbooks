@@ -8,7 +8,7 @@ class Company {
     constructor(name) {
         try {
             var sql = `SELECT * FROM company WHERE name='${name}';`;
-            this,model = new Model();
+            this.model = new Model();
             this.model.query(sql, function(result){
                 if (result.length > 0) {
                     this.name = result[0].name;
@@ -28,7 +28,7 @@ class Company {
         return this.name;
     }
 
-    static async createTable() {
+    async createTable() {
         try {
             var sql = `CREATE TABLE IF NOT EXISTS "company" (
                 "id" INTEGER,
@@ -38,8 +38,7 @@ class Company {
                 PRIMARY KEY("id" AUTOINCREMENT)
             );`;
 
-            var model = new Model();
-            await model.querySync(sql);
+            await this.model.querySync(sql);
         } catch(error) {
             console.error(error);
         }
