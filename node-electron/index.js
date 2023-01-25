@@ -146,6 +146,27 @@ ipcMain.on("get_accounts_by_company", function(evt, company_id){
     coa.getList(company_id, function(accounts){
         mainWindow.webContents.send("get_accounts_by_company",JSON.stringify(accounts));
     });
+});
+
+ipcMain.on("add_transaction", function(evt, json){
+    console.log("add_transaction")
+    var data = JSON.parse(json);
+    const { addTransaction } = require("@pingleware/bestbooks-helpers");
+    addTransaction(data.name,data.type,data.date + ' ' + data.time,data.description,data.debit,data.credit,
+    function(status){
+        mainWindow.webContents.send("add_transaction",JSON.stringify(status));
+    },data.company,0);
+});
+
+ipcMain.on("get_transactions", function(evt, company_id){
+    // SELECT id,account_name,account_code,note,ref,debit,credit,balance FROM ledger WHERE company_id=1
+    const { Model } = require("@pingleware/bestbooks-core");
+    var model = new Model();
+    var sql = `SELECT id,txdate AS date,account_name AS name,account_code AS code,note,ref,debit,credit,balance FROM ledger WHERE company_id=${company_id};`;
+    model.query(sql, function(results){
+        console.log(results);
+        mainWindow.webContents.send("get_transactions",JSON.stringify(results));
+    })
 })
 
 // BESTBOOKS API Server
