@@ -15,10 +15,8 @@ class Journal {
         this.createTable();
     }
 
-    async add(date,ref,account,debit,credit) {
+    async add(date,ref,account,debit,credit,company_id=0,office_id=0) {
         try {
-            let company_id = localStorage.getItem('company_id') + Number(0);           
-            let office_id = localStorage.getItem('office_id') + Number(0);
             var sql = `INSERT OR IGNORE INTO  journal (company_id,office_id,txdate,ref,account,debit,credit) VALUES (${company_id},${office_id},'${date}','${ref}','${account}','${debit}','${credit}');`;
             var results = await this.model.insertSync(sql);
             return results[0];
