@@ -3,6 +3,42 @@
   "version": "1.0.0-alpha",
   "description": "BestBooks Accounting Application Framework GUI",
   "main": "index.js",
+  "build": {
+    "appId": "work.pingleware.bestbooks",
+    "productName": "bestbooks",
+    "copyright": "Copyright © 2022 ${author}",
+    "win": {
+      "icon": "./assets/bestbooks.ico"
+    },
+    "linux": {
+      "target": "deb",
+      "icon": "./assets/bestbooks.png",
+      "category": "Financial",
+      "synopsis": "BestBooks Accounting Application Framework"
+    },
+    "mac": {
+      "icon": "./assets/bestbooks.icns",
+      "category": "public.app-category.financial"
+    },
+    "dmg": {
+      "title": "${productName}_${version}",
+      "icon": "./assets/bestbooks.icns",
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "files": [],
+    "extraFiles": []
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
