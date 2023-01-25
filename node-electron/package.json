@@ -1,6 +1,6 @@
 {
   "name": "bestbooks",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha",
   "description": "BestBooks Accounting Application Framework GUI",
   "main": "index.js",
   "scripts": {
