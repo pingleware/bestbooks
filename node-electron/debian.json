@@ -1,0 +1,10 @@
+{
+    "dest": "dist/bestbooks-linux-x64/",
+    "icon": "assets/bestbooks.png",
+    "categories": [
+      "Financial"
+    ],
+    "lintianOverrides": [
+      "changelog-file-missing-in-native-package"
+    ]
+}
