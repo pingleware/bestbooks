@@ -8,12 +8,13 @@
  const path = require('path');
  const fs = require('fs');
  const localStorage = require('localStorage');
+ const os = require('os');
  
  class Model {
      LastID;
  
      constructor() {
-         this.filePath = path.join(__dirname,'bestbooks.db');
+        this.filePath = path.join(os.homedir(),'bestbooks.db');
          this.db = new sqlite3.Database(this.filePath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, 
             (err) => { 
              // do your thing 
