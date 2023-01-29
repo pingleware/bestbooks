@@ -66,12 +66,12 @@
     "electron-packager": "^17.1.1"
   },
   "dependencies": {
-    "@pingleware/bestbooks-api": "file:../../bestbooks-api",
-    "@pingleware/bestbooks-core": "file:../../bestbooks-core",
-    "@pingleware/bestbooks-export": "file:../../bestbooks-export",
-    "@pingleware/bestbooks-helpers": "file:../../bestbooks-helpers",
-    "@pingleware/bestbooks-import": "file:../../bestbooks-import",
-    "@pingleware/bestbooks-reports": "file:../../bestbooks-reports",
+    "@pingleware/bestbooks-api": "^1.0.2",
+    "@pingleware/bestbooks-core": "^1.1.5",
+    "@pingleware/bestbooks-export": "^1.0.1",
+    "@pingleware/bestbooks-helpers": "^1.1.1",
+    "@pingleware/bestbooks-import": "^1.0.0",
+    "@pingleware/bestbooks-reports": "^1.0.0",
     "path": "^0.12.7",
     "yargs": "github:yargs/yargs"
   }

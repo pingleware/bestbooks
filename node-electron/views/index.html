@@ -178,7 +178,7 @@
         <!-- Accounting Chart of Accounts -->
         <div id="accounting-chartofaccounts" class="w3-container" style="display:none;">
             <br/><br/><br/>
-            <input type="button" id="add_account" value="Add Account" class="w3-button w3-block w3-blue" />
+            <input type="button" id="add_account" value="Add Account" class="w3-button w3-block w3-green" />
             <br/>
             <button class="w3-button w3-block w3-orange" id="accounting-chartofaccounts-back">Back</button>
             <table class="w3-table w3-striped w3-block w3-responsive" id="chartofaccounts-table" style="table-layout:fixed;">
@@ -207,10 +207,10 @@
                 </div>
             </div>
         </div>
-        <!-- Accounting Jornals -->
+        <!-- Accounting Journals -->
         <div id="accounting-journals" class="w3-container" style="display:none;">
             <br/><br/><br/>
-            <input type="button" id="add_journal_transaction" onclick="document.getElementById('add-journal-transaction-dialog').style.display='block';" value="Add Journal Transaction" class="w3-button w3-block w3-green" />
+            <input type="button" id="add_journal_transaction" value="Add Journal Transaction" class="w3-button w3-block w3-green" />
             <br/>
             <button class="w3-button w3-block w3-orange" id="accounting-journals-back">Back</button>
             <table id="journal_transactions_table" class="w3-table w3-block w3-striped">
@@ -219,7 +219,7 @@
                     <th>Date</th>
                     <th>Reference</th>
                     <th>Account</th>
-                    <th>Debit`</th>
+                    <th>Debit</th>
                     <th>Credit</th>
                     <th>Action</th>
                 </tr>
@@ -392,6 +392,13 @@
                 getAccounts(function(results){
                     console.log(results);
                     var accounts = JSON.parse(results);
+                    document.getElementById("chartofaccounts-table").innerHTML = `<tr>
+                        <th width="20%">ID</th>
+                        <th width="20%">Name</th>
+                        <th width="20%">Type</th>
+                        <th width="20%">Balance</th>
+                        <th width="20%">In-Use</th>
+                    </tr>`;
                     accounts.forEach(function(account){
                         console.log(account);
                         var checked = `No, <button data-id="${account.name}" class="w3-button w3-red">Delete</button>`;
@@ -457,9 +464,54 @@
             })
             document.getElementById("accounting-journals-button").addEventListener("click", function(e){
                 e.preventDefault();
-                document.getElementById("main").style.display = "none";
-                document.getElementById("accounting-journals").style.display = "block";
-            })
+
+                getJournalTransactions(function(transactions){
+                    document.getElementById("journal_transactions_table").innerHTML = `<tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Reference</th>
+                        <th>Account</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                        <th>Action</th>
+                    </tr>`;
+                    transactions.forEach(function(transaction){
+                        var base64 = btoa(transaction)
+                        document.getElementById("journal_transactions_table").innerHTML += `<tr>
+                            <td>${transaction.id}</td>
+                            <td>${transaction.txdate}</td>
+                            <td>${transaction.ref}</td>
+                            <td>${transaction.account}</td>
+                            <td>${transaction.debit}</td>
+                            <td>${transaction.credit}</td>
+                            <td>
+                                <select class="w3-input" data-id="${transaction.id}" data-trans="${base64}" onchange="updateJournalTransaction(this)">
+                                    <option value="">Select</option>
+                                    <option value="edit">Edit</option>
+                                    <option value="delete">Delete</option>
+                                </select>
+                            </td>
+                            </tr>`;
+                    });
+
+                    document.getElementById("main").style.display = "none";
+                    document.getElementById("accounting-journals").style.display = "block";
+                });
+            });
+            document.getElementById("add_journal_transaction").addEventListener("click", function(e){
+                e.preventDefault();
+                getAccounts(function(results){
+                    console.log(results);
+                    var accounts = JSON.parse(results);
+                    accounts.forEach(function(account){
+                        var option = document.createElement("option");
+                        option.value = account.name;
+                        option.innerText = account.name;
+                        document.getElementById("journal_account_name").appendChild(option);
+                    });
+                    document.getElementById("add-journal-transaction-dialog").style.display = 'block';
+                });
+            });
             document.getElementById("accounting-journals-back").addEventListener("click", function(e){
                 e.preventDefault();
                 document.getElementById("accounting-journals").style.display = "none";
@@ -472,6 +524,11 @@
             }
             function getTransactions(callback) {
                 SendIPC("get_transactions",company.id,function(channel,event,results){
+                    callback(JSON.parse(results));
+                })
+            }
+            function getJournalTransactions(callback) {
+                SendIPC("get_journal_transactions",company.id,function(channel,event,results){
                     callback(JSON.parse(results));
                 })
             }

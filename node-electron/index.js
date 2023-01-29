@@ -169,6 +169,16 @@ ipcMain.on("get_transactions", function(evt, company_id){
     })
 })
 
+ipcMain.on("get_journal_transactions", function(evt, company_id){
+    const { Model } = require("@pingleware/bestbooks-core");
+    var model = new Model();
+    var sql = `SELECT * FROM journal WHERE company_id=${company_id}`;
+    model.query(sql, function(results){
+        console.log(results);
+        mainWindow.webContents.send("get_journal_transactions",JSON.stringify(results));
+    })
+})
+
 // BESTBOOKS API Server
 const {start_server} = require('@pingleware/bestbooks-api');
 
