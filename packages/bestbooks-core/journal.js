@@ -82,7 +82,7 @@ class Journal {
                 "company_id" INTEGER,
                 "office_id"	INTEGER,
                 "txdate" TIMESTAMP,
-                "account" TEXT UNIQUE,
+                "account" TEXT,
                 "ref" INTEGER,
                 "debit"	REAL,
                 "credit" REAL,

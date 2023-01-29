@@ -132,7 +132,7 @@ class Ledger extends TAccount {
                 "company_id" INTEGER,
                 "office_id"	INTEGER,
                 "account_code" TEXT,
-                "account_name" TEXT UNIQUE,
+                "account_name" TEXT,
                 "txdate" TIMESTAMP,
                 "note" TEXT,
                 "ref" INTEGER DEFAULT 0,
