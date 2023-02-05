@@ -81,7 +81,7 @@
                     <li><a href="#" id="accounting-transactions-button" class="w3-button w3-block w3-black">Transactions</a></li>
                     <li><a href="#" id="accounting-chartofaccounts-button" class="w3-button w3-block w3-black">Chart of Accounts</a></li>
                     <li><a href="#" id="accounting-journals-button" class="w3-button w3-block w3-black">Journals</a></li>
-                    <li><a href="#" class="w3-button w3-block w3-black">Starting Balances</a></li>
+                    <li><a href="#" id="accounting-starting-balances-button" class="w3-button w3-block w3-black">Starting Balances</a></li>
                     <li><a href="#" id="accounting-budget-button" class="w3-button w3-block w3-black">Budgeting</a></li>
                 </ul>
             </fieldset>
@@ -250,7 +250,65 @@
             <br/><br/><br/>
         </div>
         <!-- Accounting Starting Balances -->
-        <div id="accounting-starting-balances" class="w3-container" style="display:none;"></div>
+        <div id="accounting-starting-balances" class="w3-container" style="display:none;">
+            <br/><br/><br/>
+            <button class="w3-button w3-block w3-orange" id="accounting-starting-balances-back">Back</button>
+            <br/>
+            <label for="accounting-starting-balances-account">Account</label>
+            <select id="accounting-starting-balances-account" class="w3-input w3-block"></select>
+            <fieldset>
+                <legend>Starting Balances</legend>
+                <table class="w3-tablew3-responsive w3-block" id="accounting-starting-balances-table">
+                    <tr>
+                        <th>Year</th>
+                        <th>January</th>
+                        <th>February</th>
+                        <th>March</th>
+                        <th>April</th>
+                        <th>May</th>
+                        <th>June</th>
+                        <th>July</th>
+                        <th>August</th>
+                        <th>Spetember</th>
+                        <th>October</th>
+                        <th>November</th>
+                        <th>December</th>
+                    </tr>
+                    <tr>
+                        <td id="accounting-starting-balances-table-current-year"></td>
+                        <td><input id="accounting-starting-balances-01" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-02" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-03" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-04" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-05" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-06" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-07" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-08" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-09" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-10" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-11" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-12" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                    </tr>
+                    <tr>
+                        <td id="accounting-starting-balances-table-next-year"></td>
+                        <td><input id="accounting-starting-balances-13" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-14" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-15" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-16" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-17" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-18" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-19" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-20" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-21" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-22" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-23" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-24" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                    </tr>
+                </table>
+                <button id="accounting-starting-balances-save" class="w3-button w3-block w3-black" disabled>Save</button>
+            </fieldset>
+            <br/><br/><br/>
+        </div>
         <!-- Accounting Budget -->
         <div id="accounting-budget" class="w3-container" style="display:none;">
             <br/><br/><br/>
@@ -307,7 +365,7 @@
                         <td><input id="accounting-budget-24" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
                     </tr>
                 </table>
-                <button id="accounting-budhet-save" class="w3-button w3-block w3-black" disabled>Save</button>
+                <button id="accounting-budget-save" class="w3-button w3-block w3-black" disabled>Save</button>
             </fieldset>
             <br/><br/><br/>
         </div>
@@ -390,6 +448,9 @@
 
                 document.getElementById("accounting-budget-table-current-year").innerHTML = Number(year);
                 document.getElementById("accounting-budget-table-next-year").innerHTML = Number(year) + 1;
+
+                document.getElementById("accounting-starting-balances-table-current-year").innerHTML = Number(year);
+                document.getElementById("accounting-starting-balances-table-next-year").innerHTML = Number(year) + 1;
             }
 
             document.getElementById("company-list").addEventListener("change", function(e){
@@ -603,9 +664,39 @@
                 let id = this.value;
                 console.log(id);
                 if (Number(id) > 0) {
-                    document.getElementById("accounting-budhet-save").removeAttribute("disabled");
+                    document.getElementById("accounting-budget-save").removeAttribute("disabled");
                 } else {
-                    document.getElementById("accounting-budhet-save").setAttribute("disabled","disabled");
+                    document.getElementById("accounting-budget-save").setAttribute("disabled","disabled");
+                }
+            });
+            document.getElementById("accounting-starting-balances-button").addEventListener("click",function(e){
+                e.preventDefault();
+                getAccounts(function(results){
+                    document.getElementById("accounting-starting-balances-account").innerHTML = `<option value="">Select</option>`;
+                    var accounts = JSON.parse(results);
+                    accounts.forEach(function(account){
+                        var option = new Option();
+                        option.value = account.id;
+                        option.text = account.name;
+                        document.getElementById("accounting-starting-balances-account").appendChild(option);
+                    });
+                    document.getElementById("main").style.display = "none";
+                    document.getElementById("accounting-starting-balances").style.display = 'block';
+                });
+            });
+            document.getElementById("accounting-starting-balances-back").addEventListener("click", function(e){
+                e.preventDefault();
+                document.getElementById("accounting-starting-balances").style.display = 'none';
+                document.getElementById("main").style.display = "block";
+            });
+            document.getElementById("accounting-starting-balances-account").addEventListener("change", function(e){
+                e.preventDefault();
+                let id = this.value;
+                console.log(id);
+                if (Number(id) > 0) {
+                    document.getElementById("accounting-starting-balances-save").removeAttribute("disabled");
+                } else {
+                    document.getElementById("accounting-starting-balances-save").setAttribute("disabled","disabled");
                 }
             });
             function getAccounts(callback) {
