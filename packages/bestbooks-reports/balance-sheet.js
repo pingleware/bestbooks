@@ -9,7 +9,7 @@ class BalanceSheet extends Report {
     }
 
     createReport(startDate,endDate,format) {
-
+        var sql = `SELECT account_code AS code,account_name AS name,SUM(debit)-SUM(credit) AS balance,accounts.base_type AS type FROM ledger JOIN accounts ON accounts.name=ledger.account_name GROUP BY account_name ORDER BY accounts.base_type`;
     }
 
     retrieveReportData(startDate,endDate) {
