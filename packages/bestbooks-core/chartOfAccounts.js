@@ -85,17 +85,17 @@ class ChartOfAccounts {
     getList(company_id=0,callback) {
         try {
             //var sql = `SELECT id,name,type,code FROM accounts;`;
-            var sql = `SELECT a.id,a.name,a.type,a.code,
-            (SELECT COUNT(j.id) FROM journal  j JOIN accounts a ON j.account = a.name) AS count,
-            IFNULL((SELECT  j.debit-j.credit  FROM journal j JOIN accounts a ON j.account=a.name) ,0.00) AS balance 
-            FROM accounts `;
+            var sql = `SELECT id,name,type,code,base_type,
+            IFNULL((SELECT SUM(debit-credit) FROM journal WHERE account=accounts.name) ,0.00) AS balance,
+            CASE WHEN (SELECT id FROM journal WHERE account=accounts.name) > 0 THEN true ELSE false END AS inuse 
+            FROM accounts;`;
             if (company_id > 0) {
                 //sql = `SELECT id,name,type,code,false AS in_use FROM accounts WHERE company_id=${company_id};`;
                 //sql = `SELECT a.id,a.name,a.type,a.code,(SELECT COUNT(id) FROM journal WHERE account='UBER') AS count,IFNULL((SELECT  debit-credit  FROM journal WHERE account='UBER') ,0.00) AS balance FROM accounts  a WHERE a.company_id=1`;
-                sql = `SELECT a.id,a.name,a.type,a.code,
-                (SELECT COUNT(j.id) FROM journal  j JOIN accounts a ON j.account = a.name) AS count,
-                IFNULL((SELECT  j.debit-j.credit  FROM journal j JOIN accounts a ON j.account=a.name) ,0.00) AS balance 
-                FROM accounts  a WHERE a.company_id=${company_id}`;
+                sql = `SELECT id,name,type,code,base_type,
+                IFNULL((SELECT SUM(debit-credit) FROM journal WHERE account=accounts.name) ,0.00) AS balance,
+                CASE WHEN (SELECT id FROM journal WHERE account=accounts.name) > 0 THEN true ELSE false END AS inuse 
+                FROM accounts WHERE company_id=${company_id};`;
             }
             this.model.query(sql,function(accounts){
                 callback(accounts);
@@ -107,10 +107,16 @@ class ChartOfAccounts {
 
     async getListSync(company_id=0) {
         try {
-            var sql = `SELECT name,type FROM accounts;`;
+            var sql = `SELECT id,name,type,code,base_type,
+            IFNULL((SELECT SUM(debit-credit) FROM journal WHERE account=accounts.name) ,0.00) AS balance,
+            CASE WHEN (SELECT id FROM journal WHERE account=accounts.name) > 0 THEN true ELSE false END AS inuse 
+            FROM accounts;`;
 
             if (company_id > 0) {
-                sql = `SELECT name,type FROM accounts WHERE company_id=${company_id};`;
+                sql = `SELECT id,name,type,code,base_type,
+                IFNULL((SELECT SUM(debit-credit) FROM journal WHERE account=accounts.name) ,0.00) AS balance,
+                CASE WHEN (SELECT id FROM journal WHERE account=accounts.name) > 0 THEN true ELSE false END AS inuse 
+                FROM accounts WHERE company_id=${company_id};`;
             }
             return await this.model.querySync(sql);
         } catch(error) {
