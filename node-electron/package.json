@@ -67,7 +67,7 @@
   },
   "dependencies": {
     "@pingleware/bestbooks-api": "^1.0.2",
-    "@pingleware/bestbooks-core": "^1.1.5",
+    "@pingleware/bestbooks-core": "^1.1.6",
     "@pingleware/bestbooks-export": "^1.0.1",
     "@pingleware/bestbooks-helpers": "^1.1.1",
     "@pingleware/bestbooks-import": "^1.0.0",

@@ -82,7 +82,7 @@
                     <li><a href="#" id="accounting-chartofaccounts-button" class="w3-button w3-block w3-black">Chart of Accounts</a></li>
                     <li><a href="#" id="accounting-journals-button" class="w3-button w3-block w3-black">Journals</a></li>
                     <li><a href="#" class="w3-button w3-block w3-black">Starting Balances</a></li>
-                    <li><a href="#" class="w3-button w3-block w3-black">Budgeting</a></li>
+                    <li><a href="#" id="accounting-budget-button" class="w3-button w3-block w3-black">Budgeting</a></li>
                 </ul>
             </fieldset>
             <fieldset>
@@ -252,7 +252,65 @@
         <!-- Accounting Starting Balances -->
         <div id="accounting-starting-balances" class="w3-container" style="display:none;"></div>
         <!-- Accounting Budget -->
-        <div id="accounting-budget" class="w3-container" style="display:none;"></div>
+        <div id="accounting-budget" class="w3-container" style="display:none;">
+            <br/><br/><br/>
+            <button class="w3-button w3-block w3-orange" id="accounting-budget-back">Back</button>
+            <br/>
+            <label for="accounting-budget-account">Account</label>
+            <select id="accounting-budget-account" class="w3-input w3-block"></select>
+            <fieldset>
+                <legend>Budget</legend>
+                <table class="w3-tablew3-responsive w3-block" id="accounting-budget-table">
+                    <tr>
+                        <th>Year</th>
+                        <th>January</th>
+                        <th>February</th>
+                        <th>March</th>
+                        <th>April</th>
+                        <th>May</th>
+                        <th>June</th>
+                        <th>July</th>
+                        <th>August</th>
+                        <th>Spetember</th>
+                        <th>October</th>
+                        <th>November</th>
+                        <th>December</th>
+                    </tr>
+                    <tr>
+                        <td id="accounting-budget-table-current-year"></td>
+                        <td><input id="accounting-budget-01" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-02" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-03" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-04" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-05" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-06" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-07" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-08" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-09" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-10" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-11" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-12" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                    </tr>
+                    <tr>
+                        <td id="accounting-budget-table-next-year"></td>
+                        <td><input id="accounting-budget-13" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-14" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-15" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-16" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-17" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-18" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-19" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-20" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-21" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-22" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-23" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-24" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                    </tr>
+                </table>
+                <button id="accounting-budhet-save" class="w3-button w3-block w3-black" disabled>Save</button>
+            </fieldset>
+            <br/><br/><br/>
+        </div>
         <!-- SUCCESS DIALOG -->
         <div id="success-dialog" class="w3-modal">
             <div class="w3-modal-content">
@@ -329,6 +387,9 @@
                         document.getElementById("company-list").appendChild(option);
                     }
                 })
+
+                document.getElementById("accounting-budget-table-current-year").innerHTML = Number(year);
+                document.getElementById("accounting-budget-table-next-year").innerHTML = Number(year) + 1;
             }
 
             document.getElementById("company-list").addEventListener("change", function(e){
@@ -401,15 +462,15 @@
                     </tr>`;
                     accounts.forEach(function(account){
                         console.log(account);
-                        var checked = `No, <button data-id="${account.name}" class="w3-button w3-red">Delete</button>`;
-                        if (account.in_use == 1) {
+                        var checked = `No, <button data-id="${account.id}" class="w3-button w3-red" onclick="deleteAccount(this)">Delete</button>`;
+                        if (account.inuse == 1) {
                             checked = 'Yes';
                         }
                         document.getElementById("chartofaccounts-table").innerHTML += `<tr>
                             <td>${account.id}</td>
                             <td>${account.name}</td>
                             <td>${account.type}</td>
-                            <td>$ 0.00</td>
+                            <td>${account.balance}</td>
                             <td>${checked}</td>
                             </tr>`;
                     });
@@ -436,7 +497,7 @@
                     <th>Action</th>
                     </tr>`;
                     transactions.forEach(function(transaction){
-                        var base64 = btoa(transaction)
+                        var base64 = btoa(JSON.stringify(transaction))
                         document.getElementById("transactions-table").innerHTML += `<tr>
                             <td>${transaction.id}</td>
                             <td>${transaction.date}</td>
@@ -476,7 +537,7 @@
                         <th>Action</th>
                     </tr>`;
                     transactions.forEach(function(transaction){
-                        var base64 = btoa(transaction)
+                        var base64 = btoa(JSON.stringify(transaction))
                         document.getElementById("journal_transactions_table").innerHTML += `<tr>
                             <td>${transaction.id}</td>
                             <td>${transaction.txdate}</td>
@@ -517,6 +578,36 @@
                 document.getElementById("accounting-journals").style.display = "none";
                 document.getElementById("main").style.display = "block";
             })
+            document.getElementById("accounting-budget-button").addEventListener("click", function(e){
+                e.preventDefault();
+                getAccounts(function(results){
+                    document.getElementById("accounting-budget-account").innerHTML = `<option value="">Select</option>`;
+                    var accounts = JSON.parse(results);
+                    accounts.forEach(function(account){
+                        var option = new Option();
+                        option.value = account.id;
+                        option.text = account.name;
+                        document.getElementById("accounting-budget-account").appendChild(option);
+                    });
+                    document.getElementById("main").style.display = "none";
+                    document.getElementById("accounting-budget").style.display = 'block';
+                });
+            });
+            document.getElementById("accounting-budget-back").addEventListener("click", function(e){
+                e.preventDefault();
+                document.getElementById("accounting-budget").style.display = 'none';
+                document.getElementById("main").style.display = "block";
+            });
+            document.getElementById("accounting-budget-account").addEventListener("change", function(e){
+                e.preventDefault();
+                let id = this.value;
+                console.log(id);
+                if (Number(id) > 0) {
+                    document.getElementById("accounting-budhet-save").removeAttribute("disabled");
+                } else {
+                    document.getElementById("accounting-budhet-save").setAttribute("disabled","disabled");
+                }
+            });
             function getAccounts(callback) {
                 SendIPC("get_accounts_by_company",company.id,function(channel,event,results){
                     callback(results);
@@ -604,6 +695,23 @@
                     document.getElementById('add-transaction-dialog').style.display='none';
                 });
             });
+            function deleteAccount(obj) {
+                let id = obj.getAttribute("data-id");
+            }
+            function updateTransaction(obj) {
+                let id = obj.getAttribute("data-id");
+                var transaction = atob(obj.getAttribute("data-trans"));
+                var action = obj.value;
+                console.log([id,transaction,action]);
+                obj.value = "";
+            }
+            function updateJournalTransaction(obj) {
+                let id = obj.getAttribute("data-id");
+                var transaction = atob(obj.getAttribute("data-trans"));
+                var action = obj.value;
+                console.log([id,transaction,action]);
+                obj.value = "";
+            }
         </script>
     </body>
 </html>
