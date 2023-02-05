@@ -1,6 +1,6 @@
 "use strict"
 
-const core = require('@pingleware/bestbooks-core');
+const { Model } = require('@pingleware/bestbooks-core');
 const Report = require('./report');
 
 class StatementChangeInEquity extends Report {
@@ -9,7 +9,12 @@ class StatementChangeInEquity extends Report {
     }
 
     createReport(startDate,endDate,format) {
-
+        var data = this.retrieveReportData(startDate, endDate);
+        if (format == "array") {
+            return data;
+        } else {
+            // process other formats
+        }
     }
 
     retrieveReportData(startDate,endDate) {
