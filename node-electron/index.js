@@ -179,6 +179,37 @@ ipcMain.on("get_journal_transactions", function(evt, company_id){
     })
 })
 
+ipcMain.on("report_balancesheet", function(evt, json){
+    try {
+        const { BalanceSheet } = require("@pingleware/bestbooks-reports");
+        var params = JSON.parse(json);
+        var data = BalanceSheet.retrieveReportData(params.startDate,params.endDate);
+        mainWindow.webContents.send("report_balancesheet",JSON.stringify(data));    
+    } catch(error) {
+        mainWindow.webContents.send("report_balancesheet",JSON.stringify(error));
+    }
+});
+ipcMain.on("report_incomestatement", function(evt, json){
+    try {
+        const { IncomeStatement } = require("@pingleware/bestbooks-reports");
+        var params = JSON.parse(json);
+        var data = IncomeStatement.retrieveReportData(params.startDate,params.endDate);
+        mainWindow.webContents.send("report_incomestatement",JSON.stringify(data));    
+    } catch(error) {
+        mainWindow.webContents.send("report_incomestatement",JSON.stringify(error));
+    }
+});
+ipcMain.on("report_trialbalance", function(evt, json){
+    try {
+        const { TrialBalance } = require("@pingleware/bestbooks-reports");
+        var params = JSON.parse(json);
+        var data = TrialBalance.retrieveReportData(params.startDate,params.endDate);
+        mainWindow.webContents.send("report_trialbalance",JSON.stringify(data));    
+    } catch(error) {
+        mainWindow.webContents.send("report_trialbalance",JSON.stringify(error));
+    }
+});
+
 // BESTBOOKS API Server
 const {start_server} = require('@pingleware/bestbooks-api');
 

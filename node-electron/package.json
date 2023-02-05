@@ -66,12 +66,12 @@
     "electron-packager": "^17.1.1"
   },
   "dependencies": {
-    "@pingleware/bestbooks-api": "^1.0.2",
+    "@pingleware/bestbooks-api": "^1.0.3",
     "@pingleware/bestbooks-core": "^1.1.6",
     "@pingleware/bestbooks-export": "^1.0.1",
-    "@pingleware/bestbooks-helpers": "^1.1.1",
+    "@pingleware/bestbooks-helpers": "^1.1.2",
     "@pingleware/bestbooks-import": "^1.0.0",
-    "@pingleware/bestbooks-reports": "^1.0.0",
+    "@pingleware/bestbooks-reports": "^1.0.3",
     "path": "^0.12.7",
     "yargs": "github:yargs/yargs"
   }

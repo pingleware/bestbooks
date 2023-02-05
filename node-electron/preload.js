@@ -1,7 +1,8 @@
 const {contextBridge, ipcRenderer} = require("electron");
 
 let validChannels = [
-  "error","open_browser","add_company","add_account","get_accounts_by_company","add_transaction","get_transactions","get_journal_transactions"
+  "error","open_browser","add_company","add_account","get_accounts_by_company","add_transaction","get_transactions","get_journal_transactions",
+  "report_balancesheet","report_incomestatement","report_trialbalance"
 ];
 
 contextBridge.exposeInMainWorld("api", {
