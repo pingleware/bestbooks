@@ -1,0 +1,244 @@
+        <!-- Accounting Transactions -->
+        <div id="accounting-transactions" class="w3-container" style="display:none;">
+            <br/><br/><br/>
+            <h2 class="w3-yellow">Accounting: TRANSACTIONS</h2>
+            <input type="button" id="add_transaction" value="Add Transaction" class="w3-button w3-block w3-green" />
+            <br/>
+            <button class="w3-button w3-block w3-orange" id="accounting-transactions-back">Back</button>
+            <table class="w3-table w3-striped w3-block" id="transactions-table">
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th width="10%">Description</th>
+                    <th>Account</th>
+                    <th>Debit</th>
+                    <th>Credit</th>
+                    <th>Action</th>
+                </tr>
+            </table>
+            <div id="add-transaction-dialog" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container w3-white">
+                        <h2 class="w3-green">Add Transaction</h2>
+                        <label for="account_name">Account</label>
+                        <select id="account_name" class="w3-input w3-block" name="account_name"></select>
+                        <label for="account_type">Type</label>
+                        <select id="account_type" class="w3-input w3-block" name="account_type"></select>
+                        <label for="account_date">Date</label>
+                        <input type="date" class="w3-input w3-block" name="account_date" id="account_date" value="" />
+                        <label for="account_time">Time</label>
+                        <input type="time" class="w3-input w3-block" name="account_time" id="account_time" value="" />
+                        <label for="account_description">Description</label>
+                        <input type="text" class="w3-input w3-block" name="account_description" id="account_description" value="" />
+                        <label for="account_debit">Debit</label>
+                        <input type="number" class="w3-input w3-block" name="account_debit" id="account_debit" value="0.00" />
+                        <label for="account_credit">Credit</label>
+                        <input type="number" class="w3-input w3-block" name="account_credit" id="account_credit" value="0.00" />
+                        <br/>
+                        <input type="button" class="w3-button w3-block w3-black" id="add_transaction_action" name="add_transaction_action" value="Add" />
+                        <br/>
+                        <button class="w3-button w3-block w3-orange" onclick="document.getElementById('add-transaction-dialog').style.display='none';">Cancel</button>
+                        <br/>
+                    </div>
+                </div>
+            </div>
+            <br/><br/><br/>
+        </div>
+        <!-- Accounting Chart of Accounts -->
+        <div id="accounting-chartofaccounts" class="w3-container" style="display:none;">
+            <br/><br/><br/>
+            <h2 class="w3-yellow">Accounting: CHART OF ACCOUNTS</h2>
+            <input type="button" id="add_account" value="Add Account" class="w3-button w3-block w3-green" />
+            <br/>
+            <button class="w3-button w3-block w3-orange" id="accounting-chartofaccounts-back">Back</button>
+            <table class="w3-table w3-striped w3-block w3-responsive" id="chartofaccounts-table" style="table-layout:fixed;">
+                <tr>
+                    <th width="20%">ID</th>
+                    <th width="20%">Name</th>
+                    <th width="20%">Type</th>
+                    <th width="20%">Balance</th>
+                    <th width="20%">In-Use</th>
+                </tr>
+            </table>
+            <div class="w3-modal" id="accounting-chartofaccounts-addnew">
+                <div class="w3-modal-content">
+                    <div class="w3-container w3-white">
+                        <h2 class="w3-green">Add New Account</h2>
+                        <label for="addnew-name">Name</label>
+                        <input type="text" class="w3-input w3-block" id="addnew-name" value="" />
+                        <label for="addnew-type">Type</label>
+                        <select class="w3-input w3-block" id="addnew-type"></select>
+                        <br/>
+                        <button id="addnew-now" class="w3-button w3-block w3-black">Save</button>
+                        <br/>
+                        <button class="w3-button w3-block w3-orange" onclick="document.getElementById('accounting-chartofaccounts-addnew').style.display='none';">Cancel</button>
+                        <br/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Accounting Journals -->
+        <div id="accounting-journals" class="w3-container" style="display:none;">
+            <br/><br/><br/>
+            <h2 class="w3-yellow">Accounting: JOURNAL</h2>
+            <input type="button" id="add_journal_transaction" value="Add Journal Transaction" class="w3-button w3-block w3-green" />
+            <br/>
+            <button class="w3-button w3-block w3-orange" id="accounting-journals-back">Back</button>
+            <table id="journal_transactions_table" class="w3-table w3-block w3-striped">
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Reference</th>
+                    <th>Account</th>
+                    <th>Debit</th>
+                    <th>Credit</th>
+                    <th>Action</th>
+                </tr>
+            </table>
+            <div id="add-journal-transaction-dialog" class="w3-modal">
+                <div class="w3-modal-content">
+                    <div class="w3-container w3-white">
+                        <h2 class="w3-green">Add Journal Transaction</h2>
+                        <label for="journal_account_name">Account</label>
+                        <select id="journal_account_name" class="w3-input w3-block" name="journal_account_name"></select>
+                        <label for="account_date">Date</label>
+                        <input type="date" class="w3-input w3-block" name="account_date" id="account_date" value="" />
+                        <label for="account_reference">Reference</label>
+                        <input type="number" class="w3-input w3-block" name="account_reference" id="account_reference" value="" />
+                        <label for="account_description">Description</label>
+                        <input type="text" class="w3-input w3-block" name="account_description" id="account_description" value="" />
+                        <label for="account_debit">Debit</label>
+                        <input type="number" class="w3-input w3-block" name="account_debit" id="account_debit" value="0.00" />
+                        <label for="account_credit">Credit</label>
+                        <input type="number" class="w3-input w3-block" name="account_credit" id="account_credit" value="0.00" />
+                        <input type="button" class="w3-button w3-block w3-black" id="add_transaction_action" name="add_transaction_action" value="Add" />
+                        <br/>
+                        <button class="w3-button w3-block w3-orange" onclick="document.getElementById('add-journal-transaction-dialog').style.display='none';">Cancel</button>
+                        <br/>
+                    </div>
+                </div>
+            </div>
+            <br/><br/><br/>
+        </div>
+        <!-- Accounting Starting Balances -->
+        <div id="accounting-starting-balances" class="w3-container" style="display:none;">
+            <br/><br/><br/>
+            <h2 class="w3-yellow">Accounting: STARTING BALANCES</h2>
+            <button class="w3-button w3-block w3-orange" id="accounting-starting-balances-back">Back</button>
+            <br/>
+            <label for="accounting-starting-balances-account">Account</label>
+            <select id="accounting-starting-balances-account" class="w3-input w3-block"></select>
+            <fieldset>
+                <legend>Starting Balances</legend>
+                <table class="w3-tablew3-responsive w3-block" id="accounting-starting-balances-table">
+                    <tr>
+                        <th>Year</th>
+                        <th>January</th>
+                        <th>February</th>
+                        <th>March</th>
+                        <th>April</th>
+                        <th>May</th>
+                        <th>June</th>
+                        <th>July</th>
+                        <th>August</th>
+                        <th>Spetember</th>
+                        <th>October</th>
+                        <th>November</th>
+                        <th>December</th>
+                    </tr>
+                    <tr>
+                        <td id="accounting-starting-balances-table-current-year"></td>
+                        <td><input id="accounting-starting-balances-01" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-02" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-03" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-04" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-05" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-06" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-07" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-08" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-09" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-10" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-11" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-12" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                    </tr>
+                    <tr>
+                        <td id="accounting-starting-balances-table-next-year"></td>
+                        <td><input id="accounting-starting-balances-13" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-14" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-15" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-16" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-17" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-18" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-19" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-20" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-21" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-22" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-23" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-starting-balances-24" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                    </tr>
+                </table>
+                <button id="accounting-starting-balances-save" class="w3-button w3-block w3-black" disabled>Save</button>
+            </fieldset>
+            <br/><br/><br/>
+        </div>
+        <!-- Accounting Budget -->
+        <div id="accounting-budget" class="w3-container" style="display:none;">
+            <br/><br/><br/>
+            <h2 class="w3-yellow">Accounting: BUDGET</h2>
+            <button class="w3-button w3-block w3-orange" id="accounting-budget-back">Back</button>
+            <br/>
+            <label for="accounting-budget-account">Account</label>
+            <select id="accounting-budget-account" class="w3-input w3-block"></select>
+            <fieldset>
+                <legend>Budget</legend>
+                <table class="w3-tablew3-responsive w3-block" id="accounting-budget-table">
+                    <tr>
+                        <th>Year</th>
+                        <th>January</th>
+                        <th>February</th>
+                        <th>March</th>
+                        <th>April</th>
+                        <th>May</th>
+                        <th>June</th>
+                        <th>July</th>
+                        <th>August</th>
+                        <th>Spetember</th>
+                        <th>October</th>
+                        <th>November</th>
+                        <th>December</th>
+                    </tr>
+                    <tr>
+                        <td id="accounting-budget-table-current-year"></td>
+                        <td><input id="accounting-budget-01" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-02" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-03" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-04" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-05" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-06" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-07" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-08" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-09" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-10" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-11" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-12" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                    </tr>
+                    <tr>
+                        <td id="accounting-budget-table-next-year"></td>
+                        <td><input id="accounting-budget-13" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-14" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-15" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-16" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-17" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-18" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-19" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-20" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-21" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-22" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-23" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                        <td><input id="accounting-budget-24" type="number" steps="any" class="w3-input" value="" placeholder="0.00" /></td>
+                    </tr>
+                </table>
+                <button id="accounting-budget-save" class="w3-button w3-block w3-black" disabled>Save</button>
+            </fieldset>
+            <br/><br/><br/>
+        </div>

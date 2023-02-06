@@ -117,6 +117,11 @@ ipcMain.on('error', function(evt, data){
     mainWindow.webContents.send('error',data);
 });
 
+ipcMain.on('run_script', function(evt, fullPathname){
+    require('child_process').exec(fullPathname);
+    mainWindow.webContents.send('run_script','success');
+})
+
 ipcMain.on('add_company', async function(evt, json){
     var data = JSON.parse(json);
     console.log(data);
@@ -149,7 +154,6 @@ ipcMain.on("get_accounts_by_company", function(evt, company_id){
 });
 
 ipcMain.on("add_transaction", function(evt, json){
-    console.log("add_transaction")
     var data = JSON.parse(json);
     const { addTransaction } = require("@pingleware/bestbooks-helpers");
     addTransaction(data.name,data.type,data.date + ' ' + data.time,data.description,data.debit,data.credit,
@@ -164,7 +168,6 @@ ipcMain.on("get_transactions", function(evt, company_id){
     var model = new Model();
     var sql = `SELECT id,txdate AS date,account_name AS name,account_code AS code,note,ref,debit,credit,balance FROM ledger WHERE company_id=${company_id};`;
     model.query(sql, function(results){
-        console.log(results);
         mainWindow.webContents.send("get_transactions",JSON.stringify(results));
     })
 })
@@ -174,7 +177,6 @@ ipcMain.on("get_journal_transactions", function(evt, company_id){
     var model = new Model();
     var sql = `SELECT * FROM journal WHERE company_id=${company_id}`;
     model.query(sql, function(results){
-        console.log(results);
         mainWindow.webContents.send("get_journal_transactions",JSON.stringify(results));
     })
 })
