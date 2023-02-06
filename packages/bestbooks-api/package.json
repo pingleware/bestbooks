@@ -1,6 +1,6 @@
 {
   "name": "@pingleware/bestbooks-api",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "API module for BestBooks Accounting Application Framework",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "supertest": "^6.3.1"
   },
   "dependencies": {
-    "@pingleware/bestbooks-core": "^1.1.6",
+    "@pingleware/bestbooks-core": "^1.1.8",
     "cors": "^2.8.5",
     "express": "^4.18.2"
   }
