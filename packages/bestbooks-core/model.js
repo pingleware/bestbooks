@@ -14,6 +14,9 @@
      LastID;
  
      constructor() {
+        if (fs.existsSync(path.join(os.homedir(),'.bestbooks')) == false) {
+            fs.mkdirSync(path.join(os.homedir(),'.bestbooks'));
+        }
         this.filePath = path.join(os.homedir(),'.bestbooks/bestbooks.db');
          this.db = new sqlite3.Database(this.filePath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, 
             (err) => { 
