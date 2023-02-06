@@ -130,6 +130,14 @@
                     <li><a href="#" class="w3-button w3-block w3-black">Settings</a></li>
                 </ul>
             </fieldset>
+            <!-- Import and Export -->
+            <fieldset>
+                <legend onclick="expand('import-export-dropdown')" style="cursor:pointer;">Import &amp; Export</legend>
+                <ul class="w3-ul" id="import-export-dropdown" style="display:none;">
+                    <li><a href="#" class="w3-button w3-block w3-black">Import</a></li>
+                    <li><a href="#" class="w3-button w3-block w3-black">Export</a></li>
+                </ul>
+            </fieldset>
             <!-- Help -->
             <fieldset>
                 <legend>Help</legend>
@@ -140,10 +148,28 @@
             <button id="main-back" class="w3-button w3-block w3-orange">Back</button>
             <br/><br/><br/>
         </div>
+        <!-- SALES -->
+        <div w3-include-html="sales.html"></div>
+        <!-- PURCHASES -->
+        <div w3-include-html="purchases.html"></div>
+        <!-- INVENTORY -->
+        <div w3-include-html="inventory.html"></div>
         <!-- ACCOUNTING -->
         <div w3-include-html="accounting.html"></div>
+        <!-- BANKING -->
+        <div w3-include-html="banking.html"></div>
+        <!-- PAYROLL -->
+        <div w3-include-html="payroll.html"></div>
         <!-- REPORTS -->
         <div w3-include-html="reports.html"></div>
+        <!-- SETTINGS -->
+        <div w3-include-html="settings.html"></div>
+        <!-- IMPORT -->
+        <div w3-include-html="import.html"></div>
+        <!-- EXPORT -->
+        <div w3-include-html="export.html"></div>
+        <!-- HELP -->
+        <div w3-include-html="help.html"></div>
         <!-- SUCCESS DIALOG -->
         <div id="success-dialog" class="w3-modal">
             <div class="w3-modal-content">
@@ -192,8 +218,17 @@
         </div>        
         <!-- JavaScript -->
         <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/sales.js"></script>
+        <script type="text/javascript" src="js/purchase.js"></script>
+        <script type="text/javascript" src="js/inventory.js"></script>
         <script type="text/javascript" src="js/accounting.js"></script>
+        <script type="text/javascript" src="js/banking.js"></script>
+        <script type="text/javascript" src="js/payroll.js"></script>
         <script type="text/javascript" src="js/reports.js"></script>
+        <script type="text/javascript" src="js/settings.js"></script>
+        <script type="text/javascript" src="js/import.js"></script>
+        <script type="text/javascript" src="js/export.js"></script>
+        <script type="text/javascript" src="js/help.js"></script>
         <script type="text/javascript">
             var company = { id: 0, name: ''};
 
@@ -225,8 +260,17 @@
                 })
 
                 w3.includeHTML(function(){
+                    sales_load();
+                    purchases_load();
+                    inventory_load();
                     accounting_load();
+                    banking_load();
+                    payroll_load();
                     reports_load();
+                    settings_load();
+                    import_load();
+                    export_load();
+                    help_load();
                 });
             }
 
