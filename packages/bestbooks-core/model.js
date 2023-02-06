@@ -14,7 +14,7 @@
      LastID;
  
      constructor() {
-        this.filePath = path.join(os.homedir(),'bestbooks.db');
+        this.filePath = path.join(os.homedir(),'.bestbooks/bestbooks.db');
          this.db = new sqlite3.Database(this.filePath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, 
             (err) => { 
              // do your thing 
