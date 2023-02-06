@@ -1,6 +1,6 @@
 {
   "name": "@pingleware/bestbooks-import",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Import module for BestBooks Accounting Application Framework",
   "main": "index.js",
   "scripts": {
@@ -22,6 +22,7 @@
     "mocha": "^10.1.0"
   },
   "dependencies": {
-    "@pingleware/bestbooks-core": "^1.0.0"
+    "@pingleware/bestbooks-helpers": "^1.1.3",
+    "csv-parse": "^5.3.4"
   }
 }
