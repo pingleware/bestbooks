@@ -130,6 +130,14 @@ function accounting_load() {
                 option.innerText = account.name;
                 document.getElementById("journal_account_name").appendChild(option);
             });
+            document.getElementById("add_journal_transaction_action").value = "Add";
+            document.getElementById("journal_account_name").value = "";
+            document.getElementById("journal_account_date").value = "";
+            document.getElementById("journal_account_time").value = "";
+            document.getElementById("journal_account_reference").value = "";
+            document.getElementById("journal_account_debit").value = "0.00";
+            document.getElementById("journal_account_credit").value = "0.00";
+            document.getElementById("journal_account_id").value = "0";
             document.getElementById("add-journal-transaction-dialog").style.display = 'block';
         });
     });
@@ -439,8 +447,10 @@ function accounting_load() {
     document.getElementById("add_journal_transaction_action").addEventListener("click", function(e){
         e.preventDefault();
         var data = {
+            id: document.getElementById("journal_account_id").value,
             name: document.getElementById("journal_account_name").value,
             date: document.getElementById("journal_account_date").value,
+            time: document.getElementById("journal_account_time").value,
             ref: document.getElementById("journal_account_reference").value,
             debit: document.getElementById("journal_account_debit").value,
             credit: document.getElementById("journal_account_credit").value,
@@ -495,8 +505,46 @@ function updateTransaction(obj) {
 }
 function updateJournalTransaction(obj) {
     let id = obj.getAttribute("data-id");
-    var transaction = atob(obj.getAttribute("data-trans"));
+    var transaction = JSON.parse(atob(obj.getAttribute("data-trans")));
     var action = obj.value;
     console.log([id,transaction,action]);
+    switch(action) {
+        case 'delete':
+            var message = '';
+            if (transaction.ref > 0) {
+                message = "<br/><i>Don't forget to delete the related reference transaction?</i>";
+            }
+            showConfirm("Delete Journal Transaction?",`Delete the journal transaction:<br/>${transaction.txdate} for ${transaction.account}? ${message}`,function(v){
+                SendIPC("delete_journal_transaction",id,function(channel,event,json){
+                    window.location.reload();
+                });
+            });
+            break;
+        case 'edit':
+            {
+                getAccounts(function(results){
+                    console.log(results);
+                    var accounts = JSON.parse(results);
+                    document.getElementById("journal_account_name").innerHTML = '<option value="">Select</option>';
+                    accounts.forEach(function(account){
+                        var option = document.createElement("option");
+                        option.value = account.name;
+                        option.innerText = account.name;
+                        document.getElementById("journal_account_name").appendChild(option);
+                    });
+                    document.getElementById("add_journal_transaction_action").value = "Save";
+                    var date = new Date(transaction.txdate);
+                    document.getElementById("journal_account_date").value = date.toISOString().split('T')[0];
+                    document.getElementById("journal_account_time").value = date.toTimeString().substr(0,8);
+                    document.getElementById("journal_account_reference").value = transaction.ref;
+                    document.getElementById("journal_account_debit").value = transaction.debit;
+                    document.getElementById("journal_account_credit").value = transaction.credit;
+                    document.getElementById("journal_account_id").value = transaction.id;
+                    document.getElementById("journal_account_name").value = transaction.account;
+                    document.getElementById("add-journal-transaction-dialog").style.display = 'block';
+                });        
+            }
+            break;
+    }
     obj.value = "";
 }

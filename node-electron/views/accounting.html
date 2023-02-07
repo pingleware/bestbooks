@@ -99,10 +99,13 @@
                 <div class="w3-modal-content">
                     <div class="w3-container w3-white">
                         <h2 class="w3-green">Add Journal Transaction</h2>
+                        <input type="hidden" name="journal_account_id" id="journal_account_id" value="0" />
                         <label for="journal_account_name">Account</label>
                         <select id="journal_account_name" class="w3-input w3-block" name="journal_account_name"></select>
                         <label for="journal_account_date">Date</label>
                         <input type="date" class="w3-input w3-block" name="journal_account_date" id="journal_account_date" value="" />
+                        <label for="journal_account_time">Time</label>
+                        <input type="time" class="w3-input w3-block" name="journal_account_time" id="journal_account_time" value="" />
                         <label for="journal_account_reference">Reference</label>
                         <input type="number" class="w3-input w3-block" name="journal_account_reference" id="journal_account_reference" value="" />
                         <label for="journal_account_debit">Debit</label>

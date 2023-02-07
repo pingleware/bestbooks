@@ -1,8 +1,10 @@
 const {contextBridge, ipcRenderer} = require("electron");
 
 let validChannels = [
-  "error","open_browser","add_company","add_account","get_accounts_by_company","add_transaction","get_transactions","get_journal_transactions",
-  "report_balancesheet","report_incomestatement","report_trialbalance","add_journal_transaction",
+  "error","open_browser","add_company","add_account","get_accounts_by_company",
+  "add_transaction","get_transactions",
+  "get_journal_transactions","add_journal_transaction","delete_journal_transaction",
+  "report_balancesheet","report_incomestatement","report_trialbalance",
   "accounting_budget","accounting_balance","delete_account","account_balances","account_budgets"
 ];
 

@@ -270,9 +270,14 @@ ipcMain.on("add_journal_transaction", function(evt, json){
     var params = JSON.parse(json);
     const { Model } = require("@pingleware/bestbooks-core");
     var model = new Model();
+    var date = new Date(params.date + ' ' + params.time);
+    var txdate = date.toISOString();
     var sql = `INSERT INTO journal (company_id,office_id,txdate,account,ref,debit,credit) 
-                VALUES (${params.company},${params.office},'${params.date}','${params.name}',${Number(params.ref)},${Number(params.debit)},${Number(params.credit)});`;
+                VALUES (${params.company},${params.office},'${txdate}','${params.name}',${Number(params.ref)},${Number(params.debit)},${Number(params.credit)});`;
 
+    if (params.id > 0) {
+        sql = `UPDATE journal SET txdate='${txdate}',account='${params.name}',ref=${Number(params.ref)},debit=${Number(params.debit)},credit=${Number(params.credit)} WHERE id=${params.id};`
+    }
     model.insert(sql,function(results){
         mainWindow.webContents.send('add_journal_transaction',JSON.stringify(results));
     });
@@ -286,6 +291,15 @@ ipcMain.on("get_journal_transactions", function(evt, company_id){
         mainWindow.webContents.send("get_journal_transactions",JSON.stringify(results));
     })
 })
+
+ipcMain.on('delete_journal_transaction', function(evt,id){
+    const { Model } = require("@pingleware/bestbooks-core");
+    var model = new Model();
+    var sql = `DELETE FROM journal WHERE id=${id};`;
+    model.insert(sql, function(results){
+        mainWindow.webContents.send('delete_journal_transaction',JSON.stringify(results));
+    });
+});
 
 ipcMain.on("report_balancesheet", function(evt, json){
     try {
