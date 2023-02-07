@@ -19,7 +19,8 @@
             <div id="add-transaction-dialog" class="w3-modal">
                 <div class="w3-modal-content">
                     <div class="w3-container w3-white">
-                        <h2 class="w3-green">Add Transaction</h2>
+                        <h2 id="add-transaction-dialog-title" class="w3-green">Add Transaction</h2>
+                        <input type="hidden" name="account_id" id="account_id" value="0" />
                         <label for="account_name">Account</label>
                         <select id="account_name" class="w3-input w3-block" name="account_name"></select>
                         <label for="account_type">Type</label>
@@ -30,6 +31,8 @@
                         <input type="time" class="w3-input w3-block" name="account_time" id="account_time" value="" />
                         <label for="account_description">Description</label>
                         <input type="text" class="w3-input w3-block" name="account_description" id="account_description" value="" />
+                        <label for="account_reference">Reference</label>
+                        <input type="number" class="w3-input w3-block" name="account_reference" id="account_reference" value="" />
                         <label for="account_debit">Debit</label>
                         <input type="number" class="w3-input w3-block" name="account_debit" id="account_debit" value="0.00" />
                         <label for="account_credit">Credit</label>
@@ -98,7 +101,7 @@
             <div id="add-journal-transaction-dialog" class="w3-modal">
                 <div class="w3-modal-content">
                     <div class="w3-container w3-white">
-                        <h2 class="w3-green">Add Journal Transaction</h2>
+                        <h2 id="add-journal-transaction-dialog-title" class="w3-green">Add Journal Transaction</h2>
                         <input type="hidden" name="journal_account_id" id="journal_account_id" value="0" />
                         <label for="journal_account_name">Account</label>
                         <select id="journal_account_name" class="w3-input w3-block" name="journal_account_name"></select>

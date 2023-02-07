@@ -250,10 +250,23 @@ ipcMain.on("delete_account", function(evt, name){
 ipcMain.on("add_transaction", function(evt, json){
     var data = JSON.parse(json);
     const { addTransaction } = require("@pingleware/bestbooks-helpers");
-    addTransaction(data.name,data.type,data.date + ' ' + data.time,data.description,data.debit,data.credit,
-    function(status){
-        mainWindow.webContents.send("add_transaction",JSON.stringify(status));
-    },data.company,0);
+    var date = new Date(data.date + ' ' + data.time);
+    var txdate = date.toISOString();
+    if (data.id > 0) {
+        const { Model } = require("@pingleware/bestbooks-core");
+        var model = new Model();
+        var balance = Number(data.debit) - Number(data.credit);
+        var sql = `UPDATE ledger SET company_id=${Number(data.company)},account_name='${data.name}',txdate='${txdate}',note='${data.description}',ref=${data.ref},debit=${Number(data.debit)},credit=${Number(data.credit)},balance=${balance} WHERE id=${data.id};`;
+        console.log(sql);
+        model.insert(sql, function(results){
+            mainWindow.webContents.send("add_transaction",JSON.stringify(results));
+        });
+    } else {
+        addTransaction(data.name,data.type,txdate,data.description,data.debit,data.credit,
+            function(status){
+                mainWindow.webContents.send("add_transaction",JSON.stringify(status));
+            },data.company,0);        
+    }
 });
 
 ipcMain.on("get_transactions", function(evt, company_id){
@@ -264,6 +277,16 @@ ipcMain.on("get_transactions", function(evt, company_id){
     model.query(sql, function(results){
         mainWindow.webContents.send("get_transactions",JSON.stringify(results));
     })
+});
+
+ipcMain.on('delete_transaction', function(evt, id){
+    const { Model } = require("@pingleware/bestbooks-core");
+    var model = new Model();
+    var sql = `DELETE FROM ledger WHERE id=${id};`;
+    model.insert(sql, function(results){
+        mainWindow.webContents.send('delete_transaction',JSON.stringify(results));
+    });
+
 });
 
 ipcMain.on("add_journal_transaction", function(evt, json){

@@ -22,7 +22,7 @@ function accounting_load() {
             </tr>`;
             accounts.forEach(function(account){
                 console.log(account);
-                var checked = `No, <button data-id="${account.id}" data-name="${account.name}" class="w3-button w3-red" onclick="deleteAccount(this)">Delete</button>`;
+                var checked = `No, <button data-id="${account.id}" data-name="${account.name}" data-type="${account.type}" class="w3-button w3-red" onclick="deleteAccount(this)">Delete</button>`;
                 if (account.inuse == 1) {
                     checked = 'Yes';
                 }
@@ -128,6 +128,7 @@ function accounting_load() {
                 var option = document.createElement("option");
                 option.value = account.name;
                 option.innerText = account.name;
+                option.setAttribute('data-type',account.type);
                 document.getElementById("journal_account_name").appendChild(option);
             });
             document.getElementById("add_journal_transaction_action").value = "Add";
@@ -138,6 +139,7 @@ function accounting_load() {
             document.getElementById("journal_account_debit").value = "0.00";
             document.getElementById("journal_account_credit").value = "0.00";
             document.getElementById("journal_account_id").value = "0";
+            document.getElementById("add-journal-transaction-dialog-title").innerHTML = 'Add Journal Transaction';
             document.getElementById("add-journal-transaction-dialog").style.display = 'block';
         });
     });
@@ -155,6 +157,7 @@ function accounting_load() {
                 var option = new Option();
                 option.value = account.id;
                 option.text = account.name;
+                option.setAttribute('data-type',account.type);
                 option.setAttribute("data-account",btoa(JSON.stringify(account)));
                 document.getElementById("accounting-budget-account").appendChild(option);
             });
@@ -277,6 +280,7 @@ function accounting_load() {
                 var option = new Option();
                 option.value = account.id;
                 option.text = account.name;
+                option.setAttribute('data-type',account.type);
                 option.setAttribute("data-account",btoa(JSON.stringify(account)));
                 document.getElementById("accounting-starting-balances-account").appendChild(option);
             });
@@ -412,34 +416,50 @@ function accounting_load() {
         getAccounts(function(results){
             console.log(results);
             var accounts = JSON.parse(results);
+            document.getElementById("account_name").innerHTML = '';
             accounts.forEach(function(account){
                 var option = document.createElement("option");
                 option.value = account.name;
                 option.innerText = account.name;
+                option.setAttribute('data-type',account.type);
                 document.getElementById("account_name").appendChild(option);
             });
             var accountTypes = Object.keys(JSON.parse(localStorage.getItem("accountTypes")));
+            document.getElementById("account_type").innerHTML = '';
             accountTypes.forEach(function(accountType){
                 var option = document.createElement("option");
                 option.value = accountType;
                 option.innerText = accountType;
                 document.getElementById("account_type").appendChild(option); 
             });
+            document.getElementById("add_transaction_action").value = "Add";
+            document.getElementById("account_date").value = "";
+            document.getElementById("account_time").value = "";
+            document.getElementById("account_description").value = "";
+            document.getElementById("account_reference").value = "";
+            document.getElementById("account_debit").value = "0.00";
+            document.getElementById("account_credit").value = "0.00";
+            document.getElementById("account_id").value = "0";
+            document.getElementById("account_name").value = "";
+            document.getElementById("add-transaction-dialog-title").innerHTML = "Add Transaction";
             document.getElementById('add-transaction-dialog').style.display='block';
         });
     });
     document.getElementById("add_transaction_action").addEventListener("click", function(e){
         e.preventDefault();
         var data = {
+            id: document.getElementById("account_id").value,
             name: document.getElementById("account_name").value,
             type: document.getElementById("account_type").value,
             date: document.getElementById("account_date").value,
             time: document.getElementById("account_time").value,
             description: document.getElementById("account_description").value,
+            ref: document.getElementById("account_reference").value,
             debit: document.getElementById("account_debit").value,
             credit: document.getElementById("account_credit").value,
             company: company.id
         };
+        console.log(data);
         SendIPC("add_transaction",JSON.stringify(data),function(channel,event,result){
             window.location.reload();
         });
@@ -466,6 +486,7 @@ function accounting_load() {
         e.preventDefault();
         var account_types = Object.keys(JSON.parse(localStorage.getItem("accountTypes"),true));
         console.log(account_types);
+        document.getElementById("addnew-type").innerHTML = '';
         account_types.forEach(function(account_type){
             var option = document.createElement('option');
             option.value = account_type;
@@ -498,9 +519,62 @@ function deleteAccount(obj) {
 }
 function updateTransaction(obj) {
     let id = obj.getAttribute("data-id");
-    var transaction = atob(obj.getAttribute("data-trans"));
+    var transaction = JSON.parse(atob(obj.getAttribute("data-trans")));
     var action = obj.value;
     console.log([id,transaction,action]);
+    switch(action) {
+        case 'delete':
+            var message = '';
+            if (transaction.ref > 0) {
+                message = "<br/><i>Don't forget to delete the related reference transaction?</i>";
+            }
+            showConfirm("Delete Transaction?",`Delete the transaction:<br/>${transaction.date} for ${transaction.note}? ${message}`,function(v){
+                SendIPC("delete_transaction",id,function(channel,event,json){
+                    window.location.reload();
+                });
+            });
+            break;
+        case 'edit':
+            {
+                getAccounts(function(results){
+                    console.log(results);
+                    var accounts = JSON.parse(results);
+                    document.getElementById("account_name").innerHTML = '<option value="">Select</option>';
+                    accounts.forEach(function(account){
+                        var option = document.createElement("option");
+                        option.value = account.name;
+                        option.innerText = account.name;
+                        option.setAttribute('data-type',account.type);
+                        document.getElementById("account_name").appendChild(option);
+                    });
+                    var accountTypes = Object.keys(JSON.parse(localStorage.getItem("accountTypes")));
+                    document.getElementById("account_type").innerHTML = '';
+                    accountTypes.forEach(function(accountType){
+                        var option = document.createElement("option");
+                        option.value = accountType;
+                        option.innerText = accountType;
+                        document.getElementById("account_type").appendChild(option); 
+                    });        
+                    document.getElementById("add_transaction_action").value = "Save";
+                    var date = new Date(transaction.date);
+                    document.getElementById("account_date").value = date.toISOString().split('T')[0];
+                    document.getElementById("account_time").value = date.toTimeString().substr(0,8);
+                    document.getElementById("account_description").value = transaction.note;
+                    document.getElementById("account_reference").value = transaction.ref;
+                    document.getElementById("account_debit").value = transaction.debit;
+                    document.getElementById("account_credit").value = transaction.credit;
+                    document.getElementById("account_id").value = transaction.id;
+                    document.getElementById("account_name").value = transaction.name;
+
+                    var account_name = document.getElementById("account_name");
+                    console.log(account_name.options[account_name.options.selectedIndex].getAttribute("data-type"));
+                    document.getElementById("account_type").value = account_name.options[account_name.options.selectedIndex].getAttribute("data-type");
+                    document.getElementById("add-transaction-dialog-title").innerHTML = "Edit Transaction";
+                    document.getElementById("add-transaction-dialog").style.display = 'block';
+                });
+            }
+            break;
+    }
     obj.value = "";
 }
 function updateJournalTransaction(obj) {
@@ -530,6 +604,7 @@ function updateJournalTransaction(obj) {
                         var option = document.createElement("option");
                         option.value = account.name;
                         option.innerText = account.name;
+                        option.setAttribute('data-type',account.type);
                         document.getElementById("journal_account_name").appendChild(option);
                     });
                     document.getElementById("add_journal_transaction_action").value = "Save";
@@ -541,6 +616,7 @@ function updateJournalTransaction(obj) {
                     document.getElementById("journal_account_credit").value = transaction.credit;
                     document.getElementById("journal_account_id").value = transaction.id;
                     document.getElementById("journal_account_name").value = transaction.account;
+                    document.getElementById("add-journal-transaction-dialog-title").innerHTML = 'Edit Journal Transaction';
                     document.getElementById("add-journal-transaction-dialog").style.display = 'block';
                 });        
             }
