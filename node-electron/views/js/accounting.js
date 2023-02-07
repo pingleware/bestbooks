@@ -1,4 +1,6 @@
 function accounting_load() {
+    var year = new Date().getFullYear();
+
     document.getElementById("accounting-budget-table-current-year").innerHTML = Number(year);
     document.getElementById("accounting-budget-table-next-year").innerHTML = Number(year) + 1;
     
@@ -20,7 +22,7 @@ function accounting_load() {
             </tr>`;
             accounts.forEach(function(account){
                 console.log(account);
-                var checked = `No, <button data-id="${account.id}" class="w3-button w3-red" onclick="deleteAccount(this)">Delete</button>`;
+                var checked = `No, <button data-id="${account.id}" data-name="${account.name}" class="w3-button w3-red" onclick="deleteAccount(this)">Delete</button>`;
                 if (account.inuse == 1) {
                     checked = 'Yes';
                 }
@@ -145,6 +147,7 @@ function accounting_load() {
                 var option = new Option();
                 option.value = account.id;
                 option.text = account.name;
+                option.setAttribute("data-account",btoa(JSON.stringify(account)));
                 document.getElementById("accounting-budget-account").appendChild(option);
             });
             document.getElementById("main").style.display = "none";
@@ -160,11 +163,102 @@ function accounting_load() {
         e.preventDefault();
         let id = this.value;
         console.log(id);
+
         if (Number(id) > 0) {
-            document.getElementById("accounting-budget-save").removeAttribute("disabled");
+            SendIPC("account_budgets",id, function(channel,event,json){
+                var data = JSON.parse(json);
+                document.getElementById("accounting-budget-01").value = data[0].Bud01;
+                document.getElementById("accounting-budget-02").value = data[0].Bud02;
+                document.getElementById("accounting-budget-03").value = data[0].Bud03;
+                document.getElementById("accounting-budget-04").value = data[0].Bud04;
+                document.getElementById("accounting-budget-05").value = data[0].Bud05;
+                document.getElementById("accounting-budget-06").value = data[0].Bud06;
+                document.getElementById("accounting-budget-07").value = data[0].Bud07;
+                document.getElementById("accounting-budget-08").value = data[0].Bud08;
+                document.getElementById("accounting-budget-09").value = data[0].Bud09;
+                document.getElementById("accounting-budget-10").value = data[0].Bud10;
+                document.getElementById("accounting-budget-11").value = data[0].Bud11;
+                document.getElementById("accounting-budget-12").value = data[0].Bud12;
+                document.getElementById("accounting-budget-13").value = data[0].Bud13;
+                document.getElementById("accounting-budget-14").value = data[0].Bud14;
+                document.getElementById("accounting-budget-15").value = data[0].Bud15;
+                document.getElementById("accounting-budget-16").value = data[0].Bud16;
+                document.getElementById("accounting-budget-17").value = data[0].Bud17;
+                document.getElementById("accounting-budget-18").value = data[0].Bud18;
+                document.getElementById("accounting-budget-19").value = data[0].Bud19;
+                document.getElementById("accounting-budget-20").value = data[0].Bud20;
+                document.getElementById("accounting-budget-21").value = data[0].Bud21;
+                document.getElementById("accounting-budget-22").value = data[0].Bud22;
+                document.getElementById("accounting-budget-23").value = data[0].Bud23;
+                document.getElementById("accounting-budget-24").value = data[0].Bud24;
+    
+                document.getElementById("accounting-budget-save").removeAttribute("disabled");
+            });
         } else {
+            document.getElementById("accounting-budget-01").value = "0.00";
+            document.getElementById("accounting-budget-02").value = "0.00";
+            document.getElementById("accounting-budget-03").value = "0.00";
+            document.getElementById("accounting-budget-04").value = "0.00";
+            document.getElementById("accounting-budget-05").value = "0.00";
+            document.getElementById("accounting-budget-06").value = "0.00";
+            document.getElementById("accounting-budget-07").value = "0.00";
+            document.getElementById("accounting-budget-08").value = "0.00";
+            document.getElementById("accounting-budget-09").value = "0.00";
+            document.getElementById("accounting-budget-10").value = "0.00";
+            document.getElementById("accounting-budget-11").value = "0.00";
+            document.getElementById("accounting-budget-12").value = "0.00";
+            document.getElementById("accounting-budget-13").value = "0.00";
+            document.getElementById("accounting-budget-14").value = "0.00";
+            document.getElementById("accounting-budget-15").value = "0.00";
+            document.getElementById("accounting-budget-16").value = "0.00";
+            document.getElementById("accounting-budget-17").value = "0.00";
+            document.getElementById("accounting-budget-18").value = "0.00";
+            document.getElementById("accounting-budget-19").value = "0.00";
+            document.getElementById("accounting-budget-20").value = "0.00";
+            document.getElementById("accounting-budget-21").value = "0.00";
+            document.getElementById("accounting-budget-22").value = "0.00";
+            document.getElementById("accounting-budget-23").value = "0.00";
+            document.getElementById("accounting-budget-24").value = "0.00";
+
             document.getElementById("accounting-budget-save").setAttribute("disabled","disabled");
         }
+    });
+    document.getElementById("accounting-budget-save").addEventListener("click", function(e){
+        e.preventDefault();
+
+        var params = {
+            company: Number(company.id),
+            account: Number(document.getElementById("accounting-budget-account").value),
+            budget_01: Number(document.getElementById("accounting-budget-01").value),
+            budget_02: Number(document.getElementById("accounting-budget-02").value),
+            budget_03: Number(document.getElementById("accounting-budget-03").value),
+            budget_04: Number(document.getElementById("accounting-budget-04").value),
+            budget_05: Number(document.getElementById("accounting-budget-05").value),
+            budget_06: Number(document.getElementById("accounting-budget-06").value),
+            budget_07: Number(document.getElementById("accounting-budget-07").value),
+            budget_08: Number(document.getElementById("accounting-budget-08").value),
+            budget_09: Number(document.getElementById("accounting-budget-09").value),
+            budget_10: Number(document.getElementById("accounting-budget-10").value),
+            budget_11: Number(document.getElementById("accounting-budget-11").value),
+            budget_12: Number(document.getElementById("accounting-budget-12").value),
+            budget_13: Number(document.getElementById("accounting-budget-13").value),
+            budget_14: Number(document.getElementById("accounting-budget-14").value),
+            budget_15: Number(document.getElementById("accounting-budget-15").value),
+            budget_16: Number(document.getElementById("accounting-budget-16").value),
+            budget_17: Number(document.getElementById("accounting-budget-17").value),
+            budget_18: Number(document.getElementById("accounting-budget-18").value),
+            budget_19: Number(document.getElementById("accounting-budget-19").value),
+            budget_20: Number(document.getElementById("accounting-budget-20").value),
+            budget_21: Number(document.getElementById("accounting-budget-21").value),
+            budget_22: Number(document.getElementById("accounting-budget-22").value),
+            budget_23: Number(document.getElementById("accounting-budget-23").value),
+            budget_24: Number(document.getElementById("accounting-budget-24").value)
+        };
+        console.log(params);
+        SendIPC("accounting_budget",JSON.stringify(params),function(channel,event,data){
+            console.log(data);
+            showAlert("success","Budget Status","Budget has been updated successfully!");
+        });
     });
     document.getElementById("accounting-starting-balances-button").addEventListener("click",function(e){
         e.preventDefault();
@@ -175,6 +269,7 @@ function accounting_load() {
                 var option = new Option();
                 option.value = account.id;
                 option.text = account.name;
+                option.setAttribute("data-account",btoa(JSON.stringify(account)));
                 document.getElementById("accounting-starting-balances-account").appendChild(option);
             });
             document.getElementById("main").style.display = "none";
@@ -190,12 +285,107 @@ function accounting_load() {
         e.preventDefault();
         let id = this.value;
         console.log(id);
+        //var base64 = e.target.options[e.target.options.selectedIndex].getAttribute("data-account");
+        //var json = atob(base64);
+        //console.log(json)
+        //var account = JSON.parse(json);
+        //console.log(account);
+
         if (Number(id) > 0) {
-            document.getElementById("accounting-starting-balances-save").removeAttribute("disabled");
+            SendIPC("account_balances",id,function(channel,event,json){
+                var data = JSON.parse(json);
+                console.log(data);
+                document.getElementById("accounting-starting-balances-01").value = data[0].Bal01;
+                document.getElementById("accounting-starting-balances-02").value = data[0].Bal02;
+                document.getElementById("accounting-starting-balances-03").value = data[0].Bal03;
+                document.getElementById("accounting-starting-balances-04").value = data[0].Bal04;
+                document.getElementById("accounting-starting-balances-05").value = data[0].Bal05;
+                document.getElementById("accounting-starting-balances-06").value = data[0].Bal06;
+                document.getElementById("accounting-starting-balances-07").value = data[0].Bal07;
+                document.getElementById("accounting-starting-balances-08").value = data[0].Bal08;
+                document.getElementById("accounting-starting-balances-09").value = data[0].Bal09;
+                document.getElementById("accounting-starting-balances-10").value = data[0].Bal10;
+                document.getElementById("accounting-starting-balances-11").value = data[0].Bal11;
+                document.getElementById("accounting-starting-balances-12").value = data[0].Bal12;
+                document.getElementById("accounting-starting-balances-13").value = data[0].Bal13;
+                document.getElementById("accounting-starting-balances-14").value = data[0].Bal14;
+                document.getElementById("accounting-starting-balances-15").value = data[0].Bal15;
+                document.getElementById("accounting-starting-balances-16").value = data[0].Bal16;
+                document.getElementById("accounting-starting-balances-17").value = data[0].Bal17;
+                document.getElementById("accounting-starting-balances-18").value = data[0].Bal18;
+                document.getElementById("accounting-starting-balances-19").value = data[0].Bal19;
+                document.getElementById("accounting-starting-balances-20").value = data[0].Bal20;
+                document.getElementById("accounting-starting-balances-21").value = data[0].Bal21;
+                document.getElementById("accounting-starting-balances-22").value = data[0].Bal22;
+                document.getElementById("accounting-starting-balances-23").value = data[0].Bal23;
+                document.getElementById("accounting-starting-balances-24").value = data[0].Bal24;
+
+                document.getElementById("accounting-starting-balances-save").removeAttribute("disabled");
+            })
         } else {
+            document.getElementById("accounting-starting-balances-01").value = "0.00";
+            document.getElementById("accounting-starting-balances-02").value = "0.00";
+            document.getElementById("accounting-starting-balances-03").value = "0.00";
+            document.getElementById("accounting-starting-balances-04").value = "0.00";
+            document.getElementById("accounting-starting-balances-05").value = "0.00";
+            document.getElementById("accounting-starting-balances-06").value = "0.00";
+            document.getElementById("accounting-starting-balances-07").value = "0.00";
+            document.getElementById("accounting-starting-balances-08").value = "0.00";
+            document.getElementById("accounting-starting-balances-09").value = "0.00";
+            document.getElementById("accounting-starting-balances-10").value = "0.00";
+            document.getElementById("accounting-starting-balances-11").value = "0.00";
+            document.getElementById("accounting-starting-balances-12").value = "0.00";
+            document.getElementById("accounting-starting-balances-13").value = "0.00";
+            document.getElementById("accounting-starting-balances-14").value = "0.00";
+            document.getElementById("accounting-starting-balances-15").value = "0.00";
+            document.getElementById("accounting-starting-balances-16").value = "0.00";
+            document.getElementById("accounting-starting-balances-17").value = "0.00";
+            document.getElementById("accounting-starting-balances-18").value = "0.00";
+            document.getElementById("accounting-starting-balances-19").value = "0.00";
+            document.getElementById("accounting-starting-balances-20").value = "0.00";
+            document.getElementById("accounting-starting-balances-21").value = "0.00";
+            document.getElementById("accounting-starting-balances-22").value = "0.00";
+            document.getElementById("accounting-starting-balances-23").value = "0.00";
+            document.getElementById("accounting-starting-balances-24").value = "0.00";
+        
             document.getElementById("accounting-starting-balances-save").setAttribute("disabled","disabled");
         }
-    });    
+    });   
+    document.getElementById("accounting-starting-balances-save").addEventListener("click",function(e){
+        e.preventDefault();
+        var params = {
+            company: Number(company.id),
+            account: Number(document.getElementById("accounting-starting-balances-account").value),
+            balance_01: Number(document.getElementById("accounting-starting-balances-01").value),
+            balance_02: Number(document.getElementById("accounting-starting-balances-02").value),
+            balance_03: Number(document.getElementById("accounting-starting-balances-03").value),
+            balance_04: Number(document.getElementById("accounting-starting-balances-04").value),
+            balance_05: Number(document.getElementById("accounting-starting-balances-05").value),
+            balance_06: Number(document.getElementById("accounting-starting-balances-06").value),
+            balance_07: Number(document.getElementById("accounting-starting-balances-07").value),
+            balance_08: Number(document.getElementById("accounting-starting-balances-08").value),
+            balance_09: Number(document.getElementById("accounting-starting-balances-09").value),
+            balance_10: Number(document.getElementById("accounting-starting-balances-10").value),
+            balance_11: Number(document.getElementById("accounting-starting-balances-11").value),
+            balance_12: Number(document.getElementById("accounting-starting-balances-12").value),
+            balance_13: Number(document.getElementById("accounting-starting-balances-13").value),
+            balance_14: Number(document.getElementById("accounting-starting-balances-14").value),
+            balance_15: Number(document.getElementById("accounting-starting-balances-15").value),
+            balance_16: Number(document.getElementById("accounting-starting-balances-16").value),
+            balance_17: Number(document.getElementById("accounting-starting-balances-17").value),
+            balance_18: Number(document.getElementById("accounting-starting-balances-18").value),
+            balance_19: Number(document.getElementById("accounting-starting-balances-19").value),
+            balance_20: Number(document.getElementById("accounting-starting-balances-20").value),
+            balance_21: Number(document.getElementById("accounting-starting-balances-21").value),
+            balance_22: Number(document.getElementById("accounting-starting-balances-22").value),
+            balance_23: Number(document.getElementById("accounting-starting-balances-23").value),
+            balance_24: Number(document.getElementById("accounting-starting-balances-24").value)
+        };
+        SendIPC("accounting_balance",JSON.stringify(params),function(channel,event,data){
+            console.log(data);
+            showAlert("success","Starting Balance Status","Starting Balances have been updated successfully!");
+        });
+    }); 
     document.getElementById("addnew-now").addEventListener("click", function(e){
         e.preventDefault();
         var data = {
@@ -285,7 +475,10 @@ function getJournalTransactions(callback) {
     })
 }
 function deleteAccount(obj) {
-    let id = obj.getAttribute("data-id");
+    var name = obj.getAttribute("data-name");
+    SendIPC("delete_account",name,function(channel,event,data){
+        console.log(data);
+    })
 }
 function updateTransaction(obj) {
     let id = obj.getAttribute("data-id");

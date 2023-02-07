@@ -153,6 +153,100 @@ ipcMain.on("get_accounts_by_company", function(evt, company_id){
     });
 });
 
+ipcMain.on("accounting_budget", function(evt,json){
+    var params = JSON.parse(json);
+    console.log(params);
+    const { Model } = require("@pingleware/bestbooks-core");
+    var model = new Model();
+    var sql = `UPDATE accounts SET Bud01=${params.budget_01},
+                                      Bud02=${params.budget_02},
+                                      Bud03=${params.budget_03},
+                                      Bud04=${params.budget_04},
+                                      Bud05=${params.budget_05},
+                                      Bud06=${params.budget_06},
+                                      Bud07=${params.budget_07},
+                                      Bud08=${params.budget_08},
+                                      Bud09=${params.budget_09},
+                                      Bud10=${params.budget_10},
+                                      Bud11=${params.budget_11},
+                                      Bud12=${params.budget_12},
+                                      Bud13=${params.budget_13},
+                                      Bud14=${params.budget_14},
+                                      Bud15=${params.budget_15},
+                                      Bud16=${params.budget_16},
+                                      Bud17=${params.budget_17},
+                                      Bud18=${params.budget_18},
+                                      Bud19=${params.budget_19},
+                                      Bud20=${params.budget_20},
+                                      Bud21=${params.budget_21},
+                                      Bud22=${params.budget_22},
+                                      Bud23=${params.budget_23},
+                                      Bud24=${params.budget_24} 
+                                      WHERE id=${params.account}`;
+    var result = model.updateSync(sql);
+    mainWindow.webContents.send("accounting_budget",JSON.stringify(result));
+});
+
+ipcMain.on("accounting_balance",function(evt,json){
+    var params = JSON.parse(json);
+    const { Model } = require("@pingleware/bestbooks-core");
+    var model = new Model();
+    var sql = `UPDATE accounts SET Bal01=${params.balance_01},
+                                      Bal02=${params.balance_02},
+                                      Bal03=${params.balance_03},
+                                      Bal04=${params.balance_04},
+                                      Bal05=${params.balance_05},
+                                      Bal06=${params.balance_06},
+                                      Bal07=${params.balance_07},
+                                      Bal08=${params.balance_08},
+                                      Bal09=${params.balance_09},
+                                      Bal10=${params.balance_10},
+                                      Bal11=${params.balance_11},
+                                      Bal12=${params.balance_12},
+                                      Bal13=${params.balance_13},
+                                      Bal14=${params.balance_14},
+                                      Bal15=${params.balance_15},
+                                      Bal16=${params.balance_16},
+                                      Bal17=${params.balance_17},
+                                      Bal18=${params.balance_18},
+                                      Bal19=${params.balance_19},
+                                      Bal20=${params.balance_20},
+                                      Bal21=${params.balance_21},
+                                      Bal22=${params.balance_22},
+                                      Bal23=${params.balance_23},
+                                      Bal24=${params.balance_24} 
+                                      WHERE id=${params.account}`;
+
+    
+    var result = model.updateSync(sql);
+    mainWindow.webContents.send("accounting_balance",JSON.stringify(result));
+});
+
+ipcMain.on("account_balances", function(evt,id){
+    const { Model } = require("@pingleware/bestbooks-core");
+    var model = new Model();
+    var sql = `SELECT Bal01,Bal02,Bal03,Bal04,Bal05,Bal06,Bal07,Bal08,Bal09,Bal10,Bal11,Bal12,Bal13,Bal14,Bal15,Bal16,Bal17,Bal18,Bal19,Bal20,Bal21,Bal22,Bal23,Bal24 FROM accounts WHERE id=${id};`;
+    model.query(sql, function(data){
+        mainWindow.webContents.send('account_balances',JSON.stringify(data));
+    })
+});
+
+ipcMain.on("account_budgets", function(evt,id){
+    const { Model } = require("@pingleware/bestbooks-core");
+    var model = new Model();
+    var sql = `SELECT Bud01,Bud02,Bud03,Bud04,Bud05,Bud06,Bud07,Bud08,Bud09,Bud10,Bud11,Bud12,Bud13,Bud14,Bud15,Bud16,Bud17,Bud18,Bud19,Bud20,Bud21,Bud22,Bud23,Bud24 FROM accounts WHERE id=${id};`;
+    model.query(sql, function(data){
+        mainWindow.webContents.send('account_budgets',JSON.stringify(data));
+    })
+})
+
+ipcMain.on("delete_account", function(evt, name){
+    const { ChartOfAccounts } = require("@pingleware/bestbooks-core");
+    var coa = new ChartOfAccounts();
+    var status = coa.remove(name);
+    mainWindow.webContents.send("delete_account",status);
+});
+
 ipcMain.on("add_transaction", function(evt, json){
     var data = JSON.parse(json);
     const { addTransaction } = require("@pingleware/bestbooks-helpers");

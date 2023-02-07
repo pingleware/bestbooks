@@ -177,7 +177,7 @@
                 <h2 class="w3-green" id="success-dialog-title">Success</h2>
                 <p id="success-dialog-message"></p>
                 <br />
-                <button class="w3-button w3-block w3-black" onclick="document.getElementById('success-dialog').style.display='none';">OK</button>
+                <button class="w3-button w3-block w3-black" id="success-dialog-ok" onclick="document.getElementById('success-dialog').style.display='none';">OK</button>
                 <br />
             </div>
             </div>
@@ -217,6 +217,10 @@
             </p>
         </div>        
         <!-- JavaScript -->
+        <script type="text/javascript">
+            var company = { id: 0, name: ''};
+
+        </script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/sales.js"></script>
         <script type="text/javascript" src="js/purchase.js"></script>
@@ -230,8 +234,6 @@
         <script type="text/javascript" src="js/export.js"></script>
         <script type="text/javascript" src="js/help.js"></script>
         <script type="text/javascript">
-            var company = { id: 0, name: ''};
-
             window.onload = function() {
                 document.getElementById('version').innerHTML = 'Version ' + localStorage.getItem('version');
 
@@ -294,7 +296,6 @@
                     company.id = 0;
                     company.name = '';
                 }
-                console.log(company);
             })
 
             function expand(element_id) {
@@ -320,6 +321,7 @@
                 })
             });
             document.getElementById("main-back").addEventListener("click",function(e){
+                e.preventDefault();
                 company.id = 0;
                 company.name = '';
 
@@ -327,8 +329,6 @@
 
                 document.getElementById("main").style.display = "none";
                 document.getElementById("company").style.display = "block";
-
-                e.preventDefault();
             });
         </script>
     </body>
