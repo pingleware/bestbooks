@@ -244,7 +244,7 @@ ipcMain.on("delete_account", function(evt, name){
     const { ChartOfAccounts } = require("@pingleware/bestbooks-core");
     var coa = new ChartOfAccounts();
     var status = coa.remove(name);
-    mainWindow.webContents.send("delete_account",status);
+    mainWindow.webContents.send("delete_account",JSON.stringify(status));
 });
 
 ipcMain.on("add_transaction", function(evt, json){
@@ -264,7 +264,19 @@ ipcMain.on("get_transactions", function(evt, company_id){
     model.query(sql, function(results){
         mainWindow.webContents.send("get_transactions",JSON.stringify(results));
     })
-})
+});
+
+ipcMain.on("add_journal_transaction", function(evt, json){
+    var params = JSON.parse(json);
+    const { Model } = require("@pingleware/bestbooks-core");
+    var model = new Model();
+    var sql = `INSERT INTO journal (company_id,office_id,txdate,account,ref,debit,credit) 
+                VALUES (${params.company},${params.office},'${params.date}','${params.name}',${Number(params.ref)},${Number(params.debit)},${Number(params.credit)});`;
+
+    model.insert(sql,function(results){
+        mainWindow.webContents.send('add_journal_transaction',JSON.stringify(results));
+    });
+});
 
 ipcMain.on("get_journal_transactions", function(evt, company_id){
     const { Model } = require("@pingleware/bestbooks-core");

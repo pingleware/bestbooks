@@ -396,9 +396,7 @@ function accounting_load() {
         console.log(data);
         SendIPC("add_account",JSON.stringify(data),function(channel,event,result){
             console.log(result);
-            document.getElementById("addnew-name").value = "";
-            document.getElementById("addnew-type").value = "Unknown";
-            document.getElementById('accounting-chartofaccounts-addnew').style.display='none';
+            window.location.reload();
         });
     });
     document.getElementById("add_transaction").addEventListener("click", function(e){
@@ -435,16 +433,24 @@ function accounting_load() {
             company: company.id
         };
         SendIPC("add_transaction",JSON.stringify(data),function(channel,event,result){
-            console.log(result);
-            document.getElementById("account_name").value = "Cash";
-            document.getElementById("account_type").value = "Unknown";
-            document.getElementById("account_date").value = "";
-            document.getElementById("account_time").value = "";
-            document.getElementById("account_description").value = "";
-            document.getElementById("account_debit").value = "0.00";
-            document.getElementById("account_credit").value = "0.00";
-            document.getElementById('add-transaction-dialog').style.display='none';
+            window.location.reload();
         });
+    });
+    document.getElementById("add_journal_transaction_action").addEventListener("click", function(e){
+        e.preventDefault();
+        var data = {
+            name: document.getElementById("journal_account_name").value,
+            date: document.getElementById("journal_account_date").value,
+            ref: document.getElementById("journal_account_reference").value,
+            debit: document.getElementById("journal_account_debit").value,
+            credit: document.getElementById("journal_account_credit").value,
+            company: company.id,
+            office: 0
+        };
+        SendIPC("add_journal_transaction",JSON.stringify(data),function(channel,event,result){
+            window.location.reload();
+        });
+
     });
     document.getElementById("add_account").addEventListener("click",function(e){
         e.preventDefault();
@@ -477,7 +483,7 @@ function getJournalTransactions(callback) {
 function deleteAccount(obj) {
     var name = obj.getAttribute("data-name");
     SendIPC("delete_account",name,function(channel,event,data){
-        console.log(data);
+        window.location.reload();
     })
 }
 function updateTransaction(obj) {

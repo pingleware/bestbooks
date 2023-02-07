@@ -101,17 +101,15 @@
                         <h2 class="w3-green">Add Journal Transaction</h2>
                         <label for="journal_account_name">Account</label>
                         <select id="journal_account_name" class="w3-input w3-block" name="journal_account_name"></select>
-                        <label for="account_date">Date</label>
-                        <input type="date" class="w3-input w3-block" name="account_date" id="account_date" value="" />
-                        <label for="account_reference">Reference</label>
-                        <input type="number" class="w3-input w3-block" name="account_reference" id="account_reference" value="" />
-                        <label for="account_description">Description</label>
-                        <input type="text" class="w3-input w3-block" name="account_description" id="account_description" value="" />
-                        <label for="account_debit">Debit</label>
-                        <input type="number" class="w3-input w3-block" name="account_debit" id="account_debit" value="0.00" />
-                        <label for="account_credit">Credit</label>
-                        <input type="number" class="w3-input w3-block" name="account_credit" id="account_credit" value="0.00" />
-                        <input type="button" class="w3-button w3-block w3-black" id="add_transaction_action" name="add_transaction_action" value="Add" />
+                        <label for="journal_account_date">Date</label>
+                        <input type="date" class="w3-input w3-block" name="journal_account_date" id="journal_account_date" value="" />
+                        <label for="journal_account_reference">Reference</label>
+                        <input type="number" class="w3-input w3-block" name="journal_account_reference" id="journal_account_reference" value="" />
+                        <label for="journal_account_debit">Debit</label>
+                        <input type="number" class="w3-input w3-block" name="journal_account_debit" id="journal_account_debit" value="0.00" />
+                        <label for="journal_account_credit">Credit</label>
+                        <input type="number" class="w3-input w3-block" name="journal_account_credit" id="journal_account_credit" value="0.00" />
+                        <input type="button" class="w3-button w3-block w3-black" id="add_journal_transaction_action" name="add_journal_transaction_action" value="Add" />
                         <br/>
                         <button class="w3-button w3-block w3-orange" onclick="document.getElementById('add-journal-transaction-dialog').style.display='none';">Cancel</button>
                         <br/>
