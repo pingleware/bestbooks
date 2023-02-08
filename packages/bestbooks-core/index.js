@@ -30,6 +30,12 @@ const Income = require('./income');
 const Company = require('./company');
 // user
 const User = require('./user');
+// vendor
+const Vendor = require('./vendor');
+// customer
+const Customer = require('./customer');
+// reports
+const Report = require('./report');
 
 module.exports = {
     Model: Model,
@@ -49,5 +55,8 @@ module.exports = {
     OwnersEquity: OwnersEquity,
     Income: Income,
     Company: Company,
-    User: User
+    User: User,
+    Vendor: Vendor,
+    Customer: Customer,
+    Report: Report
 }
