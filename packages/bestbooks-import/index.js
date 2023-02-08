@@ -30,8 +30,156 @@ async function import_from_wordpress(params) {
     return await importTransactions(params);
 }
 
-async function import_from_waveaccounting(params) {
-    return await importTransactions(params);
+function import_from_waveaccounting(params,callback) {
+    const fs = require("fs");
+    const { parse } = require("csv-parse");
+    const { addTransaction, payExpenseByCard } = require("@pingleware/bestbooks-helpers");
+
+    const data = [];
+
+    fs.createReadStream(params.filename)
+        .pipe(parse({ delimiter: ',' }))
+        .on('data', (r) => {
+            //console.log(r);
+            data.push(r);        
+        })
+        .on('end', () => {
+            // import transactions
+            switch(params.source) {
+                case 'accounting':
+                    {
+                        /**
+                         * Transaction ID,
+                         * Transaction Date, [1]
+                         * Account Name, [2]
+                         * Transaction Description, [3]
+                         * Transaction Line Description,
+                         * Amount (One column),
+                         *  ,
+                         * Debit Amount (Two Column Approach), [7]
+                         * Credit Amount (Two Column Approach), [8]
+                         * Other Accounts for this Transaction,
+                         * Customer,
+                         * Vendor,
+                         * Invoice Number,
+                         * Bill Number,
+                         * Notes / Memo
+                         * Amount Before Sales Tax
+                         * Sales Tax Amount,
+                         * Sales Tax Name,
+                         * Transaction Date Added,
+                         * Transaction Date Last Modified,
+                         * Account Group,
+                         * Account Type, [21]
+                         * Account ID
+                         */
+                        var accounting = [];
+                        let total = data.length;
+                        let count = 0;
+                        data.forEach(function(lineItem){
+                            accounting.push({
+                                date: lineItem[1],
+                                account: lineItem[2],
+                                type: lineItem[20],
+                                description: lineItem[3],
+                                debit: Number(lineItem[7]),
+                                credit: Number(lineItem[8])
+                            });
+                            addTransaction(lineItem[2],lineItem[20],lineItem[1],lineItem[3],Number(lineItem[7]),Number(lineItem[8]),function(results){
+                                if (count++ >= total) {
+                                    callback(accounting);
+                                }
+                            }, params.company_id, params.office_id);
+                        });
+                    }
+                    break;
+                case 'bill_items':
+                    {
+                        /**
+                         * vendor,
+                         * description, [1]
+                         * invoice_num,
+                         * po_so,
+                         * account, [4]
+                         * product,
+                         * amount, [6]
+                         * quantity,
+                         * bill_date, [8]
+                         * currency,
+                         * due_date,
+                         * taxes
+                         */
+                        var bill_items = [];
+                        data.forEach(function(lineItem){
+                            bill_items.push({
+                                date: lineItem[8],
+                                description: lineItem[1],
+                                amount: lineItem[6],
+                                account: lineItem[4]
+                            });
+                            payExpenseByCard(lineItem[8],lineItem[1],lineItem[6],lineItem[4]);
+                        });
+                        callback(bill_items);
+                    }
+                    break;
+                case 'customers':
+                    {
+                        /**
+                         * customer_name,email,
+                         * contact_first_name,
+                         * contact_last_name,
+                         * customer_currency,
+                         * account_number,
+                         * phone,
+                         * fax,
+                         * mobile,
+                         * toll_free,
+                         * website,
+                         * country,
+                         * province/state,
+                         * address_line_1,
+                         * address_line_2,
+                         * city,
+                         * postal_code/zip_code,
+                         * shipping_address,
+                         * ship-to_contact,
+                         * ship-to_country,
+                         * ship-to_province/state,
+                         * ship-to_address_line_1,
+                         * ship-to_address_line_2,
+                         * ship-to_city,
+                         * ship-to_postal_code/zip_code,
+                         * ship-to_phone,
+                         * delivery_instructions
+                         */
+                    }
+                    break;
+                case 'vendors':
+                    {
+                        /**
+                         * vendor_name,
+                         * email,
+                         * contact_first_name,
+                         * contact_last_name,
+                         * vendor_currency,
+                         * account_number,
+                         * phone,
+                         * fax,
+                         * mobile,
+                         * toll_free,
+                         * website,
+                         * country,
+                         * province/state,
+                         * address_line_1,
+                         * address_line_2,
+                         * city,
+                         * postal_code/zip_code
+                         */
+                    }
+                    break;
+            }        
+        });            
+
 }
 
 async function import_from_quickbooks(params) {
