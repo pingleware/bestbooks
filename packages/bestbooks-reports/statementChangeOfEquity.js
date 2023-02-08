@@ -1,9 +1,9 @@
 "use strict"
 
 const { Model } = require('@pingleware/bestbooks-core');
-const Report = require('./report');
+const BaseReport = require('./report');
 
-class StatementChangeInEquity extends Report {
+class StatementChangeInEquity extends BaseReport {
     constructor() {
         super();
     }

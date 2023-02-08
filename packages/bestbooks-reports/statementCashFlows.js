@@ -14,9 +14,9 @@
  */
 
 const { Model } = require('@pingleware/bestbooks-core');
-const Report = require('./report');
+const BaseReport = require('./report');
 
-class StatementCashFlows extends Report {
+class StatementCashFlows extends BaseReport {
     constructor() {
         super();
     }
