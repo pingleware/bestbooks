@@ -77,6 +77,15 @@ class User {
         }
     }
 
+    async purgeTable() {
+        try {
+            var sql = `DELETE FROM user;`;
+            await this.model.insertSync(sql);
+        } catch(error) {
+            console.error(error);
+        }
+    }
+
 }
 
 

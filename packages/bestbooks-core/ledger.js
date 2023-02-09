@@ -147,6 +147,15 @@ class Ledger extends TAccount {
             console.error(error);
         }
     }
+
+    async purgeLedgerTable() {
+        try {
+            var sql = `DELETE FROM ledger;`;
+            await this.model.insertSync(sql);
+        } catch(error) {
+            console.error(error);
+        }
+    }
 }
 
 module.exports = Ledger;

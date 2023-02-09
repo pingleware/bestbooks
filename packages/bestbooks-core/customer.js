@@ -112,7 +112,7 @@ class Customer {
         }
     }
 
-    createTable() {
+    async createTable() {
         try {
             var sql = `CREATE TABLE IF NOT EXISTS "customer" (
                 "id"	INTEGER,
@@ -144,7 +144,16 @@ class Customer {
                 PRIMARY KEY("id" AUTOINCREMENT)
             );`;
 
-            this.model.insertSync(sql);
+            await this.model.insertSync(sql);
+        } catch(error) {
+            console.error(error);
+        }
+    }
+
+    async purgeTable() {
+        try {
+            var sql = `DELETE FROM customer;`;
+            await this.model.insertSync(sql);
         } catch(error) {
             console.error(error);
         }

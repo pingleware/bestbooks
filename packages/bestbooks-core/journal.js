@@ -93,6 +93,15 @@ class Journal {
             console.error(error);
         }
     }
+
+    async purgeTable() {
+        try {
+            var sql = `DELETE FROM journal;`;
+            await this.model.insertSync(sql);
+        } catch(error) {
+            console.error(error);
+        }
+    }
 }
 
 module.exports = Journal;

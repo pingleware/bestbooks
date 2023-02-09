@@ -83,7 +83,7 @@ class Vendor {
         }
     }
 
-    createTable() {
+    async createTable() {
         try {
             var sql = `CREATE TABLE IF NOT EXISTS "vendor" (
                 "id"	INTEGER,
@@ -103,7 +103,16 @@ class Vendor {
                 PRIMARY KEY("id" AUTOINCREMENT)
             );`;
 
-            this.model.insertSync(sql);
+            await this.model.insertSync(sql);
+        } catch(error) {
+            console.error(error);
+        }
+    }
+
+    async purgeTable() {
+        try {
+            var sql = `DELETE FROM vendor;`;
+            await this.model.insertSync(sql);
         } catch(error) {
             console.error(error);
         }

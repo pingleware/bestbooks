@@ -60,6 +60,15 @@ class Company {
             console.error(error);
         }
     }
+
+    async purgeTable() {
+        try {
+            var sql = `DELETE FROM company;`;
+            await this.model.insertSync(sql);
+        } catch(error) {
+            console.error(error);
+        }
+    }
 }
 
 module.exports = Company;
