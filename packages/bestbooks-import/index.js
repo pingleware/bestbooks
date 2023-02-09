@@ -33,7 +33,6 @@ async function import_from_wordpress(params) {
 function import_from_waveaccounting(params,callback) {
     const fs = require("fs");
     const { parse } = require("csv-parse");
-    const { addTransaction, payExpenseByCard } = require("@pingleware/bestbooks-helpers");
 
     const data = [];
 
@@ -44,6 +43,13 @@ function import_from_waveaccounting(params,callback) {
             data.push(r);        
         })
         .on('end', () => {
+            import_from_waveaccounting_contents(params,data,callback);
+        });
+}
+
+function import_from_waveaccounting_contents(params,data,callback) {
+    const { addTransaction, payExpenseByCard } = require("@pingleware/bestbooks-helpers");
+    
             // import transactions
             switch(params.source) {
                 case 'accounting':
@@ -178,7 +184,6 @@ function import_from_waveaccounting(params,callback) {
                     }
                     break;
             }        
-        });            
 
 }
 
@@ -211,5 +216,6 @@ module.exports = {
     import_pdf,
     import_from_wordpress,
     import_from_waveaccounting,
+    import_from_waveaccounting_contents,
     import_from_quickbooks
 }
