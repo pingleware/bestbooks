@@ -95,6 +95,11 @@ function import_from_waveaccounting_contents(params,data,callback) {
                                 if (count++ >= total) {
                                     callback(accounting);
                                 }
+                                if (params.updater) {
+                                    let percent = Number(count / total) * 100;
+                                    // params.updater is mainWindow.webContents.send(param.channel,percent)
+                                    params.updater(params.channel,percent)
+                                }
                             }, params.company_id, params.office_id);
                         });
                     }
@@ -116,6 +121,8 @@ function import_from_waveaccounting_contents(params,data,callback) {
                          * taxes
                          */
                         var bill_items = [];
+                        let total = data.length;
+                        let count = 0;
                         data.forEach(function(lineItem){
                             bill_items.push({
                                 date: lineItem[8],
@@ -124,6 +131,11 @@ function import_from_waveaccounting_contents(params,data,callback) {
                                 account: lineItem[4]
                             });
                             payExpenseByCard(lineItem[8],lineItem[1],lineItem[6],lineItem[4]);
+                            if (params.updater) {
+                                let percent = Number(count / total) * 100;
+                                // params.updater is mainWindow.webContents.send(param.channel,percent)
+                                params.updater(params.channel,percent)
+                            }
                         });
                         callback(bill_items);
                     }
