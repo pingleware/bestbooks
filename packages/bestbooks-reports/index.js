@@ -6,6 +6,7 @@ const NoteToFinancialStatements = require('./noteToFinancialStatements');
 const StatementCashFlows = require('./statementCashFlows');
 const StatementChangeInEquity = require('./statementChangeOfEquity');
 const TrialBalance = require('./trial-balance');
+const RetainedEarnings = require('./retained-earnings');
 
 module.exports = {
     BalanceSheet,
@@ -13,5 +14,6 @@ module.exports = {
     TrialBalance,
     NoteToFinancialStatements,
     StatementCashFlows,
-    StatementChangeInEquity
+    StatementChangeInEquity,
+    RetainedEarnings
 }

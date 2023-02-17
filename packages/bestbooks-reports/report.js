@@ -2,8 +2,8 @@
 
 class BaseReport {
     constructor() {}
-    createReport(startDate,endDate,format) {}
-    retrieveReportData(startDate,endDate) {}
+    createReport(startDate,endDate,format,callback=null) {}
+    retrieveReportData(startDate,endDate,callback=null) {}
 }
 
 module.exports = BaseReport;
