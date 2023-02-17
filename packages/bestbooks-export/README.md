@@ -13,4 +13,4 @@ The export function(s) for export framework data to other formats
 
 # XBLR Viewer
 
-<iframe width="640" height="480" src="https://www.youtube.com/watch?v=zTyhOvE79DQ" frameborder="0" allow="autplay; encrypted-media;" allowfullscreen></iframe>
+[![IMAGE_ALT](http://i3.ytimg.com/vi/zTyhOvE79DQ/hqdefault.jpg)](https://www.youtube.com/watch?v=zTyhOvE79DQ)
