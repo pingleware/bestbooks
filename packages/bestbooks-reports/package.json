@@ -10,9 +10,9 @@
   "author": "PressPage Entertainment Inc <presspage.entertainment@gmail.com>",
   "license": "CC-BY-4.0",
   "bugs": {
-    "url": "https://github.com/pingleware/bestbooks-reports/issues"
+    "url": "https://support.pingleware.work"
   },
-  "homepage": "https://pingleware.github.io/bestbooks-reports",
+  "homepage": "https://github.com/pingleware/bestbooks-reports",
   "private": false,
   "engines": {
     "node": ">=6.0.0"
