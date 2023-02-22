@@ -95,10 +95,11 @@ function import_from_waveaccounting_contents(params,data,callback) {
                                 if (count++ >= total) {
                                     callback(accounting);
                                 }
-                                if (params.updater) {
+                                if (params.mainWindow) {
                                     let percent = Number(count / total) * 100;
+                                    console.log(percent);
                                     // params.updater is mainWindow.webContents.send(param.channel,percent)
-                                    params.updater(params.channel,percent)
+                                    params.mainWindow.webContents.send(params.channel,percent)
                                 }
                             }, params.company_id, params.office_id);
                         });
