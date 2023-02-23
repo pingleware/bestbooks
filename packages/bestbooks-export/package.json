@@ -1,6 +1,6 @@
 {
   "name": "@pingleware/bestbooks-export",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Export module for BestBooks Accounting Application Framework",
   "main": "index.js",
   "scripts": {
@@ -26,6 +26,6 @@
     "mocha": "^10.1.0"
   },
   "dependencies": {
-    "@pingleware/bestbooks-core": "^1.0.0"
+    "@pingleware/bestbooks-core": "^1.1.11"
   }
 }
