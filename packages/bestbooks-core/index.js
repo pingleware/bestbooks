@@ -36,6 +36,10 @@ const Vendor = require('./vendor');
 const Customer = require('./customer');
 // reports
 const Report = require('./report');
+// contra accounts
+const ContraAsset = require('./contra-asset');
+const ContraLiability = require('./contra-liability');
+const ContraEquity = require('./contra-equity');
 
 module.exports = {
     Model: Model,
@@ -44,13 +48,16 @@ module.exports = {
     Ledger: Ledger,
     Journal: Journal,
     Asset: Asset,
+    ContraAsset: ContraAsset,
     Liability: Liability,
+    ContraLiability: ContraLiability,
     Cash: Cash,
     Bank: Bank,
     Expense: Expense,
     Investment: Investment,
     Withdrawals: Withdrawals,
     Equity: Equity,
+    ContraEquity: ContraEquity,
     Revenue: Revenue,
     OwnersEquity: OwnersEquity,
     Income: Income,

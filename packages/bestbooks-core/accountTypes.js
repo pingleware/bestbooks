@@ -7,7 +7,11 @@
 const AccountTypes = {
     Unknown: "Unknown",
     Asset: "Asset",
+    ContraAsset: "ContraAsset",
     Liability: "Liability",
+    ContraLiability: "ContraLiability",
+    Equity: "Equity",
+    ContraEquity: "ContraEquity",
     OwnersEquity: "OwnersEquity",
     Revenue: "Revenue",
     Expense: "Expense",
