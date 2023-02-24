@@ -28,6 +28,5 @@ This repository contains the following directories,
     assets - for current and new assets
     node-electron - the Node-Electron Desktop Administrator
     wordpress.org - the original wordpress.org/plugins/bestbooks code
-    wordpress - the future wordpress.org/plugins/bestbooks refactor for 
-the Desktop Administrator
+    wordpress - the future wordpress.org/plugins/bestbooks refactor for the Desktop Administrator
 
