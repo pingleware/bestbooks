@@ -10,6 +10,10 @@ BestBooks is being redesigned to a client-server-desktop model, where the server
 
 ![Business Automation Rendition](https://github.com/pingleware/bestbooks/blob/master/assets/business-automation.png "Business Automation")
 
+	Administrative Assistant - https://snapcraft.io/administrative-assistant
+	Node Application Builder -
+	Everyday Management - https://everyday.management
+
 ## Release Schedule
 
 ### Alpha
