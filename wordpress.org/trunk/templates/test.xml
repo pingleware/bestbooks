@@ -1,0 +1,75 @@
+<!--?xml version="1.0"?-->
+<purchaseorder>
+    <lineitems>
+        <lineitem>
+            <description>Auto Repair - Oil Change</description>
+            <quantity>1</quantity>
+            <unitprice>50</unitprice>
+            <amount>50</amount>
+        </lineitem>
+        <lineitem>
+            <description>Auto Repair - Tire Change</description>
+            <quantity>1</quantity>
+            <unitprice>100</unitprice>
+            <amount>0</amount>
+        </lineitem>
+    </lineitems>
+    <number>PO-20210725-000001</number>
+    <date>2021-07-25</date>
+    <company>
+        <name>PressPage Entertainment Inc</name>
+        <contact>Patrick Ingle</contact>
+        <email>presspage.entertainment@gmail.com</email>
+        <phone>(212) 879-0758</phone>
+        <website>https://presspage.info</website>
+        <billing>
+            <address1>P.O. Box 142814</address1>
+            <address2></address2>
+            <city>Gainesville</city>
+            <state>FL</state>
+            <zipcode>32614-2814</zipcode>
+            <phone>(212) 879-0758</phone>
+            <fax>(212) 879-0758</fax>
+        </billing>
+        <shipping>
+            <contact>Patrick Ingle</contact>
+            <address1>4055 SW 15 PL</address1>
+            <address2>Apt G</address2>
+            <city>Gainesville</city>
+            <state>FL</state>
+            <zipcode>32607</zipcode>
+            <phone>(212) 879-0758</phone>
+            <fax>(212) 879-0758</fax>
+        </shipping>
+    </company>
+    <vendor>
+        <name>WALMART</name>
+        <contact></contact>
+        <address1>Butler Plaza</address1>
+        <address2></address2>
+        <city>Gainesville</city>
+        <state>
+            <zipcode>FL</zipcode>
+            <phone>3425551212</phone>
+            <fax></fax>
+        </state>
+    </vendor>
+    <shipping>
+        <service>Fedex</service>
+        <method>Second-day Air</method>
+        <deliverydate>07/27/2021</deliverydate>
+    </shipping>
+    <comments>Contact before shipping</comments>
+    <prices>
+        <subtotal>100</subtotal>
+        <tax>0.00</tax>
+        <shipping>0.00</shipping>
+        <other>0.00</other>
+        <total>100</total>
+    </prices>
+    <payment>
+        <amount>0</amount>
+        <method>NOT PAID</method>
+        <confirmation>None</confirmation>
+    </payment>
+</purchaseorder>
