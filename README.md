@@ -21,3 +21,13 @@ A first pre-release alpha is targeted to include working functionality of the fo
 3. Balance Sheet, Income Statement and Trial Balance reports
 
 The database is a SQLite datastore saved in the .bestbooks directory of the user directory.
+
+## Directory Structure
+This repository contains the following directories,
+
+    assets - for current and new assets
+    node-electron - the Node-Electron Desktop Administrator
+    wordpress.org - the original wordpress.org/plugins/bestbooks code
+    wordpress - the future wordpress.org/plugins/bestbooks refactor for 
+the Desktop Administrator
+
