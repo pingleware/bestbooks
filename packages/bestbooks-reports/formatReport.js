@@ -3,7 +3,6 @@
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
-const xslt = require('xslt');
 const {xsltProcess, xmlParse} = require('xslt-processor');
 
 const report_list = {
