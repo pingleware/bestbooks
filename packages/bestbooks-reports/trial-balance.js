@@ -1,7 +1,8 @@
 "use strict"
 
-const { Report } = require('@pingleware/bestbooks-core');
+const { Report, Model } = require('@pingleware/bestbooks-core');
 const BaseReport = require('./report');
+const {format, array2xml} = require('./formatReport');
 
 class TrialBalance extends BaseReport {
     constructor() {
@@ -9,13 +10,19 @@ class TrialBalance extends BaseReport {
         this.report = new Report();
     }
 
-    createReport(startDate,endDate,format,callback) {
+    createReport(startDate,endDate,_format,callback) {
         this.retrieveReportData(startDate, endDate, function(data){
-            if (format == "array") {
+            if (_format == "array") {
+                var _data = {
+                    date: new Date().toDateString(),
+                    lineItems: data[0],
+                    total: data[1]
+                };
+                var formattedData = array2xml('trialBalance',_data);
                 if (callback) {
-                    callback(data);
+                    callback(format("trialBalance",formattedData));
                 } else {
-                    return data;
+                    return format("trialBalance",formattedData);
                 }
             } else {
                 // process other formats
@@ -24,8 +31,11 @@ class TrialBalance extends BaseReport {
     }
 
     async retrieveReportData(startDate,endDate,callback) {
-        this.report.trialBalance(startDate, endDate, function(rows){
-            callback(rows);
+        this.report.trialBalance(startDate, endDate, function(lineItems){
+            const model = new Model();
+            model.query('SELECT SUM(debit) AS debit,SUM(credit) AS credit FROM trial_balance;',function(totals){
+                callback([lineItems,totals]);
+            });
         });
     }
 }
