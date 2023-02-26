@@ -14,7 +14,9 @@ function init() {
         "purchase-order.xslt",
         "statement-in-change-in-equity.xslt",
         "statement-of-cash-flows.xslt",
-        "trial-balance.xslt"
+        "trial-balance.xslt",
+        "retained-earnings.xslt"
+
     ];
     let copied = 0;
 
