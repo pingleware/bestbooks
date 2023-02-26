@@ -13,7 +13,8 @@ const report_list = {
     purchaseOrder: "purchase-order.xslt",
     statementChangeInEquity: "statement-in-change-in-equity.xslt",
     statementCashFlows: "statement-of-cash-flows.xslt",
-    trialBalance: "trial-balance.xslt"
+    trialBalance: "trial-balance.xslt",
+    retainedEarnings: "retained-earnings.xslt"
 };
 
 function transform_xml_xslt(xml_content, xslt_content) {
