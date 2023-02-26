@@ -44,6 +44,7 @@ const StatementCashFlows = require('./statementCashFlows');
 const StatementChangeInEquity = require('./statementChangeOfEquity');
 const TrialBalance = require('./trial-balance');
 const RetainedEarnings = require('./retained-earnings');
+const PurchaseOrder = require('./purchase-order');
 
 module.exports = {
     init,
@@ -54,5 +55,6 @@ module.exports = {
     NoteToFinancialStatements,
     StatementCashFlows,
     StatementChangeInEquity,
-    RetainedEarnings
+    RetainedEarnings,
+    PurchaseOrder
 }
