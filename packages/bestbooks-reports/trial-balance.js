@@ -3,6 +3,9 @@
 const { Report, Model } = require('@pingleware/bestbooks-core');
 const BaseReport = require('./report');
 const {format, array2xml} = require('./formatReport');
+const os = require('os');
+const fs = require('fs');
+const path = require('path');
 
 class TrialBalance extends BaseReport {
     constructor() {
@@ -19,6 +22,7 @@ class TrialBalance extends BaseReport {
                     total: data[1]
                 };
                 var formattedData = array2xml('trialBalance',_data);
+                fs.writeFileSync(path.join(os.homedir(),'.bestbooks/trialBalance.xml'), formattedData);
                 if (callback) {
                     callback(format("trialBalance",formattedData));
                 } else {
