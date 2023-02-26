@@ -16,7 +16,6 @@ function init() {
         "statement-of-cash-flows.xslt",
         "trial-balance.xslt",
         "retained-earnings.xslt"
-
     ];
     let copied = 0;
 
@@ -45,6 +44,7 @@ const StatementChangeInEquity = require('./statementChangeOfEquity');
 const TrialBalance = require('./trial-balance');
 const RetainedEarnings = require('./retained-earnings');
 const PurchaseOrder = require('./purchase-order');
+const CustomerEstimate = require('./customer-estimate');
 
 module.exports = {
     init,
@@ -56,5 +56,6 @@ module.exports = {
     StatementCashFlows,
     StatementChangeInEquity,
     RetainedEarnings,
-    PurchaseOrder
+    PurchaseOrder,
+    CustomerEstimate
 }
