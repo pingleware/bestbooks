@@ -10,7 +10,7 @@ function init() {
         "balance-sheet.xslt",
         "customer-estimate.xslt",
         "income-statement.xslt",
-        "noted-to-financial-statements.xslt",
+        "note-to-financial-statements.xslt",
         "purchase-order.xslt",
         "statement-in-change-in-equity.xslt",
         "statement-of-cash-flows.xslt",
