@@ -1,6 +1,5 @@
 "use strict"
 
-const { Model } = require('@pingleware/bestbooks-core');
 const {format, array2xml} = require('./formatReport');
 const os = require('os');
 const fs = require('fs');
