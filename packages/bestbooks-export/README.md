@@ -10,6 +10,7 @@ The export function(s) for export framework data to other formats
 
 * export_csv
 * export_xblr
+* export_doc
 
 # XBLR Viewer
 
