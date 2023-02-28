@@ -1,0 +1,36 @@
+{
+  "name": "@pingleware/bestbooks-auditor",
+  "version": "1.0.0",
+  "description": "Thhe audit component for BestBooks Accounting Application Framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pingleware/bestbooks-auditor.git"
+  },
+  "keywords": [
+    "bestbooks",
+    "bookkeeping",
+    "accounting",
+    "auditing"
+  ],
+  "author": "PressPage Entertainment Inc DBA PINGLEWARE <maintainers@pingleware.work>",
+  "license": "CC-BY-4.0",
+  "bugs": {
+    "url": "https://support.pingleware.work"
+  },
+  "homepage": "https://github.com/pingleware/bestbooks-auditor#readme",
+  "private": false,
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "engineStrict": true,
+  "dependencies": {
+    "@pingleware/bestbooks-reports": "^1.0.7"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0"
+  }
+}
