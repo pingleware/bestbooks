@@ -1,4 +1,5 @@
 # BestBooks Accounting Application Framework - API Module
+
 The API module for interfacing with the BestBooks Accounting Application Framework - CORE
 
 # API Endpoints
@@ -14,4 +15,6 @@ The API module for interfacing with the BestBooks Accounting Application Framewo
 
 # Exported Functions
 
-    start_server
+    start_server -*with arguments of host and port*
+
+    stop_server -*without any arguments*

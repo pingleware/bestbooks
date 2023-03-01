@@ -50,7 +50,33 @@ rest.put("/bestbooks/v2/add/", function(req, res){
 rest.put("/bestbooks/v2/subtract/", function(req, res){
     res.json({status: 'success', difference: Number(req.body.subtractor) - Number(req.body.subtractend)});
 });
+rest.get("/bestbooks/v2/headers", function(req, res){
+    res.json({status: "error", message: "NOT IMPLEMENTED"});
+})
 
+/**
+ * Sharing a Customer Invoice
+ * 
+ * using mod_proxy, setup a proxy redirect from your publicly accessible URL to the /customer/estimate server API
+ */
+rest.get("/customer/estimate/:num", function(req, res){
+    res.send("NOT IMPLEMENTED");
+});
+rest.get("/customer/invoice/:num", function(req, res){
+    res.send("NOT IMPLEMENTED");
+});
+
+/**
+ * Sharing a Purchase Order
+ */
+// share a vendor purchase order
+rest.get("/vendor/purchase/:num", function(req,res){
+    res.send("NOT IMPLEMENTED");
+})
+// update a vendor purchase order
+rest.put("/vendor/purchase/:num", function(req,res){
+    res.send("NOT IMPLEMENTED");
+})
 
 function start_server(host,port) {
     try {
@@ -62,6 +88,11 @@ function start_server(host,port) {
     }
 }
 
+function stop_server() {
+    rest.close();
+}
+
 module.exports = {
-    start_server
+    start_server,
+    stop_server
 }
