@@ -9,6 +9,8 @@ const cors = require("cors");
 
 const rest = express();
 
+var server = null;
+
 rest.use(cors());
 rest.use(express.json());
 rest.use(express.urlencoded({ extended: true }));
@@ -80,7 +82,7 @@ rest.put("/vendor/purchase/:num", function(req,res){
 
 function start_server(host,port) {
     try {
-        rest.listen(port, host, () => {
+        server = rest.listen(port, host, () => {
             console.log(host + " server running on port " + port);
         });      
     } catch(error) {
@@ -89,7 +91,7 @@ function start_server(host,port) {
 }
 
 function stop_server() {
-    rest.close();
+    server.close();
 }
 
 module.exports = {

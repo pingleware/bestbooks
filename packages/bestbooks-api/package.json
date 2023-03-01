@@ -1,6 +1,6 @@
 {
   "name": "@pingleware/bestbooks-api",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "API module for BestBooks Accounting Application Framework",
   "main": "index.js",
   "scripts": {
