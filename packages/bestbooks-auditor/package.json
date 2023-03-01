@@ -4,7 +4,7 @@
   "description": "Thhe audit component for BestBooks Accounting Application Framework",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -28,9 +28,12 @@
   },
   "engineStrict": true,
   "dependencies": {
-    "@pingleware/bestbooks-reports": "^1.0.7"
+    "@pingleware/bestbooks-reports": "^1.0.7",
+    "child-process": "^1.0.2"
   },
   "devDependencies": {
+    "@pingleware/bestbooks-api": "^1.0.8",
+    "chai": "^4.3.7",
     "mocha": "^10.2.0"
   }
 }
