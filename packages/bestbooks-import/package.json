@@ -24,7 +24,7 @@
     "mocha": "^10.1.0"
   },
   "dependencies": {
-    "@pingleware/bestbooks-helpers": "^1.1.10",
+    "@pingleware/bestbooks-helpers": "^1.1.11",
     "path": "^0.12.7"
   }
 }
