@@ -125,36 +125,42 @@ class ChartOfAccounts {
     }
 
     getAccountTypeCode(type) {
-        var account_type = '';
+        var account_type = 'Other';
         let account_value = 900;
         switch(type) {
-          case 'Asset':
-          case 'Bank':
-          case 'Cash':
-            account_type = 'Asset';
-            account_value = 100;
-            break;
-          case 'Liability':
-          case 'Credit':
-            account_type = 'Liability';
-            account_value = 200;
-            break;
-          case 'OwnersEquity':
-          case 'Investment':
-          case 'Withdrawals':
-            account_type = 'Equity';
-            account_value = 300;
-            break;
-          case 'Expense':
-            account_type = 'Expense';
-            account_value = 400;
-            break;
-          case 'Revenue':
-            account_type = 'Revenue';
-            account_value = 500;
-            break;
-          default:
-            account_type = '';
+            case 'Asset':
+            case 'Bank':
+            case 'Cash':
+            case 'ContraAsset':
+                account_type = 'Asset';
+                account_value = 100;
+                break;
+            case 'Liability':
+            case 'Credit':
+            case 'ContraLiability':
+                account_type = 'Liability';
+                account_value = 200;
+                break;
+            case 'Equity':
+            case 'OwnersEquity':
+            case 'Investment':
+            case 'Withdrawals':
+            case 'ContraEquity':
+                account_type = 'Equity';
+                account_value = 300;
+                break;
+            case 'Expense':
+                account_type = 'Expense';
+                account_value = 400;
+                break;
+            case 'Revenue':
+                account_type = 'Revenue';
+                account_value = 500;
+                break;
+            case 'Unknown':
+                account_type = 'Other';
+                account_value = 900;
+                break;
         }
 
         return [account_type,account_value];
