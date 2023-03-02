@@ -3,7 +3,6 @@
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
-const {xsltProcess, xmlParse} = require('xslt-processor');
 
 const report_list = {
     balanceSheet: "balance-sheet.xslt",
@@ -17,7 +16,16 @@ const report_list = {
     retainedEarnings: "retained-earnings.xslt"
 };
 
+function getReportFileName(reportName) {
+    return report_list[reportName];
+}
+
+function getReportRootFileName(reportName) {
+    return report_list[reportName].split(".")[0];
+}
+
 function transform_xml_xslt(xml_content, xslt_content) {
+    const {xsltProcess, xmlParse} = require('xslt-processor');
     return xsltProcess(xmlParse(xml_content),xmlParse(xslt_content.toString()));
 }
 
@@ -36,6 +44,9 @@ function array2xml(topLevel, obj) {
 }
 
 module.exports = {
+    getReportFileName,
+    getReportRootFileName,
+    transform_xml_xslt,
     format,
     array2xml
 }
