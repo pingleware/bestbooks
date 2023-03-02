@@ -102,6 +102,22 @@ class Journal {
             console.error(error);
         }
     }
+
+    async listJournals() {
+        var sql = `SELECT name FROM journal GROUP BY name`;
+        var rows = this.model.querySync(sql);
+        return rows;
+    }
+
+    async getDebitCreditTotals(where='') {
+        var sql = `SELECT SUM(debit) AS total_debit,SUM(credit) AS total_credit FROM journal ${where} ORDER BY txdate ASC`;
+        return this.model.querySync(sql);
+    }
+
+    async setXRef(id, value) {
+        var sql = `UPDATE journal SET xref=${value} WHERE id=${id};`;
+        return this.model.querySync(sql);
+    }
 }
 
 module.exports = Journal;
