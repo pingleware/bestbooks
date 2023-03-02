@@ -1,12 +1,12 @@
 {
   "name": "@pingleware/bestbooks-import",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Import module for BestBooks Accounting Application Framework",
   "main": "index.js",
   "scripts": {
     "test": "mocha --reporter spec"
   },
-  "keywords": [],
+  "keywords": ["csv","pdf","wordpress","waveaccounting","quickbooks"],
   "author": "PressPage Entertainment Inc <presspage.entertainment@gmail.com>",
   "license": "CC-BY-4.0",
   "bugs": {
