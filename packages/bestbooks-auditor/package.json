@@ -1,6 +1,6 @@
 {
   "name": "@pingleware/bestbooks-auditor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Thhe audit component for BestBooks Accounting Application Framework",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,7 @@
   },
   "engineStrict": true,
   "dependencies": {
-    "@pingleware/bestbooks-reports": "^1.0.7",
+    "@pingleware/bestbooks-reports": "^1.0.8",
     "child-process": "^1.0.2"
   },
   "devDependencies": {

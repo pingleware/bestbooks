@@ -33,9 +33,9 @@ The audits which can be automated include,
 
     - Fixed and Intangible Assets
 
-    - Prepaif Expenses and Deferred Charges
+    - Prepaid Expenses and Deferred Charges
 
-    - Details o Transactions
+    - Details and Transactions
 
     - Long Term Liabilities and Stockholder Equity
 
