@@ -10,7 +10,7 @@
                 <tr>
                     <td colspan="2" style="text-align: right; width:50%;">Date: <xsl:value-of select="//date" /></td>
                 </tr>
-                <xsl:for-each-group select="balanceSheet/lineItems" group-by="type">
+                <xsl:for-each-group select="/balanceSheet/lineItems" group-by="type">
                 <xsl:sort select="type"/>
                     <tr>
                         <th colspan="2"><u><xsl:value-of select="current-grouping-key()"/></u></th>
@@ -25,25 +25,29 @@
                      <tr>
                           <th>Total <xsl:value-of select="current-grouping-key()"/>:</th>
                           <xsl:if test="current-grouping-key() = 'Asset'">
-                                <th><xsl:value-of select="//balanceSheet/totalAsset"/></th>
+                                <th><xsl:value-of select="/balanceSheet/totalAsset"/></th>
                           </xsl:if>
                           <xsl:if test="current-grouping-key() = 'Liability'">
-                                <th><xsl:value-of select="//balanceSheet/totalLiability"/></th>
+                                <th><xsl:value-of select="/balanceSheet/totalLiability"/></th>
                           </xsl:if>
                           <xsl:if test="current-grouping-key() = 'Income'">
-                                <th><xsl:value-of select="//balanceSheet/totalIncome"/></th>
+                                <th><xsl:value-of select="/balanceSheet/totalIncome"/></th>
                           </xsl:if>
                           <xsl:if test="current-grouping-key() = 'Expense'">
-                                <th><xsl:value-of select="//balanceSheet/totalExpense"/></th>
+                                <th><xsl:value-of select="/balanceSheet/totalExpense"/></th>
                           </xsl:if>
                           <xsl:if test="current-grouping-key() = 'Equity'">
-                                <th><xsl:value-of select="//balanceSheet/totalEquity"/></th>
+                                <th><xsl:value-of select="/balanceSheet/totalEquity"/></th>
                           </xsl:if>
                      </tr>
                 </xsl:for-each-group>
                 <tr>
                       <th>Total Liability &amp; Equity:</th>
-                      <th><xsl:value-of select="//balanceSheet/totalLiabilitiesShareholdersEquity"/></th>
+                      <th><xsl:value-of select="/balanceSheet/totalLiabilitiesShareholdersEquity"/></th>
+                 </tr>
+                 <tr>
+                    <th>Management|Accountant|Auditor Note(s)</th>
+                    <td><xsl:value-of select="balanceSheet/notes" /></td>
                  </tr>
             </table>
         </body>
