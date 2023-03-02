@@ -36,6 +36,10 @@
                     <th>Net Income:</th>
                     <th><xsl:value-of select="//incomeStatement/netIncome"/></th>
                 </tr>
+                <tr>
+                    <th>Management|Accountant|Auditor Note(s)</th>
+                    <td><xsl:value-of select="//incomeStatement/notes" /></td>
+                </tr>
             </table> 
         </body>
     </html>
