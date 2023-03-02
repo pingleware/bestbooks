@@ -8,7 +8,6 @@ const report_list = {
     balanceSheet: "balance-sheet.xslt",
     customerEstimate: "customer-estimate.xslt",
     incomeStatement: "income-statement.xslt",
-    noteToFinancialStatement: "note-to-financial-statements.xslt",
     purchaseOrder: "purchase-order.xslt",
     statementChangeInEquity: "statement-in-change-in-equity.xslt",
     statementCashFlows: "statement-of-cash-flows.xslt",
