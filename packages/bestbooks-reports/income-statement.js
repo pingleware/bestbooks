@@ -43,7 +43,18 @@ class IncomeStatement extends BaseReport {
                 var formattedData = array2xml('incomeStatement',_data);
                 fs.writeFileSync(path.join(os.homedir(),'.bestbooks/income-statement.xml'), formattedData);
 
-                callback(formattedData);
+                var txdate = new Date().getTime();
+                var buffer = require('buffer').Buffer;
+                var sql = `INSERT INTO report (txdate,name,contents) VALUES ('${txdate}','income-statement','${buffer.from(formattedData).toString('base64')}')`;
+                const model = new Model();
+                if (callback) {
+                    model.insert(sql,function(result){
+                        callback(formattedData);
+                    });
+                } else {
+                    model.insertSync(sql);
+                    return formattedData;
+                }
             } else {
                 // process other formats
             }    

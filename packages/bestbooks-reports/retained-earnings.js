@@ -23,9 +23,17 @@ class RetainedEarnings extends BaseReport {
                 };
                 var formattedData = array2xml('retainedEarnings',_data);
                 fs.writeFileSync(path.join(os.homedir(),'.bestbooks/retained-earnings.xml'), formattedData);
+                // Save report XML data to report table
+                var txdate = new Date().getTime();
+                var buffer = require('buffer').Buffer;
+                var sql = `INSERT INTO report (txdate,name,contents) VALUES ('${txdate}','retained-earnings','${buffer.from(formattedData).toString('base64')}')`;
+                const model = new Model();
                 if (callback) {
-                    callback(format("retainedEarnings",formattedData));
+                    model.insert(sql,function(result){
+                        callback(format("retainedEarnings",formattedData));
+                    });
                 } else {
+                    model.insertSync(sql);
                     return format("retainedEarnings",formattedData);
                 }
             } else {
@@ -45,7 +53,12 @@ class RetainedEarnings extends BaseReport {
         lastStartDate = new Date(`01-01-${lastYear}`).toISOString().split('T')[0];
         lastEndDate = new Date(`12-31-${lastYear}`).toISOString().split('T')[0];
 
-        var sql = `SELECT (SELECT ROUND(SUM(debit)+SUM(credit),2) FROM ledger WHERE account_code LIKE '9%') AS net_income, ((SELECT ROUND(SUM(debit)+SUM(credit),2) FROM ledger WHERE account_code LIKE '9%') - ROUND(SUM(debit)+SUM(credit),2)) AS retained_earnings,((SELECT ROUND(SUM(debit)+SUM(credit),2) FROM ledger WHERE account_code LIKE '9%') - ROUND(SUM(debit)+SUM(credit),2) AND txdate BETWEEN DATE('${lastStartDate}') AND DATE('${lastEndDate}')) AS previous_retained_earnings  FROM ledger WHERE account_name='Dividends Payable'`;
+        var sql = `SELECT (SELECT ROUND(SUM(debit)+SUM(credit),2) FROM ledger WHERE account_code LIKE '9%') AS net_income, 
+        ((SELECT ROUND(SUM(debit)+SUM(credit),2) FROM ledger WHERE account_code LIKE '9%') - 
+        ROUND(SUM(debit)+SUM(credit),2)) AS retained_earnings,((SELECT ROUND(SUM(debit)+SUM(credit),2) 
+        FROM ledger WHERE account_code LIKE '9%') - ROUND(SUM(debit)+SUM(credit),2) AND 
+        txdate BETWEEN DATE('${lastStartDate}') AND DATE('${lastEndDate}')) AS previous_retained_earnings  
+        FROM ledger WHERE account_name='Dividends Payable'`;
         if (startDate.length > 0 && endDate.length > 0) {
             sql = `${sql} AND txdate BETWEEN ${startDate} AND ${endDate}`;
         } else if (startDate.length > 0 && endDate.length == 0) {

@@ -13,6 +13,9 @@ class BalanceSheet extends BaseReport {
         super();
     }
 
+    saveReport(name,contents,callback=null){
+    }
+
     createReport(startDate,endDate,_format,callback) {
         this.retrieveReportData(startDate, endDate, function(data){
             if (_format == "array") {
@@ -70,7 +73,19 @@ class BalanceSheet extends BaseReport {
                 // using a free tool like https://xslttest.appspot.com/, to copy the .bestbooks/balance-sheet.xslt and .bestboos/balance-sheet.xml
                 // to render a HTML
                 // TODO: implement xsl:for-each-group. callback(format("balanceSheet",formattedData));
-                callback(formattedData);
+
+                var txdate = new Date().getTime();
+                var buffer = require('buffer').Buffer;
+                var sql = `INSERT INTO report (txdate,name,contents) VALUES ('${txdate}','balance-sheet','${buffer.from(formattedData).toString('base64')}')`;
+                const model = new Model();
+                if (callback) {
+                    model.insert(sql,function(result){
+                        callback(formattedData);
+                    });
+                } else {
+                    model.insertSync(sql);
+                    return formattedData;
+                }
             } else {
                 // process other formats
             }    
@@ -90,7 +105,7 @@ class BalanceSheet extends BaseReport {
                     GROUP BY account_name ORDER BY accounts.base_type`;
         }
         const model = new Model();
-        return model.query(sql,callback);
+        model.query(sql,callback);
     }
 }
 
