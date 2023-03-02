@@ -5,6 +5,15 @@ const fs = require('fs');
 const path = require('path');
 
 function init() {
+    const { Model } = require('@pingleware/bestbooks-core');
+    const model = new Model();
+    model.insertSync(`CREATE TABLE IF NOT EXISTS "report" (
+        "id"	INTEGER,
+        "txdate"	TIMESTAMP,
+        "name"	TEXT,
+        "contents"	TEXT,
+        PRIMARY KEY("id" AUTOINCREMENT)
+    )`)
     
     const xslt_list = [
         "balance-sheet.xslt",
@@ -46,6 +55,15 @@ const RetainedEarnings = require('./retained-earnings');
 const PurchaseOrder = require('./purchase-order');
 const CustomerEstimate = require('./customer-estimate');
 
+const parseString = require('xml2js').parseString;
+const {
+    getReportFileName,
+    getReportRootFileName,
+    transform_xml_xslt,
+    format,
+    array2xml
+} = require('./formatReport');
+
 module.exports = {
     init,
     copy,
@@ -57,5 +75,11 @@ module.exports = {
     StatementChangeInEquity,
     RetainedEarnings,
     PurchaseOrder,
-    CustomerEstimate
+    CustomerEstimate,
+    parseString,
+    getReportFileName,
+    getReportRootFileName,
+    transform_xml_xslt,
+    format,
+    array2xml
 }
