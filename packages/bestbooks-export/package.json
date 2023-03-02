@@ -1,6 +1,6 @@
 {
   "name": "@pingleware/bestbooks-export",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Export module for BestBooks Accounting Application Framework",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,11 @@
     "type": "git",
     "url": "git+https://github.com/pingleware/bestbooks-export.git"
   },
-  "keywords": [],
+  "keywords": [
+    "csv",
+    "doc",
+    "xblr"
+  ],
   "author": "PressPage Entertainment Inc <presspage.entertainment@gmail.com>",
   "license": "CC-BY-4.0",
   "bugs": {
@@ -26,6 +30,6 @@
     "mocha": "^10.1.0"
   },
   "dependencies": {
-    "@pingleware/bestbooks-helpers": "^1.1.10"
+    "@pingleware/bestbooks-helpers": "^1.1.11"
   }
 }
