@@ -37,6 +37,12 @@ class Ledger extends TAccount {
     getType(){
         return this.type;
     }
+
+    async findType(name) {
+        var sql = `SELECT type FROM accounts WHERE name='${name}';`;
+        var rows = this.model.querySync(sql);
+        return (rows.length > 0 ? rows[0].type : 'not found');
+    }
     
     async addDebit(date,desc,amount,company_id=0,office_id=0){
         try {
@@ -105,6 +111,22 @@ class Ledger extends TAccount {
         this.balance = balance;
     }
 
+    async getAll() {
+        var sql = `SELECT *,(SELECT COUNT(*) FROM ledger ORDER BY txdate DESC) AS total FROM ledger ORDER BY txdate DESC`;
+        var rows = await this.model.querySync(sql);
+        if (rows.length > 0) {
+            return {
+                total: rows[0].total,
+                transactions: rows
+            };    
+        } else {
+            return {
+                total: 0,
+                transactions: []
+            };    
+        }
+    }
+
     /**
 	 * --total balance
 	 * SELECT (SUM(debit)*-1) + SUM(credit) AS TotalBalance
@@ -122,6 +144,21 @@ class Ledger extends TAccount {
 	 */
     async getDailyBalance(transDate) {
         var sql = `SELECT txdate AS TransDate, (SUM(debit)*-1) + SUM(credit) AS DailyBalance FROM ledger WHERE txdate LIKE '${transDate}%' GROUP BY txdate`;
+        return await this.model.querySync(sql);
+    }
+
+    async getTransactionsByRange(begin_date, end_date) {
+		var sql = `SELECT * FROM ledger WHERE account_name='${this.name}' AND txdate BETWEEN '${begin_date}' AND '${end_date}' ORDER BY txdate ASC;`;
+        return await this.model.querySync(sql);
+	}
+
+    async getPeriodOfTimeBalance(begin_date,end_date) {
+		var sql = `SELECT (SUM(debit)*-1) + SUM(credit) AS PeriodBalance FROM ledger WHERE txdate BETWEEN ${begin_date} AND ${end_date};`;
+        return await this.model.querySync(sql);
+	}
+
+    async remove(id) {
+        var sql = `DELETE FROM ledger WHERE id=${id};`;
         return await this.model.querySync(sql);
     }
 
