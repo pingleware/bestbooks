@@ -1,4 +1,19 @@
 <?php
+/**
+ * API Routes:
+ * ----------
+ *
+ * /bestbooks/v2/version
+ * /bestbooks/v2/settings
+ * /bestbooks/v2/chartofaccounts
+ * /bestbooks/v2/account_types
+ * /bestbooks/v2/debit
+ * /bestbooks/v2/credit
+ * /bestbooks/v2/balance
+ * /bestbooks/v2/add
+ * /bestbooks/v2/subtract
+ * /bestbooks/v2/headers 
+ */
 if (!function_exists('add_bestbooks_api')) {
     /* 
     * When adding new class files in the betsbooks/class/src path, must regenerate the classmap for composer,

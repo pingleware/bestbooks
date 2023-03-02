@@ -1,5 +1,16 @@
 <?php
 // ajax.php
+/**
+ * Function Index:
+ * --------------
+ * 	bestbooks_add_chartofaccount
+ * 	bestbooks_delete_chartofaccount
+ * 	bestbooks_ajax_bestbooks_add_transaction
+ * 	bestbooks_ajax_bestbooks_edit_transaction
+ * 	bestbooks_ajax_bestbooks_add_journal_transaction
+ * 	bestbooks_ajax_bestbooks_edit_journal_transaction
+ * 
+ */
 if (!function_exists('bestbooks_add_chartofaccount')) {
 	function bestbooks_add_chartofaccount() {
 		try {
