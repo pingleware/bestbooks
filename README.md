@@ -10,9 +10,12 @@ BestBooks is being redesigned to a client-server-desktop model, where the server
 
 ![Business Automation Rendition](https://github.com/pingleware/bestbooks/blob/master/assets/business-automation.png "Business Automation")
 
-	Administrative Assistant - https://snapcraft.io/administrative-assistant
-	Node Application Builder -
-	Everyday Management - https://everyday.management
+* Administrative Assistant - https://snapcraft.io/administrative-assistant
+* Node Application Builder - https://snapcraft.io/node-application-builder (future)
+* Everyday Management - https://everyday.management
+* Corporate Book - https://snapcraft.io/corporate-book
+* SOP Manager - https://snapcraft.io/sop-manager
+* EDGAR Reporting Tools - https://snapcraft.io/edgar-reporting-tools
 
 ## Release Schedule
 
@@ -27,10 +30,10 @@ A first pre-release alpha is targeted to include working functionality of the fo
 The database is a SQLite datastore saved in the .bestbooks directory of the user directory.
 
 ## Directory Structure
+
 This repository contains the following directories,
 
     assets - for current and new assets
     node-electron - the Node-Electron Desktop Administrator
     wordpress.org - the original wordpress.org/plugins/bestbooks code
     wordpress - the future wordpress.org/plugins/bestbooks refactor for the Desktop Administrator
-
