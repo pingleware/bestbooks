@@ -14,7 +14,7 @@ BestBooks is being redesigned to a client-server-desktop model, where the server
 * Node Application Builder - https://snapcraft.io/node-application-builder (future)
 * Everyday Management - https://everyday.management
 * Corporate Book - https://snapcraft.io/corporate-book
-* SOP Manager - https://snapcraft.io/sop-manager
+* SOP Manager - https://snapcraft.io/sop-manager (future)
 * EDGAR Reporting Tools - https://snapcraft.io/edgar-reporting-tools
 
 ## Release Schedule
