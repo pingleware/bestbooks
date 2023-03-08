@@ -8,7 +8,7 @@ let validChannels = [
   "accounting_budget","accounting_balance","delete_account","account_balances","account_budgets",
   "import","export","import_progress",
   "chartofaccount","delete_chartofaccount","add_transaction","edit_transaction","add_journal_transaction","edit_journal_transaction",
-  "nonce", "new_invoice_number","new_purchaseorder_number"
+  "nonce", "new_invoice_number","new_purchaseorder_number","insert_sql","query_sql"
 ];
 
 contextBridge.exposeInMainWorld("api", {

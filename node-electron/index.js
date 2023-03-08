@@ -424,6 +424,20 @@ ipcMain.on("new_purchaseorder_number",function(evt,params){
         mainWindow.webContents.send("new_purchaseorder_number",purchaseorder_num);
     });
 })
+ipcMain.on("insert_sql",function(evt,sql){
+    const { Model } = require("@pingleware/bestbooks-core");
+    var model = new Model();
+    model.insert(sql,function(results){
+        mainWindow.webContents.send("insert_sql",JSON.stringify(results));
+    })
+})
+ipcMain.on("query_sql",function(evt,sql){
+    const { Model } = require("@pingleware/bestbooks-core");
+    var model = new Model();
+    model.query(sql,function(rows){
+        mainWindow.webContents.send("query_sql",JSON.stringify(rows));
+    })
+})
 
 // BESTBOOKS API Server
 const {start_server} = require('@pingleware/bestbooks-api');
