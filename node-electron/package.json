@@ -103,12 +103,15 @@
     "electron-packager": "^17.1.1"
   },
   "dependencies": {
-    "@pingleware/bestbooks-api": "^1.0.4",
-    "@pingleware/bestbooks-core": "^1.1.8",
-    "@pingleware/bestbooks-export": "^1.0.1",
-    "@pingleware/bestbooks-helpers": "^1.1.3",
-    "@pingleware/bestbooks-import": "^1.0.1",
-    "@pingleware/bestbooks-reports": "^1.0.4",
+    "@pingleware/bestbooks-api": "^1.0.9",
+    "@pingleware/bestbooks-auditor": "^1.0.2",
+    "@pingleware/bestbooks-core": "^1.1.13",
+    "@pingleware/bestbooks-export": "^1.0.6",
+    "@pingleware/bestbooks-helpers": "^1.1.11",
+    "@pingleware/bestbooks-import": "^1.0.7",
+    "@pingleware/bestbooks-reports": "^1.0.9",
+    "crypto": "^1.0.1",
+    "csv-parse": "^5.3.5",
     "path": "^0.12.7",
     "yargs": "github:yargs/yargs"
   }

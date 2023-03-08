@@ -5,15 +5,38 @@
             <input type="button" id="add_transaction" value="Add Transaction" class="w3-button w3-block w3-green" />
             <br/>
             <button class="w3-button w3-block w3-orange" id="accounting-transactions-back">Back</button>
-            <table class="w3-table w3-striped w3-block" id="transactions-table">
+            <table class="w3-table">
                 <tr>
-                    <th>ID</th>
-                    <th>Date</th>
-                    <th width="10%">Description</th>
-                    <th>Account</th>
-                    <th>Debit</th>
-                    <th>Credit</th>
-                    <th>Action</th>
+                    <th>Starting Date</th>
+                    <th>Ending Date</th>
+                </tr>
+                <tr>
+                    <td><input type="date" class="w3-input" id="transaction-startdate" value="" placeholder="starting date?" /></td>
+                    <td><input type="date" class="w3-input" id="transaction-enddate" value="" placeholder="ending date?" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <table class="w3-table w3-striped w3-block" id="transactions-table">
+                            <tr>
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th width="10%">Description</th>
+                                <th>Account</th>
+                                <th>Debit</th>
+                                <th>Credit</th>
+                                <th>Action</th>
+                            </tr>
+                        </table>            
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <nav class="pagination-container w3-center">
+                            <button class="pagination-button" id="transactions-prev-button" title="Previous page" aria-label="Previous page">&lt;</button>
+                            <div id="transactions-pagination-numbers"></div>
+                            <button class="pagination-button" id="transactions-next-button" title="Next page" aria-label="Next page">&gt;</button>  
+                        </nav>                          
+                    </td>
                 </tr>
             </table>
             <div id="add-transaction-dialog" class="w3-modal">

@@ -99,3 +99,13 @@ var $ = function (selector) {
     });
     window.api.send(channel, params);
   }
+  function open_browser(url) {
+    SendIPC("open_browser",url,function(channel,event,results){
+
+    });
+  }
+  function randomString(callback) {
+    SendIPC("nonce",null,function(channel,event,nonce){
+      callback(nonce);
+    });
+}

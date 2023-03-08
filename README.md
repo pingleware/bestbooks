@@ -16,6 +16,8 @@ BestBooks is being redesigned to a client-server-desktop model, where the server
 * Corporate Book - https://snapcraft.io/corporate-book
 * SOP Manager - https://snapcraft.io/sop-manager (future)
 * EDGAR Reporting Tools - https://snapcraft.io/edgar-reporting-tools
+* Records Management System - https://snapcraft.io/records-management-system (future)
+* Transfer Agent Stock Certificate Creator - https://github.com/pingleware/transferagent-stockcertificate-creator/releases
 
 ## Release Schedule
 

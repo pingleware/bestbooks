@@ -1,1 +1,41 @@
-<!-- placeholder -->
+<!-- Banking -->
+<div id="banking-accounts" class="w3-container" style="display: none;">
+    <br/><br/><br/>
+    <h2 class="w3-yellow">Banking: ACCOUNTS</h2>
+    <input type="button" id="add_bank" value="Add New Bank" class="w3-button w3-block w3-green" />
+    <br/>
+    <button class="w3-button w3-block w3-orange" id="banking-accounts-back">Back</button>
+    <table class="w3-table w3-striped" id="banking-list-table">
+        <tr>
+            <th>ID</th>
+            <th>Bank</th>
+            <th>Balance</th>
+            <th>Action</th>
+        </tr>
+    </table>
+    <div id="add-bank-dialog" class="w3-modal">
+        <div class="w3-modal-content">
+            <div class="w3-container w3-white">
+                <h2 class="w3-blue">Add New Bank</h2>
+                <label for="add-bank-dialog-name">Bank Name</label>
+                <input type="text" class="w3-input w3-block" name="add-bank-dialog-name" id="add-bank-dialog-name" value="" />
+                <label for="add-bank-dialog-account">Bank Account #</label>
+                <input type="text" class="w3-input w3-block" name="add-bank-dialog-account" id="add-bank-dialog-account" value="" />
+                <label for="add-bank-dialog-opening-date">Bank Account Opening Date</label>
+                <input type="date" class="w3-input w3-block" name="add-bank-dialog-opening-date" id="add-bank-dialog-opening-date" value="" />
+                <label for="add-bank-dialog-url">Bank URL</label>
+                <input type="url" class="w3-input w3-block" name="add-bank-dialog-url" id="add-bank-dialog-url" value="" />
+                <label for="add-bank-dialog-deposit">Opening Deposit</label>
+                <input type="number" class="w3-input w3-block" name="add-bank-dialog-deposit" id="add-bank-dialog-deposit" value="" />
+                <label for="add-bank-dialog-origination">Origination of Deposit</label>
+                <input type="text" class="w3-input w3-block" name="add-bank-dialog-origination" id="add-bank-dialog-origination" value="" list="add-asset-account-list" />
+                <datalist id="add-asset-account-list"></datalist>
+                <br/>
+                <button id="add_bank_action" name="add_bank_action" class="w3-button w3-black w3-block">Add</button>
+                <br/>
+                <button class="w3-button w3-block w3-orange" onclick="document.getElementById('add-bank-dialog').style.display='none'">Cancel</button>
+                <br/>
+            </div>
+        </div>
+	</div>
+</div>

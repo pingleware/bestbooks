@@ -57,7 +57,8 @@ function accounting_load() {
             <th>Action</th>
             </tr>`;
             transactions.forEach(function(transaction){
-                var base64 = btoa(JSON.stringify(transaction))
+                console.log(transaction);
+                var base64 = btoa(JSON.stringify(unescape(encodeURIComponent(transaction))))
                 document.getElementById("transactions-table").innerHTML += `<tr>
                     <td>${transaction.id}</td>
                     <td>${transaction.date}</td>
@@ -97,7 +98,8 @@ function accounting_load() {
                 <th>Action</th>
             </tr>`;
             transactions.forEach(function(transaction){
-                var base64 = btoa(JSON.stringify(transaction))
+                console.log(transaction);
+                var base64 = btoa(JSON.stringify(unescape(encodeURIComponent(transaction))))
                 document.getElementById("journal_transactions_table").innerHTML += `<tr>
                     <td>${transaction.id}</td>
                     <td>${transaction.txdate}</td>
@@ -494,7 +496,15 @@ function accounting_load() {
             document.getElementById("addnew-type").appendChild(option);
         });
         document.getElementById('accounting-chartofaccounts-addnew').style.display='block';
-    });        
+    });
+    document.getElementById("transaction-startdate").addEventListener("change",function(e){
+        e.preventDefault();
+        localStorage.setItem("pagination-startdate",this.value);
+    });
+    document.getElementById("transaction-enddate").addEventListener("change",function(e){
+        e.preventDefault();
+        localStorage.setItem("pagination-enddate",this.value);
+    });
 }
 function getAccounts(callback) {
     SendIPC("get_accounts_by_company",company.id,function(channel,event,results){
@@ -502,9 +512,91 @@ function getAccounts(callback) {
     });
 }
 function getTransactions(callback) {
-    SendIPC("get_transactions",company.id,function(channel,event,results){
-        callback(JSON.parse(results));
+    var params = {
+        company: company.id,
+        start: localStorage.getItem('pagination-start'),
+        limit: localStorage.getItem('pagination-limit'),
+        start_date: localStorage.getItem('pagination-startdate'),
+        end_date: localStorage.getItem('pagination-enddate')
+    }
+    SendIPC("get_transactions",JSON.stringify(params),function(channel,event,results){
+        var data = JSON.parse(results);
+        let total = data[0].total;
+        localStorage.setItem("pagination-total",total);
+
+        let pageCount = Math.ceil(total / localStorage.getItem("pagination-limit")).toFixed(0);
+        let currentPage;
+
+        const paginationNumbers = document.getElementById("transactions-pagination-numbers");
+        //const paginatedList = document.getElementById("paginated-list");
+        //const listItems = paginatedList.querySelectorAll("li");
+        const nextButton = document.getElementById("transactions-next-button");
+        const prevButton = document.getElementById("transactions-prev-button")
+    
+
+        const appendPageNumber = (index) => {
+            const pageNumber = document.createElement("button");
+            pageNumber.className = "pagination-number";
+            pageNumber.innerHTML = index;
+            pageNumber.setAttribute("onclick",`selectPage(${index})`);
+            pageNumber.setAttribute("page-index", index);
+            pageNumber.setAttribute("aria-label", "Page " + index);
+            paginationNumbers.appendChild(pageNumber);
+        };
+
+        const getPaginationNumbers = () => {
+            let startPage = localStorage.getItem("pagination-start");
+            let _pageCount = pageCount;
+            console.log(_pageCount)
+            let limit = localStorage.getItem("pagination-limit");
+            let start = localStorage.getItem("pagination-start");
+            if (pageCount > (limit * start)) {
+                _pageCount = limit * start;
+            }
+            paginationNumbers.innerHTML = '';
+            for (let i = startPage; i <= _pageCount; i++) {
+                appendPageNumber(i);
+            }
+        };
+
+        getPaginationNumbers();
+
+        callback(data);
     })
+}
+function selectPage(index) {
+    let limit = localStorage.getItem("pagination-limit");
+    localStorage.setItem("pagination-start",index * limit);
+    getTransactions(function(transactions){
+        document.getElementById("transactions-table").innerHTML = `<tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Account</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Action</th>
+        </tr>`;
+        transactions.forEach(function(transaction){
+            console.log(transaction);
+            var base64 = btoa(JSON.stringify(unescape(encodeURIComponent(transaction))))
+            document.getElementById("transactions-table").innerHTML += `<tr>
+                <td>${transaction.id}</td>
+                <td>${transaction.date}</td>
+                <td>${transaction.note}</td>
+                <td>${transaction.name}</td>
+                <td>${transaction.debit}</td>
+                <td>${transaction.credit}</td>
+                <td>
+                    <select class="w3-input" data-id="${transaction.id}" data-trans="${base64}" onchange="updateTransaction(this)">
+                        <option value="">Select</option>
+                        <option value="edit">Edit</option>
+                        <option value="delete">Delete</option>
+                    </select>
+                </td>
+                </tr>`;
+        });
+    });
 }
 function getJournalTransactions(callback) {
     SendIPC("get_journal_transactions",company.id,function(channel,event,results){

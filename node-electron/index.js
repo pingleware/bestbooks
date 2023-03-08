@@ -269,11 +269,26 @@ ipcMain.on("add_transaction", function(evt, json){
     }
 });
 
-ipcMain.on("get_transactions", function(evt, company_id){
+ipcMain.on("get_transactions", function(evt, json){
+    var params = JSON.parse(json);
+    var company_id = params.company;
+    var start = params.start;
+    var limit = params.limit;
+    var start_date = params.start_date;
+    var end_date = params.end_date;
     // SELECT id,account_name,account_code,note,ref,debit,credit,balance FROM ledger WHERE company_id=1
     const { Model } = require("@pingleware/bestbooks-core");
     var model = new Model();
-    var sql = `SELECT id,txdate AS date,account_name AS name,account_code AS code,note,ref,debit,credit,balance FROM ledger WHERE company_id=${company_id};`;
+    var between = ``;
+    if (start_date.length > 0 && end_date.length > 0) {
+        between = ` AND txdate >= ${start_date} AND txdate < ${end_date}`;
+    } else if (start_date.length > 0 && end_date.length == 0) {
+        between = ` AND txdate >= ${start_date} `;
+    } else if (start_date.length == 0 && end_date.length > 0) {
+        between = ` AND txdate < ${end_date}`;
+    }
+    var sql = `SELECT id,txdate AS date,account_name AS name,account_code AS code,note,ref,debit,credit,balance,(SELECT COUNT(id) FROM Ledger WHERE company_id=${company_id}) ${between} AS total FROM ledger WHERE company_id=${company_id} LIMIT ${start},${limit};`;
+    console.log(sql);
     model.query(sql, function(results){
         mainWindow.webContents.send("get_transactions",JSON.stringify(results));
     })
@@ -354,6 +369,61 @@ ipcMain.on("report_trialbalance", function(evt, json){
         mainWindow.webContents.send("report_trialbalance",JSON.stringify(error));
     }
 });
+ipcMain.on("import", function(evt, json){
+    const { import_from_waveaccounting } = require('@pingleware/bestbooks-import');
+    var params = JSON.parse(json);
+    console.log(params);
+    if (params.type == "waveaccounting") {
+        params.mainWindow = mainWindow;
+        params.channel = 'import_progress';
+        console.log(params);
+        import_from_waveaccounting(params,params.contents,function(data){
+            mainWindow.webContents.send('import',JSON.stringify(data));
+        })
+    } else {
+        mainWindow.webContents.send("error","Unknown import type");
+    }
+});
+
+var _nonce = {
+    nonce: "",
+    expiration: 0
+};
+
+ipcMain.on("nonce",function(evt,params){
+    const crypto = require('crypto');
+    let nonce = crypto.randomBytes(16).toString('base64');
+    let expiration = new Date(Date.now() + 5 * (60 * 60 * 1000) );
+    console.log(expiration.toTimeString());
+    _nonce.nonce = nonce;
+    _nonce.expiration = expiration;
+    mainWindow.webContents.send("nonce",nonce);
+})
+
+ipcMain.on("new_invoice_number",function(evt,params){
+    var sql = `SELECT count(id) AS total FROM invoice;`;
+    const { Model } = require("@pingleware/bestbooks-core");
+    const model = new Model();
+    model.query(sql,function(rows){
+        var invoice_num = `0000${Number(rows[0].total) + 1}`.substring(-4);
+        console.log(invoice_num)
+        var now = new Date().toISOString().split("T")[0].replace("-","");
+        invoice_num = `${params}${now}-${invoice_num}`;
+        console.log(invoice_num)
+        mainWindow.webContents.send("new_invoice_number",invoice_num);
+    });
+})
+ipcMain.on("new_purchaseorder_number",function(evt,params){
+    var sql = `SELECT count(id) AS total FROM purchase;`;
+    const { Model } = require("@pingleware/bestbooks-core");
+    const model = new Model();
+    model.query(sql,function(rows){
+        var purchaseorder_num = `000000${Number(rows[0].total) + 1}`.substring(-6);
+        var now = new Date().toISOString().split("T")[0].replace("-","");
+        purchaseorder_num = `${params}${now}-${purchaseorder_num}`;
+        mainWindow.webContents.send("new_purchaseorder_number",purchaseorder_num);
+    });
+})
 
 // BESTBOOKS API Server
 const {start_server} = require('@pingleware/bestbooks-api');

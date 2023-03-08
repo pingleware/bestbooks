@@ -52,31 +52,36 @@
             <fieldset>
                 <legend onclick="expand('sales-dropdown')" style="cursor:pointer;">Sales</legend>
                 <ul class="w3-ul" id="sales-dropdown" style="display:none;">
-                    <li><a href="#" class="w3-button w3-block w3-black">Estimates</a></li>
-                    <li><a href="#" class="w3-button w3-block w3-black">Invoices</a></li>
-                    <li><a href="#" class="w3-button w3-block w3-black">Recurring Invoices</a></li>
-                    <li><a href="#" class="w3-button w3-block w3-black">Payments</a></li>
-                    <li><a href="#" class="w3-button w3-block w3-black">Customer Statements</a></li>
-                    <li><a href="#" class="w3-button w3-block w3-black">Customers</a></li>
-                    <li><a href="#" class="w3-button w3-block w3-black">Products &amp; Invoices</a></li>
+                    <li><a href="#" id="sales-estimates-button" class="w3-button w3-block w3-black">Estimates</a></li>
+                    <li><a href="#" id="sales-invoices-button" class="w3-button w3-block w3-black">Invoices</a></li>
+                    <li><a href="#" id="sales-recurring-invoices-button" class="w3-button w3-block w3-black">Recurring Invoices</a></li>
+                    <li><a href="#" id="sales-payments-button" class="w3-button w3-block w3-black">Payments</a></li>
+                    <li><a href="#" id="sales-customer-statements-button" class="w3-button w3-block w3-black">Customer Statements</a></li>
+                    <li><a href="#" id="sales-customers-button" class="w3-button w3-block w3-black">Customers</a></li>
+                    <li><a href="#" id="sales-products-services-button" class="w3-button w3-block w3-black">Products &amp; Services</a></li>
+                    <li><a href="#" id="sales-payment-terms-methods-forms-button" class="w3-button w3-block w3-black">Payment Terms, Methods and Forms</a></li>
+		            <li><a href="#" id="sales-tax-jurisdictions-button" class="w3-button w3-block w3-black">Sales Tax Jurisdictions</a></li>
                 </ul>
             </fieldset>
             <!-- Purchases -->
             <fieldset>
                 <legend onclick="expand('purchases-dropdown')" style="cursor:pointer;">Purchases</legend>
                 <ul class="w3-ul" id="purchases-dropdown" style="display:none;">
-                    <li><a href="#" class="w3-button w3-block w3-black">Bills</a></li>
-                    <li><a href="#" class="w3-button w3-block w3-black">Receipts</a></li>
-                    <li><a href="#" class="w3-button w3-block w3-black">Vendors</a></li>
-                    <li><a href="#" class="w3-button w3-block w3-black">Products &amp; Services</a></li>
+                    <li><a href="#" id="purchases-purchaseorders-button" class="w3-button w3-block w3-black">Purchase Order</a></li>
+                    <li><a href="#" id="purchases-bills-button" class="w3-button w3-block w3-black">Bills</a></li>
+                    <li><a href="#" id="purchases-receipts-button" class="w3-button w3-block w3-black">Receipts</a></li>
+                    <li><a href="#" id="purchases-vendors-button" class="w3-button w3-block w3-black">Vendors</a></li>
+                    <li><a href="#" id="purchases-products-services-button" class="w3-button w3-block w3-black">Products &amp; Services</a></li>
+                    <li><a href="#" id="purchases-payment-terms-methods-forms-button" class="w3-button w3-block w3-black">Payment Terms, Methods and Forms</a><br/></li>
                 </ul>
             </fieldset>
             <!-- Inventory -->
             <fieldset>
                 <legend onclick="expand('inventory-dropdown')" style="cursor:pointer;">Inventory</legend>
                 <ul class="w3-ul" id="inventory-dropdown" style="display:none;">
-                    <li><a href="#" class="w3-button w3-block w3-black">Products</a></li>
-                    <li><a href="#" class="w3-button w3-block w3-black">Services</a></li>
+                    <li><a href="#" id="inventory-products-button" class="w3-button w3-block w3-black">Products</a></li>
+                    <li><a href="#" id="inventory-services-button" class="w3-button w3-block w3-black">Services</a></li>
+                    <li><a href="#" id="inventory-capital-assets-button" class="w3-button w3-block w3-black">Capital Assets</a></li>
                 </ul>
             </fieldset>
             <!-- Accounting -->
@@ -94,16 +99,26 @@
             <fieldset>
                 <legend onclick="expand('banking-dropdown')" style="cursor:pointer;">Banking</legend>
                 <ul class="w3-ul" id="banking-dropdown" style="display:none;">
-                    <li><a href="#" class="w3-button w3-block w3-black">Accounts</a></li>
+                    <li><a href="#" id="banking-accounts-button" class="w3-button w3-block w3-black">Accounts</a></li>
                 </ul>
             </fieldset>
             <!-- Payroll -->
             <fieldset>
                 <legend onclick="expand('payroll-dropdown')" style="cursor:pointer;">Payroll</legend>
                 <ul class="w3-ul" id="payroll-dropdown" style="display:none;">
-                    <li><a href="#" class="w3-button w3-block w3-black">Onboard</a></li>
+                    <li><a href="#" id="payroll-onboard-button" class="w3-button w3-block w3-black">Onboard</a></li>
                     <li><a href="#" class="w3-button w3-block w3-black">Manage</a></li>
                     <li><a href="#" class="w3-button w3-block w3-black">Pay</a></li>
+                </ul>
+            </fieldset>
+            <!-- Shareholders -->
+            <fieldset>
+                <legend onclick="expand('shareholder-dropdown')" style="cursor:pointer;">Shareholder's</legend>
+                <ul class="w3-ul" id="shareholder-dropdown" style="display:none;">
+                    <li><a href="#" id="shareholder-list-button" class="w3-button w3-block w3-black">Shareholder List</a></li>
+                    <li><a href="#" id="shareholder-issuance-button" class="w3-button w3-block w3-black">Issue Shares</a></li>
+                    <li><a href="#" id="shareholder-transfer-button" class="w3-button w3-block w3-black">Transfer Shares</a></li>
+                    <li><a href="#" id="shareholder-redeem-button" class="w3-button w3-block w3-black">Redeem Shares</a></li>
                 </ul>
             </fieldset>
             <!-- Reports -->
@@ -127,14 +142,14 @@
             <fieldset>
                 <legend>Settings</legend>
                 <ul class="w3-ul">
-                    <li><a href="#" class="w3-button w3-block w3-black">Settings</a></li>
+                    <li><a href="#" id="settings-button" class="w3-button w3-block w3-black">Settings</a></li>
                 </ul>
             </fieldset>
             <!-- Import and Export -->
             <fieldset>
                 <legend onclick="expand('import-export-dropdown')" style="cursor:pointer;">Import &amp; Export</legend>
                 <ul class="w3-ul" id="import-export-dropdown" style="display:none;">
-                    <li><a href="#" class="w3-button w3-block w3-black">Import</a></li>
+                    <li><a href="#" id="import" class="w3-button w3-block w3-black">Import</a></li>
                     <li><a href="#" class="w3-button w3-block w3-black">Export</a></li>
                 </ul>
             </fieldset>
@@ -142,7 +157,7 @@
             <fieldset>
                 <legend>Help</legend>
                 <ul class="w3-ul">
-                    <li><a href="#" class="w3-button w3-block w3-black">Help</a></li>
+                    <li><a href="#" id="help-button" class="w3-button w3-block w3-black">Help</a></li>
                 </ul>
             </fieldset>
             <button id="main-back" class="w3-button w3-block w3-orange">Back</button>
@@ -160,6 +175,8 @@
         <div w3-include-html="banking.html"></div>
         <!-- PAYROLL -->
         <div w3-include-html="payroll.html"></div>
+        <!-- SHAREHOLDER -->
+        <div w3-include-html="shareholder.html"></div>
         <!-- REPORTS -->
         <div w3-include-html="reports.html"></div>
         <!-- SETTINGS -->
@@ -228,6 +245,7 @@
         <script type="text/javascript" src="js/accounting.js"></script>
         <script type="text/javascript" src="js/banking.js"></script>
         <script type="text/javascript" src="js/payroll.js"></script>
+        <script type="text/javascript" src="js/shareholder.js"></script>
         <script type="text/javascript" src="js/reports.js"></script>
         <script type="text/javascript" src="js/settings.js"></script>
         <script type="text/javascript" src="js/import.js"></script>
@@ -268,6 +286,7 @@
                     accounting_load();
                     banking_load();
                     payroll_load();
+                    shareholder_load();
                     reports_load();
                     settings_load();
                     import_load();

@@ -2,10 +2,13 @@ const {contextBridge, ipcRenderer} = require("electron");
 
 let validChannels = [
   "error","open_browser","add_company","add_account","get_accounts_by_company",
-  "add_transaction","get_transactions","delete_transaction",
-  "get_journal_transactions","add_journal_transaction","delete_journal_transaction",
+  "get_transactions","delete_transaction",
+  "get_journal_transactions","delete_journal_transaction",
   "report_balancesheet","report_incomestatement","report_trialbalance",
-  "accounting_budget","accounting_balance","delete_account","account_balances","account_budgets"
+  "accounting_budget","accounting_balance","delete_account","account_balances","account_budgets",
+  "import","export","import_progress",
+  "chartofaccount","delete_chartofaccount","add_transaction","edit_transaction","add_journal_transaction","edit_journal_transaction",
+  "nonce", "new_invoice_number","new_purchaseorder_number"
 ];
 
 contextBridge.exposeInMainWorld("api", {
