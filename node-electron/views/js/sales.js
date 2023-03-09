@@ -56,11 +56,37 @@ function sales_load() {
     });
     document.getElementById("sales-payment-terms-methods-forms-button").addEventListener("click",function(e){
         e.preventDefault();
+        var json = localStorage.getItem('payment_terms');
+        if (json.length > 0) {
+            var payment_terms = JSON.parse(json);
+            document.getElementById("sales-payment-terms-list-table").innerHTML = `<tr><th>Name</th><th>Description</th><th>Action</th></tr>`;
+            payment_terms.forEach(function(term){
+                document.getElementById("sales-payment-terms-list-table").innerHTML += `<tr>
+                                                                                            <td>${term.name}</td>
+                                                                                            <td>${term.description}</td>
+                                                                                            <td>
+                                                                                                <select class="w3-input" onclick="paymentTermAction(this)">
+                                                                                                    <option value="">Select</option>
+                                                                                                    <option value="edit">Edit</option>
+                                                                                                    <option value="delete">Delete</option>
+                                                                                                </select>
+                                                                                            </td>
+                                                                                        </tr>`;
+            })
+        }
         document.getElementById("main").style.display = "none";
         document.getElementById("sales-payment-terms").style.display = "block";
     });
     document.getElementById("sales-tax-jurisdictions-button").addEventListener("click",function(e){
         e.preventDefault();
+        var json = localStorage.getItem("salestax_jurisdictions");
+        if (json.length > 0) {
+            var salestax_jurisdictions = JSON.parse(json);
+            document.getElementById("sales-tax-jurisdictions-list-table").innerHTML = `<tr><th>State</th><th>Rate</th></tr>`;
+            salestax_jurisdictions.forEach(function(jurisdiction){
+                document.getElementById("sales-tax-jurisdictions-list-table").innerHTML += `<tr><td>${jurisdiction.state}</td><td>${jurisdiction.rate}</td></tr>`;
+            })
+        }
         document.getElementById("main").style.display = "none";
         document.getElementById("sales-tax-jurisdictions").style.display = "block";
     });
@@ -125,14 +151,38 @@ function sales_load() {
     document.getElementById("add-estimate").addEventListener("click",function(e){
         e.preventDefault();
         newEstimateNumber(function(){
+            var json = localStorage.getItem("customers");
+            if (json.length > 0) {
+                const customers = JSON.parse(json);
+                document.getElementById("estimate_customer").innerHTML = `<option value="">Select</option>`;
+                customers.forEach(function(customer){
+                    var option = new Option(`${customer.name} [${customer.email}]`,customer.id);
+                    document.getElementById("estimate_customer").appendChild(option);
+                })
+            }
+            json = localStorage.getItem("salestax_jurisdictions");
+            if (json.length > 0) {
+                const salestax_jurisdictions = JSON.parse(json);
+                document.getElementById("tax_jurisdiction").innerHTML = `<option value="">Select</option>`;
+                salestax_jurisdictions.forEach(function(jurisdiction){
+                    var option = new Option(jurisdiction.state,jurisdiction.rate);
+                    option.setAttribute("data-taxrate",jurisdiction.rate);
+                    document.getElementById("tax_jurisdiction").appendChild(option);
+                })
+            }
+            json = localStorage.getItem("payment_terms");
+            if (json.length > 0) {
+                const payment_terms = JSON.parse(json);
+                document.getElementById("net_terms").innerHTML = `<option value="">Select</option>`;
+                payment_terms.forEach(function(term){
+                    var option = new Option(`${term.name} [${term.descripotion}]`,term.id);
+                    document.getElementById("net_terms").appendChild(option);
+                })
+            }
             document.getElementById("add-estimate-dialog-title").innerHTML = "Add New Estimate";
             document.getElementById("add-estimate-dialog-recurring").style.display = "none";
             document.getElementById("add-estimate-dialog").style.display = "block";
         })
-    });
-    document.getElementById("add_tax_jurisdiction").addEventListener("click",function(e){
-        e.preventDefault();
-        document.getElementById('add-tax-jurisdiction-dialog').style.display='block';
     });
     document.getElementById("add-invoice").addEventListener("click",function(e){
         e.preventDefault();
@@ -219,6 +269,40 @@ function sales_load() {
         document.getElementById("customer_shipping_state").value = document.getElementById("customer_billing_state").value;
         document.getElementById("customer_shipping_zip").value = document.getElementById("customer_billing_zip").value;
     });
+    document.getElementById("add_invoice_payment_term").addEventListener("click",function(e){
+        e.preventDefault();
+        document.getElementById("payment-terms-dialog").style.display = 'block';
+    });
+    document.getElementById("payment-terms-dialog-add").addEventListener("click",function(e){
+        e.preventDefault();
+        var name = document.getElementById("payment-terms-dialog-name").value;
+        var description = document.getElementById("payment-terms-dialog-description").value;
+        var sql = `INSERT INTO payment_terms (name,description) VALUES ('${name}','${description}');`;
+        console.log(sql);
+        SendIPC("add_payment_term",sql,function(channel,evetm,result){
+            window.location.reload();
+        })
+        document.getElementById("payment-terms-dialog-name").value = "";
+        document.getElementById("payment-terms-dialog-description").value = "";
+    });
+    document.getElementById("add_invoice_payment_method").addEventListener("click",function(e){
+        e.preventDefault();
+        document.getElementById("payment-method-dialog").style.display = 'block';
+    });
+    document.getElementById("payment-method-dialog-add").addEventListener("click",function(e){
+
+    });
+
+    document.getElementById("add-tax-jurisdiction-now").addEventListener("click",function(e){
+        e.preventDefault();
+        var state = document.getElementById("add-tax-jurisdiction-dialog-state").value;
+        var rate = document.getElementById("add-tax-jurisdiction-dialog-rate").value;
+        var url = document.getElementById("add-tax-jurisdiction-dialog-url").value;
+        var sql = `INSERT INTO sales_tax (state,rate,url) VALUES ('${state}',${rate},'${url}')`;
+        SendIPC("add_salestax_jurisdiction",sql,function(channel,event,results){
+            window.location.reload();
+        })
+    })
 }
 
 function changeState(state) {

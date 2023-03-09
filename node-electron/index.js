@@ -438,6 +438,20 @@ ipcMain.on("query_sql",function(evt,sql){
         mainWindow.webContents.send("query_sql",JSON.stringify(rows));
     })
 })
+ipcMain.on("add_salestax_jurisdiction",function(evt,sql){
+    const { Model } = require("@pingleware/bestbooks-core");
+    var model = new Model();
+    model.query(sql,function(rows){
+        mainWindow.webContents.send("add_salestax_jurisdiction",JSON.stringify(rows));
+    })
+})
+ipcMain.on("add_payment_term",function(event,sql){
+    const { Model } = require("@pingleware/bestbooks-core");
+    var model = new Model();
+    model.query(sql,function(rows){
+        mainWindow.webContents.send("add_payment_term",JSON.stringify(rows));
+    })
+})
 
 // BESTBOOKS API Server
 const {start_server} = require('@pingleware/bestbooks-api');

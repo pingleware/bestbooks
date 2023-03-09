@@ -5,8 +5,6 @@
     <button class="w3-button w3-block w3-orange" id="sales-estimates-back">Back</button>
     <br/>
     <input type="button" class="w3-button w3-blue w3-block" id="add-estimate" value="Create an Estimate" />
-    <br/>
-    <a href="#" id="add_tax_jurisdiction" class="w3-button w3-green w3-block">Add Tax Jurisdiction</a>
     <fieldset>
         <legend>Open Estimates</legend>
         <table class="w3-table w3-striped" id="sales-estimates-table">
@@ -90,19 +88,14 @@
         </tr>
     </table>
 </div>
-<!-- payment terms -->
+<!-- payment terms, methods, forms -->
 <div id="sales-payment-terms" class="w3-container" style="display:none;">
     <br/><br/><br/>
-    <h2 class="w3-yellow">Sales: INVOICE PAYMENT TERMS</h2>
+    <h2 class="w3-yellow">Sales: INVOICE PAYMENT TERMS &amp; METHODS</h2>
     <button class="w3-button w3-block w3-orange" id="sales-payment-terms-back">Back</button>
-    <br/>
-    <a href="#" type="button" class="w3-button w3-blue w3-block" id="add_invoice_payment_term">Add New Payment Term</a>&nbsp;
-    <br/>
-    <a href="#" type="button" class="w3-button w3-purple w3-block" id="add_invoice_payment_method">Add New Payment Method</a>&nbsp;
-    <br/>
-    <a href="#" type="button" class="w3-button w3-green w3-block" id="add_invoice_payment_form">Add New Payment Form</a>&nbsp;
     <fieldset>
         <legend>Payment Terms</legend>
+        <a href="#" type="button" class="w3-button w3-blue w3-block" id="add_invoice_payment_term">Add New Payment Term</a>&nbsp;
         <table class="w3-table w3-striped" id="sales-payment-terms-list-table">
             <tr>
                 <th>Name</th>
@@ -113,6 +106,7 @@
     </fieldset>
     <fieldset>
         <legend>Payment Methods</legend>
+        <a href="#" type="button" class="w3-button w3-purple w3-block" id="add_invoice_payment_method">Add New Payment Method</a>&nbsp;
         <table class="w3-table w3-striped" id="sales-payment-methods-list-table">
             <tr>
                 <th>Name</th>
@@ -121,16 +115,75 @@
             </tr>
         </table>
     </fieldset>
-    <fieldset>
-        <legend>Payment Forms</legend>
-        <table class="w3-table w3-striped" id="sales-payment-forms-list-table">
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Action</th>
-            </tr>
-        </table>
-    </fieldset>
+</div>
+<!-- payment terms dialog -->
+<div id="payment-terms-dialog" class="w3-modal">
+    <div class="w3-modal-content">
+        <div class="w3-container w3-white">
+            <h2 class="w3-yellow">Add New Payment Term</h2>
+            <p>
+                <b>Suggested Payment Terms:</b>
+                <ul>
+                    <li>PIA: Payment in advance</li>
+                    <li>Net 7, 10, 15, 30, 60, or 90: Payment expected within 7, 10, 15, 30, 60, or 90 days after the invoice date</li>
+                    <li>EOM: End of month</li>
+                    <li>21 MFI: 21st of the month following invoice date</li>
+                    <li>COD: Cash on delivery</li>
+                    <li>CND: Cash next delivery</li>
+                    <li>CBS: Cash before shipment</li>
+                    <li>CIA: Cash in advance</li>
+                    <li>CWO: Cash with order</li>
+                    <li>1MD, 2MD: Monthly credit payment of a full month (or two-month) supply</li>
+                    <li>Stage payments: Set payments over a period of time, agreed upon by the client and seller</li>
+                    <li>Forward dating: Invoicing for payment to be made after the customer receives the order</li>
+                    <li>Accumulation discounts: Discounts on large orders</li>
+                    <li>Partial payment discount: When a seller offers a partial discount due to low cash flow</li>
+                    <li>Rebate: Refund sent to the buyer after they’ve made a purchase</li>
+                    <li>Contra: Payment from the client, offset by the cost of supplies purchased</li>
+                </ul>
+                <a href="https://quickbooks.intuit.com/r/bookkeeping/choosing-and-defining-invoice-payment-terms/" class="w3-button w3-block w3-green">More About Payment Terms?</a>
+                <label for="payment-terms-dialog-name">Name</label>
+                <input type="text" class="w3-input w3-block" id="payment-terms-dialog-name" value="" />
+                <label for="payment-terms-dialog-description">Description</label>
+                <textarea class="w3-input w3-block" rows="5" id="payment-terms-dialog-description"></textarea>
+                <button class="w3-button w3-block w3-black" id="payment-terms-dialog-add">Submit</button>
+                <br/>
+                <button class="w3-button w3-block w3-orange" onclick="document.getElementById('payment-terms-dialog').style.display='none';">Cancel</button>
+                <br/>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- payment methods dialog -->
+<div id="payment-method-dialog" class="w3-modal">
+    <div class="w3-modal-content">
+        <div class="w3-container w3-white">
+            <h2 class="w3-yellow">Add New Payment Method</h2>
+            <p>
+                <b>Suggested Payment Methods:</b>
+                <ul>
+                    <li>Credit Card</li>
+                    <li>Debit Card</li>
+                    <li>Store, Custom Credit Card</li>
+                    <li>Cash</li>
+                    <li>Mobile wallet</li>
+                    <li>Buy now, pay later (BNPL)</li>
+                    <li>Checks</li>
+                    <li>Bank transfer</li>
+                    <li>Autopay, ACH</li>
+                    <li>Cryptocurrency</li>
+                </ul>
+            </p>
+            <label for="payment-method-dialog-name">Name</label>
+            <input type="text" class="w3-input w3-block" id="payment-method-dialog-name" value="" />
+            <label for="payment-method-dialog-description">Description</label>
+            <textarea class="w3-input w3-block" rows="5" id="payment-method-dialog-description"></textarea>
+            <button class="w3-button w3-block w3-black" id="payment-method-dialog-add">Submit</button>
+            <br/>
+            <button class="w3-button w3-block w3-orange" onclick="document.getElementById('payment-method-dialog').style.display='none';">Cancel</button>
+            <br/>
+        </div>
+    </div>
 </div>
 <!-- sales tax jurisdictions -->
 <div id="sales-tax-jurisdictions" class="w3-container" style="display:none;">
@@ -139,9 +192,9 @@
     <button class="w3-button w3-block w3-orange" id="sales-tax-jurisdictions-back">Back</button>
     <br/>
     <input type="button" class="w3-button w3-blue w3-block" id="add-tax-jurisdiction" value="Add a State Tax Jurisdiction" />
-    <table class="w3-table w3-striped">
+    <table class="w3-table w3-striped" id="sales-tax-jurisdictions-list-table">
         <tr>
-            <th>Name</th>
+            <th>State</th>
             <th>Rate</th>
         </tr>
     </table>
@@ -153,6 +206,8 @@
                 <input type="text" class="w3-input w3-block" id="add-tax-jurisdiction-dialog-state" value="" />
                 <label for="add-tax-jurisdiction-dialog-rate">Rate</label>
                 <input type="text" class="w3-input w3-block" id="add-tax-jurisdiction-dialog-rate" value="" />
+                <label for="add-tax-jurisdiction-dialog-url">Payment URL</label>
+                <input type="url" id="add-tax-jurisdiction-dialog-url" class="w3-input w3-block" value="" />
                 <button class="w3-button w3-block w3-black" id="add-tax-jurisdiction-now">Add</button>
                 <br/>
                 <button class="w3-button w3-block w3-orange" onclick="document.getElementById('sales-tax-jurisdictions-addnew-dialog').style.display='none'">Cancel</button>
@@ -412,6 +467,10 @@
                 </table>
                 <input type="hidden" name="estimate_items" id="estimate_items" value="1" />
                 <datalist id="productservices-list">
+                    <optgroup>Product(s)</optgroup>
+                    <option data-price="10.01">Widget</option>
+                    <optgroup>Service(s)</optgroup>
+                    <option data-price="150.35">Widget Installation</option>
                 </datalist>
                 <br/>
                 <label class="w3-block" for="add_terms">Additional Terms</label>
@@ -422,7 +481,7 @@
                 <br/>
                 <input class="w3-button w3-block w3-black" type="button" id="add_estimate_action" name="add_estimate_action" value="Save" />
                 <br/>
-                <button class="w3-button w3-block w3-orange" onclick="document.getElementById('add-estimate-dialog').style.display='none';">Cancel</button>
+                <button class="w3-button w3-block w3-orange" onclick="document.getElementById('add-estimate-dialog').style.display='none';return false;">Cancel</button>
                 <br/>
             </form>
         </div>
