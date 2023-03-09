@@ -8,7 +8,8 @@ let validChannels = [
   "accounting_budget","accounting_balance","delete_account","account_balances","account_budgets",
   "import","export","import_progress",
   "chartofaccount","delete_chartofaccount","add_transaction","edit_transaction","add_journal_transaction","edit_journal_transaction",
-  "nonce", "new_invoice_number","new_purchaseorder_number","insert_sql","query_sql","add_salestax_jurisdiction","add_payment_term"
+  "nonce", "new_invoice_number","new_purchaseorder_number","insert_sql","query_sql","add_salestax_jurisdiction","add_payment_term",
+  "add_resale_product","add_resale_service"
 ];
 
 contextBridge.exposeInMainWorld("api", {
@@ -60,5 +61,14 @@ model.query("SELECT * FROM sales_tax",function(rows){
 model.query("SELECT * FROM payment_terms",function(rows){
   localStorage.setItem('payment_terms',JSON.stringify(rows));
 })
+// get resale products
+model.query("SELECT * FROM inventory WHERE type='product.resale' ORDER BY description ASC",function(rows){
+  localStorage.setItem('resale_products',JSON.stringify(rows));
+})
+// get resale services
+model.query("SELECT * FROM inventory WHERE type='service.resale' ORDER BY description ASC",function(rows){
+  localStorage.setItem('resale_services',JSON.stringify(rows));
+})
+
 
 localStorage.setItem("accountTypes",JSON.stringify(AccountTypes));

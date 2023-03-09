@@ -51,6 +51,53 @@ function sales_load() {
     });
     document.getElementById("sales-products-services-button").addEventListener("click",function(e){
         e.preventDefault();
+        var json = localStorage.getItem("resale_products");
+        if (json.length > 0) {
+            const resale_products = JSON.parse(json);
+            document.getElementById("inventory-resale-product-list-table").innerHTML = `<tr><th>Name</th><th>Description</th><th>Quantity</th><th>Unit Type</th><th>Cost</th><th>Price</th><th>Vendor</th><th>Action</th></tr>`;
+            resale_products.forEach(function(product){
+                document.getElementById("inventory-resale-product-list-table").innerHTML += `<tr>
+                                                                                                <td>${product.name}</td>
+                                                                                                <td>${product.description}</td>
+                                                                                                <td>${product.unit_qty}</td>
+                                                                                                <td>${product.unit_type}</td>
+                                                                                                <td>${product.cost}</td>
+                                                                                                <td>${product.price}</td>
+                                                                                                <td>${product.vendor}</td>
+                                                                                                <td>
+                                                                                                    <select class="w3-input" onclick="productResaleAction(this)">
+                                                                                                        <option value-"">Select</option>
+                                                                                                        <option value="edit">Edit</option>
+                                                                                                        <option value="delete">Delete</option>
+                                                                                                    </select>
+                                                                                                </td>
+                                                                                             </tr>`;
+            })
+        }
+        json = localStorage.getItem("resale_services");
+        if (json.length > 0) {
+            const resale_services = JSON.parse(json);
+            document.getElementById("inventory-resale-service-list-table").innerHTML = `<tr><th>Name</th><th>Description</th><th>Quantity</th><th>Unit Type</th><th>Cost</th><th>Price</th><th>Vendor</th><th>Action</th></tr>`;
+            resale_services.forEach(function(service){
+                document.getElementById("inventory-resale-service-list-table").innerHTML += `<tr>
+                                                                                                <td>${service.name}</td>
+                                                                                                <td>${service.description}</td>
+                                                                                                <td>${service.unit_qty}</td>
+                                                                                                <td>${service.unit_type}</td>
+                                                                                                <td>${service.cost}</td>
+                                                                                                <td>${service.price}</td>
+                                                                                                <td>${service.vendor}</td>
+                                                                                                <td>
+                                                                                                    <select class="w3-input" onclick="productResaleAction(this)">
+                                                                                                        <option value-"">Select</option>
+                                                                                                        <option value="edit">Edit</option>
+                                                                                                        <option value="delete">Delete</option>
+                                                                                                    </select>
+                                                                                                </td>
+                                                                                             </tr>`;
+            })
+        }
+
         document.getElementById("main").style.display = "none";
         document.getElementById("sales-products-services").style.display = "block";
     });
@@ -142,11 +189,37 @@ function sales_load() {
     // dialog acctions
     document.getElementById("add_product_action").addEventListener("click",function(e){
         e.preventDefault();
+        var product_name = document.getElementById("product_name").value;
+        var product_desc = document.getElementById("product_desc").value;
+        var product_quantity = document.getElementById("product_quantity").value;
+        var product_unit_type = document.getElementById("product_unit_type").value;
+        var product_cost = document.getElementById("product_cost").value;
+        var product_price = document.getElementById("product_price").value;
 
+        var purchase_date = new Date().toISOString().split("T")[0];
+
+        var sql = `INSERT INTO inventory (type,purchase_date,name,description,cost,price,unit_qty,unit_type) VALUES 
+                    ('product.resale','${purchase_date}','${product_name}','${product_desc}',${product_cost},${product_price},${product_quantity},'${product_unit_type}')`;
+        SendIPC("add_resale_product",sql,function(channel,event,results){
+            window.location.reload();
+        })
     });
     document.getElementById("add_service_action").addEventListener("click",function(e){
         e.preventDefault();
+        var service_name = document.getElementById("service_name").value;
+        var service_desc = document.getElementById("service_desc").value;
+        var service_quantity = document.getElementById("service_quantity").value;
+        var service_unit_type = document.getElementById("service_unit_type").value;
+        var service_cost = document.getElementById("service_cost").value;
+        var service_price = document.getElementById("service_price").value;
 
+        var service_add_date = new Date().toISOString().split("T")[0];
+
+        var sql = `INSERT INTO inventory (type,purchase_date,name,description,cost,price,unit_qty,unit_type) VALUES 
+        ('service.resale','${service_add_date}','${service_name}','${service_desc}',${service_cost},${service_price},${service_quantity},'${service_unit_type}')`;
+        SendIPC("add_resale_service",sql,function(channel,event,results){
+            window.location.reload();
+        })
     })
     document.getElementById("add-estimate").addEventListener("click",function(e){
         e.preventDefault();
@@ -175,10 +248,28 @@ function sales_load() {
                 const payment_terms = JSON.parse(json);
                 document.getElementById("net_terms").innerHTML = `<option value="">Select</option>`;
                 payment_terms.forEach(function(term){
-                    var option = new Option(`${term.name} [${term.descripotion}]`,term.id);
+                    var option = new Option(`${term.name} [${term.description}]`,term.id);
                     document.getElementById("net_terms").appendChild(option);
                 })
             }
+            var resale_html = '<optgroup>Product(s)</optgroup>';
+            json = localStorage.getItem("resale_products");
+            if (json.length > 0) {
+                const resale_products = JSON.parse(json);
+                resale_products.forEach(function(product){
+                    resale_html += `<option data-price="${product.price}">${product.description}</option>`;
+                })
+            }
+            resale_html += '<optgroup>Service(s)</optgroup>';
+            json = localStorage.getItem("resale_services");
+            if (json.length > 0) {
+                const resale_services = JSON.parse(json);
+                resale_services.forEach(function(service){
+                    resale_html += `<option data-price="${service.price}">${service.description}</option>`;
+                })
+            }
+            document.getElementById("productservices-list").innerHTML = resale_html;
+
             document.getElementById("add-estimate-dialog-title").innerHTML = "Add New Estimate";
             document.getElementById("add-estimate-dialog-recurring").style.display = "none";
             document.getElementById("add-estimate-dialog").style.display = "block";
@@ -244,6 +335,7 @@ function sales_load() {
         itemlist += '<td><input type="text" class="w3-input w3-grey" name="item_total_'+_item_no+'" id="item_total_'+_item_no+'" value="" readonly /></td>';
         itemlist += '</tr>';
         document.getElementById("estimate_itemizations").innerHTML += itemlist;
+        return false;
     });
     document.getElementById("add_customer_action").addEventListener("click",function(e){
         e.preventDefault();
@@ -302,6 +394,12 @@ function sales_load() {
         SendIPC("add_salestax_jurisdiction",sql,function(channel,event,results){
             window.location.reload();
         })
+    })
+    document.getElementById("add-estimate-dialog-generate").addEventListener("click",function(e){
+        e.preventDefault();
+        var randomstring = Math.random().toString(36).slice(-8);
+        document.getElementById("estimate_password").value = randomstring;
+        return false;
     })
 }
 

@@ -351,13 +351,13 @@
                 <label for="product_desc">Description</label>
                 <input type="text" id="product_desc" name="product_desc" class="w3-input" value="" required />
                 <label for="product_quantity">Unit Quantity</label>
-                <input type="number" class="w3-input w3-block" name="product_quantity" id="product_quantity" value="" required />
+                <input type="number" class="w3-input w3-block" name="product_quantity" id="product_quantity" steps="any" value="" required />
                 <label for="product_unit_type">Unit Type</label>
                 <input type="text" class="w3-input w3-block" name="product_unit_type" id="product_unit_type" value="" required />
                 <label for="product_cost">Cost</label>
-                <input type="number" class="w3-input w3-block" name="product_cost" id="product_cost" value="" required />
+                <input type="number" class="w3-input w3-block" name="product_cost" id="product_cost" steps="any" value="" required />
                 <label for="product_price">Price</label>
-                <input type="number" class="w3-input w3-block" name="product_price" id="product_price" value="" required />
+                <input type="number" class="w3-input w3-block" name="product_price" id="product_price" steps="any" value="" required />
                 <br/>
                 <input type="submit" id="add_product_action" name="add_product_action" class="w3-button w3-black w3-block" value="Add" />
                 <br/>
@@ -402,7 +402,7 @@
                 <input type="hidden" name="estimate_status" id="estimate_status" value="created" placeholder="Status: created|sent|invoiced"/>
                 <label for="estimate_invnum">Invoice #</label>
                 <input type="text" class="w3-input w3-block w3-grey" name="estimate_invnum" id="estimate_invnum" value="" readonly />
-                <label for="estimate_password">Password</label>
+                <label for="estimate_password">Password&nbsp;<button id="add-estimate-dialog-generate" class="w3-button w3-small w3-blue">Generate</button></label>
                 <input type="text" class="w3-input w3-block" name="estimate_password" id="estimate_password" value="" title="Add a password for customer to view this estimate the URL?" />
                 <label for="estimate_public_url">URL</label>
                 <input type="text" class="w3-input w3-block w3-grey" name="estimate_public_url" id="estimate_public_url" value="" placeholder="customer/estimate/?num=[INVOICE_NUMBER]" readonly />

@@ -452,6 +452,20 @@ ipcMain.on("add_payment_term",function(event,sql){
         mainWindow.webContents.send("add_payment_term",JSON.stringify(rows));
     })
 })
+ipcMain.on("add_resale_product",function(event,sql){
+    const { Model } = require("@pingleware/bestbooks-core");
+    var model = new Model();
+    model.insert(sql,function(results){
+        mainWindow.webContents.send("add_resale_product",JSON.stringify(results));
+    })
+})
+ipcMain.on("add_resale_service",function(event,sql){
+    const { Model } = require("@pingleware/bestbooks-core");
+    var model = new Model();
+    model.insert(sql,function(results){
+        mainWindow.webContents.send("add_resale_service",JSON.stringify(results));
+    })
+})
 
 // BESTBOOKS API Server
 const {start_server} = require('@pingleware/bestbooks-api');
