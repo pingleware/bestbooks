@@ -2,6 +2,7 @@ function settings_load() {
         // add document.getElementById statements
         var pagination_limit = localStorage.getItem("pagination-limit");
         var corporatebook_url = localStorage.getItem("corporate-book-url");
+        var company_sender_email = localStorage.getItem("company_sender_email");
         if (pagination_limit) {
                 document.getElementById("settings-pagination-limit").value = pagination_limit;
         } else {
@@ -14,11 +15,21 @@ function settings_load() {
         } else {
                 document.getElementById("settings-corporatebook-url").value = "";
         }
+        if (company_sender_email) {
+                document.getElementById("settings-company-sender").value = company_sender_email;
+        } else {
+                document.getElementById("settings-company-sender").value = "";
+        }
         document.getElementById("settings-save").addEventListener("click",function(e){
                 e.preventDefault();
                 localStorage.setItem("pagination-start",0);
                 localStorage.setItem("pagination-limit",document.getElementById("settings-pagination-limit").value);
                 localStorage.setItem("corporate-book-url",document.getElementById("settings-corporatebook-url").value);
+                localStorage.setItem("company_sender_email",document.getElementById("settings-company-sender").value);
+                // Notify the CompanySenderChanged custom event that the company sender email has been changed.
+                const eventCompanySenderChange = new Event("CompanySenderChanged");
+                document.dispatchEvent(eventCompanySenderChange);
+
                 showAlert("success","Settings Status","Settings successfully saved.");
         });
 
