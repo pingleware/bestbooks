@@ -2,3 +2,8 @@ node_modules/
 dist/
 ._*
 package-lock.json
+settings.json
+assets/private.key
+assets/public.key
+assets/bind9.txt
+assets/tinydns.txt
