@@ -1,5 +1,5 @@
 
-const { SendEMail, SaveToDatabase } = require("../index");
+const { SendEMail, SaveToDatabase, start_smtp_server } = require("../index");
 
 
 describe("send email", function(){
@@ -42,5 +42,8 @@ describe("send email", function(){
             console.log(status);
         })
     
+    })
+    it("3. start smtp server", function(){
+        start_smtp_server("domain.com",587)
     })
 });
