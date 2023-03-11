@@ -1,10 +1,41 @@
+var customer = null;
+
 function sales_load() {
     // add document.getElementById statements
 
     document.getElementById("sales-estimates-button").addEventListener("click",function(e){
         e.preventDefault();
-        document.getElementById("main").style.display = "none";
-        document.getElementById("sales-estimates").style.display = "block";
+        let company_id = localStorage.getItem("company_id");
+        var sql = `SELECT * FROM invoice WHERE company_id=${company_id} AND (status='draft' OR status='rejected') ORDER BY txdate DESC;`;
+        SendIPC("get_estimates",sql,function(channel,event,rows){
+            var estimates = JSON.parse(rows);
+            console.log(estimates);
+            var customers = JSON.parse(localStorage.getItem("customers"));
+            console.log(customers);
+            document.getElementById("sales-estimates-table").innerHTML = `<tr><th>ID</th><th>Date</th><th>Number</th><th>Customer</th><th>Amount</th><th>Tax State</th><th>Action</th></tr>`;
+            document.getElementById("sales-rejected-estimates-table").innerHTML = `<tr><th>Date</th><th>Number</th><th>Customer</th><th>Amount</th><th>Action</th></tr>`;
+            estimates.forEach(function(estimate){
+                var txdate = new Date(estimate.txdate).toISOString();
+                var customer = '';
+                customers.forEach(function(_customer){
+                    if (_customer.id == estimate.customer) {
+                        customer = _customer.name;
+                    }
+                })
+
+                if (estimate.status == "draft") {
+                    document.getElementById("sales-estimates-table").innerHTML += `<tr><td>${estimate.id}</td><td>${txdate}</td><td>${estimate.number}</td><td>${customer}</td><td>${Number(estimate.amount).toFixed(2)}</td><td>${estimate.taxstate}</td><td><select class="w3-input" data-id="${estimate.id}" data-estimate="${estimate.content}" onchange="estimateAction(this)"><option value="">Select</option><option value="edit">Edit</option>
+                    <option value="view">View/Print</option>
+                    <option value="send">Send</option>
+                    <option value="invoice">Make an Invoice</option>
+                    <option value="delete">Delete</option></select></td></tr>`;
+                } else if (estimate.status == "rejected") {
+                    document.getElementById("sales-rejected-estimates-table").innerHTML += `<tr><td>${txdate}</td><td>${estimate.number}</td><td>${customer}</td><td>${Number(estimate.amount).toFixed(2)}</td><td><select class="w3-input" data-id="${estimate.id}" data-estimate="${estimate.content}" onchange="estimateAction(this)"><option value="">Select</option><option value="edit">Edit</option><option value="delete">Delete</option></select></td></tr>`;
+                }
+            })
+            document.getElementById("main").style.display = "none";
+            document.getElementById("sales-estimates").style.display = "block";
+        });
     });
     document.getElementById("sales-invoices-button").addEventListener("click",function(e){
         e.preventDefault();
@@ -230,6 +261,7 @@ function sales_load() {
                 document.getElementById("estimate_customer").innerHTML = `<option value="">Select</option>`;
                 customers.forEach(function(customer){
                     var option = new Option(`${customer.name} [${customer.email}]`,customer.id);
+                    option.setAttribute("data-customer",btoa(JSON.stringify(customer)));
                     document.getElementById("estimate_customer").appendChild(option);
                 })
             }
@@ -238,7 +270,7 @@ function sales_load() {
                 const salestax_jurisdictions = JSON.parse(json);
                 document.getElementById("tax_jurisdiction").innerHTML = `<option value="">Select</option>`;
                 salestax_jurisdictions.forEach(function(jurisdiction){
-                    var option = new Option(jurisdiction.state,jurisdiction.rate);
+                    var option = new Option(jurisdiction.state,jurisdiction.state);
                     option.setAttribute("data-taxrate",jurisdiction.rate);
                     document.getElementById("tax_jurisdiction").appendChild(option);
                 })
@@ -248,7 +280,8 @@ function sales_load() {
                 const payment_terms = JSON.parse(json);
                 document.getElementById("net_terms").innerHTML = `<option value="">Select</option>`;
                 payment_terms.forEach(function(term){
-                    var option = new Option(`${term.name} [${term.description}]`,term.id);
+                    var option = new Option(`${term.name} [${term.description}]`,term.name);
+                    option.setAttribute("data-id",term.id);
                     document.getElementById("net_terms").appendChild(option);
                 })
             }
@@ -310,12 +343,33 @@ function sales_load() {
             var timestamp = new Date().getTime();
             var _item_no = Number(document.getElementById("estimate_items").value);
             var total = 0;
+            var tax = 0;
+            var subtotal = 0;
             for (let i=1; i <= _item_no; i++) {
                 total += Number(document.getElementById(`item_total_${i}`).value);
+                tax += Number(document.getElementById(`item_tax_${i}`).value);
+                subtotal += Number(document.getElementById(`item_total_${i}`).value) - Number(document.getElementById(`item_tax_${i}`).value);
             }
             var content = btoa(JSON.stringify(formObject));
-            var sql = `INSERT invoice (status,txdate,number,customer,amount,taxstate,countent) VALUES ('draft','${timestamp}','${formObject.estimate_invnum}',${Number(formObject.estimate_customer)},${total},'${formObject.tax_jurisdiction}','${content}');`;
+            var sql = `INSERT INTO invoice (company_id,status,txdate,number,customer,amount,taxstate,content) VALUES (${company.id},'draft','${timestamp}','${formObject.estimate_invnum}',${Number(formObject.estimate_customer)},${total},'${formObject.tax_jurisdiction}','${content}');`;
             console.log(sql);
+            var params = {
+                sql: sql,
+                form: formObject,
+                customer: customer,
+                company: company,
+                prices: {
+                    subtotal: subtotal, 
+                    tax: tax, 
+                    shipping: Number(formObject.shipping), 
+                    other: Number(formObject.other),     
+                    total: Number(total) + Number(formObject.shipping) + Number(formObject.other)
+                }
+            }
+            console.log(params);
+            SendIPC("save_estimate",params,function(channel,event,results){
+                window.location.reload();
+            })
         }
     });
 
@@ -407,7 +461,10 @@ function changeState(state) {
     var taxrate = state.options[state.selectedIndex].getAttribute("data-taxrate");
     document.getElementById("tax_amount").value = taxrate;
 }
-function changeCustomer(customer) {
+function changeCustomer(customer_obj) {
+    var base64 = customer_obj.options[customer_obj.selectedIndex].getAttribute("data-customer");
+    var json = atob(base64);
+    customer = JSON.parse(json);
     console.log(customer);
 }
 function setProductType(item_no) {
@@ -480,5 +537,30 @@ function customerAction(element_obj) {
     var customer_id = element_obj.getAttribute("data-id");
     var customer = JSON.parse(atob(element_obj.getAttribute("data-customer")));
     console.log([action,customer_id,customer]);
+    element_obj.value = "";
+}
+
+function estimateAction(element_obj) {
+    var action = element_obj.value;
+    var estimate_id = element_obj.getAttribute("data-id");
+    var estimate = JSON.parse(atob(element_obj.getAttribute("data-estimate")));
+    console.log([action,estimate_id,estimate]);
+    switch(action) {
+        case 'edit':
+            // popup edit dialog
+            break;
+        case 'view':
+            // invoke bestbooks-reports to create a HTML estimate to view
+            break;
+        case 'send':
+            // invoke bestbooks-reportes to create a HTML estimate and then invoice bestbooks-mailer to send the HTML
+            break;
+        case 'invoice':
+            // change status to "invoice"
+            break;
+        case 'delete':
+            // popup delete confirmation, then IPC delete estimate by estimate.id reference
+            break;
+    }
     element_obj.value = "";
 }

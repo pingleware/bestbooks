@@ -10,7 +10,6 @@
         <table class="w3-table w3-striped" id="sales-estimates-table">
             <tr>
                 <th>ID</th>
-                <th>Status</th>
                 <th>Date</th>
                 <th>Number</th>
                 <th>Customer</th>
@@ -24,7 +23,6 @@
         <legend>Rejected Estimates</legend>
         <table class="w3-table w3-striped" id="sales-rejected-estimates-table">
             <tr>
-                <th>Status</th>
                 <th>Date</th>
                 <th>Number</th>
                 <th>Customer</th>
@@ -472,10 +470,13 @@
                     <optgroup>Service(s)</optgroup>
                     <option data-price="150.35">Widget Installation</option>
                 </datalist>
-                <br/>
                 <label class="w3-block" for="add_terms">Additional Terms</label>
                 <textarea class="w3-input w3-block" id="add_terms" name="add_terms" placeholder="Specify additional terms, if any?">
                 </textarea>
+                <label for="shipping">Shipping</label>
+                <input type="number" steps="any" class="w3-input w3-block" name="shipping" id="shipping" value="0.00" placeholder="Add any shipping charges for this estimate?" />
+                <label for="other">Other</label>
+                <input type="number" steps="any" class="w3-input w3-block" name="other" id="other" value="0.00" placeholder="Add any additional charges for this estimate?" />
                 <br/>
                 <input class="w3-button w3-block w3-black" type="button" id="add_item_row" name="add_item_row" value="Add Item" />
                 <br/>
