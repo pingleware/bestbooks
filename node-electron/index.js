@@ -125,7 +125,7 @@ ipcMain.on('run_script', function(evt, fullPathname){
 ipcMain.on('add_company', async function(evt, json){
     var data = JSON.parse(json);
     console.log(data);
-    const {Company} = require('@pingleware/bestbooks-core');
+    const {Company, Model} = require('@pingleware/bestbooks-core');
     var company = new Company();
     company.addCompany(data.name,data.note,
         function(lastID, changes){
@@ -133,10 +133,22 @@ ipcMain.on('add_company', async function(evt, json){
                 lastID: lastID,
                 changes: changes
             };
-            mainWindow.webContents.send('add_company',JSON.stringify(result));
+            var model = new Model();
+            var sql = `INSERT INTO company_metadata (company_id) VALUES (${lastID});`;
+            model.insert(sql,function(nthing){
+                mainWindow.webContents.send('add_company',JSON.stringify(result));
+            })
         });
 });
-
+ipcMain.on("update_company", function(evt, json){
+    var data = JSON.parse(json);
+    const { Model } = require("@pingleware/bestbooks-core");
+    var model = new Model();
+    var sql = `UPDATE company_metadata SET address1='${data.address1}',address2='${data.address2}',city='${data.city}',state='${data.state}',zipcode='${data.zipcode}',contact='${data.contact}',email='${data.email}',phone='${data.phone}',fax='${data.fax}',website='${data.website}' WHERE company_id=${data.id};`;
+    model.insert(sql,function(results){
+        mainWindow.webContents.send('update_company',JSON.stringify(results));
+    })
+})
 ipcMain.on("add_account", function(evt, json){
     var data = JSON.parse(json);
     const { ChartOfAccounts } = require("@pingleware/bestbooks-core");
@@ -466,8 +478,131 @@ ipcMain.on("add_resale_service",function(event,sql){
         mainWindow.webContents.send("add_resale_service",JSON.stringify(results));
     })
 })
+ipcMain.on("save_estimate",function(event,params){
+    const { Model } = require("@pingleware/bestbooks-core");
+    //const { CustomerEstimate } = require("@pingleware/bestbooks-reports");
+    //const { SendEMail, SaveToDatabase } = require("@pingleware/bestbooks-mailer");
+
+    console.log(params)
+    var model = new Model();
+    model.insert(params.sql,function(results){
+        var recipient = params.customer.email;
+        var message = '';
+
+        var customer_contact = params.customer.name;
+        if (params.customer.poc_firstname && params.customer.poc_lastname) {
+            customer_contact = params.customer.poc_firstname + ' ' + params.customer.poc_lastname;
+        }
+        var ship_phone = params.customer.phone;
+        if (params.customer.ship_phone) {
+            ship_phone = params.customer.ship_phone;
+        }
+
+        var customerEstimateInfo = {
+            number: params.form.estimate_invnum,
+            date: new Date().toISOString().split('T')[0],
+            company: {
+                name: params.company.name,
+                contact: params.company.contact, 
+                email: params.company.email, 
+                website: params.company.website, 
+                address1: params.company.address1, 
+                address2: params.company.address2, 
+                city: params.company.city, 
+                state: params.company.state, 
+                zipcode: params.company.zipcode, 
+                phone: params.company.phone, 
+                fax: params.company.fax
+            }, 
+            customer: {
+                id: params.customer.id,
+                name: params.customer.name,
+                email: recipient,
+                contact: customer_contact,
+                address1: params.customer.address_1,
+                address2: params.customer.address_2,
+                city: params.customer.city,
+                state: params.customer.state,
+                zipcode: params.customer.postalCode,
+                phone: params.customer.phone,
+                fax: params.customer.fax,
+                shipping: {
+                    contact: customer_contact, 
+                    address1: params.customer.ship_address_1,
+                    address2: params.customer.ship_address_2,
+                    city: params.customer.ship_city,
+                    state: params.customer.ship_state,
+                    zipcode: params.customer.ship_postalCode,
+                    phone: ship_phone,
+                    fax: params.customer.fax
+                }
+            }, 
+            terms: params.form.net_terms,
+            tax: params.form.tax_jurisdiction,
+            duedate: params.form.due_date,
+            lineitems: {
+                lineitem: []
+            }, 
+            comments: params.form.add_terms, 
+            prices: {
+                subtotal: Number(params.prices.subtotal).toFixed(2), 
+                tax: Number(params.prices.tax).toFixed(2), 
+                shipping: Number(params.prices.shipping).toFixed(2), 
+                other: Number(params.prices.other).toFixed(2), 
+                total: Number(params.prices.total).toFixed(2)
+            },
+            payment: {
+                amount: 0.00,
+                method: 'NOT PAID',
+                confirmation: 'None'
+            }
+        };
+        var lineitems = [];
+        for (let i=1; i <= Number(params.form.estimate_items); i++) {
+            lineitems.push(
+                {
+                    quantity: Number(params.form[`item_qty_${i}`]),
+                    description: params.form[`item_desc_${i}`],
+                    unitprice: Number(params.form[`item_price_${i}`]).toFixed(2),
+                    discount: Number(params.form[`item_disc_${i}`]).toFixed(2),
+                    tax: Number(params.form[`item_tax_${i}`]).toFixed(2),
+                    total: Number(params.form[`item_total_${i}`]).toFixed(2)
+                }
+            )
+        }
+        customerEstimateInfo.lineitems.lineitem = lineitems;
+        mainWindow.webContents.send("save_estimate",JSON.stringify(results));
+
+        /*
+        var customerEstimate = new CustomerEstimate();
+        customerEstimate.createReport(customerEstimateInfo,function(html){
+            fs.writeFileSync('customer-estimate.html',html);
+            var subject = `New Estimate #${params.formObject.invoice_num}`;
+            SendEMail(company.sender,recipient,subject,message,25,function(results){
+                SaveToDatabase("sent",company.sender,recipient,customerEstimateInfo.date,subject,html,html.envelop,function(results){
+                    mainWindow.webContents.send("save_estimate",JSON.stringify(results));
+                })
+            });    
+        });
+        */
+    });
+})
+ipcMain.on("get_estimates",function(evt,sql){
+    const { Model } = require("@pingleware/bestbooks-core");
+    const model = new Model();
+    console.log(sql)
+    model.query(sql,function(results){
+        console.log(results);
+        mainWindow.webContents.send("get_estimates",JSON.stringify(results));
+    })
+})
 
 // BESTBOOKS API Server
 const {start_server} = require('@pingleware/bestbooks-api');
 
 start_server(host, port);
+
+// BESTBOOKS SMTP MAIL SERVER
+const { start_smtp_server } = require("@pingleware/bestbooks-mailer");
+
+start_smtp_server("mail.presspage-entertainment-accounting.systems",587);

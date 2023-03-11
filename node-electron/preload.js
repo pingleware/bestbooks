@@ -1,7 +1,7 @@
 const {contextBridge, ipcRenderer} = require("electron");
 
 let validChannels = [
-  "error","open_browser","add_company","add_account","get_accounts_by_company",
+  "error","open_browser","add_company","update_company","add_account","get_accounts_by_company",
   "get_transactions","delete_transaction",
   "get_journal_transactions","delete_journal_transaction",
   "report_balancesheet","report_incomestatement","report_trialbalance",
@@ -9,7 +9,8 @@ let validChannels = [
   "import","export","import_progress",
   "chartofaccount","delete_chartofaccount","add_transaction","edit_transaction","add_journal_transaction","edit_journal_transaction",
   "nonce", "new_invoice_number","new_purchaseorder_number","insert_sql","query_sql","add_salestax_jurisdiction","add_payment_term",
-  "add_resale_product","add_resale_service"
+  "add_resale_product","add_resale_service","save_estimate",
+  "get_estimates"
 ];
 
 contextBridge.exposeInMainWorld("api", {
@@ -43,12 +44,17 @@ new Journal();
 new ChartOfAccounts();
 new Ledger('Unknown','Unknown');
 
-company.getCompanies(function(companies){
-  console.log(companies)
-  localStorage.setItem('companies',JSON.stringify(companies));
-});
+//company.getCompanies(function(companies){
+//  console.log(companies)
+//  localStorage.setItem('companies',JSON.stringify(companies));
+//});
 
 const model = new Model();
+// get commpanies with metadata
+model.query("SELECT c.*,m.address1,m.address2,m.city,m.state,m.zipcode,m.contact,m.email,m.phone,m.fax,m.website FROM company c JOIN company_metadata m ON c.id=m.company_id",function(rows){
+  localStorage.setItem('companies',JSON.stringify(rows));
+})
+
 //get customers
 model.query("SELECT * FROM customer",function(rows){
   localStorage.setItem('customers',JSON.stringify(rows));
