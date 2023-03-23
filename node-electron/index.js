@@ -149,6 +149,24 @@ ipcMain.on("update_company", function(evt, json){
         mainWindow.webContents.send('update_company',JSON.stringify(results));
     })
 })
+ipcMain.on("get_companies",function(evt,params){
+    const { Model } = require("@pingleware/bestbooks-core");
+    const model = new Model();
+    // get commpanies with metadata
+    model.query("SELECT c.*,m.address1,m.address2,m.city,m.state,m.zipcode,m.contact,m.email,m.phone,m.fax,m.website FROM company c JOIN company_metadata m ON c.id=m.company_id",function(rows){
+        //localStorage.setItem('companies',JSON.stringify(rows));
+        mainWindow.webContents.send("get_companies",JSON.stringify(rows));
+    });
+})
+ipcMain.on("get_customers",function(evt,company_id){
+    const { Model } = require("@pingleware/bestbooks-core");
+    const model = new Model();
+    //get customers
+    model.query(`SELECT * FROM customer WHERE companf_id=${company_id}`,function(rows){
+        //localStorage.setItem('customers',JSON.stringify(rows));
+        mainWindow.webContents.send("get_customers",JSON.stringify(rows));
+    });  
+})
 ipcMain.on("add_account", function(evt, json){
     var data = JSON.parse(json);
     const { ChartOfAccounts } = require("@pingleware/bestbooks-core");
@@ -480,111 +498,10 @@ ipcMain.on("add_resale_service",function(event,sql){
 })
 ipcMain.on("save_estimate",function(event,params){
     const { Model } = require("@pingleware/bestbooks-core");
-    //const { CustomerEstimate } = require("@pingleware/bestbooks-reports");
-    //const { SendEMail, SaveToDatabase } = require("@pingleware/bestbooks-mailer");
 
-    console.log(params)
     var model = new Model();
     model.insert(params.sql,function(results){
-        var recipient = params.customer.email;
-        var message = '';
-
-        var customer_contact = params.customer.name;
-        if (params.customer.poc_firstname && params.customer.poc_lastname) {
-            customer_contact = params.customer.poc_firstname + ' ' + params.customer.poc_lastname;
-        }
-        var ship_phone = params.customer.phone;
-        if (params.customer.ship_phone) {
-            ship_phone = params.customer.ship_phone;
-        }
-
-        var customerEstimateInfo = {
-            number: params.form.estimate_invnum,
-            date: new Date().toISOString().split('T')[0],
-            company: {
-                name: params.company.name,
-                contact: params.company.contact, 
-                email: params.company.email, 
-                website: params.company.website, 
-                address1: params.company.address1, 
-                address2: params.company.address2, 
-                city: params.company.city, 
-                state: params.company.state, 
-                zipcode: params.company.zipcode, 
-                phone: params.company.phone, 
-                fax: params.company.fax
-            }, 
-            customer: {
-                id: params.customer.id,
-                name: params.customer.name,
-                email: recipient,
-                contact: customer_contact,
-                address1: params.customer.address_1,
-                address2: params.customer.address_2,
-                city: params.customer.city,
-                state: params.customer.state,
-                zipcode: params.customer.postalCode,
-                phone: params.customer.phone,
-                fax: params.customer.fax,
-                shipping: {
-                    contact: customer_contact, 
-                    address1: params.customer.ship_address_1,
-                    address2: params.customer.ship_address_2,
-                    city: params.customer.ship_city,
-                    state: params.customer.ship_state,
-                    zipcode: params.customer.ship_postalCode,
-                    phone: ship_phone,
-                    fax: params.customer.fax
-                }
-            }, 
-            terms: params.form.net_terms,
-            tax: params.form.tax_jurisdiction,
-            duedate: params.form.due_date,
-            lineitems: {
-                lineitem: []
-            }, 
-            comments: params.form.add_terms, 
-            prices: {
-                subtotal: Number(params.prices.subtotal).toFixed(2), 
-                tax: Number(params.prices.tax).toFixed(2), 
-                shipping: Number(params.prices.shipping).toFixed(2), 
-                other: Number(params.prices.other).toFixed(2), 
-                total: Number(params.prices.total).toFixed(2)
-            },
-            payment: {
-                amount: 0.00,
-                method: 'NOT PAID',
-                confirmation: 'None'
-            }
-        };
-        var lineitems = [];
-        for (let i=1; i <= Number(params.form.estimate_items); i++) {
-            lineitems.push(
-                {
-                    quantity: Number(params.form[`item_qty_${i}`]),
-                    description: params.form[`item_desc_${i}`],
-                    unitprice: Number(params.form[`item_price_${i}`]).toFixed(2),
-                    discount: Number(params.form[`item_disc_${i}`]).toFixed(2),
-                    tax: Number(params.form[`item_tax_${i}`]).toFixed(2),
-                    total: Number(params.form[`item_total_${i}`]).toFixed(2)
-                }
-            )
-        }
-        customerEstimateInfo.lineitems.lineitem = lineitems;
         mainWindow.webContents.send("save_estimate",JSON.stringify(results));
-
-        /*
-        var customerEstimate = new CustomerEstimate();
-        customerEstimate.createReport(customerEstimateInfo,function(html){
-            fs.writeFileSync('customer-estimate.html',html);
-            var subject = `New Estimate #${params.formObject.invoice_num}`;
-            SendEMail(company.sender,recipient,subject,message,25,function(results){
-                SaveToDatabase("sent",company.sender,recipient,customerEstimateInfo.date,subject,html,html.envelop,function(results){
-                    mainWindow.webContents.send("save_estimate",JSON.stringify(results));
-                })
-            });    
-        });
-        */
     });
 })
 ipcMain.on("get_estimates",function(evt,sql){
@@ -596,6 +513,107 @@ ipcMain.on("get_estimates",function(evt,sql){
         mainWindow.webContents.send("get_estimates",JSON.stringify(results));
     })
 })
+ipcMain.on("send_estimate",function(evt,params){
+    const { CustomerEstimate } = require("@pingleware/bestbooks-reports");
+    //const { SendEMail, SaveToDatabase } = require("@pingleware/bestbooks-mailer");
+
+    console.log(params)
+    var recipient = params.customer.email;
+
+    var customer_contact = params.customer.name;
+    if (params.customer.poc_firstname && params.customer.poc_lastname) {
+        customer_contact = params.customer.poc_firstname + ' ' + params.customer.poc_lastname;
+    }
+    var ship_phone = params.customer.phone;
+    if (params.customer.ship_phone) {
+        ship_phone = params.customer.ship_phone;
+    }
+
+    var customerEstimateInfo = {
+        number: params.form.estimate_invnum,
+        date: params.txdate,
+        company: {
+            name: params.company.name,
+            contact: params.company.contact, 
+            email: params.company.email, 
+            website: params.company.website, 
+            address1: params.company.address1, 
+            address2: params.company.address2, 
+            city: params.company.city, 
+            state: params.company.state, 
+            zipcode: params.company.zipcode, 
+            phone: params.company.phone, 
+            fax: params.company.fax
+        }, 
+        customer: {
+            id: params.customer.id,
+            name: params.customer.name,
+            email: recipient,
+            contact: customer_contact,
+            address1: params.customer.address_1,
+            address2: params.customer.address_2,
+            city: params.customer.city,
+            state: params.customer.state,
+            zipcode: params.customer.postalCode,
+            phone: params.customer.phone,
+            fax: params.customer.fax,
+            shipping: {
+                contact: customer_contact, 
+                address1: params.customer.ship_address_1,
+                address2: params.customer.ship_address_2,
+                city: params.customer.ship_city,
+                state: params.customer.ship_state,
+                zipcode: params.customer.ship_postalCode,
+                phone: ship_phone,
+                fax: params.customer.fax
+            }
+        }, 
+        terms: params.form.net_terms,
+        tax: params.form.tax_jurisdiction,
+        duedate: params.form.due_date,
+        lineitems: {
+            lineitem: []
+        }, 
+        comments: params.form.add_terms, 
+        prices: {
+            subtotal: Number(params.prices.subtotal).toFixed(2), 
+            tax: Number(params.prices.tax).toFixed(2), 
+            shipping: Number(params.prices.shipping).toFixed(2), 
+            other: Number(params.prices.other).toFixed(2), 
+            total: Number(params.prices.total).toFixed(2)
+        },
+        payment: {
+            amount: 0.00,
+            method: 'NOT PAID',
+            confirmation: 'None'
+        }
+    };
+    var lineitems = [];
+    for (let i=1; i <= Number(params.form.estimate_items); i++) {
+        lineitems.push(
+            {
+                quantity: Number(params.form[`item_qty_${i}`]),
+                description: params.form[`item_desc_${i}`],
+                unitprice: Number(params.form[`item_price_${i}`]).toFixed(2),
+                discount: Number(params.form[`item_disc_${i}`]).toFixed(2),
+                tax: Number(params.form[`item_tax_${i}`]).toFixed(2),
+                total: Number(params.form[`item_total_${i}`]).toFixed(2)
+            }
+        )
+    }
+    customerEstimateInfo.lineitems.lineitem = lineitems;
+    var customerEstimate = new CustomerEstimate();
+
+    customerEstimate.createReport(customerEstimateInfo,function(html){
+        fs.writeFileSync('customer-estimate.html',html);
+        var subject = `New Estimate #${params.formObject.invoice_num}`;
+        SendEMail(company.sender,recipient,subject,message,25,function(results){
+            SaveToDatabase("sent",company.sender,recipient,customerEstimateInfo.date,subject,html,html.envelop,function(results){
+                mainWindow.webContents.send("send_estimate",JSON.stringify(results));
+            })
+        });    
+    });
+})
 
 // BESTBOOKS API Server
 const {start_server} = require('@pingleware/bestbooks-api');
@@ -606,3 +624,138 @@ start_server(host, port);
 const { start_smtp_server } = require("@pingleware/bestbooks-mailer");
 
 start_smtp_server("mail.presspage-entertainment-accounting.systems",587);
+
+/**
+ * Start HTTP Server
+ */
+const http = require('http');
+const PORT = 0;
+const http_server = http.createServer(async(req,res)=>{
+  var pathname = req.url.split('?')[0]; // url.parse(req.url).pathname;
+    
+  if( pathname === '/' ) {
+    var html = `<!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <title>BestBooks&trade; Accounting Application Framework</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+            <style>
+            .header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+            }
+            .footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+            }
+            </style>
+        </head>
+        <body>
+             <!-- HEADER -->
+             <h2 class="w3-container w3-yellow header">BestBooks&trade; Accounting Application Framework</h2>
+             <!-- MAIN PAGE -->
+             <div id="main-page" class="w3-container">
+                 <br/><br/><br/>
+                <div class="w3-panel w3-block">
+                    <h1>BestBooks&trade; Accounting Application Framework</h1>
+                </div>
+                <br/><br/><br/>
+            </div>
+            <!-- FOOTER -->
+            <h5 class="w3-container w3-yellow footer">
+                &copy; <span id="year"></span> by <a href="https://presspage.info" target="_system" style="text-decoration: none">PRESSPAGE ENTERTAINMENT INC</a> dba <a href="https://pingleware.work" target="_system" style="text-decoration: none">PINGLEWARE</a>. All rights reserved.
+            </h5>
+        </body>
+    </html>`;
+    return res.end(html);
+} else if (pathname === '/customer/authenticate') {
+    if (req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => {
+            console.log(chunk.toString());
+            body += chunk.toString(); // convert Buffer to string
+        });
+        req.on('end', () => {
+            console.log(body);
+            res.end('ok');
+        });
+    }
+} else if (pathname === '/customer/estimate') {
+    var html = ``;
+    var query = req.url.split('?')[1];
+    console.log(query);
+    var estimate_no = query.split('&')[0].split("=")[1];
+    var sql = `SELECT  i.id AS invoice_id,i.company_id,i.txdate,i.amount,i.content,c.name,c.email FROM invoice i JOIN customer c ON c.id=i.customer WHERE number='${estimate_no}' AND status='draft'`;
+    const { Model } = require("@pingleware/bestbooks-core");
+    const model = new Model();
+    model.query(sql,function(rows){
+        if (rows.length > 0) {
+            var json = atob(rows[0].content)
+            var content = JSON.parse(json);
+            var _port = req.rawHeaders[1].split(":")[1];
+            var url = `http://localhost:${_port}/customer/authenticate/?num=${estimate_no}`;
+            html = `<!DOCTYPE html>
+            <html lang="en">
+                <head>
+                    <title>BestBooks&trade; Accounting Application Framework</title>
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+                    <style>
+                    .header {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                    }
+                    .footer {
+                        position: fixed;
+                        left: 0;
+                        bottom: 0;
+                        width: 100%;
+                        text-align: center;
+                    }
+                    </style>
+                </head>
+                <body>
+                <!-- HEADER -->
+                <h2 class="w3-container w3-yellow header">BestBooks&trade; Accounting Application Framework</h2>
+                <!-- MAIN PAGE -->
+                <div id="main-page" class="w3-container">
+                    <br/><br/><br/>
+                   <div class="w3-panel w3-block">
+                        <form method="post" action="${url}">
+                            <label for="username">User Name</label>
+                            <input type="text" class="w3-input w3-block" id="username" name="username">
+                            <label for="password">Password</label>
+                            <input type="password" class="w3-input w3-block" id="password" name="password">
+                            <input type="submit" class="w3-button w3-block w3-black" value="Log In">
+                        </form>
+                   </div>
+                   <br/><br/><br/>
+               </div>
+               <!-- FOOTER -->
+               <h5 class="w3-container w3-yellow footer">
+                   &copy; <span id="year"></span> by <a href="https://presspage.info" target="_system" style="text-decoration: none">PRESSPAGE ENTERTAINMENT INC</a> dba <a href="https://pingleware.work" target="_system" style="text-decoration: none">PINGLEWARE</a>. All rights reserved.
+               </h5>
+                </body>
+            </html>`;
+            if (content.estimate_password.length == 0) {
+                html = `${json}`;
+            }        
+        }
+        return res.end(html);    
+    })
+  } else if (pathname === '/vendor/purchaseorder') {
+  }
+});
+
+http_server.listen(PORT, () => {
+  console.log(`Server started at http://localhost:${http_server.address().port}`);
+  //localStorage.setItem('http_server_port',server.address().port);
+});

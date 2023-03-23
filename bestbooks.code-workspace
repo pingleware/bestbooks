@@ -1,10 +1,16 @@
 {
 	"folders": [
 		{
-			"path": ".."
+			"path": "."
 		},
 		{
-			"path": "../../financial-transactions-auditor"
+			"path": "../bestbooks-auditor"
+		},
+		{
+			"path": "../bestbooks-core"
+		},
+		{
+			"path": "../dotnet/bestbooks-core"
 		}
 	],
 	"settings": {}
