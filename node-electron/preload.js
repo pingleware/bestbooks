@@ -1,7 +1,7 @@
 const {contextBridge, ipcRenderer} = require("electron");
 
 let validChannels = [
-  "error","open_browser","add_company","update_company","add_account","get_accounts_by_company",
+  "error","open_browser","add_company","update_company","get_companies","add_account","get_accounts_by_company",
   "get_transactions","delete_transaction",
   "get_journal_transactions","delete_journal_transaction",
   "report_balancesheet","report_incomestatement","report_trialbalance",
@@ -10,7 +10,7 @@ let validChannels = [
   "chartofaccount","delete_chartofaccount","add_transaction","edit_transaction","add_journal_transaction","edit_journal_transaction",
   "nonce", "new_invoice_number","new_purchaseorder_number","insert_sql","query_sql","add_salestax_jurisdiction","add_payment_term",
   "add_resale_product","add_resale_service","save_estimate",
-  "get_estimates"
+  "get_estimates","send_estimate","get_customers"
 ];
 
 contextBridge.exposeInMainWorld("api", {
@@ -50,15 +50,10 @@ new Ledger('Unknown','Unknown');
 //});
 
 const model = new Model();
-// get commpanies with metadata
 model.query("SELECT c.*,m.address1,m.address2,m.city,m.state,m.zipcode,m.contact,m.email,m.phone,m.fax,m.website FROM company c JOIN company_metadata m ON c.id=m.company_id",function(rows){
   localStorage.setItem('companies',JSON.stringify(rows));
-})
+});
 
-//get customers
-model.query("SELECT * FROM customer",function(rows){
-  localStorage.setItem('customers',JSON.stringify(rows));
-})
 // get sales tax jurisdictions
 model.query("SELECT * FROM sales_tax",function(rows){
   localStorage.setItem('salestax_jurisdictions',JSON.stringify(rows));
@@ -78,3 +73,4 @@ model.query("SELECT * FROM inventory WHERE type='service.resale' ORDER BY descri
 
 
 localStorage.setItem("accountTypes",JSON.stringify(AccountTypes));
+
