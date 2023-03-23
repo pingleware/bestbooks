@@ -1,78 +1,119 @@
 {
-  "name": "bestbooks",
-  "version": "1.0.0-alpha",
-  "description": "BestBooks Accounting Application Framework GUI",
-  "main": "index.js",
-  "build": {
-    "appId": "work.pingleware.bestbooks",
-    "productName": "bestbooks",
-    "copyright": "Copyright © 2022-2023 ${author}",
-    "win": {
-      "icon": "./assets/bestbooks.ico",
-      "appVersion": "${version}",
-      "buildVersion": "${version}_001",
-      "appCopyright": "Copyright © 2022-2023 ${author}"
-    },
-    "linux": {
-      "target": "deb",
-      "icon": "./assets/bestbooks.png",
-      "category": "Financial",
-      "synopsis": "BestBooks Accounting Application Framework"
-    },
-    "mac": {
-      "icon": "./assets/bestbooks.icns",
-      "category": "public.app-category.financial"
-    },
-    "dmg": {
-      "title": "${productName}_${version}",
-      "icon": "./assets/bestbooks.icns",
-      "contents": [
-        {
-          "x": 110,
-          "y": 150
+    "name": "bestbooks",
+    "version": "1.0.0-alpha",
+    "description": "BestBooks Accounting Application Framework GUI",
+    "main": "index.js",
+    "build": {
+        "appId": "work.pingleware.bestbooks",
+        "productName": "BestBooks",
+        "afterSign": "./scripts/notarize.js",
+        "afterPack": "./scripts/afterPack.js",
+        "publish": [
+            {
+                "provider": "github",
+                "repo": "git@github.com:pingleware/bestbooks.git",
+                "owner": "PressPage Entertainment Inc DBA PINGLEWARE",
+                "private": false,
+                "releaseType": "prerelease",
+                "publishAutoUpdate": true
+            }
+        ],
+        "copyright": "Copyright © 2022-2023 ${author}",
+        "win": {
+            "icon": "./assets/bestbooks.ico",
+            "appVersion": "${version}",
+            "buildVersion": "${version}_001",
+            "appCopyright": "Copyright © 2022-2023 ${author}",
+            "target": [
+                {
+                    "target": "nsis",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                },
+                {
+                    "target": "portable",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                }
+            ]
         },
-        {
-          "x": 240,
-          "y": 150,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
+        "linux": {
+            "target": "deb",
+            "icon": "./assets/bestbooks.png",
+            "category": "Financial",
+            "synopsis": "BestBooks Accounting Application Framework"
+        },
+        "mac": {
+            "icon": "./assets/bestbooks.icns",
+            "category": "public.app-category.financial"
+        },
+        "dmg": {
+            "artifactName": "${productName}-${version}_OSX.${ext}",
+            "icon": "./assets/bestbooks.icns",
+            "contents": [
+                {
+                    "x": 110,
+                    "y": 150
+                },
+                {
+                    "x": 240,
+                    "y": 150,
+                    "type": "link",
+                    "path": "/Applications"
+                }
+            ],
+            "sign": true
+        },
+        "files": [],
+        "extraFiles": [],
+        "portable": {
+            "artifactName": "${productName}-${version}_Portable.${ext}"
+        },
+        "buildDependenciesFromSource": true
     },
-    "files": [],
-    "extraFiles": []
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
-    "debug": "electron . -menu=on",
-    "dist": "electron-builder",
-    "snap": "electron-builder --linux snap",
-    "png2icns": "./icns_creator.sh ./assets/bestbooks.png ./assets/bestbooks",
-    "macos": "electron-packager . --overwrite --platform=darwin --arch=arm64 --icon=assets/bestbooks.icns --prune=true --out=dist",
-    "macos_installer": "electron-installer-dmg ./dist/bestbooks-darwin-arn64/bestbooks.app bestbooks",
-    "win32": "electron-packager . bestbooks --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/bestbooks.ico --prune=true --out=dist --version-string.CompanyName='PRESSPAGE ENTERTAINMENT INC' --version-string.FileDescription='BestBooks Accounting Application Framework GUI' --version-string.ProductName='BestBooks'",
-    "linux": "electron-packager . bestbooks --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/bestbooks.png --prune=true --out=dist",
-    "linux_installer": "electron-installer-debian --src dist/bestbooks-linux-x64/ --arch amd64 --config debian.json"
-  },
-  "keywords": [],
-  "author": "PRESSPAGE ENTERTAINMENT INC dba PINGLEWARE <maintainers@pingleware.work>",
-  "license": "CC-BY-4.0",
-  "devDependencies": {
-    "electron": "^22.0.2",
-    "electron-builder": "^22.10.3",
-    "electron-installer-debian": "^3.1.0",
-    "electron-installer-dmg": "^4.0.0",
-    "electron-packager": "^17.1.1"
-  },
-  "dependencies": {
-    "@pingleware/bestbooks-api": "^1.0.2",
-    "@pingleware/bestbooks-core": "^1.1.5",
-    "@pingleware/bestbooks-export": "^1.0.1",
-    "@pingleware/bestbooks-helpers": "^1.1.1",
-    "@pingleware/bestbooks-import": "^1.0.0",
-    "@pingleware/bestbooks-reports": "^1.0.0",
-    "path": "^0.12.7",
-    "yargs": "github:yargs/yargs"
-  }
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "electron .",
+        "debug": "electron . -menu=on",
+        "dist": "electron-builder",
+        "pub": "electron-builder --p always",
+        "snap": "electron-builder --linux snap",
+        "png2icns": "./icns_creator.sh ./assets/bestbooks.png ./assets/bestbooks",
+        "macos": "electron-packager . --overwrite --platform=darwin --arch=arm64 --icon=assets/bestbooks.icns --prune=true --out=dist",
+        "macos_installer": "electron-installer-dmg ./dist/bestbooks-darwin-arn64/bestbooks.app bestbooks",
+        "win32": "electron-packager . bestbooks --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/bestbooks.ico --prune=true --out=dist --version-string.CompanyName='PRESSPAGE ENTERTAINMENT INC' --version-string.FileDescription='BestBooks Accounting Application Framework GUI' --version-string.ProductName='BestBooks'",
+        "linux": "electron-packager . bestbooks --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/bestbooks.png --prune=true --out=dist",
+        "linux_installer": "electron-installer-debian --src dist/bestbooks-linux-x64/ --arch amd64 --config debian.json",
+        "build-icons": "electron-icon-maker -i ./assets/bestbooks.png -o ./assets/app-icon/",
+        "postinstall": "electron-builder install-app-deps"
+    },
+    "keywords": [],
+    "author": "PRESSPAGE ENTERTAINMENT INC dba PINGLEWARE <maintainers@pingleware.work>",
+    "license": "CC-BY-4.0",
+    "devDependencies": {
+        "electron": "^22.0.2",
+        "electron-builder": "^22.10.3",
+        "electron-icon-maker": "^0.0.5",
+        "electron-installer-debian": "^3.1.0",
+        "electron-installer-dmg": "^4.0.0",
+        "electron-packager": "^17.1.1"
+    },
+    "dependencies": {
+        "@pingleware/bestbooks-api": "^1.0.9",
+        "@pingleware/bestbooks-auditor": "^1.0.2",
+        "@pingleware/bestbooks-core": "^1.1.13",
+        "@pingleware/bestbooks-export": "^1.0.6",
+        "@pingleware/bestbooks-helpers": "^1.1.11",
+        "@pingleware/bestbooks-import": "^1.0.7",
+        "@pingleware/bestbooks-mailer": "^1.1.0",
+        "@pingleware/bestbooks-reports": "^1.0.9",
+        "crypto": "^1.0.1",
+        "csv-parse": "^5.3.5",
+        "path": "^0.12.7",
+        "yargs": "github:yargs/yargs"
+    }
 }

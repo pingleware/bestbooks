@@ -99,3 +99,26 @@ var $ = function (selector) {
     });
     window.api.send(channel, params);
   }
+  function open_browser(url) {
+    SendIPC("open_browser",url,function(channel,event,results){
+
+    });
+  }
+  function randomString(callback) {
+    SendIPC("nonce",null,function(channel,event,nonce){
+      callback(nonce);
+    });
+}
+
+function getData(form) {
+  var formData = new FormData(form);
+
+  // iterate through entries...
+  //for (var pair of formData.entries()) {
+  //  console.log(pair[0] + ": " + pair[1]);
+  //}
+
+  // ...or output as an object
+  //console.log(Object.fromEntries(formData));
+  return Object.fromEntries(formData);
+}

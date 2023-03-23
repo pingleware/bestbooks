@@ -1,0 +1,71 @@
+<!--?xml version="1.0"?-->
+<purchaseorder>
+    <number>PO-20210725-000001</number>
+    <date>2021-07-25</date>
+    <company>
+        <name>PressPage Entertainment Inc</name>
+        <contact>Patrick Ingle</contact>
+        <email>presspage.entertainment@gmail.com</email>
+        <phone>(212) 879-0758</phone>
+        <website>https://presspage.info</website>
+        <billing>
+            <address1>P.O. Box 142814</address1>
+            <address2></address2>
+            <city>Gainesville</city>
+            <state>FL</state>
+            <zipcode>32614-2814</zipcode>
+            <phone>(212) 879-0758</phone>
+            <fax>(212) 879-0758</fax>
+        </billing>
+        <shipping>
+            <contact>Patrick Ingle</contact>
+            <address1>4055 SW 15 PL</address1>
+            <address2>Apt G</address2>
+            <city>Gainesville</city>
+            <state>FL</state>
+            <zipcode>32607</zipcode>
+            <phone>(212) 879-0758</phone>
+            <fax>(212) 879-0758</fax>
+        </shipping>
+    </company>
+    <vendor>
+        <name>WALMART</name>
+        <contact>
+            <address1>Butler Plaza</address1>
+            <address2></address2>
+            <city>Gainesville</city>
+            <state>FL</state>
+            <zipcode>32607</zipcode>
+            <phone>3425551212</phone>
+            <fax></fax>                        
+        </contact>
+    </vendor>
+    <shipping>
+        <service>Fedex</service>
+        <method>Second-day Air</method>
+        <deliverydate>07/27/2021</deliverydate>
+    </shipping>
+    <lineitems>
+        <lineitem>
+            <productid>1234</productid>
+            <description>str1234</description>
+            <quantity>1</quantity>
+            <unitprice>123.45</unitprice>
+            <amount>123.45</amount>
+        </lineitem>
+    </lineitems>
+    <comments>Contact before shipping</comments>
+    <prices>
+        <subtotal>50</subtotal>
+        <tax>0.00</tax>
+        <shipping>0.00</shipping>
+        <other>0.00</other>
+        <total></total>
+    </prices>
+    <payment>
+        <amount>0</amount>
+        <method>
+            <confirmation></confirmation>
+        </method>
+    </payment>
+</purchaseorder>
