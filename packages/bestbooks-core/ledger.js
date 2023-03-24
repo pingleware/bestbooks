@@ -48,18 +48,16 @@ class Ledger extends TAccount {
         try {
             this.debit = amount;
             var sql = `INSERT OR IGNORE INTO ledger (company_id,office_id,account_name,account_code,txdate,note,debit,balance) VALUES (${company_id},${office_id},'${this.name}',(SELECT code FROM accounts WHERE name='${this.name}'),'${date}','${desc}','${amount}',(SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+${amount},${amount}) FROM ledger WHERE account_name='${this.name}'));`;
-            console.log(sql);
-            await this.model.insertSync(sql);
+            let ledger_insert_id = await this.model.insertSync(sql);
 
-            let ledger_insert_id = localStorage.getItem('lastID');
+            //let ledger_insert_id = localStorage.getItem('lastID');
             let journal_insert_id = 0;
 
             if (this.name !== 'Uncategorized') {
                 var journal = new Journal('General');
-                journal.add(date,ledger_insert_id,this.name,amount,0.00);
-                journal_insert_id = localStorage.getItem('lastID');
+                journal_insert_id = await journal.add(date,ledger_insert_id,this.name,amount,0.00,company_id,office_id);
+                //journal_insert_id = localStorage.getItem('lastID');
                 sql = `UPDATE ledger SET ref=${journal_insert_id} WHERE id=${ledger_insert_id};`;
-                console.log(sql);
                 await this.model.insertSync(sql);
             }            
             return [ledger_insert_id,journal_insert_id];
@@ -72,17 +70,17 @@ class Ledger extends TAccount {
             this.credit = amount;
             var sql = `INSERT OR IGNORE INTO ledger (company_id,office_id,account_name,account_code,txdate,note,credit,balance) VALUES (${company_id},${office_id},'${this.name}',(SELECT code FROM accounts WHERE name='${this.name}'),'${date}','${desc}','${amount}',(SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+${amount},${amount}) FROM ledger WHERE account_name='${this.name}'));`;
     
-            await this.model.insertSync(sql);
-            let ledger_insert_id = localStorage.getItem('lastID');
+            let ledger_insert_id = await this.model.insertSync(sql);
+            //let ledger_insert_id = localStorage.getItem('lastID');
             let journal_insert_id = 0;
 
             if (this.name !== 'Uncategorized') {
                 var journal = new Journal('General');
-                journal.add(date,ledger_insert_id,this.name,0.00,amount, company_id, office_id);
-                journal_insert_id = localStorage.getItem('lastID');
+                journal_insert_id = await journal.add(date,ledger_insert_id,this.name,0.00,amount, company_id, office_id);
+                //journal_insert_id = localStorage.getItem('lastID');
                 sql = `UPDATE ledger SET ref=${journal_insert_id} WHERE id=${ledger_insert_id};`;
                 await this.model.insertSync(sql);
-            }            
+            }
             return [ledger_insert_id,journal_insert_id];
         } catch(error) {
             console.error(error);
@@ -98,9 +96,9 @@ class Ledger extends TAccount {
     
     async getBalance(){
         try {
-            var sql = `SELECT SUM(debit)-SUM(credit) FROM ledger WHERE account_name='${this.name}';`;
+            var sql = `SELECT SUM(debit)-SUM(credit) AS balance FROM ledger WHERE account_name='${this.name}';`;
             var rows = await this.model.querySync(sql);
-            this.balance = Number(rows);
+            this.balance = Number(rows[0].balance);
         } catch(error) {
             console.error(error);
         }

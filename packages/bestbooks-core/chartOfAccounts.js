@@ -27,11 +27,11 @@ class ChartOfAccounts {
 
                 //let company_id = localStorage.getItem('company_id') + Number(0);
                 var account = this.getAccountTypeCode(type);
-                console.log(account);
                 var new_code = `SELECT count(id)+${account[1]} AS code FROM accounts WHERE base_type='${account[0]}'`;
                 var sql = `INSERT OR IGNORE INTO accounts (company_id,code,name,type,base_type) VALUES (${company_id},(${new_code}),'${name}','${type}','${account[0]}');`;
-                await this.model.insertSync(sql);
-                return localStorage.getItem("lastID"); //`${name} added to Accounts successfully`;    
+                //console.log(sql);
+                return await this.model.insertSync(sql);
+                //return localStorage.getItem("lastID"); //`${name} added to Accounts successfully`;    
             //} else {
             //    return `Account: ${name} already exists`;
             //}

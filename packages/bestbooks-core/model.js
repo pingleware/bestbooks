@@ -80,6 +80,31 @@
      async updateSync(sql) {
          return this.insertSync(sql);
      }
+
+     emptyTable(table,callback) {
+        this.insert(`DELETE FROM ${table};`,callback);
+     }
+
+     async emptyTableSync(table) {
+        return await this.insertSync(`DELETE FROM ${table};`)  
+     }
+
+     getAllTables(callback) {
+        var sql = `SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%';`;
+        this.query(sql,callback);
+     }
+
+     async getAllTablesSync() {
+        var sql = `SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%';`;
+        return await this.querySync(sql);
+     }
+
+     async emptyAllTablesSync() {
+        var rows = await this.getAllTablesSync();
+        rows.forEach(async function(row){
+            await this.emptyTableSync(row.name);
+        })
+     }
  }
  
  module.exports = Model;

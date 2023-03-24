@@ -1,6 +1,7 @@
 bestbooks.db
 node_modules/
 cli/
-test/
 .env
 ._*
+.DS_Store
+dotnet/

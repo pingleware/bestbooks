@@ -19,7 +19,7 @@ class Journal {
         try {
             var sql = `INSERT OR IGNORE INTO  journal (company_id,office_id,txdate,ref,account,debit,credit) VALUES (${company_id},${office_id},'${date}','${ref}','${account}','${debit}','${credit}');`;
             var results = await this.model.insertSync(sql);
-            return results[0];
+            return results;
         } catch(error) {
             console.error(error);
         }
