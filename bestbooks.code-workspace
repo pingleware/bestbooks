@@ -10,7 +10,7 @@
 			"path": "../bestbooks-core"
 		},
 		{
-			"path": "../dotnet/bestbooks-core"
+			"path": "../bestbooks-helpers"
 		}
 	],
 	"settings": {}
