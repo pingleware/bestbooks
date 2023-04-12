@@ -132,6 +132,7 @@ class ChartOfAccounts {
             case 'Bank':
             case 'Cash':
             case 'ContraAsset':
+            case 'Inventory':
                 account_type = 'Asset';
                 account_value = 100;
                 break;
