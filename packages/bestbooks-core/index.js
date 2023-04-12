@@ -17,6 +17,7 @@ const Cash = require('./cash');
 const Bank = require('./bank');
 const Expense = require('./expense');
 const Investment = require('./investment');
+const Inventory = require("./inventory");
 // derived from Expense class
 const Withdrawals = require('./withdrawals');
 // derived from Liability class
@@ -55,6 +56,7 @@ module.exports = {
     Bank: Bank,
     Expense: Expense,
     Investment: Investment,
+    Inventory: Inventory,
     Withdrawals: Withdrawals,
     Equity: Equity,
     ContraEquity: ContraEquity,

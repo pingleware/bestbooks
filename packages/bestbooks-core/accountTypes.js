@@ -22,7 +22,8 @@ const AccountTypes = {
     Bank: "Bank",
     Cash: "Cash",
     Credit: "Credit",
-    Investment: "Investment"
+    Investment: "Investment",
+    Inventory: "Asset"
 };
 
 module.exports = AccountTypes;
