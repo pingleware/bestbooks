@@ -5,3 +5,4 @@ cli/
 ._*
 .DS_Store
 dotnet/
+package-lock.json

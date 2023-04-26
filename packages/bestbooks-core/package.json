@@ -1,6 +1,6 @@
 {
   "name": "@pingleware/bestbooks-core",
-  "version": "1.1.16",
+  "version": "1.1.17",
   "description": "The core component for BestBooks Accounting Application Framework",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,8 @@
     "test-chartofaccounts": "mocha test/1-chartofaccounts.test.js",
     "test-ledger": "mocha test/2-ledger.test.js",
     "test-journal": "mocha test/3-journal.test.js",
-    "test-model": "mocha test/4-model.test.js"
+    "test-model": "mocha test/4-model.test.js",
+    "test-digitalcurrency": "mocha test/5-digitalcurrency.test.js"
   },
   "keywords": [
     "bestbooks",

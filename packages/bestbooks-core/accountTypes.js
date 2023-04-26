@@ -21,6 +21,7 @@ const AccountTypes = {
     Journal: "Journal",
     Bank: "Bank",
     Cash: "Cash",
+    DigitalCurrency: "Cash",
     Credit: "Credit",
     Investment: "Investment",
     Inventory: "Asset"

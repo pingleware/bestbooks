@@ -41,6 +41,10 @@ const Report = require('./report');
 const ContraAsset = require('./contra-asset');
 const ContraLiability = require('./contra-liability');
 const ContraEquity = require('./contra-equity');
+// digital assets
+const DigitalCurrency = require('./digitalcurrency');
+const Bitcoin = require('./bitcoin');
+const Ether = require('./ether');
 
 module.exports = {
     Model: Model,
@@ -67,5 +71,8 @@ module.exports = {
     User: User,
     Vendor: Vendor,
     Customer: Customer,
-    Report: Report
+    Report: Report,
+    DigitalCurrency: DigitalCurrency,
+    Bitcoin: Bitcoin,
+    Ether, Ether
 }
