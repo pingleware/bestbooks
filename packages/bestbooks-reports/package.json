@@ -1,10 +1,21 @@
 {
   "name": "@pingleware/bestbooks-reports",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Reports module for BestBooks Accounting Application Framework",
   "main": "index.js",
   "files": [
-    "xslt/**"
+    "xslt/**",
+    "balance-sheet.js",
+    "customer-estimate.js",
+    "formatReport.js",
+    "income-statement.js",
+    "noteToFinancialStatements.js",
+    "purchase-order.js",
+    "report.js",
+    "retained-earnings.js",
+    "statementCashFlows.js",
+    "statementChangeOfEquity.js",
+    "trial-balance.js"
   ],
   "scripts": {
     "test": "mocha"
