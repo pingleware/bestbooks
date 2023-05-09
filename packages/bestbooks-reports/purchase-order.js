@@ -27,6 +27,14 @@ class PurchaseOrder {
             return format("purchaseOrder",formattedData);
         }
     }
+
+    createReportFromXML(formattedData,callback) {
+        if (callback) {
+            callback(format("purchaseOrder",formattedData));
+        } else {
+            return format("purchaseOrder",formattedData);
+        }
+    }
 }
 
 module.exports = PurchaseOrder;
