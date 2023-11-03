@@ -10,7 +10,8 @@ let validChannels = [
   "chartofaccount","delete_chartofaccount","add_transaction","edit_transaction","add_journal_transaction","edit_journal_transaction",
   "nonce", "new_invoice_number","new_purchaseorder_number","insert_sql","query_sql","add_salestax_jurisdiction","add_payment_term",
   "add_resale_product","add_resale_service","save_estimate",
-  "get_estimates","send_estimate","get_customers"
+  "get_estimates","send_estimate","get_customers",
+  "get_purchaseorders","transform_purchaseorder"
 ];
 
 contextBridge.exposeInMainWorld("api", {

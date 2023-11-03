@@ -443,6 +443,26 @@ ipcMain.on("new_invoice_number",function(evt,params){
         mainWindow.webContents.send("new_invoice_number",invoice_num);
     });
 })
+ipcMain.on("get_purchaseorders",function(evt,params){
+    var sql = `SELECT * FROM report WHERE name='purchase-order' ORDER BY txdate DESC;`;    
+    const { Model } = require("@pingleware/bestbooks-core");
+    const model = new Model();
+    model.query(sql,function(rows){
+        mainWindow.webContents.send("get_purchaseorders",rows);
+    });
+})
+ipcMain.on("transform_purchaseorder",function(evt,xml){
+    try {
+        const { init, PurchaseOrder } = require("@pingleware/bestbooks-reports");
+        init();
+        const purchaseOrder = new PurchaseOrder();
+        purchaseOrder.createReportFromXML(xml,function(html){
+            mainWindow.webContents.send("transform_purchaseorder",html);
+        })    
+    } catch(error) {
+        mainWindow.webContents.send("error",error.message);
+    }
+})
 ipcMain.on("new_purchaseorder_number",function(evt,params){
     var sql = `SELECT count(id) AS total FROM purchase;`;
     const { Model } = require("@pingleware/bestbooks-core");

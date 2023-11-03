@@ -96,7 +96,9 @@
         "build-icons": "electron-icon-maker -i ./assets/bestbooks.png -o ./assets/app-icon/",
         "postinstall": "electron-builder install-app-deps"
     },
-    "keywords": ["BestBooks Accounting Application Framework"],
+    "keywords": [
+        "BestBooks Accounting Application Framework"
+    ],
     "author": "PRESSPAGE ENTERTAINMENT INC dba PINGLEWARE <maintainers@pingleware.work>",
     "license": "CC-BY-4.0",
     "devDependencies": {
@@ -110,12 +112,12 @@
     "dependencies": {
         "@pingleware/bestbooks-api": "^1.0.9",
         "@pingleware/bestbooks-auditor": "^1.0.2",
-        "@pingleware/bestbooks-core": "^1.1.14",
+        "@pingleware/bestbooks-core": "^1.1.17",
         "@pingleware/bestbooks-export": "^1.0.6",
-        "@pingleware/bestbooks-helpers": "^1.1.12",
+        "@pingleware/bestbooks-helpers": "^1.1.14",
         "@pingleware/bestbooks-import": "^1.0.7",
         "@pingleware/bestbooks-mailer": "^1.1.0",
-        "@pingleware/bestbooks-reports": "^1.0.9",
+        "@pingleware/bestbooks-reports": "^1.0.11",
         "crypto": "^1.0.1",
         "csv-parse": "^5.3.5",
         "http": "^0.0.1-security",

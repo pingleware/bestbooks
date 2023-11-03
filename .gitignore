@@ -3,3 +3,4 @@ node_modules/
 settings.json
 BestBooks/obj/
 .vs/
+package-lock.json

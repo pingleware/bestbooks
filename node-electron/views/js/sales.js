@@ -514,22 +514,36 @@ function updateItemDescription(element, item_no) {
 }
 
 function newInvoiceNumber(callback=null) {
-    SendIPC("new_invoice_number","I",function(channel,event,invnum){
-        console.log(invnum)
-        var url = localStorage.getItem("corporate-book-url");
-        document.getElementById("estimate_invnum").value = invnum;
-        document.getElementById("estimate_public_url").value = `${url}/customer/invoice/?num=${invnum}`;
-        if (callback) callback();
-    })
+    const timestamp = new Date();
+    const invnum = 'I' + timestamp.getTime() + Math.random();
+    var url = localStorage.getItem("corporate-book-url");
+    document.getElementById("estimate_invnum").value = invnum;
+    document.getElementById("estimate_public_url").value = `${url}/customer/invoice/?num=${invnum}`;
+    if (callback) callback();
+
+    //SendIPC("new_invoice_number","I",function(channel,event,invnum){
+    //    console.log(invnum)
+    //    var url = localStorage.getItem("corporate-book-url");
+    //    document.getElementById("estimate_invnum").value = invnum;
+    //    document.getElementById("estimate_public_url").value = `${url}/customer/invoice/?num=${invnum}`;
+    //    if (callback) callback();
+    //})
 }
 function newEstimateNumber(callback=null) {
-    SendIPC("new_invoice_number","E",function(channel,event,invnum){
-        console.log(invnum)
-        var url = localStorage.getItem("corporate-book-url");
-        document.getElementById("estimate_invnum").value = invnum;
-        document.getElementById("estimate_public_url").value = `${url}/customer/estimate/?num=${invnum}`;
-        if (callback) callback();
-    })
+    const timestamp = new Date();
+    const invnum = 'E' + timestamp.getTime() + Math.random();
+    var url = localStorage.getItem("corporate-book-url");
+    document.getElementById("estimate_invnum").value = invnum;
+    document.getElementById("estimate_public_url").value = `${url}/customer/estimate/?num=${invnum}`;
+    if (callback) callback();
+
+    //SendIPC("new_invoice_number","E",function(channel,event,invnum){
+    //    console.log(invnum)
+    //    var url = localStorage.getItem("corporate-book-url");
+    //    document.getElementById("estimate_invnum").value = invnum;
+    //    document.getElementById("estimate_public_url").value = `${url}/customer/estimate/?num=${invnum}`;
+    //    if (callback) callback();
+    //})
 }
 
 function customerAction(element_obj) {
