@@ -146,7 +146,8 @@ class Ledger extends TAccount {
     }
 
     async getTransactionsByRange(begin_date, end_date) {
-		var sql = `SELECT * FROM ledger WHERE account_name='${this.name}' AND txdate BETWEEN '${begin_date}' AND '${end_date}' ORDER BY txdate ASC;`;
+		var sql = `SELECT * FROM ledger WHERE account_name='${this.name}' AND txdate >= '${begin_date}' AND txdate < '${end_date}' ORDER BY txdate ASC;`;
+        console.log(sql);
         return await this.model.querySync(sql);
 	}
 
