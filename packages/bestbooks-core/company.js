@@ -5,11 +5,11 @@ const localStorage = require('localStorage');
 
 class Company {
 
-    constructor(name) {
+    constructor(name="") {
         try {
             this.model = new Model();
             this.createTable();
-            if (name) {
+            if (name.length > 0) {
                 var sql = `SELECT * FROM company WHERE name='${name}';`;
                 this.model.query(sql, function(result){
                     if (result.length > 0) {
