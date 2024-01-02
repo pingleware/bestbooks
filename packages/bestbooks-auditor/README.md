@@ -12,6 +12,231 @@ See https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf
 
 R language is required and can be installed from https://www.r-project.org/. The Rscript tool is used to launch R scripts from the command line, and is included in the R installation package.
 
+## Audit Rules
+
+A financial audit involves a thorough examination of an organization's financial statements, transactions, and controls to ensure accuracy, compliance with accounting standards, and the prevention of fraud. The specific rules and procedures for a financial audit can vary based on the auditing standards followed (such as Generally Accepted Auditing Standards or International Standards on Auditing). Below are some common rules and principles typically applied in financial audits:
+
+1. **Materiality:**
+
+   - **Rule:** Focus on items that are material to the financial statements.
+2. **Consistency:**
+
+   - **Rule:** Ensure consistency in accounting methods and reporting between periods.
+3. **Completeness:**
+
+   - **Rule:** Verify that all transactions and events are recorded and disclosed in the financial statements.
+4. **Accuracy:**
+
+   - **Rule:** Verify the mathematical accuracy of financial statements and supporting documentation.
+5. **Valuation:**
+
+   - **Rule:** Ensure that assets and liabilities are valued accurately.
+6. **Rights and Obligations:**
+
+   - **Rule:** Confirm that the entity has legal rights to assets and is obligated for liabilities.
+7. **Existence and Occurrence:**
+
+   - **Rule:** Confirm the existence of assets and the occurrence of transactions.
+8. **Presentation and Disclosure:**
+
+   - **Rule:** Ensure that financial statements are presented fairly and all required disclosures are made.
+9. **Audit Trail:**
+
+   - **Rule:** Trace transactions from the original source documents through the accounting records to the financial statements.
+10. **Internal Controls:**
+
+    - **Rule:** Assess the effectiveness of internal controls over financial reporting.
+11. **Going Concern:**
+
+    - **Rule:** Evaluate the entity's ability to continue as a going concern.
+12. **Substantive Procedures:**
+
+    - **Rule:** Perform substantive procedures to gather evidence on the accuracy of account balances and transactions.
+13. **Risk Assessment:**
+
+    - **Rule:** Identify and assess risks of material misstatement in the financial statements.
+14. **Independence:**
+
+    - **Rule:** Ensure independence and objectivity of the audit team.
+15. **Documentation:**
+
+    - **Rule:** Maintain thorough and complete audit documentation.
+16. **Sampling:**
+
+    - **Rule:** Use statistical or judgmental sampling to test transactions and account balances.
+17. **Fraud Detection:**
+
+    - **Rule:** Consider the risk of fraud and perform procedures to detect and prevent it.
+18. **Subsequent Events:**
+
+    - **Rule:** Evaluate events occurring after the balance sheet date that may affect financial statements.
+
+## Auditing using PROLOG
+
+Creating Prolog routines for each of the rules listed would be quite extensive, and Prolog may not be the most suitable language for implementing all aspects of a financial audit. However, I can provide simplified Prolog examples for a few rules to give you an idea. Keep in mind that these examples are basic and may need to be adapted based on the specific requirements and structure of your financial audit system.
+
+Here are Prolog examples for a few rules:
+
+1. **Materiality:**
+
+   ```prolog
+   % Rule: Focus on items that are material to the financial statements.
+   materiality_threshold(100000). % Set a threshold amount
+
+   material_item(Item) :-
+       financial_statement(Item, Amount),
+       materiality_threshold(Threshold),
+       Amount >= Threshold.
+   ```
+2. **Consistency:**
+
+   ```prolog
+   % Rule: Ensure consistency in accounting methods and reporting between periods.
+   consistent_methods :-
+       accounting_method(CurrentPeriod, Method),
+       accounting_method(PreviousPeriod, Method),
+       CurrentPeriod \= PreviousPeriod.
+   ```
+3. **Completeness:**
+
+   ```prolog
+   % Rule: Verify that all transactions and events are recorded and disclosed in the financial statements.
+   transaction_recorded(Transaction) :-
+       recorded_transaction(Transaction).
+
+   all_transactions_recorded :-
+       forall(transaction(Transaction), transaction_recorded(Transaction)).
+   ```
+4. **Accuracy:**
+
+   ```prolog
+   % Rule: Verify the mathematical accuracy of financial statements and supporting documentation.
+   check_accuracy :-
+       financial_statement(Item, Amount),
+       sum_all_items(Sum),
+       Amount =:= Sum.
+   ```
+
+
+5. **Valuation:**
+
+   ```prolog
+   % Rule: Ensure that assets and liabilities are valued accurately.
+   accurate_valuation(Item) :-
+       asset_or_liability(Item),
+       acceptable_valuation_method(Item).
+
+   all_valuations_accurate :-
+       forall(asset_or_liability(Item), accurate_valuation(Item)).
+   ```
+6. **Rights and Obligations:**
+
+   ```prolog
+   % Rule: Confirm that the entity has legal rights to assets and is obligated for liabilities.
+   legal_rights(Item) :-
+       has_legal_rights(Item).
+
+   legal_obligations(Item) :-
+       has_legal_obligations(Item).
+
+   rights_and_obligations_verified :-
+       forall(asset(Item), legal_rights(Item)),
+       forall(liability(Item), legal_obligations(Item)).
+   ```
+7. **Existence and Occurrence:**
+
+   ```prolog
+   % Rule: Confirm the existence of assets and the occurrence of transactions.
+   asset_exists(Item) :-
+       exists_in_physical_form(Item).
+
+   transaction_occurred(Transaction) :-
+       occurred_as_per_records(Transaction).
+
+   all_assets_exist :-
+       forall(asset(Item), asset_exists(Item)).
+
+   all_transactions_occurred :-
+       forall(transaction(Transaction), transaction_occurred(Transaction)).
+   ```
+
+
+8. **Presentation and Disclosure:**
+
+   ```prolog
+   % Rule: Ensure that financial statements are presented fairly and all required disclosures are made.
+   fair_presentation :-
+       presented_fairly.
+
+   required_disclosures_made :-
+       all_required_disclosures_made.
+
+   financial_statements_compliant :-
+       fair_presentation,
+       required_disclosures_made.
+   ```
+9. **Audit Trail:**
+
+   ```prolog
+   % Rule: Trace transactions from the original source documents through the accounting records to the financial statements.
+   traceable(Transaction) :-
+       traced_to_source_documents(Transaction).
+
+   audit_trail_intact :-
+       forall(transaction(Transaction), traceable(Transaction)).
+   ```
+10. **Internal Controls:**
+
+    ```prolog
+    % Rule: Assess the effectiveness of internal controls over financial reporting.
+    effective_internal_controls :-
+        documented_internal_controls,
+        regularly_monitored_controls.
+
+    internal_controls_assessed :-
+        effective_internal_controls.
+    ```
+11. **Going Concern:**
+
+    ```prolog
+    % Rule: Evaluate the entity's ability to continue as a going concern.
+    going_concern_risk_low :-
+        low_risk_indicators.
+
+    assess_going_concern :-
+        going_concern_risk_low.
+    ```
+12. **Substantive Procedures:**
+
+    ```prolog
+    % Rule: Perform substantive procedures to gather evidence on the accuracy of account balances and transactions.
+    substantive_procedures_complete :-
+        evidence_gathered_according_to_plan.
+
+    audit_evidence_sufficient :-
+        substantive_procedures_complete.
+    ```
+13. **Risk Assessment:**
+
+    ```prolog
+    % Rule: Identify and assess risks of material misstatement in the financial statements.
+    material_misstatement_risk_low :-
+        low_risk_assessment_indicators.
+
+    assess_risk_of_misstatement :-
+        material_misstatement_risk_low.
+    ```
+14. **Independence:**
+
+    ```prolog
+    % Rule: Ensure independence and objectivity of the audit team.
+    independent_audit_team :-
+        no_conflicts_of_interest.
+
+    audit_team_objective :-
+        independent_audit_team.
+    ```
+
 ## Financial Statement Notes
 
 An entry to the financial statements by bestbooks-auditor would be considered a management entry since the BestBooks Auditor is NOT a registered CPA or licensed Auditor.
@@ -29,6 +254,22 @@ An entry to the financial statements by bestbooks-auditor would be considered a 
 9. **Principle of Materiality:** Financial reports fully disclose the organization's monetary situation.
 10. **Principle of Utmost Good Faith:** All involved parties are assumed to be acting honestly.
 
+## Codification
+
+Businesses should codify their accounting records regularly and consistently as part of their financial management and record-keeping processes. Codifying accounting records refers to organizing and categorizing financial transactions in a structured and systematic manner, typically using accounting codes or chart of accounts. Here are some key points to consider:
+
+1. **Consistency**: It's important to establish a consistent system for codifying accounting records from the outset. This ensures that all financial transactions are recorded and categorized in a uniform manner, making it easier to track and analyze financial data over time.
+2. **Chart of Accounts**: Developing a comprehensive chart of accounts is a fundamental step in codifying accounting records. This chart outlines the specific categories and subcategories under which different financial transactions will be recorded. It should be tailored to the specific needs of the business and can be customized to reflect the nature of its operations.
+3. **Frequency**: Accounting records should be codified as transactions occur. This means recording and categorizing financial transactions on a regular basis, whether that's daily, weekly, monthly, or as often as necessary for your business's size and complexity.
+4. **Accuracy**: It's crucial to ensure accuracy when codifying accounting records. Mistakes or inconsistencies can lead to financial reporting errors and compliance issues. Utilize accounting software or hire experienced accountants to help maintain accuracy.
+5. **Compliance**: Depending on the jurisdiction and industry, businesses may be required to follow specific accounting standards and regulations. Codifying accounting records in compliance with these standards is essential to meet legal and reporting requirements.
+6. **Decision-Making**: Well-organized accounting records are essential for making informed business decisions. When financial data is codified and categorized effectively, it's easier to analyze trends, monitor cash flow, and assess the overall financial health of the business.
+7. **Auditing and Tax Reporting**: Having codified accounting records in place makes it easier to prepare for audits and generate accurate tax reports. In the event of an audit, having organized financial records will save time and reduce stress.
+8. **Growth and Scaling**: As a business grows and scales, the complexity of its financial transactions can increase. Proper codification becomes even more critical in such cases to maintain financial control and visibility.
+9. **Business Type**: The timing and frequency of codifying accounting records can vary depending on the type of business. For example, a small sole proprietorship may codify records more informally compared to a large corporation with more rigorous reporting requirements.
+
+In summary, businesses should codify their accounting records consistently, accurately, and in compliance with relevant standards and regulations. This ongoing process ensures that financial data is organized and readily accessible for management, reporting, and decision-making purposes. The specific timing and frequency of codification will vary depending on the nature and size of the business.
+
 ## Audits
 
 The audits which can be automated include,
@@ -41,7 +282,7 @@ The audits which can be automated include,
 
     - Long Term Liabilities and Stockholder Equity
 
-    - Cash and Investments (common accounts inclulde: Operating Checking Account, Payroll Checking Account, Merchant Account and Money Market Account [can also be currency trading account, a sweep account may also serve as this purpos ]))
+    - Cash and Investments (common accounts inclulde: Operating Checking Account, Payroll Checking Account, Merchant Account and Money Market Account [can also be currency trading account, a sweep account may also serve as this purpose ]))
 
 * **Anti Money Laundering (AML), review of OFAC (Office of Foreign Assets Control) procedures and AML processes, strategy, policy, controls and related technologies.**
 * **Financial Condition, expresses an unqualified opinion, that the financial statements were presented fairly, in all material respects, in accordance with US GAAP accounting principles.**
@@ -52,7 +293,7 @@ The audits which can be automated include,
 
 ## Internal Controls
 
-An important factor of audits is to access the risk of internal controls. When revenue was received by the USPS, there were four employees to process, record and deposit the checks received. In today's economy where electronic payments are the norm, a paper trail is already established and routing payments to operating accountin is usually automatic.
+An important factor of audits is to access the risk of internal controls. When revenue was received by the USPS, there were four employees to process, record and deposit the checks received. In today's economy where electronic payments are the norm, a paper trail is already established and routing payments to operating accounting is usually automatic.
 
 Technically known as a SOC I Type II Audit. A SOC 1 –Type II audit report **contains the same opinions as a Type I, but it adds an opinion on the operating effectiveness to achieve related control objectives throughout a specified period**
 
@@ -183,3 +424,47 @@ See [https://pcaobus.org/oversight/standards/auditing-standards](https://pcaobus
 * [Financial Audit Manual - Volume 1](assets/gao-22-105894.pdf)
 * [Financial Audit Manual - Volume 2](assets/gao-22-105895.pdf)
 * [Financial Audit Manual - Volume 3](assets/gao-21-105127.pdf)
+
+## Federal Reserve Codification Reference
+
+See [https://www.ffiec.gov/pdf/FFIEC_forms/CodificationReferences_201006.pdf](https://www.ffiec.gov/pdf/FFIEC_forms/CodificationReferences_201006.pdf)
+
+## CPA Education Requirements
+
+120 semester or 180 quarter hours:
+
+* Total upper-division accounting hours required of the 120 semester or 180 quarter hours:
+  * 24 semester or 36 quarter hours to include:
+    * coverage in auditing and cost accounting,
+    * three (3) semester or four (4) quarter hours of financial accounting
+      and three (3) semester or four (4) quarter hours of taxation, both of
+      which must be based on USA accounting standards.
+  * Total upper-division general business hours required of the 120 semester or 180 quarter hours:
+    * 24 semester or 36 quarter hours to include:
+      * three (3) semester or four (4) quarter hours of business law based on USA Law.
+
+|                    | Course                               | Credits | Cost | Book                                                                                                                                                             |
+| ------------------ | ------------------------------------ | :-----: | :---: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Prerequisites      |                                      |        |      |                                                                                                                                                                  |
+|                    | Principles of Financial Accounting   |    3    | 10.29 | https://www.thriftbooks.com/w/financial-and-managerial-accounting-information-for-decisions_john-j-wild/434234/#edition=13193064&idiq=34454027                   |
+|                    | Principles of Managerial Accounting  |    3    |   -   | https://www.thriftbooks.com/w/financial-and-managerial-accounting-information-for-decisions_john-j-wild/434234/#edition=13193064&idiq=34454027                   |
+|                    | Computer Applications for Business   |    3    | 4.00 | https://www.abebooks.com/Computer-Applications-Business-R-Parameswaran-Chand/4513299831/bd                                                                       |
+|                    | Principles of Macroeconomics         |    3    | 6.39 | https://www.thriftbooks.com/w/principles-of-macroeconomics_n-gregory-mankiw/34604432/?resultid=91d5a1f1-ed05-48a6-8ed8-fa7e4652ac0f#edition=6513056&idiq=6149835 |
+|                    | Principles of Microeconomics         |    3    | 7.39 | https://www.thriftbooks.com/w/principles-of-microeconomics_robert-frank/367334/?resultid=4e06159a-4d34-427c-adfc-a59c1fa5b2f6#edition=13244269&idiq=32269544     |
+|                    | Calculus for Business                |    3    |      |                                                                                                                                                                  |
+|                    | Elementary Statistics-Business       |    3    |      |                                                                                                                                                                  |
+|                    | TOTAL                                |   21   |      |                                                                                                                                                                  |
+| Core Requirements |                                      |        |      |                                                                                                                                                                  |
+|                    | Legal Environment of Business        |    3    |      |                                                                                                                                                                  |
+|                    | Financial Management                 |    3    |      |                                                                                                                                                                  |
+|                    | Principles of Management             |    3    |      |                                                                                                                                                                  |
+|                    | Principles of Marketing              |    3    |      |                                                                                                                                                                  |
+|                    | Operations Management                |    3    |      |                                                                                                                                                                  |
+|                    | Strategic Management Business Policy |    3    |      |                                                                                                                                                                  |
+|                    | TOTAL                                |   18   |      |                                                                                                                                                                  |
+| Major Requirements |                                      |        |      |                                                                                                                                                                  |
+|                    |                                      |        |      |                                                                                                                                                                  |
+|                    |                                      |        |      |                                                                                                                                                                  |
+|                    |                                      |        |      |                                                                                                                                                                  |
+|                    |                                      |        |      |                                                                                                                                                                  |
+|                    |                                      |        |      |                                                                                                                                                                  |

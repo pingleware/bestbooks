@@ -4,7 +4,10 @@
   "description": "Thhe audit component for BestBooks Accounting Application Framework",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "test:ITManagementFramework": "mocha test/test_ITManagementFramework.js",
+    "test:StakeholderTransparency": "mocha test/test_StakeholderTransparency.js",
+    "test:emailCommunicationAudit": "mocha test/test_emailCommunicationAudit.js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +22,7 @@
   "author": "PressPage Entertainment Inc DBA PINGLEWARE <maintainers@pingleware.work>",
   "license": "CC-BY-4.0",
   "bugs": {
-    "url": "https://support.pingleware.work"
+    "url": "https://pingleware.support"
   },
   "homepage": "https://github.com/pingleware/bestbooks-auditor#readme",
   "private": false,
