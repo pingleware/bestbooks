@@ -52,4 +52,6 @@ BenefitsDelivery.benefitMonitoringData = [
 ];
   
 
-module.exports = BenefitsDelivery;
+module.exports = {
+    BenefitsDelivery
+};

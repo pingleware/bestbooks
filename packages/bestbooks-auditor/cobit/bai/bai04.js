@@ -73,4 +73,4 @@ var DataManagement = {
     ],
   };
   
-  
+module.exports = DataManagement;

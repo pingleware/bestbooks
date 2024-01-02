@@ -2,7 +2,7 @@
 
 "use strict"
 
-var StakeholderTransparency = {
+const StakeholderTransparency = {
     communicationChannels: [],
     performanceReporting: [],
     riskReporting: [],
@@ -48,4 +48,6 @@ var StakeholderTransparency = {
     },
   ];
   
-module.exports = StakeholderTransparency;
+module.exports = {
+  StakeholderTransparency
+};

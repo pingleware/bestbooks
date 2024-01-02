@@ -49,4 +49,6 @@ ResourceOptimization.resourceMonitoring = [
 ];
   
 
-module.exports = ResourceOptimization;
+module.exports = {
+  ResourceOptimization
+};

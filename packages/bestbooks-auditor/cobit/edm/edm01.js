@@ -2,7 +2,7 @@
 
 "use strict"
 
-var GovernanceFramework = {
+const GovernanceFramework = {
     governancePrinciples: [],
     governancePolicies: {},
     governanceStructures: {},
@@ -32,7 +32,7 @@ var GovernanceFramework = {
   
 // EDM01 Governance Structure
 
-var GovernanceStructure = {
+const GovernanceStructure = {
   governanceBoard: {
     role: "Governance Board",
     responsibilities: [

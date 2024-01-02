@@ -54,4 +54,6 @@ RiskOptimization.riskMitigation = [
     },
 ];
   
-module.exports = RiskOptimization;
+module.exports = {
+  RiskOptimization
+};
