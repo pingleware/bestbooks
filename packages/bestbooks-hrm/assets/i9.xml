@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Root element -->
+  <xs:element name="FormI9">
+    <xs:complexType>
+      <xs:sequence>
+        <!-- Section 1: Employee Information and Attestation -->
+        <xs:element name="Section1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="EmployeeInformation">
+                <xs:complexType>
+                  <!-- Define elements for employee information -->
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="EmployerInformation">
+                <xs:complexType>
+                  <!-- Define elements for employer information -->
+                </xs:complexType>
+              </xs:element>
+              <!-- ... additional elements for Section 1 ... -->
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
+        <!-- Section 2: Employer Review and Verification -->
+        <xs:element name="Section2">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ListA">
+                <xs:complexType>
+                  <!-- Define elements for List A document verification -->
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="ListB">
+                <xs:complexType>
+                  <!-- Define elements for List B document verification -->
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="ListC">
+                <xs:complexType>
+                  <!-- Define elements for List C document verification -->
+                </xs:complexType>
+              </xs:element>
+              <!-- ... additional elements for Section 2 ... -->
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
