@@ -116,8 +116,6 @@ Here are Prolog examples for a few rules:
        sum_all_items(Sum),
        Amount =:= Sum.
    ```
-
-
 5. **Valuation:**
 
    ```prolog
@@ -159,8 +157,6 @@ Here are Prolog examples for a few rules:
    all_transactions_occurred :-
        forall(transaction(Transaction), transaction_occurred(Transaction)).
    ```
-
-
 8. **Presentation and Disclosure:**
 
    ```prolog
@@ -468,3 +464,52 @@ See [https://www.ffiec.gov/pdf/FFIEC_forms/CodificationReferences_201006.pdf](ht
 |                    |                                      |        |      |                                                                                                                                                                  |
 |                    |                                      |        |      |                                                                                                                                                                  |
 |                    |                                      |        |      |                                                                                                                                                                  |
+
+## Internal Audit
+
+Three types of internal audit,
+
+1. Envrionmental
+2. Operational
+3. Performance
+
+### The Five C's of Auditing
+
+The following are the 5 Cs of the internal auditing process:
+
+* **C**riteria:
+  Audit Criteria are usually based on some company's manual, policy and
+  targets, or it can also be based on some subscribed standards. What
+  issue was identified during the auditing process, and why conducting the
+  internal auditing was necessary? Is the organization prepared to
+  conduct an external audit in the future?
+* **C**ondition:
+  What is the relation of the identified issue with the company's
+  expectations and targets? Was there any company policy, procedures, or
+  subscribed standards that was bypassed?
+* **C**ause:
+  What were the reasons why these issues arose first? Who was involved,
+  and what processes were infringed? How the company could have prevented
+  this issue from arising?
+* **C**onsequence: What was
+  the result of the issue that arose? Did the issue cause disruption in
+  internal matters of the company or were there any external risks
+  involved too? Are there any financial consequences of the identified
+  issue?
+* **C**orrective Action: What corrective
+  actions can the company take to fix this issue from reoccurrence? How
+  will the company monitor and review the effectiveness of solutions after
+  their implementation?
+
+## Stages in an Internal Audit
+
+1. Planning
+2. Auditing
+3. Reporting
+4. Monitoring
+
+## Resources
+
+Accounting Courseware - [https://alison.com/dashboard](https://alison.com/dashboard)
+
+AuditNet Audit Programs  - [https://www.auditnet.org/audit_programs](https://www.auditnet.org/audit_programs)
