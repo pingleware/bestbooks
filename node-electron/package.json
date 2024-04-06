@@ -85,15 +85,17 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "electron .",
-        "debug": "electron . -menu=on",
-        "dist": "electron-builder --universal",
+        "debug": "nodemon electron . -menu=on",
+        "dist:mac": "electron-builder --mac --universal",
+        "dist:win": "electron-builder --win --universal",
         "pub": "electron-builder --p always",
-        "snap": "electron-builder --linux snap",
+        "dist:snap": "electron-builder --linux snap",
         "png2icns": "./icns_creator.sh ./assets/bestbooks.png ./assets/bestbooks",
         "win32": "electron-packager . bestbooks --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/bestbooks.ico --prune=true --out=dist --version-string.CompanyName='PRESSPAGE ENTERTAINMENT INC' --version-string.FileDescription='BestBooks Accounting Application Framework GUI' --version-string.ProductName='BestBooks'",
         "linux": "electron-packager . bestbooks --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/bestbooks.png --prune=true --out=dist",
         "linux_installer": "electron-installer-debian --src dist/bestbooks-linux-x64/ --arch amd64 --config debian.json",
-        "build-icons": "electron-icon-maker -i ./assets/bestbooks.png -o ./assets/app-icon/"
+        "build-icons": "electron-icon-maker -i ./assets/bestbooks.png -o ./assets/app-icon/",
+        "postinstall": "electron-builder install-app-deps"
     },
     "keywords": [
         "BestBooks Accounting Application Framework"
@@ -106,7 +108,8 @@
         "electron-icon-maker": "^0.0.5",
         "electron-installer-debian": "^3.1.0",
         "electron-installer-dmg": "^4.0.0",
-        "electron-packager": "^17.1.1"
+        "electron-packager": "^17.1.1",
+        "nodemon": "^3.1.0"
     },
     "dependencies": {
         "@pingleware/bestbooks-api": "^1.0.9",

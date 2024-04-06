@@ -67,7 +67,7 @@ function createWindow () {
         width: width,
         height: height,
         title: "BestBooks Accounting Application Framework",
-        icon: path.join(__dirname,'assets/bestbooks.png'),
+        icon: './assets/bestbooks.png',
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: true,
@@ -90,15 +90,6 @@ function createWindow () {
     mainWindow.once('ready-to-show', () => {
         //autoUpdater.checkForUpdatesAndNotify();
     });
-    // Setup Tray
-    tray = new Tray(path.join(__dirname,'assets/app-icon/icons/win/icon.ico'));
-
-    const contextMenu = Menu.buildFromTemplate([
-    ]);
-
-    tray.setIgnoreDoubleClickEvents(true);
-    tray.setToolTip('Corporate Book');
-    tray.setContextMenu(contextMenu);  
 }
 
 app.on('ready', createWindow);
@@ -113,7 +104,7 @@ app.on('activate', function () {
 
 // Load IPC routines
 var ipc = require('./ipc.js');
-ipc.mainWindow = mainWindow;
+ipc._mainWindow = mainWindow;
 
 
 // BESTBOOKS API Server
@@ -124,7 +115,7 @@ start_server(host, port);
 // BESTBOOKS SMTP MAIL SERVER
 const { start_smtp_server } = require("@pingleware/bestbooks-mailer");
 
-start_smtp_server("mail.presspage-entertainment-accounting.systems",587);
+start_smtp_server(argv.smtp,587);
 
 /**
  * Start HTTP Server
@@ -253,6 +244,99 @@ const http_server = http.createServer(async(req,res)=>{
         return res.end(html);    
     })
   } else if (pathname === '/vendor/purchaseorder') {
+    html = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>503 Service Unavailable</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f4f4f4;
+          margin: 0;
+          padding: 0;
+        }
+        .container {
+          max-width: 600px;
+          margin: 100px auto;
+          text-align: center;
+        }
+        h1 {
+          font-size: 48px;
+          color: #333;
+        }
+        p {
+          font-size: 18px;
+          color: #666;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>503 Service Unavailable</h1>
+        <p>We're sorry, but the server is currently unavailable.</p>
+        <p>Please try again later.</p>
+      </div>
+    </body>
+    </html>`;
+    return res.end(html);   
+  } else {
+    // NOT FOUND
+    html = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>404 - Page Not Found</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f5f5f5;
+                color: #333;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+            }
+    
+            .container {
+                text-align: center;
+            }
+    
+            h1 {
+                font-size: 3em;
+                margin-bottom: 10px;
+                color: #555;
+            }
+    
+            p {
+                font-size: 1.2em;
+                margin-top: 0;
+                color: #777;
+            }
+    
+            a {
+                color: #007bff;
+                text-decoration: none;
+            }
+    
+            a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>404 - Page Not Found</h1>
+            <p>Oops! The page you are looking for might have been removed or temporarily unavailable.</p>
+            <p>Go back to <a href="/">homepage</a>.</p>
+        </div>
+    </body>
+    </html>`;
+    return res.end(html);   
   }
 });
 
