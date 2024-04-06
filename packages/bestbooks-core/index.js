@@ -46,6 +46,12 @@ const DigitalCurrency = require('./digitalcurrency');
 const Bitcoin = require('./bitcoin');
 const Ether = require('./ether');
 
+const {
+    warn,
+    info,
+    error
+} = require('./ledger');
+
 module.exports = {
     Model: Model,
     AccountTypes: AccountTypes,
@@ -74,5 +80,8 @@ module.exports = {
     Report: Report,
     DigitalCurrency: DigitalCurrency,
     Bitcoin: Bitcoin,
-    Ether, Ether
+    Ether: Ether,
+    warn,
+    info,
+    error,
 }

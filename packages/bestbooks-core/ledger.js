@@ -9,6 +9,12 @@ const Model = require('./model');
 const Journal = require('./journal');
 const localStorage = require('localStorage');
 
+const {
+    info,
+    warn,
+    error
+} = require('./logger');
+
 class Ledger extends TAccount {
     balance = 0;
 	name = null;
@@ -39,7 +45,8 @@ class Ledger extends TAccount {
     }
 
     async findType(name) {
-        var sql = `SELECT type FROM accounts WHERE name='${name}';`;
+        const sql = `SELECT type FROM accounts WHERE name='${name}';`;
+        info(sql);
         var rows = this.model.querySync(sql);
         return (rows.length > 0 ? rows[0].type : 'not found');
     }
@@ -48,6 +55,7 @@ class Ledger extends TAccount {
         try {
             this.debit = amount;
             var sql = `INSERT OR IGNORE INTO ledger (company_id,office_id,account_name,account_code,txdate,note,debit,balance) VALUES (${company_id},${office_id},'${this.name}',(SELECT code FROM accounts WHERE name='${this.name}'),'${date}','${desc}','${amount}',(SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+${amount},${amount}) FROM ledger WHERE account_name='${this.name}'));`;
+            info(sql);
             let ledger_insert_id = await this.model.insertSync(sql);
 
             //let ledger_insert_id = localStorage.getItem('lastID');
@@ -56,20 +64,21 @@ class Ledger extends TAccount {
             if (this.name !== 'Uncategorized') {
                 var journal = new Journal('General');
                 journal_insert_id = await journal.add(date,ledger_insert_id,this.name,amount,0.00,company_id,office_id);
-                //journal_insert_id = localStorage.getItem('lastID');
                 sql = `UPDATE ledger SET ref=${journal_insert_id} WHERE id=${ledger_insert_id};`;
+                info(sql);
                 await this.model.insertSync(sql);
             }            
             return [ledger_insert_id,journal_insert_id];
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            console.err0r(err);
         }
     }
     async addCredit(date,desc,amount,company_id=0,office_id=0){
         try {
             this.credit = amount;
             var sql = `INSERT OR IGNORE INTO ledger (company_id,office_id,account_name,account_code,txdate,note,credit,balance) VALUES (${company_id},${office_id},'${this.name}',(SELECT code FROM accounts WHERE name='${this.name}'),'${date}','${desc}','${amount}',(SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+${amount},${amount}) FROM ledger WHERE account_name='${this.name}'));`;
-    
+            info(sql);
+
             let ledger_insert_id = await this.model.insertSync(sql);
             //let ledger_insert_id = localStorage.getItem('lastID');
             let journal_insert_id = 0;
@@ -82,8 +91,8 @@ class Ledger extends TAccount {
                 await this.model.insertSync(sql);
             }
             return [ledger_insert_id,journal_insert_id];
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(JSON.stringify(err));
         }
     }
     
@@ -96,11 +105,12 @@ class Ledger extends TAccount {
     
     async getBalance(){
         try {
-            var sql = `SELECT SUM(debit)-SUM(credit) AS balance FROM ledger WHERE account_name='${this.name}';`;
+            const sql = `SELECT SUM(debit)-SUM(credit) AS balance FROM ledger WHERE account_name='${this.name}';`;
+            info(sql);
             var rows = await this.model.querySync(sql);
             this.balance = Number(rows[0].balance);
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(JSON.stringify(err));
         }
         return this.balance;
     }
@@ -110,7 +120,8 @@ class Ledger extends TAccount {
     }
 
     async getAll() {
-        var sql = `SELECT *,(SELECT COUNT(*) FROM ledger ORDER BY txdate DESC) AS total FROM ledger ORDER BY txdate DESC`;
+        const sql = `SELECT *,(SELECT COUNT(*) FROM ledger ORDER BY txdate DESC) AS total FROM ledger ORDER BY txdate DESC`;
+        info(sql);
         var rows = await this.model.querySync(sql);
         if (rows.length > 0) {
             return {
@@ -141,29 +152,33 @@ class Ledger extends TAccount {
 	 * 
 	 */
     async getDailyBalance(transDate) {
-        var sql = `SELECT txdate AS TransDate, (SUM(debit)*-1) + SUM(credit) AS DailyBalance FROM ledger WHERE txdate LIKE '${transDate}%' GROUP BY txdate`;
+        const sql = `SELECT txdate AS TransDate, (SUM(debit)*-1) + SUM(credit) AS DailyBalance FROM ledger WHERE txdate LIKE '${transDate}%' GROUP BY txdate`;
+        info(sql);
         return await this.model.querySync(sql);
     }
 
     async getTransactionsByRange(begin_date, end_date) {
-		var sql = `SELECT * FROM ledger WHERE account_name='${this.name}' AND txdate >= '${begin_date}' AND txdate < '${end_date}' ORDER BY txdate ASC;`;
+		const sql = `SELECT * FROM ledger WHERE account_name='${this.name}' AND txdate >= '${begin_date}' AND txdate < '${end_date}' ORDER BY txdate ASC;`;
+        info(sql);
         console.log(sql);
         return await this.model.querySync(sql);
 	}
 
     async getPeriodOfTimeBalance(begin_date,end_date) {
-		var sql = `SELECT (SUM(debit)*-1) + SUM(credit) AS PeriodBalance FROM ledger WHERE txdate BETWEEN ${begin_date} AND ${end_date};`;
+		const sql = `SELECT (SUM(debit)*-1) + SUM(credit) AS PeriodBalance FROM ledger WHERE txdate BETWEEN ${begin_date} AND ${end_date};`;
+        info(sql);
         return await this.model.querySync(sql);
 	}
 
     async remove(id) {
-        var sql = `DELETE FROM ledger WHERE id=${id};`;
+        const sql = `DELETE FROM ledger WHERE id=${id};`;
+        info(sql);
         return await this.model.querySync(sql);
     }
 
     async createLedgerTable() {
         try {
-            var sql = `CREATE TABLE IF NOT EXISTS "ledger" (
+            const sql = `CREATE TABLE IF NOT EXISTS "ledger" (
                 "id" INTEGER,
                 "company_id" INTEGER,
                 "office_id"	INTEGER,
@@ -177,19 +192,21 @@ class Ledger extends TAccount {
                 "balance" REAL DEFAULT 0,
                 PRIMARY KEY("id" AUTOINCREMENT)
             );`;
+            info(sql);
     
             await this.model.querySync(sql);
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(JSON.stringify(err));
         }
     }
 
     async purgeLedgerTable() {
         try {
-            var sql = `DELETE FROM ledger;`;
+            const sql = `DELETE FROM ledger;`;
+            info(sql);
             await this.model.insertSync(sql);
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(JSON.stringify(err));
         }
     }
 }

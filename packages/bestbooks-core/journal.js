@@ -6,6 +6,11 @@
 
 const Model = require('./model');
 const localStorage = require('localStorage');
+const {
+    info,
+    warn,
+    error
+} = require('./logger');
 
 class Journal {
 
@@ -17,48 +22,53 @@ class Journal {
 
     async add(date,ref,account,debit,credit,company_id=0,office_id=0) {
         try {
-            var sql = `INSERT OR IGNORE INTO  journal (company_id,office_id,txdate,ref,account,debit,credit) VALUES (${company_id},${office_id},'${date}','${ref}','${account}','${debit}','${credit}');`;
+            const sql = `INSERT OR IGNORE INTO  journal (company_id,office_id,txdate,ref,account,debit,credit) VALUES (${company_id},${office_id},'${date}','${ref}','${account}','${debit}','${credit}');`;
+            info(sql);
             var results = await this.model.insertSync(sql);
             return results;
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(JSON.stringify(err));
         }
     }
     async update(id,date,account,debit,credit,ref=0) {
         try {
-            var sql = `UPDATE journal SET txdate='${date}',account='${account}',ref='${ref}',debit=${debit},credit=${credit} WHERE id=${id};`;
+            const sql = `UPDATE journal SET txdate='${date}',account='${account}',ref='${ref}',debit=${debit},credit=${credit} WHERE id=${id};`;
+            info(sql);
             return await this.model.updateSync(sql);
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(JSON.stringify(err));
         }
     }
 
     async remove(id) {
         try {
-            var sql = `DELETE FROM journal WHERE id='${id}';`;
+            const sql = `DELETE FROM journal WHERE id='${id}';`;
+            info(sql);
             await this.model.querySync(sql);
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(JSON.stringify(err));
         }
     }
 
     async inBalance() {
         try {
-            var sql = `SELECT SUM(debit)=SUM(credit) AS INBALANCE FROM journal WHERE account="${this.name}";'`;
+            const sql = `SELECT SUM(debit)=SUM(credit) AS INBALANCE FROM journal WHERE account="${this.name}";'`;
+            info(sql);
             var rows = await this.model.querySync(sql);
             return rows[0].INBALANCE;
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(JSON.stringify(err));
         }
     }
 
     async balance() {
         try {
-            var sql = `SELECT SUM(credit)-SUM(debit) AS balance FROM journal WHERE account='${this.name}";'`;
+            const sql = `SELECT SUM(credit)-SUM(debit) AS balance FROM journal WHERE account='${this.name}";'`;
+            info(sql);
             var rows = await this.model.querySync(sql);
             return Number(rows[0].balance);
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(JSON.stringify(err));
         }
     }
 
@@ -68,16 +78,17 @@ class Journal {
 
     async transaction(where="") {
         try {
-            var sql = `SELECT * FROM journal WHERE account="${this.name}" ${where} ORDER BY txdate ASC;`;
+            const sql = `SELECT * FROM journal WHERE account="${this.name}" ${where} ORDER BY txdate ASC;`;
+            info(sql);
             return await this.model.querySync(sql);
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(JSON.stringify(err));
         }
     }
 
     async createTable() {
         try {
-            var sql = `CREATE TABLE IF NOT EXISTS "journal" (
+            const sql = `CREATE TABLE IF NOT EXISTS "journal" (
                 "id" INTEGER,
                 "company_id" INTEGER,
                 "office_id"	INTEGER,
@@ -88,34 +99,39 @@ class Journal {
                 "credit" REAL,
                 PRIMARY KEY("id" AUTOINCREMENT)
             );`;
+            info(sql);
             await this.model.querySync(sql);    
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(JSON.stringify(err));
         }
     }
 
     async purgeTable() {
         try {
-            var sql = `DELETE FROM journal;`;
+            const sql = `DELETE FROM journal;`;
+            info(sql);
             await this.model.insertSync(sql);
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(JSON.stringify(err));
         }
     }
 
     async listJournals() {
-        var sql = `SELECT name FROM journal GROUP BY name`;
+        const sql = `SELECT name FROM journal GROUP BY name`;
+        info(sql);
         var rows = this.model.querySync(sql);
         return rows;
     }
 
     async getDebitCreditTotals(where='') {
-        var sql = `SELECT SUM(debit) AS total_debit,SUM(credit) AS total_credit FROM journal ${where} ORDER BY txdate ASC`;
+        const sql = `SELECT SUM(debit) AS total_debit,SUM(credit) AS total_credit FROM journal ${where} ORDER BY txdate ASC`;
+        info(sql);
         return this.model.querySync(sql);
     }
 
     async setXRef(id, value) {
-        var sql = `UPDATE journal SET xref=${value} WHERE id=${id};`;
+        const sql = `UPDATE journal SET xref=${value} WHERE id=${id};`;
+        info(sql);
         return this.model.querySync(sql);
     }
 }
