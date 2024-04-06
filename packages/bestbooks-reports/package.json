@@ -20,7 +20,10 @@
   "scripts": {
     "test": "mocha"
   },
-  "keywords": [],
+  "keywords": [
+    "BestBooks Accounting Application Framework",
+    "pingleware"
+  ],
   "author": "PressPage Entertainment Inc <presspage.entertainment@gmail.com>",
   "license": "CC-BY-4.0",
   "bugs": {
