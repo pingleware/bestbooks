@@ -1,5 +1,5 @@
 const expect = require("chai").expect;
-const invoke = require("../index");
+const {invoke} = require("../index");
 
 const { start_server, stop_server } = require('@pingleware/bestbooks-api');
 
@@ -18,7 +18,10 @@ describe("auditor",function(){
         in_progress = true;
         var script_filename = `scripts/audit_checkVersion.R ${host} ${port}`;
         invoke("Rscript",script_filename,1,"balanceSheet",function(output){
-            console.log(output);
+            //console.log(output);
+            if (output.status === "success") {
+                expect(output.message,"  version\n1   1.0.9\n");
+            }
             stop_server();
         })
     })
