@@ -6,9 +6,9 @@ An open-source accounting framework used to build a full fledge accounting bookk
 
 BestBooks is being redesigned to a client-server-desktop model, where the server-deesktop applications operates behind a firewall while the client provides relevant data to the server-desktop.
 
-![New Architectire](https://github.com/pingleware/bestbooks/blob/master/assets/new-architecture.png "New Architecture")
+![1712411119697](image/README/1712411119697.png)
 
-![Business Automation Rendition](https://github.com/pingleware/bestbooks/blob/master/assets/business-automation.png "Business Automation")
+![1712411135560](image/README/1712411135560.png)
 
 * Administrative Assistant - https://snapcraft.io/administrative-assistant
 * Node Application Builder - https://snapcraft.io/node-application-builder (future)
@@ -20,6 +20,11 @@ BestBooks is being redesigned to a client-server-desktop model, where the server
 * Transfer Agent Stock Certificate Creator - https://github.com/pingleware/transferagent-stockcertificate-creator/releases
 
 ## Release Schedule
+
+| Date | Version     | Deescription                                                                                                                                                              |
+| ---- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| TBD  | 1.0.0-alpha | Integration implementation of CHart of Account, Ledger, Journal; importing accounting csv from Wave Accounting; balance sheet, income statement and trial balance reports |
+|      |             |                                                                                                                                                                           |
 
 ### Alpha
 
@@ -36,6 +41,7 @@ The database is a SQLite datastore saved in the .bestbooks directory of the user
 This repository contains the following directories,
 
     assets - for current and new assets
+    dotnet - a dotnet maui version
     node-electron - the Node-Electron Desktop Administrator
     wordpress.org - the original wordpress.org/plugins/bestbooks code
     wordpress - the future wordpress.org/plugins/bestbooks refactor for the Desktop Administrator

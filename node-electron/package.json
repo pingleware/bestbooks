@@ -93,8 +93,7 @@
         "win32": "electron-packager . bestbooks --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/bestbooks.ico --prune=true --out=dist --version-string.CompanyName='PRESSPAGE ENTERTAINMENT INC' --version-string.FileDescription='BestBooks Accounting Application Framework GUI' --version-string.ProductName='BestBooks'",
         "linux": "electron-packager . bestbooks --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/bestbooks.png --prune=true --out=dist",
         "linux_installer": "electron-installer-debian --src dist/bestbooks-linux-x64/ --arch amd64 --config debian.json",
-        "build-icons": "electron-icon-maker -i ./assets/bestbooks.png -o ./assets/app-icon/",
-        "postinstall": "electron-builder install-app-deps"
+        "build-icons": "electron-icon-maker -i ./assets/bestbooks.png -o ./assets/app-icon/"
     },
     "keywords": [
         "BestBooks Accounting Application Framework"
@@ -102,8 +101,8 @@
     "author": "PRESSPAGE ENTERTAINMENT INC dba PINGLEWARE <maintainers@pingleware.work>",
     "license": "CC-BY-4.0",
     "devDependencies": {
-        "electron": "^17.1.2",
-        "electron-builder": "^22.14.13",
+        "electron": "^29.2.0",
+        "electron-builder": "^24.13.3",
         "electron-icon-maker": "^0.0.5",
         "electron-installer-debian": "^3.1.0",
         "electron-installer-dmg": "^4.0.0",
@@ -111,17 +110,18 @@
     },
     "dependencies": {
         "@pingleware/bestbooks-api": "^1.0.9",
-        "@pingleware/bestbooks-auditor": "^1.0.2",
-        "@pingleware/bestbooks-core": "^1.1.17",
+        "@pingleware/bestbooks-auditor": "^1.0.0",
+        "@pingleware/bestbooks-core": "^1.1.18",
         "@pingleware/bestbooks-export": "^1.0.6",
-        "@pingleware/bestbooks-helpers": "^1.1.14",
+        "@pingleware/bestbooks-helpers": "^1.1.17",
         "@pingleware/bestbooks-import": "^1.0.7",
         "@pingleware/bestbooks-mailer": "^1.1.0",
-        "@pingleware/bestbooks-reports": "^1.0.11",
+        "@pingleware/bestbooks-reports": "^1.0.7",
         "crypto": "^1.0.1",
         "csv-parse": "^5.3.5",
         "http": "^0.0.1-security",
         "path": "^0.12.7",
-        "yargs": "github:yargs/yargs"
+        "sqlite3": "^5.1.7",
+        "yargs": "^17.7.2"
     }
 }

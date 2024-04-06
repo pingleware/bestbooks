@@ -1,6 +1,6 @@
 ._*
 node_modules/
 settings.json
-BestBooks/obj/
+dotNet/obj/
 .vs/
 package-lock.json
