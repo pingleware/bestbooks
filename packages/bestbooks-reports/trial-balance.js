@@ -16,10 +16,26 @@ class TrialBalance extends BaseReport {
     createReport(startDate,endDate,_format,callback) {
         this.retrieveReportData(startDate, endDate, function(data){
             if (_format == "array") {
+                var totalItems = [];
+                data[1].forEach(function(totalItem){
+                    totalItems.push({
+                        debit: Number(totalItem.debit).toFixed(2),
+                        credit: Number(totalItem.credit).toFixed(2)
+                    })
+                })
+                var lineItems = [];
+                data[0].forEach(function(lineItem){
+                    lineItems.push({
+                        code: lineItem.code,
+                        name: lineItem.name,
+                        debit: lineItem.debit.toFixed(2),
+                        credit: lineItem.credit.toFixed(2)
+                    })
+                })
                 var _data = {
                     date: new Date().toDateString(),
-                    lineItems: data[0],
-                    total: data[1]
+                    lineItems: lineItems,
+                    total: totalItems
                 };
                 var formattedData = array2xml('trialBalance',_data);
                 fs.writeFileSync(path.join(os.homedir(),'.bestbooks/trialBalance.xml'), formattedData);
