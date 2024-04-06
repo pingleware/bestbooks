@@ -101,6 +101,8 @@
         "BestBooks Accounting Application Framework"
     ],
     "author": "PRESSPAGE ENTERTAINMENT INC dba PINGLEWARE <maintainers@pingleware.work>",
+    "homepage": "https://github.com/pingleware/bestbooks",
+    "funding": "https://github.com/sponsors/pingleware",
     "license": "CC-BY-4.0",
     "devDependencies": {
         "electron": "^29.2.0",
