@@ -39,33 +39,58 @@ class BalanceSheet extends BaseReport {
                 data.forEach(function(lineItem){
                     switch(lineItem.type) {
                         case 'Asset':
-                            _data.lineItems.push(lineItem);
+                            _data.lineItems.push({
+                                code: lineItem.code,
+                                name: lineItem.name,
+                                balance: Number(lineItem.balance).toFixed(2),
+                                type: lineItem.type
+                            });
                             totalAsset += Number(lineItem.balance);
                             break;
                         case 'Liability':
-                            _data.lineItems.push(lineItem);
+                            _data.lineItems.push({
+                                code: lineItem.code,
+                                name: lineItem.name,
+                                balance: Number(lineItem.balance).toFixed(2),
+                                type: lineItem.type
+                            });
                             totalLiability += Number(lineItem.balance);
                             break;
                         case 'Expense':
-                            _data.lineItems.push(lineItem);
+                            _data.lineItems.push({
+                                code: lineItem.code,
+                                name: lineItem.name,
+                                balance: Number(lineItem.balance).toFixed(2),
+                                type: lineItem.type
+                            });
                             totalExpense += Number(lineItem.balance);
                             break;
                         case 'Income':
-                            _data.lineItems.push(lineItem);
+                            _data.lineItems.push({
+                                code: lineItem.code,
+                                name: lineItem.name,
+                                balance: Number(lineItem.balance).toFixed(2),
+                                type: lineItem.type
+                            });
                             totalIncome += Number(lineItem.balance);
                             break;
                         case 'Equity':
-                            _data.lineItems.push(lineItem);
+                            _data.lineItems.push({
+                                code: lineItem.code,
+                                name: lineItem.name,
+                                balance: Number(lineItem.balance).toFixed(2),
+                                type: lineItem.type
+                            });
                             totalEquity += Number(lineItem.balance);
                             break;
                     }
                 });
-                _data.totalAsset = totalAsset;
-                _data.totalLiability = totalLiability;
-                _data.totalIncome = totalIncome;
-                _data.totalExpense = totalExpense;
-                _data.totalEquity = totalEquity;
-                _data.totalLiabilitiesShareholdersEquity = totalLiability + totalEquity;
+                _data.totalAsset = totalAsset.toFixed(2);
+                _data.totalLiability = totalLiability.toFixed(2);
+                _data.totalIncome = totalIncome.toFixed(2);
+                _data.totalExpense = totalExpense.toFixed(2);
+                _data.totalEquity = totalEquity.toFixed(2);
+                _data.totalLiabilitiesShareholdersEquity = (totalLiability + totalEquity).toFixed(2);
                 //console.log(_data);
                 var formattedData = array2xml('balanceSheet',_data);
                 fs.writeFileSync(path.join(os.homedir(),'.bestbooks/balanceSheet.xml'), formattedData);
