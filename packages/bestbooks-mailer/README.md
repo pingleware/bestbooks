@@ -4,7 +4,7 @@ This component provides the mailer functionality for sending and receiving email
 
 ## SMTP Server
 
-BestBooks Mailer has a builtin SMTP Server. When sending mail from BestBooks Mailer, the email will be placed end the recipient's spam folder unless you have properly configured your DNS settings. Please contact https://support.pingleware.work for assistance with configuring DNS for BestBooks Mailer to properly deliver mail to the inbox and not the spam folder.
+BestBooks Mailer has a builtin SMTP Server. When sending mail from BestBooks Mailer, the email will be placed end the recipient's spam folder unless you have properly configured your DNS settings. Please contact [https://pingleware.support](https://pingleware.support) for assistance with configuring DNS for BestBooks Mailer to properly deliver mail to the inbox and not the spam folder.
 
 To start the SMTP server, invoke the start_smtp_server function specifying the hostname and port as the parameters.
 

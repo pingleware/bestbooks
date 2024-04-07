@@ -1,6 +1,6 @@
 {
   "name": "@pingleware/bestbooks-mailer",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "The mailer component for BestBooks Accounting Application Framework",
   "main": "index.js",
   "scripts": {
@@ -11,22 +11,23 @@
     "url": "git+https://github.com/pingleware/bestbooks-mailer.git"
   },
   "keywords": [
-    "bestbooks",
+    "BestBooks Accounting Application Framework",
     "mailer"
   ],
   "author": "PRESSPAGE ENTERTAINMENT INC dba PINGLEWARE <maintainers@pingleware.work>",
   "license": "CC-BY-4.0",
   "bugs": {
-    "url": "https://support.pingleware.work"
+    "url": "https://pingleware.support"
   },
   "homepage": "https://github.com/pingleware/bestbooks-mailer#readme",
+  "funding": "https://github.com/sponsors/pingleware",
   "private": false,
   "engines": {
     "node": ">=6.0.0"
   },
   "engineStrict": true,
   "dependencies": {
-    "@pingleware/bestbooks-core": "^1.1.13",
+    "@pingleware/bestbooks-core": "^1.1.18",
     "dns": "^0.2.2",
     "node-mailin": "^2.5.0",
     "nodemailer": "^6.9.1"
