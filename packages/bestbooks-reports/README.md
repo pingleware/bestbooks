@@ -20,3 +20,21 @@ Reporting is the most important feature of any accounting system, because report
 ## GAAP Compliance
 
 There is much discussion concerning GAAP compliance and accounting sofftware with some commentors stating that accounting software can never be GAAP compliance. First, GAAP compliance has to do with reporting and involves an accountant statement or notes added to the financial statements, this where the component noteToFinancialStatements permits the addition of a notes fields to the report XML data, thus making BestBooks GAAP compliance with the addition of a notes field on reports.
+
+## Sample Reports
+
+### Customer Estimate
+
+![1712500090802](image/README/1712500090802.png)
+
+### Trial Balance
+
+![1712501317103](image/README/1712501317103.png)
+
+### Purchase Order
+
+![1712501796886](image/README/1712501796886.png)
+
+### Statement in Change in Equity
+
+![1712502172676](image/README/1712502172676.png)

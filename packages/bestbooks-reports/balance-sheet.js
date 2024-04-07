@@ -105,7 +105,7 @@ class BalanceSheet extends BaseReport {
                 const model = new Model();
                 if (callback) {
                     model.insert(sql,function(result){
-                        callback(formattedData);
+                        callback(fformattedData);
                     });
                 } else {
                     model.insertSync(sql);

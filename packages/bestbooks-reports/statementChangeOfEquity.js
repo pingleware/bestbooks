@@ -40,13 +40,13 @@ class StatementChangeInEquity extends BaseReport {
     createReport(startDate,endDate,_format,callback) {
         this.retrieveReportData(startDate, endDate, function(data){
             if (_format == "array") {
-                let ending_equity_total = Number(data[0].beginning_equity_total) + Number(data[0].net_income_total) - Number(data[0].dividends_payable_total) + Number(data[0].paidin_capital_total) + Number(data[0].treasury_shares_total);
+                let ending_equity_total = Number(data[0].beginning_equity_total) + Number(data[0].net_income_total) - Number(data[0].dividends_payable_total) + Number(data[0].paidin_capital_total) + Number(data[0].treasury_shares_total).toFixed(2);
                 var _data = {
                     date: new Date().toDateString(),
-                    beginning_equity: data[0].beginning_equity_total,
-                    net_income: data[0].net_income_total,
-                    dividends: data[0].dividends_payable_total,
-                    other_change: Number(data[0].paidin_capital_total) + Number(data[0].treasury_shares_total),
+                    beginning_equity: Number(data[0].beginning_equity_total).toFixed(2),
+                    net_income: Number(data[0].net_income_total).toFixed(2),
+                    dividends: Number(data[0].dividends_payable_total).toFixed(2),
+                    other_change: Number(data[0].paidin_capital_total).toFixed(2) + Number(data[0].treasury_shares_total).toFixed(2),
                     ending_equity: ending_equity_total
                 };
                 var formattedData = array2xml('statementChangeInEquity',_data);

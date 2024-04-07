@@ -11,6 +11,22 @@ class PurchaseOrder {
     }
 
     createReport(purchaseOrderInfo,callback) {
+        var lineItems = [];
+        purchaseOrderInfo.lineitems.lineitem.forEach(function(lineItem){
+            lineItems.push({
+                quantity: lineItem.quantity,
+                description: lineItem.description,
+                unitprice: Number(lineItem.unitprice).toFixed(2),
+                amount: Number(lineItem.amount).toFixed(2)
+            })
+        })
+        purchaseOrderInfo.lineitems = { lineitem: lineItems };
+        purchaseOrderInfo.prices.subtotal = Number(purchaseOrderInfo.prices.subtotal).toFixed(2);
+        purchaseOrderInfo.prices.tax = Number(purchaseOrderInfo.prices.tax).toFixed(2);
+        purchaseOrderInfo.prices.shipping = Number(purchaseOrderInfo.prices.shipping).toFixed(2);
+        purchaseOrderInfo.prices.other = Number(purchaseOrderInfo.prices.other).toFixed(2);
+        purchaseOrderInfo.prices.total = Number(purchaseOrderInfo.prices.total).toFixed(2);
+
         var formattedData = array2xml('purchaseOrder',purchaseOrderInfo);
         fs.writeFileSync(path.join(os.homedir(),'.bestbooks/purchase-order.xml'), formattedData);
         // Save report XML data to report table
