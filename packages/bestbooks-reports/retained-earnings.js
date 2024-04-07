@@ -12,14 +12,15 @@ class RetainedEarnings extends BaseReport {
         super();
     }
 
-    createReport(startDate,endDate,_format,callback) {
+    createReport(startDate,endDate,_format,callback,notes="") {
         this.retrieveReportData(startDate, endDate, function(data){
             if (_format == "array") {
                 var _data = {
                     date: new Date().toDateString(),
-                    previous_retained_earnings: data[0].previous_retained_earnings,
-                    net_income: data[0].net_income,
-                    retained_earnings: data[0].retained_earnings
+                    previous_retained_earnings: Number(data[0].previous_retained_earnings).toFixed(2),
+                    net_income: Number(data[0].net_income).toFixed(2),
+                    retained_earnings: Number(data[0].retained_earnings).toFixed(2),
+                    notes: notes
                 };
                 var formattedData = array2xml('retainedEarnings',_data);
                 fs.writeFileSync(path.join(os.homedir(),'.bestbooks/retained-earnings.xml'), formattedData);

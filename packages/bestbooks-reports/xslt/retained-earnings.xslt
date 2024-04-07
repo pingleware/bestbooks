@@ -24,7 +24,7 @@
                 </tr>
                 <tr>
                     <th>Management|Accountant|Auditor Note(s)</th>
-                    <td><xsl:value-of select="//retained_earnings/notes" /></td>
+                    <td><xsl:value-of select="//notes" /></td>
                 </tr>
             </table>
         </body>
