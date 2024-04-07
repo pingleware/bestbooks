@@ -38,23 +38,23 @@ retained-earnings.xslt
 
 ### Customer Estimate
 
-![1712500090802](image/README/1712500090802.png)
+![1712500090802](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712500090802.png)
 
 ### Trial Balance
 
-![1712501317103](image/README/1712501317103.png)
+![1712501317103](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712501317103.png)
 
 ### Purchase Order
 
-![1712501796886](image/README/1712501796886.png)
+![1712501796886](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712501796886.png)
 
 ### Statement in Change in Equity
 
-![1712503491502](image/README/1712503491502.png)
+![1712503491502](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712503491502.png)
 
 ### Retained Earnings
 
-![1712504010713](image/README/1712504010713.png)
+![1712504010713](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712504010713.png)
 
 ## TODO
 
