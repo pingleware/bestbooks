@@ -50,4 +50,4 @@ retained-earnings.xslt
 
 ### Statement in Change in Equity
 
-![1712502172676](image/README/1712502172676.png)
+![1712503491502](image/README/1712503491502.png)

@@ -37,7 +37,7 @@ class StatementChangeInEquity extends BaseReport {
         super();
     }
 
-    createReport(startDate,endDate,_format,callback) {
+    createReport(startDate,endDate,_format,callback,notes="") {
         this.retrieveReportData(startDate, endDate, function(data){
             if (_format == "array") {
                 let ending_equity_total = Number(data[0].beginning_equity_total) + Number(data[0].net_income_total) - Number(data[0].dividends_payable_total) + Number(data[0].paidin_capital_total) + Number(data[0].treasury_shares_total).toFixed(2);
@@ -47,7 +47,8 @@ class StatementChangeInEquity extends BaseReport {
                     net_income: Number(data[0].net_income_total).toFixed(2),
                     dividends: Number(data[0].dividends_payable_total).toFixed(2),
                     other_change: Number(data[0].paidin_capital_total).toFixed(2) + Number(data[0].treasury_shares_total).toFixed(2),
-                    ending_equity: ending_equity_total
+                    ending_equity: ending_equity_total,
+                    notes: notes
                 };
                 var formattedData = array2xml('statementChangeInEquity',_data);
                 fs.writeFileSync(path.join(os.homedir(),'.bestbooks/statement-of-change-in-equity.xml'), formattedData);
