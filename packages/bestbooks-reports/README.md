@@ -23,6 +23,19 @@ There is much discussion concerning GAAP compliance and accounting sofftware wit
 
 ## Sample Reports
 
+You can customize the style of the reports by modifying the XSLT file located in the **.bestbooks** system directory of the current user home directory. The package XSLT files are ONLY copied to this directory if they do not exist. The available report XSLT files include,
+
+```
+balance-sheet.xslt
+customer-estimate.xslt
+income-statement.xslt
+purchase-order.xslt
+statement-in-change-in-equity.xslt
+statement-of-cash-flows.xslt
+trial-balance.xslt
+retained-earnings.xslt
+```
+
 ### Customer Estimate
 
 ![1712500090802](image/README/1712500090802.png)
