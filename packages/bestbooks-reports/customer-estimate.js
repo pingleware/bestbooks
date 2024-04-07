@@ -30,7 +30,7 @@ class CustomerEstimate {
         customerEstimateInfo.prices.other = Number(customerEstimateInfo.prices.other).toFixed(2);
         customerEstimateInfo.prices.total = Number(customerEstimateInfo.prices.total).toFixed(2);
         var formattedData = array2xml('customerEstimate',customerEstimateInfo);
-        //console.log(formattedData)
+        console.log(formattedData)
         fs.writeFileSync(path.join(os.homedir(),'.bestbooks/customer-estimate.xml'), formattedData);
         // Save report XML data to report table
         var txdate = new Date().getTime();

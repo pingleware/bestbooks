@@ -4,6 +4,12 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 
+const {
+    info,
+    warn,
+    error
+} = require('@pingleware/bestbooks-core');
+
 const report_list = {
     balanceSheet: "balance-sheet.xslt",
     customerEstimate: "customer-estimate.xslt",
@@ -29,11 +35,16 @@ function transform_xml_xslt(xml_content, xslt_content) {
 }
 
 function format(reportName,formattedData) {
-    if (report_list[reportName]) {
-        var xsltString = fs.readFileSync(path.join(os.homedir(),`.bestbooks/${report_list[reportName]}`));
-        return transform_xml_xslt(formattedData,xsltString);
-    } else {
-        // report does not exist?
+    try {
+        if (report_list[reportName]) {
+            var xsltString = fs.readFileSync(path.join(os.homedir(),`.bestbooks/${report_list[reportName]}`));
+            return transform_xml_xslt(formattedData,xsltString);
+        } else {
+            // report does not exist?
+        }    
+    } catch(err) {
+        //console.error(formattedData)
+        console.error(err);
     }
 }
 

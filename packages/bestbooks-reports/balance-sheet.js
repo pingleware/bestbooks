@@ -17,104 +17,116 @@ class BalanceSheet extends BaseReport {
     }
 
     createReport(startDate,endDate,_format,callback) {
-        this.retrieveReportData(startDate, endDate, function(data){
-            if (_format == "array") {
-                //console.log(data);
-                var _data = {
-                    date: new Date().toDateString(),
-                    lineItems: [],
-                    totalAsset: 0,
-                    totalLiability: 0,
-                    totalIncome: 0,
-                    totalExpense: 0,
-                    totalEquity: 0,
-                    totalLiabilitiesShareholdersEquity: 0
-                }
-                let totalAsset = 0;
-                let totalLiability = 0;
-                let totalIncome = 0;
-                let totalExpense = 0;
-                let totalEquity = 0;
-
-                data.forEach(function(lineItem){
-                    switch(lineItem.type) {
-                        case 'Asset':
-                            _data.lineItems.push({
-                                code: lineItem.code,
-                                name: lineItem.name,
-                                balance: Number(lineItem.balance).toFixed(2),
-                                type: lineItem.type
-                            });
-                            totalAsset += Number(lineItem.balance);
-                            break;
-                        case 'Liability':
-                            _data.lineItems.push({
-                                code: lineItem.code,
-                                name: lineItem.name,
-                                balance: Number(lineItem.balance).toFixed(2),
-                                type: lineItem.type
-                            });
-                            totalLiability += Number(lineItem.balance);
-                            break;
-                        case 'Expense':
-                            _data.lineItems.push({
-                                code: lineItem.code,
-                                name: lineItem.name,
-                                balance: Number(lineItem.balance).toFixed(2),
-                                type: lineItem.type
-                            });
-                            totalExpense += Number(lineItem.balance);
-                            break;
-                        case 'Income':
-                            _data.lineItems.push({
-                                code: lineItem.code,
-                                name: lineItem.name,
-                                balance: Number(lineItem.balance).toFixed(2),
-                                type: lineItem.type
-                            });
-                            totalIncome += Number(lineItem.balance);
-                            break;
-                        case 'Equity':
-                            _data.lineItems.push({
-                                code: lineItem.code,
-                                name: lineItem.name,
-                                balance: Number(lineItem.balance).toFixed(2),
-                                type: lineItem.type
-                            });
-                            totalEquity += Number(lineItem.balance);
-                            break;
+        try {
+            this.retrieveReportData(startDate, endDate, function(data){
+                if (_format == "array") {
+                    //console.log(data);
+                    var _data = {
+                        date: new Date().toDateString(),
+                        lineItems: [],
+                        totalAsset: 0,
+                        totalLiability: 0,
+                        totalIncome: 0,
+                        totalExpense: 0,
+                        totalEquity: 0,
+                        totalLiabilitiesShareholdersEquity: 0
                     }
-                });
-                _data.totalAsset = totalAsset.toFixed(2);
-                _data.totalLiability = totalLiability.toFixed(2);
-                _data.totalIncome = totalIncome.toFixed(2);
-                _data.totalExpense = totalExpense.toFixed(2);
-                _data.totalEquity = totalEquity.toFixed(2);
-                _data.totalLiabilitiesShareholdersEquity = (totalLiability + totalEquity).toFixed(2);
-                //console.log(_data);
-                var formattedData = array2xml('balanceSheet',_data);
-                fs.writeFileSync(path.join(os.homedir(),'.bestbooks/balanceSheet.xml'), formattedData);
-                // the xslt-processor does not suppot the XSLT syntax xsl:for-each-group, so the XML generated is returned,
-                // using a free tool like https://xslttest.appspot.com/, to copy the .bestbooks/balance-sheet.xslt and .bestboos/balance-sheet.xml
-                // to render a HTML
-                // TODO: implement xsl:for-each-group. callback(format("balanceSheet",formattedData));
+                    let totalAsset = 0;
+                    let totalLiability = 0;
+                    let totalIncome = 0;
+                    let totalExpense = 0;
+                    let totalEquity = 0;
 
-                var txdate = new Date().getTime();
-                var buffer = require('buffer').Buffer;
-                var sql = `INSERT INTO report (txdate,name,contents) VALUES ('${txdate}','balance-sheet','${buffer.from(formattedData).toString('base64')}')`;
-                const model = new Model();
-                if (callback) {
-                    model.insert(sql,function(result){
-                        callback(fformattedData);
+                    var lineItems = [];
+
+                    //console.log(data);
+    
+                    data.forEach(function(lineItem){
+                        switch(lineItem.type) {
+                            case 'Asset':
+                                lineItems.push({
+                                    code: lineItem.code,
+                                    name: lineItem.name,
+                                    balance: Number(lineItem.balance).toFixed(2),
+                                    type: lineItem.type    
+                                });
+                                totalAsset += Number(lineItem.balance);
+                                break;
+                            case 'Liability':
+                                lineItems.push({
+                                    code: lineItem.code,
+                                    name: lineItem.name,
+                                    balance: Number(lineItem.balance).toFixed(2),
+                                    type: lineItem.type    
+                                });
+                                totalLiability += Number(lineItem.balance);
+                                break;
+                            case 'Expense':
+                                lineItems.push({
+                                    code: lineItem.code,
+                                    name: lineItem.name,
+                                    balance: Number(lineItem.balance).toFixed(2),
+                                    type: lineItem.type    
+                                });
+                                totalExpense += Number(lineItem.balance);
+                                break;
+                            case 'Income':
+                                lineItems.push({
+                                    code: lineItem.code,
+                                    name: lineItem.name,
+                                    balance: Number(lineItem.balance).toFixed(2),
+                                    type: lineItem.type    
+                                });
+                                totalIncome += Number(lineItem.balance);
+                                break;
+                            case 'Equity':
+                                lineItems.push({
+                                    code: lineItem.code,
+                                    name: lineItem.name,
+                                    balance: Number(lineItem.balance).toFixed(2),
+                                    type: lineItem.type    
+                                });
+                                totalEquity += Number(lineItem.balance);
+                                break;
+                        }
                     });
+                    //console.log(lineItems);
+                    _data.lineItems = { lineitem: lineItems };
+                    _data.totalAsset = totalAsset.toFixed(2);
+                    _data.totalLiability = totalLiability.toFixed(2);
+                    _data.totalIncome = totalIncome.toFixed(2);
+                    _data.totalExpense = totalExpense.toFixed(2);
+                    _data.totalEquity = totalEquity.toFixed(2);
+                    _data.totalLiabilitiesShareholdersEquity = (totalLiability + totalEquity).toFixed(2);
+                    
+                   //console.log(_data);
+                    var formattedData = array2xml('balanceSheet',_data);
+                    //console.log(formattedData)
+                    fs.writeFileSync(path.join(os.homedir(),'.bestbooks/balanceSheet.xml'), formattedData);
+                    // the xslt-processor does not suppot the XSLT syntax xsl:for-each-group, so the XML generated is returned,
+                    // using a free tool like https://xslttest.appspot.com/, to copy the .bestbooks/balance-sheet.xslt and .bestboos/balance-sheet.xml
+                    // to render a HTML
+                    // TODO: implement xsl:for-each-group. callback(format("balanceSheet",formattedData));
+    
+                    const txdate = new Date().getTime();
+                    const buffer = require('buffer').Buffer;
+                    const sql = `INSERT INTO report (txdate,name,contents) VALUES ('${txdate}','balance-sheet','${buffer.from(formattedData).toString('base64')}')`;
+                    const model = new Model();
+                    if (callback) {
+                        //model.insert(sql,function(record_id,changes){
+                            callback(format('balanceSheet',formattedData));
+                        //});
+                    } else {
+                        //model.insertSync(sql);
+                        return format('balanceSheet'.formattedData);
+                    }
                 } else {
-                    model.insertSync(sql);
-                    return formattedData;
-                }
-            } else {
-                // process other formats
-            }    
-        });
+                    // process other formats
+                }    
+            });    
+        } catch(err) {
+            console.error(err);
+        }
     }
 
     retrieveReportData(startDate,endDate,callback) {

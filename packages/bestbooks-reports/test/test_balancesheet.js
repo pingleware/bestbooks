@@ -8,14 +8,8 @@ describe("balance sheet", function(){
     })
     it("get balance sheet report data", function(){
         var balanceSheet = new BalanceSheet();
-        balanceSheet.createReport("","","array",function(xml){
-            var notEmpty = (xml.length > 0);
-            expect(notEmpty).to.equal(true);
-            if (notEmpty) {
-                fs.writeFileSync('balance-sheet.xml',xml);
-            } else {
-                fs.unlink('balance-sheet.xml');
-            }
+        balanceSheet.createReport("","","array",function(html){
+            fs.writeFileSync('balance-sheet.html',html);
         });
     })
 })

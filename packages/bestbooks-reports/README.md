@@ -36,6 +36,10 @@ trial-balance.xslt
 retained-earnings.xslt
 ```
 
+### Balance Sheet
+
+![1712510112578](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712510112578.png)
+
 ### Customer Estimate
 
 ![1712500090802](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712500090802.png)
@@ -60,5 +64,4 @@ retained-earnings.xslt
 
 The following list of TODO items
 
-* Balance Sheet report as HTML
 * Income Statement as HTML
