@@ -5,6 +5,7 @@
   "main": "index.js",
   "files": [
     "xslt/**",
+    "image/**",
     "balance-sheet.js",
     "customer-estimate.js",
     "formatReport.js",
@@ -15,7 +16,8 @@
     "retained-earnings.js",
     "statementCashFlows.js",
     "statementChangeOfEquity.js",
-    "trial-balance.js"
+    "trial-balance.js",
+    "README.md"
   ],
   "scripts": {
     "test": "mocha"
