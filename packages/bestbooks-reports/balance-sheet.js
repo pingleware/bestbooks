@@ -16,7 +16,7 @@ class BalanceSheet extends BaseReport {
     saveReport(name,contents,callback=null){
     }
 
-    createReport(startDate,endDate,_format,callback) {
+    createReport(startDate,endDate,_format,callback,notes="") {
         try {
             this.retrieveReportData(startDate, endDate, function(data){
                 if (_format == "array") {
@@ -29,7 +29,8 @@ class BalanceSheet extends BaseReport {
                         totalIncome: 0,
                         totalExpense: 0,
                         totalEquity: 0,
-                        totalLiabilitiesShareholdersEquity: 0
+                        totalLiabilitiesShareholdersEquity: 0,
+                        notes: notes
                     }
                     let totalAsset = 0;
                     let totalLiability = 0;
