@@ -10,35 +10,41 @@
                 <tr>
                     <td colspan="2" style="text-align: right; width:50%;">Date: <xsl:value-of select="//date" /></td>
                 </tr>
-                <xsl:for-each-group select="incomeStatement/lineItems" group-by="type">
-                    <xsl:sort select="type"/>
-                    <tr>
-                        <th colspan="2"><u><xsl:value-of select="current-grouping-key()"/></u></th>
-                    </tr>
-                    <tr><th>Account</th><th>Balance</th></tr>
-                    <xsl:for-each select="current-group()">
-                        <tr>
-                        <td><xsl:value-of select="name"/></td>
-                        <td><xsl:value-of select="balance"/></td>
-                        </tr>
-                    </xsl:for-each>
-                     <tr>
-                          <th>Total <xsl:value-of select="current-grouping-key()"/>:</th>
-                          <xsl:if test="current-grouping-key() = 'Income'">
-                                <th><xsl:value-of select="//incomeStatement/totalIncome"/></th>
-                          </xsl:if>
-                          <xsl:if test="current-grouping-key() = 'Expense'">
-                                <th><xsl:value-of select="//incomeStatement/totalExpense"/></th>
-                          </xsl:if>
-                     </tr>
-                </xsl:for-each-group>
+                <tr>
+                    <td colspan="2" style="text-align: right; width:100%;">
+                        <table class="w3-table" style="table-layout: fixed; width:100%;" border="1">
+                            <tr>
+                                <th style="text-align: center;">CODE</th>
+                                <th style="text-align: center;">ACCOUNT</th>
+                                <th style="text-align: center;">BALANCE</th>
+                                <th style="text-align: center;">TYPE</th>
+                            </tr>
+                            <xsl:for-each select="//lineItems/lineitem">
+                                <tr>
+                                <td style="text-align: center;"><xsl:value-of select="code"/></td>
+                                <td style="text-align: center;"><xsl:value-of select="name"/></td>
+                                <td style="text-align: center;"><xsl:value-of select="balance"/></td>
+                                <td style="text-align: center;"><xsl:value-of select="type"/></td>
+                                </tr>
+                            </xsl:for-each>
+                        </table>
+                    </td>
+                <tr>
+                <tr>
+                    <th>Total Income:</th>
+                    <th><xsl:value-of select="//totalIncome"/></th>
+                </tr>
+                <tr>
+                    <th>Total Expense:</th>
+                    <th><xsl:value-of select="//totalExpense"/></th>
+                </tr>
                 <tr>
                     <th>Net Income:</th>
-                    <th><xsl:value-of select="//incomeStatement/netIncome"/></th>
+                    <th><xsl:value-of select="//netIncome"/></th>
                 </tr>
                 <tr>
                     <th>Management|Accountant|Auditor Note(s)</th>
-                    <td><xsl:value-of select="//incomeStatement/notes" /></td>
+                    <td><xsl:value-of select="//notes" /></td>
                 </tr>
             </table> 
         </body>
