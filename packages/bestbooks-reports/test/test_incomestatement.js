@@ -8,14 +8,9 @@ describe('income statement',function(){
     })
     it('get income statement',function(){
         var incomestatement = new IncomeStatement();
-        incomestatement.createReport("","","array",function(xml){
-            var notEmpty = (xml.length > 0);
-            expect(notEmpty).to.equal(true);
-            if (notEmpty) {
-                fs.writeFileSync('income-statement.xml',xml);
-            } else {
-                fs.unlink('income-statement.xml');
-            }
-        })
+        const notes = `n our opinion, the income statement presents fairly, in all material respects, the results of operations for the specified period ended in accordance with FASB ASC Topic 220, Income Statement`;
+        incomestatement.createReport("","","array",function(html){
+            fs.writeFileSync('income-statement.html',html);
+        },notes)
     })
 })

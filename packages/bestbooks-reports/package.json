@@ -1,6 +1,6 @@
 {
   "name": "@pingleware/bestbooks-reports",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Reports module for BestBooks Accounting Application Framework",
   "main": "index.js",
   "files": [

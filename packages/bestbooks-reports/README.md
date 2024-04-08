@@ -40,6 +40,10 @@ retained-earnings.xslt
 
 ![1712510574150](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712510574150.png)
 
+### Income Statement
+
+![1712586856327](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712586856327.png)
+
 ### Customer Estimate
 
 ![1712500090802](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712500090802.png)
@@ -59,9 +63,3 @@ retained-earnings.xslt
 ### Retained Earnings
 
 ![1712504010713](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712504010713.png)
-
-## TODO
-
-The following list of TODO items
-
-* Income Statement as HTML

@@ -12,9 +12,9 @@ class IncomeStatement extends BaseReport {
         super();
     }
 
-    createReport(startDate,endDate,format,callback) {
+    createReport(startDate,endDate,_format,callback,notes="") {
         this.retrieveReportData(startDate, endDate, function(data){
-            if (format == "array") {
+            if (_format == "array") {
                 var _data = {
                     date: new Date().toDateString(),
                     lineItems: [],
@@ -25,21 +25,33 @@ class IncomeStatement extends BaseReport {
                 let totalIncome = 0;
                 let totalExpense = 0;
 
+                var lineItems = [];
+
                 data.forEach(function(lineItem){
                     switch(lineItem.type) {
                         case 'Expense':
-                            _data.lineItems.push(lineItem);
+                            lineItems.push(lineItem);
                             totalExpense += Number(lineItem.balance);
                             break;
                         case 'Income':
-                            _data.lineItems.push(lineItem);
+                            lineItems.push(lineItem);
+                            totalIncome += Number(lineItem.balance);
+                            break;
+                        case 'Revenue':
+                            lineItem.type = "Income";
+                            lineItems.push(lineItem);
                             totalIncome += Number(lineItem.balance);
                             break;
                     }
                 });
-                _data.totalIncome = totalIncome;
-                _data.totalExpense = totalExpense;
-                _data.netIncome = Number(totalIncome - totalExpense);
+                let netIncome = Number(totalIncome - totalExpense).toFixed(2);
+
+                _data.lineItems = { lineitem: lineItems };
+                _data.totalIncome = totalIncome.toFixed(2);
+                _data.totalExpense = totalExpense.toFixed(2);
+                _data.netIncome = netIncome;
+                _data.notes = notes;
+
                 var formattedData = array2xml('incomeStatement',_data);
                 fs.writeFileSync(path.join(os.homedir(),'.bestbooks/income-statement.xml'), formattedData);
 
@@ -49,11 +61,11 @@ class IncomeStatement extends BaseReport {
                 const model = new Model();
                 if (callback) {
                     model.insert(sql,function(result){
-                        callback(formattedData);
+                        callback(format('incomeStatement', formattedData));
                     });
                 } else {
                     model.insertSync(sql);
-                    return formattedData;
+                    return format('incomeStatement',formattedData);
                 }
             } else {
                 // process other formats
@@ -62,10 +74,10 @@ class IncomeStatement extends BaseReport {
     }
 
     retrieveReportData(startDate,endDate,callback) {
-        var sql = `SELECT account_code AS code,account_name AS name,
+        const sql = `SELECT account_code AS code,account_name AS name,
                     ROUND(SUM(debit)-SUM(credit),2) AS balance,accounts.base_type AS type 
                     FROM ledger JOIN accounts ON accounts.name=ledger.account_name 
-                    WHERE accounts.type='Income' OR accounts.type='Expense' 
+                    WHERE accounts.type='Income' OR accounts.type='Expense'  OR accounts.type='Revenue'
                     GROUP BY account_name 
                     ORDER BY accounts.type`;
         const model = new Model();
