@@ -11,40 +11,115 @@
                     <td colspan="2" style="text-align: right; width:100%;">Date: <xsl:value-of select="//date" /></td>
                 </tr>
                 <tr>
+                    <th colspan="2" style="text-align: left; width: 100%;">ASSET</th>
+                </tr>
+                <tr>
                     <td colspan="2" style="text-align: right; width:100%;">
                         <table class="w3-table" style="table-layout: fixed; width:100%;" border="1">
                             <tr>
-                                <th style="text-align: center;">CODE</th>
                                 <th style="text-align: center;">ACCOUNT</th>
                                 <th style="text-align: center;">BALANCE</th>
-                                <th style="text-align: center;">TYPE</th>
                             </tr>
-                            <xsl:for-each select="//lineItems/lineitem">
+                            <xsl:for-each select="//lineItems/assets">
                                 <tr>
-                                <td style="text-align: center;"><xsl:value-of select="code"/></td>
                                 <td style="text-align: center;"><xsl:value-of select="name"/></td>
                                 <td style="text-align: center;"><xsl:value-of select="balance"/></td>
-                                <td style="text-align: center;"><xsl:value-of select="type"/></td>
                                 </tr>
                             </xsl:for-each>
                         </table>
                     </td>
-                <tr>
+                </tr>
                 <tr>
                     <th>Total Asset</th>
                     <th><xsl:value-of select="//totalAsset"/></th>
+                </tr>
+                <tr>
+                    <th colspan="2" style="text-align: left; width: 100%;">LIABILITIES</th>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: right; width:100%;">
+                        <table class="w3-table" style="table-layout: fixed; width:100%;" border="1">
+                            <tr>
+                                <th style="text-align: center;">ACCOUNT</th>
+                                <th style="text-align: center;">BALANCE</th>
+                            </tr>
+                            <xsl:for-each select="//lineItems/liabilities">
+                                <tr>
+                                <td style="text-align: center;"><xsl:value-of select="name"/></td>
+                                <td style="text-align: center;"><xsl:value-of select="balance"/></td>
+                                </tr>
+                            </xsl:for-each>
+                        </table>
+                    </td>
                 </tr>
                 <tr>
                     <th>Total Liability</th>
                     <th><xsl:value-of select="//totalLiability"/></th>
                 </tr>
                 <tr>
+                    <th colspan="2" style="text-align: left; width: 100%;">INCOME &amp; REVENUE</th>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: right; width:100%;">
+                        <table class="w3-table" style="table-layout: fixed; width:100%;" border="1">
+                            <tr>
+                                <th style="text-align: center;">ACCOUNT</th>
+                                <th style="text-align: center;">BALANCE</th>
+                            </tr>
+                            <xsl:for-each select="//lineItems/income">
+                                <tr>
+                                <td style="text-align: center;"><xsl:value-of select="name"/></td>
+                                <td style="text-align: center;"><xsl:value-of select="balance"/></td>
+                                </tr>
+                            </xsl:for-each>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
                     <th>Total Income</th>
                     <th><xsl:value-of select="//totalIncome"/></th>
                 </tr>
                 <tr>
+                    <th colspan="2" style="text-align: left; width: 100%;">EXPENSES</th>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: right; width:100%;">
+                        <table class="w3-table" style="table-layout: fixed; width:100%;" border="1">
+                            <tr>
+                                <th style="text-align: center;">ACCOUNT</th>
+                                <th style="text-align: center;">BALANCE</th>
+                            </tr>
+                            <xsl:for-each select="//lineItems/expenses">
+                                <tr>
+                                <td style="text-align: center;"><xsl:value-of select="name"/></td>
+                                <td style="text-align: center;"><xsl:value-of select="balance"/></td>
+                                </tr>
+                            </xsl:for-each>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
                     <th>Total Expense</th>
                     <th><xsl:value-of select="//totalExpense"/></th>
+                </tr>
+                <tr>
+                    <th colspan="2" style="text-align: left; width: 100%;">EQUITY</th>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: right; width:100%;">
+                        <table class="w3-table" style="table-layout: fixed; width:100%;" border="1">
+                            <tr>
+                                <th style="text-align: center;">ACCOUNT</th>
+                                <th style="text-align: center;">BALANCE</th>
+                            </tr>
+                            <xsl:for-each select="//lineItems/equity">
+                                <tr>
+                                <td style="text-align: center;"><xsl:value-of select="name"/></td>
+                                <td style="text-align: center;"><xsl:value-of select="balance"/></td>
+                                </tr>
+                            </xsl:for-each>
+                        </table>
+                    </td>
                 </tr>
                 <tr>
                     <th>Total Equity</th>

@@ -39,67 +39,73 @@ class BalanceSheet extends BaseReport {
                     let totalEquity = 0;
 
                     var lineItems = [];
+                    var assetLineItems = [];
+                    var LiabilityLineItems = [];
+                    var equityLineItems = [];
+                    var incomeLineItesm = [];
+                    var expenseLineItems = [];
+
 
                     //console.log(data);
     
                     data.forEach(function(lineItem){
                         switch(lineItem.type) {
                             case 'Asset':
-                                lineItems.push({
+                                assetLineItems.push({
                                     code: lineItem.code,
                                     name: lineItem.name,
                                     balance: Number(lineItem.balance).toFixed(2),
                                     type: lineItem.type    
-                                });
+                                })
                                 totalAsset += Number(lineItem.balance);
                                 break;
                             case 'Liability':
-                                lineItems.push({
+                                LiabilityLineItems.push({
                                     code: lineItem.code,
                                     name: lineItem.name,
                                     balance: Number(lineItem.balance).toFixed(2),
                                     type: lineItem.type    
-                                });
+                                })
                                 totalLiability += Number(lineItem.balance);
                                 break;
                             case 'Expense':
-                                lineItems.push({
+                                expenseLineItems.push({
                                     code: lineItem.code,
                                     name: lineItem.name,
                                     balance: Number(lineItem.balance).toFixed(2),
                                     type: lineItem.type    
-                                });
+                                })
                                 totalExpense += Number(lineItem.balance);
                                 break;
                             case 'Income':
-                                lineItems.push({
+                                incomeLineItesm.push({
                                     code: lineItem.code,
                                     name: lineItem.name,
                                     balance: Number(lineItem.balance).toFixed(2),
                                     type: lineItem.type    
-                                });
+                                })
                                 totalIncome += Number(lineItem.balance);
                                 break;
                             case 'Equity':
-                                lineItems.push({
+                                equityLineItems.push({
                                     code: lineItem.code,
                                     name: lineItem.name,
                                     balance: Number(lineItem.balance).toFixed(2),
                                     type: lineItem.type    
-                                });
+                                })
                                 totalEquity += Number(lineItem.balance);
                                 break;
                         }
                     });
                     //console.log(lineItems);
-                    _data.lineItems = { lineitem: lineItems };
+                    _data.lineItems = { assets: assetLineItems, liabilities: LiabilityLineItems, expenses: expenseLineItems, income: incomeLineItesm, equity: equityLineItems };
                     _data.totalAsset = totalAsset.toFixed(2);
                     _data.totalLiability = totalLiability.toFixed(2);
                     _data.totalIncome = totalIncome.toFixed(2);
                     _data.totalExpense = totalExpense.toFixed(2);
                     _data.totalEquity = totalEquity.toFixed(2);
                     _data.totalLiabilitiesShareholdersEquity = (totalLiability + totalEquity).toFixed(2);
-                    
+                    //console.log(_data.lineItems)
                    //console.log(_data);
                     var formattedData = array2xml('balanceSheet',_data);
                     //console.log(formattedData)
