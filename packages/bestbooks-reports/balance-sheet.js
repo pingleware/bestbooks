@@ -42,7 +42,7 @@ class BalanceSheet extends BaseReport {
                     var assetLineItems = [];
                     var LiabilityLineItems = [];
                     var equityLineItems = [];
-                    var incomeLineItesm = [];
+                    var incomeLineItems = [];
                     var expenseLineItems = [];
 
 
@@ -78,7 +78,7 @@ class BalanceSheet extends BaseReport {
                                 totalExpense += Number(lineItem.balance);
                                 break;
                             case 'Income':
-                                incomeLineItesm.push({
+                                incomeLineItems.push({
                                     code: lineItem.code,
                                     name: lineItem.name,
                                     balance: Number(lineItem.balance).toFixed(2),
@@ -98,7 +98,7 @@ class BalanceSheet extends BaseReport {
                         }
                     });
                     //console.log(lineItems);
-                    _data.lineItems = { assets: assetLineItems, liabilities: LiabilityLineItems, expenses: expenseLineItems, income: incomeLineItesm, equity: equityLineItems };
+                    _data.lineItems = { assets: assetLineItems, liabilities: LiabilityLineItems, expenses: expenseLineItems, income: incomeLineItems, equity: equityLineItems };
                     _data.totalAsset = totalAsset.toFixed(2);
                     _data.totalLiability = totalLiability.toFixed(2);
                     _data.totalIncome = totalIncome.toFixed(2);
@@ -110,8 +110,8 @@ class BalanceSheet extends BaseReport {
                     var formattedData = array2xml('balanceSheet',_data);
                     //console.log(formattedData)
                     fs.writeFileSync(path.join(os.homedir(),'.bestbooks/balanceSheet.xml'), formattedData);
-                    // the xslt-processor does not suppot the XSLT syntax xsl:for-each-group, so the XML generated is returned,
-                    // using a free tool like https://xslttest.appspot.com/, to copy the .bestbooks/balance-sheet.xslt and .bestboos/balance-sheet.xml
+                    // the xslt-processor does not support the XSLT syntax xsl:for-each-group, so the XML generated is returned,
+                    // using a free tool like https://xslttest.appspot.com/, to copy the .bestbooks/balance-sheet.xslt and .bestbooks/balance-sheet.xml
                     // to render a HTML
                     // TODO: implement xsl:for-each-group. callback(format("balanceSheet",formattedData));
     
