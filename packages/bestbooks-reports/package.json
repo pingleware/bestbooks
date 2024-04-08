@@ -19,7 +19,17 @@
     "README.md"
   ],
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "test:balancesheet": "mocha test/balancesheet.test",
+    "test:customerestimate": "mocha test/customerestimate.test",
+    "test:incomestatement": "mocha test/incomestatement.test",
+    "test:notetofinancialstatement": "mocha test/notetofinancialstatement.test",
+    "test:purchaseorder": "mocha test/purchaseorder.test",
+    "test:retainedearnings": "mocha test/retainedearnings.test",
+    "test:statementofcashflows": "mocha test/statementofcashflows.test",
+    "test:statementofchangeinequity": "mocha test/statementofchangeinequity.test",
+    "test:trialbalance": "mocha test/trialbalance.test",
+    "test:initialization": "mocha test/initialization.test"
   },
   "keywords": [
     "BestBooks Accounting Application Framework",
