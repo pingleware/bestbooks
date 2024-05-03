@@ -14,7 +14,11 @@
     "help": "node . --help",
     "snap": "electron-builder --linux snap"
   },
-  "keywords": [],
+  "keywords": [
+    "bestbooks",
+    "json-rpc",
+    "rpc-json"
+  ],
   "author": {
     "name": "PRESSPAGE ENTERTAINMENT INC",
     "email": "presspage.entertainment@gmail.com",
