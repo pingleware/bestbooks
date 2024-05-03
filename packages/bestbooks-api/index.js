@@ -110,6 +110,14 @@ const {
     addFundsToPostageDebitAccount,
     postageExpense,
 } = require("@pingleware/bestbooks-helpers");
+const {
+    start_smtp_server,
+    base64_encode,
+    base64_decode,
+    SendEMail,
+    SaveToDatabase,
+    ReadFromDatabase
+} = require('@pingleware/bestbooks-mailer');
 const express = require("express");
 const cors = require("cors");
 
@@ -841,6 +849,68 @@ rpcServer.addMethod('postageExpense', async ([date,description,amount,account,co
     try {
         const status = await postageExpense(date,description,amount,account,company_id,office_id);
         return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+
+// @pingleware/bestbooks-mailer
+rpcServer.addMethod('start_smtp_server', async ([hostname,port]) => {
+    try {
+        const status = start_smtp_server(hostname,port);
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('base64_encode', async ([contents]) => {
+    try {
+        const status = await base64_encode(contents);
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('base64_decode', async ([contents]) => {
+    try {
+        const status = await base64_decode(contents);
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('SendEMail', async ([sender,recipient,subject,message,smpt_port]) => {
+    try {
+        SendEMail(sender,recipient,subject,message,smpt_port,async(err,status) => {
+            if (err) {
+                return({success: false, error: err.message});
+            }
+            return({success: true, status: status});
+        })
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('SaveToDatabase', async ([location,from,email,date,subject,html,envelop]) => {
+    try {
+        SaveToDatabase(location,from,email,date,subject,html,envelop,async (err,status) => {
+            if (err) {
+                return({success: false, error: err.message});
+            }
+            return({success: true, status: status});
+        })
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('ReadFromDatabas', async ([email]) => {
+    try {
+        const status = await ReadFromDatabase(email,async (err,status) => {
+            if (err) {
+                return({success: false, error: err.message});
+            }
+            return({success: true, status: status});
+        })
     } catch(err) {
         return({success: false, error: err.message});
     }        

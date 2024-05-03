@@ -22,17 +22,19 @@ Using the endpoint of **/,** you will make json-rpc requests. This permits one A
 
 ## JSON-RPC Methods
 
-
 | METHOD | ARGUMENTS | DESCRIPTION                                                         |
 | :-----: | :-------: | ------------------------------------------------------------------- |
-|  total  |     -     | obtains the total count of JSON-RPC methods, current;y at 96.       |
+|  total  |     -     | obtains the total count of JSON-RPC methods, current;y at **102**. |
 |  list  |     -     | obtains a sorted list of all JSON-RPC methods with the total count. |
 | version |     -     | retrieves the pckage.json version number                            |
 
 The current list of methods is,
 
 ```
-	    "account_types",
+            "ReadFromDatabas",
+            "SaveToDatabase",
+            "SendEMail",
+            "account_types",
             "accountsReceivablePayment",
             "accruedExpense",
             "accruedIncome",
@@ -49,6 +51,8 @@ The current list of methods is,
             "badDebt",
             "balance",
             "bankfee",
+            "base64_decode",
+            "base64_encode",
             "bondDiscount",
             "bondPremium",
             "bondPremiumInterestPayment",
@@ -119,6 +123,7 @@ The current list of methods is,
             "securityDepositReceived",
             "softwareLicense",
             "spendFundingAccount",
+            "start_smtp_server",
             "stockDividend",
             "stocksIssuedOtherThanCash",
             "subtract",
@@ -129,8 +134,6 @@ The current list of methods is,
             "version",
             "workingHours"
 ```
-
-# Exported Functions
 
 The following functions are available when the **--server** option is **false**.
 
