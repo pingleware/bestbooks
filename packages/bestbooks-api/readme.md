@@ -14,7 +14,7 @@ You may import this module into another project or invoke the stndalone server o
 
 The benefit of a standalone API server, will permit a client to reside anywhere on the same network without duplicating accounting entries, By using VPN with VLAN subnetting and a layer 3 switch, you can protect your accounting data from unauthroized access.
 
-![1714690005758](image/readme/1714690005758.png)
+![1714690005758](https://github.com/pingleware/bestbooks-api/blob/master/image/readme/1714690005758.png)
 
 # JSON-RPC Server
 
