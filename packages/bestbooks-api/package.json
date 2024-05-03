@@ -36,6 +36,7 @@
     "url": "https://pingleware.support"
   },
   "homepage": "https://github.com/pingleware/bestbooks-api",
+  "funding": "https://github.com/sponsors/pingleware",
   "private": false,
   "engines": {
     "node": ">=6.0.0"
