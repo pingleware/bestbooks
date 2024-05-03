@@ -1,16 +1,35 @@
 {
   "name": "@pingleware/bestbooks-api",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "API module for BestBooks Accounting Application Framework",
   "main": "index.js",
+  "build": {
+    "linux": {
+      "category": "finance"
+    }
+  },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start": "nodemon node . --server=true",
+    "help": "node . --help",
+    "snap": "electron-builder --linux snap"
   },
   "keywords": [],
-  "author": "PressPage Entertainment Inc <presspage.entertainment@gmail.com>",
+  "author": {
+    "name": "PRESSPAGE ENTERTAINMENT INC",
+    "email": "presspage.entertainment@gmail.com",
+    "url": "https://presspage.info"
+  },
+  "maintainers": [
+    {
+      "name": "PRESSPAGE ENTERTAINMENT INC dba PINGLEWARE",
+      "email": "maintainers@pingleware.work",
+      "url": "https://pingleware.biz"
+    }
+  ],
   "license": "CC-BY-4.0",
   "bugs": {
-    "url": "https://support.pingleware.work"
+    "url": "https://pingleware.support"
   },
   "homepage": "https://github.com/pingleware/bestbooks-api",
   "private": false,
@@ -19,12 +38,17 @@
   },
   "engineStrict": true,
   "devDependencies": {
+    "electron": "^30.0.2",
+    "electron-builder": "^24.13.3",
     "mocha": "^10.1.0",
+    "nodemon": "^3.1.0",
     "supertest": "^6.3.1"
   },
   "dependencies": {
-    "@pingleware/bestbooks-core": "^1.1.12",
+    "@pingleware/bestbooks-helpers": "^1.1.18",
     "cors": "^2.8.5",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "json-rpc-2.0": "^1.7.0",
+    "yargs": "^17.7.2"
   }
 }
