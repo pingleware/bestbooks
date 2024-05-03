@@ -22,18 +22,15 @@ Using the endpoint of **/,** you will make json-rpc requests. This permits one A
 
 ## JSON-RPC Methods
 
-| METHOD | ARGUMENTS | DESCRIPTION                                                         |
-| :-----: | :-------: | ------------------------------------------------------------------- |
-|  total  |     -     | obtains the total count of JSON-RPC methods, current;y at **102**. |
-|  list  |     -     | obtains a sorted list of all JSON-RPC methods with the total count. |
-| version |     -     | retrieves the pckage.json version number                            |
+| METHOD | ARGUMENTS | DESCRIPTION                                                               |
+| :-----: | :-------: | ------------------------------------------------------------------------- |
+|  total  |     -     | obtains the total count of JSON-RPC methods, current;y at **119**. |
+|  list  |     -     | obtains a sorted list of all JSON-RPC methods with the total count.       |
+| version |     -     | retrieves the pckage.json version number                                  |
 
 The current list of methods is,
 
 ```
-            "ReadFromDatabas",
-            "SaveToDatabase",
-            "SendEMail",
             "account_types",
             "accountsReceivablePayment",
             "accruedExpense",
@@ -51,8 +48,6 @@ The current list of methods is,
             "badDebt",
             "balance",
             "bankfee",
-            "base64_decode",
-            "base64_encode",
             "bondDiscount",
             "bondPremium",
             "bondPremiumInterestPayment",
@@ -104,6 +99,12 @@ The current list of methods is,
             "liability",
             "list",
             "loanPayment",
+            "mailer-ReadFromDatabas",
+            "mailer-SaveToDatabase",
+            "mailer-SendEMail",
+            "mailer-base64_decode",
+            "mailer-base64_encode",
+            "mailer-start_smtp_server",
             "paidInCapitalStock",
             "payAssetsByCheck",
             "payAssetsByCredit",
@@ -115,6 +116,23 @@ The current list of methods is,
             "recognizeDeferredExpense",
             "recognizeDeferredRevenue",
             "recognizePrepaidSubscription",
+            "reporting-BalanceSheet",
+            "reporting-CustomerEstimate",
+            "reporting-IncomeStatement",
+            "reporting-NoteToFinancialStatements",
+            "reporting-PurchaseOrder",
+            "reporting-RetainedEarnings",
+            "reporting-StatementCashFlows",
+            "reporting-StatementChangeInEquity",
+            "reporting-TrialBalance",
+            "reporting-array2xml",
+            "reporting-copy",
+            "reporting-format",
+            "reporting-getReportFileName",
+            "reporting-getReportRootFileName",
+            "reporting-init",
+            "reporting-parseString",
+            "reporting-transform_xml_xslt",
             "revenue",
             "salesCard",
             "salesCash",
@@ -123,7 +141,6 @@ The current list of methods is,
             "securityDepositReceived",
             "softwareLicense",
             "spendFundingAccount",
-            "start_smtp_server",
             "stockDividend",
             "stocksIssuedOtherThanCash",
             "subtract",

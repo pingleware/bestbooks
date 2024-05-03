@@ -118,6 +118,26 @@ const {
     SaveToDatabase,
     ReadFromDatabase
 } = require('@pingleware/bestbooks-mailer');
+const {
+    init,
+    copy,
+    BalanceSheet,
+    IncomeStatement,
+    TrialBalance,
+    NoteToFinancialStatements,
+    StatementCashFlows,
+    StatementChangeInEquity,
+    RetainedEarnings,
+    PurchaseOrder,
+    CustomerEstimate,
+    parseString,
+    getReportFileName,
+    getReportRootFileName,
+    transform_xml_xslt,
+    format,
+    array2xml
+} = require('@pingleware/bestbooks-reports');
+
 const express = require("express");
 const cors = require("cors");
 
@@ -855,7 +875,7 @@ rpcServer.addMethod('postageExpense', async ([date,description,amount,account,co
 });
 
 // @pingleware/bestbooks-mailer
-rpcServer.addMethod('start_smtp_server', async ([hostname,port]) => {
+rpcServer.addMethod('mailer-start_smtp_server', async ([hostname,port]) => {
     try {
         const status = start_smtp_server(hostname,port);
         return({success: true, status: status});
@@ -863,7 +883,7 @@ rpcServer.addMethod('start_smtp_server', async ([hostname,port]) => {
         return({success: false, error: err.message});
     }        
 });
-rpcServer.addMethod('base64_encode', async ([contents]) => {
+rpcServer.addMethod('mailer-base64_encode', async ([contents]) => {
     try {
         const status = await base64_encode(contents);
         return({success: true, status: status});
@@ -871,7 +891,7 @@ rpcServer.addMethod('base64_encode', async ([contents]) => {
         return({success: false, error: err.message});
     }        
 });
-rpcServer.addMethod('base64_decode', async ([contents]) => {
+rpcServer.addMethod('mailer-base64_decode', async ([contents]) => {
     try {
         const status = await base64_decode(contents);
         return({success: true, status: status});
@@ -879,7 +899,7 @@ rpcServer.addMethod('base64_decode', async ([contents]) => {
         return({success: false, error: err.message});
     }        
 });
-rpcServer.addMethod('SendEMail', async ([sender,recipient,subject,message,smpt_port]) => {
+rpcServer.addMethod('mailer-SendEMail', async ([sender,recipient,subject,message,smpt_port]) => {
     try {
         SendEMail(sender,recipient,subject,message,smpt_port,async(err,status) => {
             if (err) {
@@ -891,7 +911,7 @@ rpcServer.addMethod('SendEMail', async ([sender,recipient,subject,message,smpt_p
         return({success: false, error: err.message});
     }        
 });
-rpcServer.addMethod('SaveToDatabase', async ([location,from,email,date,subject,html,envelop]) => {
+rpcServer.addMethod('mailer-SaveToDatabase', async ([location,from,email,date,subject,html,envelop]) => {
     try {
         SaveToDatabase(location,from,email,date,subject,html,envelop,async (err,status) => {
             if (err) {
@@ -903,7 +923,7 @@ rpcServer.addMethod('SaveToDatabase', async ([location,from,email,date,subject,h
         return({success: false, error: err.message});
     }        
 });
-rpcServer.addMethod('ReadFromDatabas', async ([email]) => {
+rpcServer.addMethod('mailer-ReadFromDatabas', async ([email]) => {
     try {
         const status = await ReadFromDatabase(email,async (err,status) => {
             if (err) {
@@ -911,6 +931,148 @@ rpcServer.addMethod('ReadFromDatabas', async ([email]) => {
             }
             return({success: true, status: status});
         })
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+
+// @pingleware/bestbooks-reports
+rpcServer.addMethod('reporting-init', async ([]) => {
+    try {
+        const status = init();
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('reporting-copy', async ([source,destination]) => {
+    try {
+        const status = copy(source,destination);
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('reporting-BalanceSheet', async ([]) => {
+    try {
+        const status = await BalanceSheet();
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('reporting-IncomeStatement', async ([]) => {
+    try {
+        const status = await IncomeStatement();
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('reporting-TrialBalance', async ([]) => {
+    try {
+        const status = await TrialBalance();
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('reporting-NoteToFinancialStatements', async ([]) => {
+    try {
+        const status = await NoteToFinancialStatements();
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('reporting-StatementCashFlows', async ([]) => {
+    try {
+        const status = await StatementCashFlows();
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('reporting-StatementChangeInEquity', async ([]) => {
+    try {
+        const status = await StatementChangeInEquity();
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('reporting-RetainedEarnings', async ([]) => {
+    try {
+        const status = await RetainedEarnings();
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('reporting-PurchaseOrder', async ([]) => {
+    try {
+        const status = await PurchaseOrder();
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('reporting-CustomerEstimate', async ([]) => {
+    try {
+        const status = await CustomerEstimate();
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('reporting-parseString', async ([contents]) => {
+    try {
+        const status = await parseString(contents,async (err,status) => {
+            if (err) {
+                return({success: false, error: err.message});
+            }
+            return({success: true, status: status});
+        })
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('reporting-getReportFileName', async ([reportName]) => {
+    try {
+        const status = await getReportFileName(reportName);
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('reporting-getReportRootFileName', async ([reportName]) => {
+    try {
+        const status = await getReportRootFileName(reportName);
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('reporting-transform_xml_xslt', async ([xml_content,xslt_content]) => {
+    try {
+        const status = await transform_xml_xslt(xml_content,xslt_content);
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('reporting-format', async ([reportName,formattedData]) => {
+    try {
+        const status = await format(reportName,formattedData);
+        return({success: true, status: status});
+    } catch(err) {
+        return({success: false, error: err.message});
+    }        
+});
+rpcServer.addMethod('reporting-array2xml', async ([topLevel,obj]) => {
+    try {
+        const status = await array2xml(topLevel,obj);
+        return({success: true, status: status});
     } catch(err) {
         return({success: false, error: err.message});
     }        
