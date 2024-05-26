@@ -9,6 +9,7 @@ Human Resource Management for BestBooks Accounting Application Framework
 * [Labor Laws and Worker Protection](https://www.usa.gov/labor-laws)
 * [Prohibited Employment Practices](https://www.eeoc.gov/prohibited-employment-policiespractices)
 * [Workplace Laws](https://www.usa.gov/workplace-laws)
+* [Publication 15 (2024), (Circular E), Employer's Tax Guide](https://www.irs.gov/publications/p15)
 
 # New Hire Onboarding
 
