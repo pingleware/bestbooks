@@ -16,6 +16,11 @@ class Vendor {
         this.createTable();
     }
 
+    /**
+     * 
+     * @param {object} usermeta {company_id: 0, office_id: 0, name: '', address_1: '', address_2: '', city: '', state: '', postalCode: '', phone: '', email: '', website: '', account_number: ''}
+     * @returns 
+     */
     add(usermeta) {
         try {
             var sql = `INSERT INTO vendor (company_id,
@@ -29,9 +34,10 @@ class Vendor {
                                             phone,
                                             email,
                                             website,
-                                            account_number) VALLUES (
+                                            account_number) VALUES (
                                                 ${usermeta.company_id},
                                                 ${usermeta.office_id},
+                                                '${usermeta.name}',
                                                 '${usermeta.address_1}',
                                                 '${usermeta.address_2}',
                                                 '${usermeta.city}',
@@ -68,19 +74,18 @@ class Vendor {
         }
     }
 
-    find(name,callback) {
-        try {
-            var sql = `SELECT id FROM vendor WHERE name LIKE '%${name}%'`;
-            this.model.query(sql, function(results){
-                if (results.length > 0) {
-                    callback(results);
-                } else {
-                    callback([]);
-                }
-            });
-        } catch(error) {
-            console.error(error);
-        }
+    find(name) {
+        return new Promise((resolve,reject) => {
+            try {
+                var sql = `SELECT id FROM vendor WHERE name LIKE '%${name}%'`;
+                this.model.query(sql, function(results){
+                    resolve(results);
+                });
+            } catch(error) {
+                console.error(error);
+                reject(error);
+            }    
+        })
     }
 
     async createTable() {

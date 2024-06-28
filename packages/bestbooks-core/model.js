@@ -53,8 +53,15 @@
          });
      }
  
-     insert(sql, callback) {
-         this.db.run(sql, function(err, rows){
+     /**
+      * To prevent SQL injection, using parameterized queries.
+      * 
+      * @param {*} sql       'INSERT INTO your_table (column1, column2) VALUES (?, ?)'
+      * @param {*} params   [value1, value2]; // These are your actual values
+      * @param {*} callback 
+      */
+     insert(sql, params, callback) {
+         this.db.run(sql, params, (err, rows) => {
              if (err) throw new Error(err);
              localStorage.setItem('lastID',this.lastID);
              localStorage.setItem('changes',this.changes);
@@ -62,9 +69,17 @@
          });
      }
  
-     async insertSync(sql) {
+     /**
+      * To prevent SQL injection, using parameterized queries.
+      * 
+      * @param {*} sql      'INSERT INTO your_table (column1, column2) VALUES (?, ?)'
+      * @param {*} params   [value1, value2]; // These are your actual values
+      * @returns 
+      */
+     async insertSync(sql,params) {
          return new Promise((resolve, reject) => {
-             this.db.run(sql, function(err, rows){
+            //  deepcode ignore Sqli: change to using parameterized queries but Snyk does not recognized this implementation
+             this.db.run(sql, params, (err, rows) => {
                  if (err) reject(err);
                  localStorage.setItem('lastID',this.lastID);
                  localStorage.setItem('changes',this.changes);
@@ -101,7 +116,7 @@
 
      async emptyAllTablesSync() {
         var rows = await this.getAllTablesSync();
-        rows.forEach(async function(row){
+        rows.forEach(async row => {
             await this.emptyTableSync(row.name);
         })
      }

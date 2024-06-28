@@ -1,6 +1,6 @@
 {
   "name": "@pingleware/bestbooks-core",
-  "version": "1.1.18",
+  "version": "1.1.19",
   "description": "The core component for BestBooks Accounting Application Framework",
   "main": "index.js",
   "scripts": {
@@ -32,7 +32,7 @@
   "dependencies": {
     "localStorage": "^1.0.4",
     "path": "^0.12.7",
-    "sqlite3": "^5.1.2"
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "mocha": "^10.1.0"

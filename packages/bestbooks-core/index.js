@@ -35,6 +35,8 @@ const User = require('./user');
 const Vendor = require('./vendor');
 // customer
 const Customer = require('./customer');
+// internal user
+const User = require('./user');
 // reports
 const Report = require('./report');
 // contra accounts
@@ -50,7 +52,7 @@ const {
     warn,
     info,
     error
-} = require('./ledger');
+} = require('./logger');
 
 module.exports = {
     Model: Model,
@@ -77,6 +79,7 @@ module.exports = {
     User: User,
     Vendor: Vendor,
     Customer: Customer,
+    User: User,
     Report: Report,
     DigitalCurrency: DigitalCurrency,
     Bitcoin: Bitcoin,

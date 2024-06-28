@@ -97,19 +97,18 @@ class Customer {
         }
     }
 
-    find(name,callback) {
-        try {
-            var sql = `SELECT id FROM customer WHERE name LIKE '%${name}%';`;
-            this.model.query(sql, function(results){
-                if (results.length > 0) {
-                    callback(results);
-                } else {
-                    callback([]);
-                }
-            });
-        } catch(error) {
-            console.error(error);
-        }
+    find(name) {
+        return new Promise((resolve,reject) => {
+            try {
+                var sql = `SELECT id FROM customer WHERE name LIKE '%${name}%';`;
+                this.model.query(sql, function(results){
+                    resolve(results);
+                });
+            } catch(error) {
+                console.error(error);
+                reject(error);
+            }    
+        })
     }
 
     async createTable() {

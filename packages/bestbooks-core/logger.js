@@ -50,7 +50,7 @@ function handleExit() {
 
     process.on('unhandledRejection', (reason, promise) => {
         console.error('Unhandled promise rejection at:', promise, 'reason:', reason);
-        log('warn',new Error(`Unhandled promise rejection: ${reason}`));
+        log('warn',`Unhandled promise rejection: ${reason}`);
     });
 }
 

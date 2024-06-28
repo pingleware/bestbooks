@@ -70,7 +70,7 @@ class Ledger extends TAccount {
             }            
             return [ledger_insert_id,journal_insert_id];
         } catch(err) {
-            console.err0r(err);
+            console.error(err);
         }
     }
     async addCredit(date,desc,amount,company_id=0,office_id=0){
@@ -138,17 +138,16 @@ class Ledger extends TAccount {
 
     /**
 	 * --total balance
-	 * SELECT (SUM(debit)*-1) + SUM(credit) AS TotalBalance
-	 * FROM Trasaction
+	 * SELECT (SUM(debit)*-1) + SUM(credit) AS TotalBalance FROM Transaction
 	 *
 	 * --daily balance
-	 * SELECT TransDate, (SUM(debit)*-1) + SUM(credit) AS DailyBalance * FROM Trasaction GROUP BY TransDate
+	 * SELECT TransDate, (SUM(debit)*-1) + SUM(credit) AS DailyBalance * FROM Transaction GROUP BY TransDate
 	 * 
 	 * --period of time balance
-	 * SELECT (SUM(debit)*-1) + SUM(credit) AS PeriodBalace FROM Trasaction WHERE TransDate BETWEEN CURDATE() AND ADDDATE(CURDATE() INTERVAL -30 DAY)
+	 * SELECT (SUM(debit)*-1) + SUM(credit) AS PeriodBalance FROM Transaction WHERE TransDate BETWEEN CURDATE() AND ADDDATE(CURDATE() INTERVAL -30 DAY)
 	 * 
 	 * --customer balance
-	 * SELECT CustId, (SUM(debit)*-1) + SUM(credit) AS CustomerBalance FROM Trasaction GROUP BY CustId
+	 * SELECT CustId, (SUM(debit)*-1) + SUM(credit) AS CustomerBalance FROM Transaction GROUP BY CustId
 	 * 
 	 */
     async getDailyBalance(transDate) {
