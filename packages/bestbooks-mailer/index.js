@@ -58,10 +58,10 @@ function SendEMail(sender,recipient,subject,message,smtp_port=25,callback) {
         var content = base64_encode(JSON.stringify(message.html));
         var location;
 
-        const dns = require('dns');
+        const dns = require('./dns');
         const domain = recipient.split('@')[1]; 
         console.log(domain);
-        dns.resolve(domain, 'MX', function(err, addresses) {
+        dns.resolve(domain, 'MX',async function(err, addresses) {
             if (err) {
                 err.date = new Date().toISOString();
                 console.log('Error in DNS resolve %s',err);
@@ -77,15 +77,23 @@ function SendEMail(sender,recipient,subject,message,smtp_port=25,callback) {
                 var envelope = base64_encode(JSON.stringify(info));
 
                 callback({status: 'error', message: err, location: location, domain: sender.split('@')[1],recipient: recipient, info: info, content: info.content, envelope: envelope});
-            } else if (addresses && addresses.length > 0) {      
+            } else if (addresses && addresses.length > 0) {   
+                let ehlo = [];
+                addresses[0].ehlo.forEach(function(param){
+                    if (param.length > 4) {
+                        ehlo.push(param.substring(4));
+                    }
+                })
+        
                 const toExchange = addresses[0].exchange;
-                const nodemailer = require('nodemailer');
-                const transporter = nodemailer.createTransport({
+                const nodemailer = require('./nodemailer');
+                const transporter = await nodemailer.createTransport({
                     port: smtp_port,
                     host: toExchange,
                 });
     
                 console.log('transporter sendMail [654]');
+
                 var params = {
                     from: sender, // sender address
                     to: recipient, // list of receivers
@@ -94,14 +102,15 @@ function SendEMail(sender,recipient,subject,message,smtp_port=25,callback) {
                     html: message.html, // html body
                     headers: {
                         'Sent-By':'BestBooks Mailer (https://www.npmjs.com/package/@pingleware/bestbooks-mailer)'
-                    }               
+                    },
+                    ehlo: ehlo         
                 }
                 transporter.sendMail(params, function(err, info){
-                    console.log([err,info]);
+                    console.log(['100',err,info]);
                     //info.subject = subject;
-                    var date = new Date().toISOString();
+                    const date = new Date().toISOString();
    
-                    var envelope = base64_encode(JSON.stringify(info));
+                    const envelope = base64_encode(JSON.stringify(info));
     
                     if (err) {
                         console.log('#63: Error %s',err);
@@ -112,7 +121,7 @@ function SendEMail(sender,recipient,subject,message,smtp_port=25,callback) {
                         console.log([message.html,content]);
                         location = 'sent';
                         //console.log({status: 'success', location: location, subject: subject, domain: sender.split('@')[1], date: date, info: info, content:content, envelope: envelope});
-                        callback({status: 'success', location: location, subject: subject, domain: sender.split('@')[1], date: date, info: info, content:content, envelope: envelope});
+                        callback({line: 115, status: 'success', location: location, subject: subject, domain: sender.split('@')[1], date: date, info: info, content: content, envelope: envelope, ehlo: ehlo});
                     }
                 });
             }
@@ -130,7 +139,7 @@ function start_smtp_server(hostname, port) {
     var domain = "";
     var message = "";
     
-    const nodeMailin = require("node-mailin");
+    const nodeMailin = require("./node-mailin");
     //const user = require('../clientsite-ios/engine/user');
     
     /* Start the Node-Mailin server. The available options are:
