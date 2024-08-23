@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "../bestbooks-helpers"
+		},
+		{
+			"path": "../../../Users/patrickingle/.bestbooks"
 		}
 	],
 	"settings": {}

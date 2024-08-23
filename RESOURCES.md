@@ -257,3 +257,66 @@ Assume $4,000 is used for operational expenses (e.g., $1,000 for rent, $500 for 
    - **Credit:** Cash $4,000
 
 By following these entries, the corporation accurately reflects the use of forex trading profits for payroll and operational expenses in its accounting records.
+
+## Founder pays Company Expense with personal credit card
+
+When a founder pays a business expense with a personal credit card and the company reimburses that expense, there are several accounting entries to make sure everything is properly recorded. Here’s how it can be done:
+
+### Accounting Entries
+
+1. **When the Founder Pays the Business Expense:**
+
+   No journal entry is recorded in the company's books when the founder initially pays the expense with their personal credit card.
+2. **When the Company Reimburses the Founder:**
+
+   When the company reimburses the founder for the business expense, the following entries are made:
+
+   - **Expense Account:**
+
+     ```plaintext
+     Debit: [Expense Account] (e.g., Office Supplies, Travel Expense, etc.)
+     Credit: Accounts Payable or Cash
+     ```
+   - **Accounts Payable (or other Liability Account):**
+
+     ```plaintext
+     Debit: Accounts Payable (or other liability account if applicable)
+     Credit: Cash (or Bank Account)
+     ```
+
+### Example
+
+Let's assume the founder pays $500 for office supplies with a personal credit card. Later, the company reimburses the founder by writing a check for $500.
+
+1. **When the Company Recognizes the Expense:**
+
+   ```plaintext
+   Debit: Office Supplies Expense   $500
+   Credit: Accounts Payable         $500
+   ```
+2. **When the Company Reimburses the Founder:**
+
+   ```plaintext
+   Debit: Accounts Payable          $500
+   Credit: Cash                     $500
+   ```
+
+### Form 1120 Entries
+
+For tax purposes, the expense should be recorded on Form 1120 (U.S. Corporation Income Tax Return) in the appropriate section based on the nature of the expense. The reimbursement itself is not separately reported but rather included in the total expenses.
+
+1. **On Form 1120:**
+
+   - The office supplies expense would be included in the "Other deductions" line on Schedule K, line 20, or on line 26 of page 1, depending on the type of expense.
+
+   ```plaintext
+   Line 26 (Page 1) or Schedule K, Line 20: $500 (Office Supplies Expense)
+   ```
+
+### Important Considerations
+
+- **Documentation:** Keep detailed records and receipts of the expenses paid by the founder and the corresponding reimbursements.
+- **Business Purpose:** Ensure that the expense has a clear business purpose and is ordinary and necessary for the business.
+- **Timeliness:** Reimburse the founder in a timely manner to avoid any potential tax complications.
+
+Proper documentation and accurate record-keeping are essential to ensure compliance with accounting principles and tax regulations.
