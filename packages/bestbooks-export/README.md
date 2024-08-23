@@ -4,7 +4,7 @@ The export function(s) for export framework data to other formats
 
 # Dependency
 
-    @pingleware/bestbooks-core
+    @pingleware/bestbooks-helpers
 
 # Helper Methods
 
@@ -15,3 +15,5 @@ The export function(s) for export framework data to other formats
 # XBLR Viewer
 
 [![IMAGE_ALT](http://i3.ytimg.com/vi/zTyhOvE79DQ/hqdefault.jpg)](https://www.youtube.com/watch?v=zTyhOvE79DQ)
+
+Video URL: [https://www.youtube.com/watch?v=zTyhOvE79DQ](https://www.youtube.com/watch?v=zTyhOvE79DQ)
