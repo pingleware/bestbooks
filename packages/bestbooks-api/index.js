@@ -1077,6 +1077,13 @@ rpcServer.addMethod('reporting-array2xml', async ([topLevel,obj]) => {
         return({success: false, error: err.message});
     }        
 });
+rpcServer.addMethod('receipt', async ([vendor,date,amount]) => {
+    try {
+
+    } catch(err) {
+        return({success: false, error: err.message});
+    }
+})
 
 
 function start_server(host,port) {
