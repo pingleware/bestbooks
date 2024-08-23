@@ -477,29 +477,11 @@ Three types of internal audit,
 
 The following are the 5 Cs of the internal auditing process:
 
-* **C**riteria:
-  Audit Criteria are usually based on some company's manual, policy and
-  targets, or it can also be based on some subscribed standards. What
-  issue was identified during the auditing process, and why conducting the
-  internal auditing was necessary? Is the organization prepared to
-  conduct an external audit in the future?
-* **C**ondition:
-  What is the relation of the identified issue with the company's
-  expectations and targets? Was there any company policy, procedures, or
-  subscribed standards that was bypassed?
-* **C**ause:
-  What were the reasons why these issues arose first? Who was involved,
-  and what processes were infringed? How the company could have prevented
-  this issue from arising?
-* **C**onsequence: What was
-  the result of the issue that arose? Did the issue cause disruption in
-  internal matters of the company or were there any external risks
-  involved too? Are there any financial consequences of the identified
-  issue?
-* **C**orrective Action: What corrective
-  actions can the company take to fix this issue from reoccurrence? How
-  will the company monitor and review the effectiveness of solutions after
-  their implementation?
+* **C**riteria: Audit Criteria are usually based on some company's manual, policy and targets, or it can also be based on some subscribed standards. What issue was identified during the auditing process, and why conducting the internal auditing was necessary? Is the organization prepared tovconduct an external audit in the future?
+* **C**ondition: What is the relation of the identified issue with the company's expectations and targets? Was there any company policy, procedures, or subscribed standards that was bypassed?
+* **C**ause: What were the reasons why these issues arose first? Who was involved, and what processes were infringed? How the company could have prevented this issue from arising?
+* **C**onsequence: What was the result of the issue that arose? Did the issue cause disruption in internal matters of the company or were there any external risks involved too? Are there any financial consequences of the identified issue?
+* **C**orrective Action: What corrective actions can the company take to fix this issue from reoccurrence? How will the company monitor and review the effectiveness of solutions after their implementation?
 
 ## Stages in an Internal Audit
 
@@ -513,3 +495,11 @@ The following are the 5 Cs of the internal auditing process:
 Accounting Courseware - [https://alison.com/dashboard](https://alison.com/dashboard)
 
 AuditNet Audit Programs  - [https://www.auditnet.org/audit_programs](https://www.auditnet.org/audit_programs)
+
+Deloitte Omnia for Audit Automation - [https://www2.deloitte.com/us/en/pages/audit/solutions/audit-technology-solutions.html](https://www2.deloitte.com/us/en/pages/audit/solutions/audit-technology-solutions.html)
+
+Deloitte Audit & Assurance playlist - [https://www.youtube.com/watch?v=eYtn7t1dylQ&amp;list=PLl4by_vVwv0yhFIvBmaYv5u9q6as6q8jD](https://www.youtube.com/watch?v=eYtn7t1dylQ&list=PLl4by_vVwv0yhFIvBmaYv5u9q6as6q8jD)
+
+Deloitte Technology Industry Accounting Guide - [https://www2.deloitte.com/us/en/pages/audit/articles/technology-industry-accounting-guide.html](https://www2.deloitte.com/us/en/pages/audit/articles/technology-industry-accounting-guide.html)
+
+FASB ASC606 Revenue Recognition - [https://fasb.org/page/PageContent?pageId=/projects/recentlycompleted/revenue-recognition-summary.html](https://fasb.org/page/PageContent?pageId=/projects/recentlycompleted/revenue-recognition-summary.html)
