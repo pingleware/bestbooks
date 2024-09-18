@@ -14,8 +14,7 @@ R language is required and can be installed from https://www.r-project.org/. The
 
 ## GAAS
 
-When the SEC brought action against the audit firm [Prager Metis for negligence](https://www.sec.gov/newsroom/press-releases/2024-133), the [complaint](https://www.sec.gov/files/litigation/complaints/2024/comp-pr2024-133.pdf) starting in paragra[h II details the mechanics for conducting an audit which is based on [Auditing Standards Board clarified statements](https://us.aicpa.org/research/standards/auditattest/clarifiedsas).
-
+When the SEC brought action against the audit firm [Prager Metis for negligence](https://www.sec.gov/newsroom/press-releases/2024-133), the [complaint](https://www.sec.gov/files/litigation/complaints/2024/comp-pr2024-133.pdf) starting in paragragh II details the mechanics for conducting an audit which is based on [Auditing Standards Board clarified statements](https://us.aicpa.org/research/standards/auditattest/clarifiedsas).
 
 ## Audit Rules
 
