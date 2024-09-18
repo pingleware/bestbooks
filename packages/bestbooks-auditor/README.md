@@ -507,3 +507,47 @@ Deloitte Audit & Assurance playlist - [https://www.youtube.com/watch?v=eYtn7t1dy
 Deloitte Technology Industry Accounting Guide - [https://www2.deloitte.com/us/en/pages/audit/articles/technology-industry-accounting-guide.html](https://www2.deloitte.com/us/en/pages/audit/articles/technology-industry-accounting-guide.html)
 
 FASB ASC606 Revenue Recognition - [https://fasb.org/page/PageContent?pageId=/projects/recentlycompleted/revenue-recognition-summary.html](https://fasb.org/page/PageContent?pageId=/projects/recentlycompleted/revenue-recognition-summary.html)
+
+## Auditing using LLaMA.cpp amd Large Language Models (LLM)
+
+To use LLaMA.cpp and Large Language Models (LLMs) for GAAS (Generally Accepted Auditing Standards) auditing based on the ASB (Auditing Standards Board) clarified statements, you can follow these steps:
+
+### 1. **Setting Up LLaMA.cpp:**
+   - **Compile LLaMA.cpp:** Ensure LLaMA.cpp is set up on your system, which involves compiling it for your specific hardware. You've mentioned working on optimizing `llama.cpp` for a CPU-only system, so follow these steps if not already completed:
+     ```bash
+     git clone https://github.com/ggerganov/llama.cpp
+     cd llama.cpp
+     make
+     ```
+   - **Quantize the Model:** If you need to reduce the model's memory footprint, quantize the model using one of the supported quantization formats (avoiding IQ1_S, IQ1_M, IQ2_S, etc., based on your preference).
+   - **Load the Model:** Prepare the LLaMA model by downloading the weights and placing them in the correct directory.
+
+### 2. **Data Preparation:**
+   - **GAAS and ASB Statements:** You need to provide LLaMA with the clarified statements from ASB and relevant GAAS guidelines. You can either:
+     - **Direct Embedding:** Use LLaMA embeddings to store this data in your server for retrieval-augmented generation (RAG).
+     - **Fine-tuning:** Fine-tune LLaMA on a dataset that includes GAAS guidelines and ASB statements if the LLaMA model supports fine-tuning in your setup.
+
+### 3. **Implementing RAG with LLaMA.cpp:**
+   - **Indexing Statements:** Use a RAG setup to embed the ASB statements into a retrievable index. 
+   - **Query Processing:** When an auditing question is posed, use LLaMA to generate a query response by first retrieving the relevant ASB statement using the embedding index.
+   - **Embedding Index Updates:** As you want to keep the embeddings updated, use the `/embed` route you've mentioned previously to update the `embeddingsIndex` array with new or revised ASB statements.
+
+### 4. **Building an Auditing Application:**
+   - **Server-Side Implementation:** Set up a server (using Node.js with Express, as you prefer) that listens to auditing queries and responds with LLaMA-generated answers.
+   - **Interacting with LLaMA.cpp:** Use the command line to interact with the LLaMA model. For example:
+     ```bash
+     ./llama.cpp -m path/to/llama/model -p "Query related to GAAS and ASB standards"
+     ```
+   - **Enhancing the Responses:** Refine the LLM's output to ensure compliance with auditing standards by tailoring prompts and adding constraints.
+
+### 5. **Refining the Workflow:**
+   - **Accuracy Checks:** Regularly verify the LLaMA responses against actual auditing standards to ensure compliance and accuracy.
+   - **Manual Override:** Implement a manual review system where auditors can override LLM suggestions when necessary.
+  
+### 6. **Example Workflow:**
+   - **Query:** An auditor inputs, "What are the documentation requirements for an audit based on GAAS?"
+   - **RAG Server:** The system retrieves relevant ASB statements on documentation requirements.
+   - **LLaMA Processing:** LLaMA generates a response that outlines the necessary documentation per GAAS.
+   - **Output:** The final response is displayed to the auditor for review.
+
+This setup allows you to leverage LLaMA.cpp for generating responses based on ASB statements and GAAS guidelines, providing a practical auditing tool. If you have any specific requirements or need further customization, let me know!
