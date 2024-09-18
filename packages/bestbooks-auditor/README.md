@@ -10,7 +10,12 @@ See https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf
 
 ## Installing R
 
-R language is required and can be installed from https://www.r-project.org/. The Rscript tool is used to launch R scripts from the command line, and is included in the R installation package.
+R language is required and can be installed from https://www.r-project.org/. The Rscript tool is used to launch R scripts from the command line, and is included in the R installation package.\
+
+## GAAS
+
+When the SEC brought action against the audit firm [Prager Metis for negligence](https://www.sec.gov/newsroom/press-releases/2024-133), the [complaint](https://www.sec.gov/files/litigation/complaints/2024/comp-pr2024-133.pdf) starting in paragra[h II details the mechanics for conducting an audit which is based on [Auditing Standards Board clarified statements](https://us.aicpa.org/research/standards/auditattest/clarifiedsas).
+
 
 ## Audit Rules
 
