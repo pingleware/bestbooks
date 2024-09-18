@@ -378,6 +378,10 @@ const {
 */
 const {Soc1Framework} = require('./Soc1Framework');
 
+const {
+  RAG_SERVER_URL
+} = require('./llamaAudit.js')
+
 
 module.exports = {
   invoke,
@@ -424,4 +428,5 @@ module.exports = {
   ComplianceMonitoring,
   ITGovernanceAssurance,
   Soc1Framework,
+  RAG_SERVER_URL,
 };
