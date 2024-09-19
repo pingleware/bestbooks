@@ -953,26 +953,126 @@ rpcServer.addMethod('reporting-copy', async ([source,destination]) => {
         return({success: false, error: err.message});
     }        
 });
-rpcServer.addMethod('reporting-BalanceSheet', async ([]) => {
+rpcServer.addMethod('reporting-BalanceSheet', async ([start_date,end_date]) => {
     try {
-        const status = await BalanceSheet();
-        return({success: true, status: status});
-    } catch(err) {
-        return({success: false, error: err.message});
-    }        
+        // Generate Excel report
+       const workbook = new ExcelJS.Workbook();
+       const worksheet = workbook.addWorksheet('Balance Sheet');
+       worksheet.addRow(['Date', 'Amount', 'Description', 'Category', 'Type']);
+
+       const balanceSheet = new BalanceSheet();
+
+       const transactions = await balanceSheet.retrieveReportDataSync(start_date,end_date);
+
+       transactions.forEach(transaction => {
+           worksheet.addRow([
+               transaction.date, 
+               transaction.balance, 
+               transaction.description, 
+               transaction.name, 
+               transaction.type
+           ]);
+       });
+
+       var file = "";
+
+       if (typeof start_date === "undefined" || typeof end_date === "undefined") {
+           const now = new Date().getTime()
+           file = `balance_sheet-${now}.xlsx`
+       } else {
+           file = `balance_sheet-${start_date}-${end_date}.xlsx`;
+       }
+       const balance_sheet_filename = path.join(os.homedir(),`.bestbooks/${file}`);
+
+
+       await workbook.xlsx.writeFile(balance_sheet_filename);
+       return({success: true, filename: balance_sheet_filename})    
+   } catch(err) {
+       return({success: false, message: err.message});
+   }
 });
-rpcServer.addMethod('reporting-IncomeStatement', async ([]) => {
+rpcServer.addMethod('reporting-IncomeStatement', async ([start_date,end_date]) => {
     try {
-        const status = await IncomeStatement();
-        return({success: true, status: status});
+        const incomeStatement = new IncomeStatement();
+
+        const transactions = await incomeStatement.retrieveReportDataSync(start_date,end_date);
+
+        let totalIncome = 0;
+        let totalExpense = 0;
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Income Statement');
+        worksheet.addRow(['Date', 'Description', 'Amount', 'Category', 'Type']);
+
+        transactions.forEach(transaction => {
+            if (transaction.type === "Expense") {
+                totalExpense += Number(transaction.balance);
+            } else {
+                totalIncome += Number(transaction.balance);
+            }
+            worksheet.addRow([
+                transaction.date, 
+                transaction.description, 
+                transaction.balance, 
+                transaction.name, 
+                transaction.type
+            ]);
+        })
+        const netIncome = totalIncome - totalExpense;
+
+        // Generate Excel report
+        worksheet.addRow(['Description', 'Amount']);
+        worksheet.addRow(['Total Income', totalIncome]);
+        worksheet.addRow(['Total Expenses', totalExpenses]);
+        worksheet.addRow(['Net Income', netIncome]);            
+
+        var file = "";
+
+        if (typeof start_date === "undefined" || typeof end_date === "undefined") {
+            const now = new Date().getTime()
+            file = `income_statement-${now}.xlsx`
+        } else {
+            file = `income_statement-${start_date}-${end_date}.xlsx`;
+        }
+        const income_statement_filename = path.join(os.homedir(),`.bestbooks/${file}`);
+
+
+        await workbook.xlsx.writeFile(income_statement_filename);
+        return({success: true, filename: income_statement_filename})    
     } catch(err) {
-        return({success: false, error: err.message});
-    }        
+        return({success: false, message: err.message});
+    }
 });
-rpcServer.addMethod('reporting-TrialBalance', async ([]) => {
+rpcServer.addMethod('reporting-TrialBalance', async ([start_date,end_date]) => {
     try {
-        const status = await TrialBalance();
-        return({success: true, status: status});
+        const trialBalance = new TrialBalance();
+
+        const transactions = await trialBalance.retrieveReportDataSync(start_date,end_date);
+
+        // Generate Excel report
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Trial Balance');
+        worksheet.addRow(['Category', 'Total Amount']);
+        transactions.forEach(transaction => {
+            worksheet.addRow([
+                transaction.category, 
+                transaction.total
+            ]);
+        });
+
+        var file = "";
+
+        if (typeof start_date === "undefined" || typeof end_date === "undefined") {
+            const now = new Date().getTime()
+            file = `trial_balance-${now}.xlsx`
+        } else {
+            file = `trial_balance-${start_date}-${end_date}.xlsx`;
+        }
+        const trial_balance_filename = path.join(os.homedir(),`.bestbooks/${file}`);
+
+
+        await workbook.xlsx.writeFile(trial_balance_filename);
+        return({success: true, filename: trial_balance_filename})    
     } catch(err) {
         return({success: false, error: err.message});
     }        
@@ -985,26 +1085,105 @@ rpcServer.addMethod('reporting-NoteToFinancialStatements', async ([]) => {
         return({success: false, error: err.message});
     }        
 });
-rpcServer.addMethod('reporting-StatementCashFlows', async ([]) => {
+rpcServer.addMethod('reporting-StatementCashFlows', async ([start_date,end_date]) => {
     try {
-        const status = await StatementCashFlows();
-        return({success: true, status: status});
+        const statementCashFlows = new StatementCashFlows();
+        const transactions = await statementCashFlows.retrieveReportDataSync(start_date,end_date);
+
+        const totalOperating = transactions.operations_cashflow_total;
+        const totalInvesting = transactions.investment_cashflow_total;
+        const totalFinancing = transactions.financing_cashflow_total;
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Cash Flow Statement');
+        worksheet.addRow(['Category', 'Amount']);
+        worksheet.addRow(['Operating Activities', totalOperating]);
+        worksheet.addRow(['Investing Activities', totalInvesting]);
+        worksheet.addRow(['Financing Activities', totalFinancing]);
+
+        var file = "";
+
+        if (typeof start_date === "undefined" || typeof end_date === "undefined") {
+            const now = new Date().getTime()
+            file = `statement_cash_flows-${now}.xlsx`
+        } else {
+            file = `statement_cash_flows-${start_date}-${end_date}.xlsx`;
+        }
+        const statement_cash_flows_filename = path.join(os.homedir(),`.bestbooks/${file}`);
+
+        await workbook.xlsx.writeFile(statement_cash_flows_filename);
+        return({success: true, filename: statement_cash_flows_filename})    
     } catch(err) {
         return({success: false, error: err.message});
     }        
 });
-rpcServer.addMethod('reporting-StatementChangeInEquity', async ([]) => {
+rpcServer.addMethod('reporting-StatementChangeInEquity', async ([start_date,end_date,beginning_equity]) => {
     try {
-        const status = await StatementChangeInEquity();
-        return({success: true, status: status});
+        const statementChangeInEquity = new StatementChangeInEquity();
+        const transactions = await statementChangeInEquity.retrieveReportDataSync(start_date,end_date);
+        const equityMovements = await statementChangeInEquity.retrieveEquityMovementDataSync(start_date,end_date);
+
+        // Calculate beginning equity, net income, dividends, and other movements
+        const beginningEquity = beginning_equity; // Example starting balance, can be dynamic
+        const netIncome = transactions.income_total || 0;
+        const dividends = transactions.dividend_total || 0;
+
+        const totalContributions = equityMovements
+        .filter(m => m.type === 'contribution')
+        .reduce((sum, m) => sum + m.amount, 0);
+
+        const totalWithdrawals = equityMovements
+        .filter(m => m.type === 'withdrawal')
+        .reduce((sum, m) => sum + m.amount, 0);
+
+        const endingEquity = beginningEquity + totalContributions - totalWithdrawals + netIncome - dividends;        
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Changes in Equity');
+        worksheet.addRow(['Description', 'Amount']);
+        worksheet.addRow(['Beginning Equity', beginningEquity]);
+        worksheet.addRow(['Net Income', netIncome]);
+        worksheet.addRow(['Owner Contributions', totalContributions]);
+        worksheet.addRow(['Owner Withdrawals', totalWithdrawals]);
+        worksheet.addRow(['Dividends Paid', dividends]);
+        worksheet.addRow(['Ending Equity', endingEquity]);
+
+        return({success: true, status: transactions});
     } catch(err) {
         return({success: false, error: err.message});
     }        
 });
-rpcServer.addMethod('reporting-RetainedEarnings', async ([]) => {
+rpcServer.addMethod('reporting-RetainedEarnings', async ([start_date,end_date,beginning_retained_earnings]) => {
     try {
-        const status = await RetainedEarnings();
-        return({success: true, status: status});
+        const retainedEarnings = new RetainedEarnings();
+        const transactions = await retainedEarnings.retrieveReportDataSync(start_date,end_date);
+
+        const beginningRetainedEarnings = beginning_retained_earnings;
+        const netIncome = transactions.net_income || 0;
+        const dividends = transactions.net_dividend || 0;
+        const totalRetainedEarnings = beginningRetainedEarnings + netIncome - dividends;
+
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Retained Earnings');
+        worksheet.addRow(['Description', 'Amount']);
+        worksheet.addRow(['Beginning Retained Earnings', beginningRetainedEarnings]);
+        worksheet.addRow(['Net Income', netIncome]);
+        worksheet.addRow(['Dividends Paid', dividends]);
+        worksheet.addRow(['Ending Retained Earnings', totalRetainedEarnings]);
+
+        var file = "";
+
+        if (typeof start_date === "undefined" || typeof end_date === "undefined") {
+            const now = new Date().getTime()
+            file = `retained_earnings-${now}.xlsx`
+        } else {
+            file = `retained_earnings-${start_date}-${end_date}.xlsx`;
+        }
+        const retained_earnings_filename = path.join(os.homedir(),`.bestbooks/${file}`);
+
+        await workbook.xlsx.writeFile(retained_earnings_filename);
+        return({success: true, filename: retained_earnings_filename})    
     } catch(err) {
         return({success: false, error: err.message});
     }        
@@ -1115,6 +1294,7 @@ if (argv.server) {
     });    
 } else {
     module.exports = {
+        rpcServer,
         start_server,
         stop_server
     }    
