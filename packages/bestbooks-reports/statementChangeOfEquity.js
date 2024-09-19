@@ -82,18 +82,51 @@ class StatementChangeInEquity extends BaseReport {
         lastStartDate = new Date(`01-01-${lastYear}`).toISOString().split('T')[0];
         lastEndDate = new Date(`12-31-${lastYear}`).toISOString().split('T')[0];
 
-        var equity_code = `SELECT code FROM accounts WHERE type="Equity" AND NOT name LIKE '%retained%' AND NOT name LIKE '%Paid-in Capital%'`;
-        var dividends_payable_code = `SELECT code FROM accounts WHERE name='Dividends Payable'`;
-        var paid_in_capital_code = `SELECT code FROM accounts WHERE name LIKE '%Paid-in Capital%'`;
-        var treasury_shares_code = `SELECT code FROM accounts WHERE name LIKE '%Treasury%'`;
+        const netIncomeData = `SELECT SUM(balance) AS total FROM ledger WHERE account_name LIKE '%income%'`;
+        const dividendsData =  `SELECT SUM(amount) AS total FROM equity_movements WHERE type = 'dividend'`;
 
-        var beginning_equity_total = `SELECT IFNULL(ROUND(SUM(debit)-SUM(credit),2),0.0) FROM ledger WHERE (DATE(txdate) BETWEEN '${lastStartDate}' AND '${lastEndDate}') AND account_code IN (${equity_code})`;
-        var net_income_total = `SELECT IFNULL(ROUND(SUM(debit)+SUM(credit),2),0.0) FROM ledger WHERE (DATE(txdate) BETWEEN '${startDate}' AND '${endDate}') AND account_code LIKE '5%'`;
-        var dividends_payable_total = `SELECT IFNULL(ROUND(SUM(debit)-SUM(credit),2),0.0) FROM ledger WHERE (DATE(txdate) BETWEEN '${startDate}' AND '${endDate}') AND account_code IN (${dividends_payable_code})`;
-        var paidin_capital_total = `SELECT IFNULL(ROUND(SUM(debit)-SUM(credit),2),0.0) FROM ledger WHERE (DATE(txdate) BETWEEN '${startDate}' AND '${endDate}') AND account_code IN (${paid_in_capital_code})`;
-        var treasury_shares_total = `SELECT IFNULL(ROUND(SUM(debit)-SUM(credit),2),0.0) FROM ledger WHERE (DATE(txdate) BETWEEN '${startDate}' AND '${endDate}') AND account_code IN (${treasury_shares_code})`;
+        /**
+         * SELECT * FROM equity_movements
+         * SELECT SUM(balance) AS total FROM ledger WHERE account_name LIKE '%income%'
+         * SELECT SUM(amount) AS total FROM equity_movements WHERE type = 'dividend'
+         * 
+         * SELECT (SELECT * FROM equity_movements),(SELECT SUM(balance) AS total FROM ledger WHERE account_name LIKE '%income%'),(SELECT SUM(amount) AS total FROM equity_movements WHERE type = 'dividend')
+         */
 
-        var sql = `SELECT (${beginning_equity_total}) AS beginning_equity_total,(${net_income_total}) AS net_income_total,(${dividends_payable_total}) AS dividends_payable_total,(${paidin_capital_total}) AS paidin_capital_total,(${treasury_shares_total}) AS treasury_shares_total`;
+        var sql = `SELECT 
+                        (${netIncomeData}),
+                        (${dividendsData})
+                    `;
+    
+
+        //var equity_code = `SELECT code FROM accounts WHERE type="Equity" AND NOT name LIKE '%retained%' AND NOT name LIKE '%Paid-in Capital%'`;
+        //var dividends_payable_code = `SELECT code FROM accounts WHERE name='Dividends Payable'`;
+        //var paid_in_capital_code = `SELECT code FROM accounts WHERE name LIKE '%Paid-in Capital%'`;
+        //var treasury_shares_code = `SELECT code FROM accounts WHERE name LIKE '%Treasury%'`;
+
+        //var beginning_equity_total = `SELECT IFNULL(ROUND(SUM(debit)-SUM(credit),2),0.0) FROM ledger WHERE (DATE(txdate) BETWEEN '${lastStartDate}' AND '${lastEndDate}') AND account_code IN (${equity_code})`;
+        //var net_income_total = `SELECT IFNULL(ROUND(SUM(debit)+SUM(credit),2),0.0) FROM ledger WHERE (DATE(txdate) BETWEEN '${startDate}' AND '${endDate}') AND account_code LIKE '5%'`;
+        //var dividends_payable_total = `SELECT IFNULL(ROUND(SUM(debit)-SUM(credit),2),0.0) FROM ledger WHERE (DATE(txdate) BETWEEN '${startDate}' AND '${endDate}') AND account_code IN (${dividends_payable_code})`;
+        //var paidin_capital_total = `SELECT IFNULL(ROUND(SUM(debit)-SUM(credit),2),0.0) FROM ledger WHERE (DATE(txdate) BETWEEN '${startDate}' AND '${endDate}') AND account_code IN (${paid_in_capital_code})`;
+        //var treasury_shares_total = `SELECT IFNULL(ROUND(SUM(debit)-SUM(credit),2),0.0) FROM ledger WHERE (DATE(txdate) BETWEEN '${startDate}' AND '${endDate}') AND account_code IN (${treasury_shares_code})`;
+
+        //var sql = `SELECT (${beginning_equity_total}) AS beginning_equity_total,(${net_income_total}) AS net_income_total,(${dividends_payable_total}) AS dividends_payable_total,(${paidin_capital_total}) AS paidin_capital_total,(${treasury_shares_total}) AS treasury_shares_total`;
+        console.log(sql)
+        const model = new Model();
+        model.query(sql,callback);
+    }
+
+    retrieveEquityMovementData(startDate,endDate,callback) {
+        var equityMovements = 'SELECT * FROM equity_movements';
+
+        if (startDate.length > 0 && endDate.length > 0) {
+            equityMovements = `SELECT * FROM equity_movements WHERE date BETWEEN ${startDate} AND ${endDate};`;
+        } else if (startDate.length > 0 && endDate.length == 0) {
+            equityMovements = `SELECT * FROM equity_movements WHERE date >= ${startDate};`;
+        } else if (startDate.length == 0 && endDate.length > 0) {
+            equityMovements = `SELECT * FROM equity_movements WHERE date < ${endDate};`;
+        }
+
         console.log(sql)
         const model = new Model();
         model.query(sql,callback);
@@ -102,6 +135,18 @@ class StatementChangeInEquity extends BaseReport {
     async retrieveReportDataSync(startDate,endDate) {
         return new Promise((resolve, reject) => {
             this.retrieveReportData(startDate, endDate, function(err, results) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
+
+    async retrieveEquityMovementDataSync(startDate,endDate) {
+        return new Promise((resolve, reject) => {
+            this.retrieveEquityMovementData(startDate, endDate, function(err, results) {
                 if (err) {
                     reject(err);
                 } else {

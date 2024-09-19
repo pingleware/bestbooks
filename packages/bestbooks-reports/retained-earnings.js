@@ -54,19 +54,40 @@ class RetainedEarnings extends BaseReport {
         lastStartDate = new Date(`01-01-${lastYear}`).toISOString().split('T')[0];
         lastEndDate = new Date(`12-31-${lastYear}`).toISOString().split('T')[0];
 
-        var sql = `SELECT (SELECT ROUND(SUM(debit)+SUM(credit),2) FROM ledger WHERE account_code LIKE '9%') AS net_income, 
-        ((SELECT ROUND(SUM(debit)+SUM(credit),2) FROM ledger WHERE account_code LIKE '9%') - 
-        ROUND(SUM(debit)+SUM(credit),2)) AS retained_earnings,((SELECT ROUND(SUM(debit)+SUM(credit),2) 
-        FROM ledger WHERE account_code LIKE '9%') - ROUND(SUM(debit)+SUM(credit),2) AND 
-        txdate BETWEEN DATE('${lastStartDate}') AND DATE('${lastEndDate}')) AS previous_retained_earnings  
-        FROM ledger WHERE account_name='Dividends Payable'`;
+        var sql = `SELECT 
+            (SELECT SUM(balance) AS total FROM ledger WHERE account_name LIKE "%income%" OR account_name LIKE "%revenue%") AS net_income,
+            (SELECT SUM(balance) AS total FROM ledger WHERE account_name LIKE "%dividend%") AS net_dividend;
+        `;
         if (startDate.length > 0 && endDate.length > 0) {
-            sql = `${sql} AND txdate BETWEEN ${startDate} AND ${endDate}`;
+            sql = `SELECT 
+                (SELECT SUM(balance) AS total FROM ledger WHERE account_name LIKE "%income%" OR account_name LIKE "%revenue%" WHERE txdate BETWEEN ${startDate} AND ${endDate}) AS net_income,
+                (SELECT SUM(balance) AS total FROM ledger WHERE account_name LIKE "%dividend%" WHERE txdate BETWEEN ${startDate} AND ${endDate}) AS net_dividend;
+            `;
         } else if (startDate.length > 0 && endDate.length == 0) {
-            sql = `${sql} AND txdate >= ${startDate}`;
+            sql = `SELECT 
+                (SELECT SUM(balance) AS total FROM ledger WHERE account_name LIKE "%income%" OR account_name LIKE "%revenue%" WHERE txdate >= ${startDate}) AS net_income,
+                (SELECT SUM(balance) AS total FROM ledger WHERE account_name LIKE "%dividend%" WHERE txdate >= ${startDate}) AS net_dividend;
+            `;
         } else if (startDate.length == 0 && endDate.length > 0) {
-            sql = `${sql} AND txdate < ${endDate}`;
+            sql = `SELECT 
+                (SELECT SUM(balance) AS total FROM ledger WHERE account_name LIKE "%income%" OR account_name LIKE "%revenue%" WHERE txdate < ${endDate}) AS net_income,
+                (SELECT SUM(balance) AS total FROM ledger WHERE account_name LIKE "%dividend%" WHERE txdate < ${endDate}) AS net_dividend;
+            `;
         }
+
+        //var sql = `SELECT (SELECT ROUND(SUM(debit)+SUM(credit),2) FROM ledger WHERE account_code LIKE '9%') AS net_income, 
+        //((SELECT ROUND(SUM(debit)+SUM(credit),2) FROM ledger WHERE account_code LIKE '9%') - 
+        //ROUND(SUM(debit)+SUM(credit),2)) AS retained_earnings,((SELECT ROUND(SUM(debit)+SUM(credit),2) 
+        //FROM ledger WHERE account_code LIKE '9%') - ROUND(SUM(debit)+SUM(credit),2) AND 
+        //txdate BETWEEN DATE('${lastStartDate}') AND DATE('${lastEndDate}')) AS previous_retained_earnings  
+        //FROM ledger WHERE account_name='Dividends Payable'`;
+        //if (startDate.length > 0 && endDate.length > 0) {
+        //    sql = `${sql} AND txdate BETWEEN ${startDate} AND ${endDate}`;
+        //} else if (startDate.length > 0 && endDate.length == 0) {
+        //    sql = `${sql} AND txdate >= ${startDate}`;
+        //} else if (startDate.length == 0 && endDate.length > 0) {
+        //    sql = `${sql} AND txdate < ${endDate}`;
+        //}
         const model = new Model();
         model.query(sql,callback);
     }

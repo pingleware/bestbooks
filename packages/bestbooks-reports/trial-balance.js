@@ -51,12 +51,25 @@ class TrialBalance extends BaseReport {
     }
 
     retrieveReportData(startDate,endDate,callback) {
-        this.report.trialBalance(startDate, endDate, function(lineItems){
-            const model = new Model();
-            model.query('SELECT SUM(debit) AS debit,SUM(credit) AS credit FROM trial_balance;',function(totals){
-                callback([lineItems,totals]);
-            });
-        });
+        var sql = '';
+        if (startDate.length == 0 && endDate.length == 0) {
+            sql = 'SELECT * FROM trial_balance;';
+        } else {
+            sql = `SELECT account_name AS category, SUM(balance) AS total FROM ledger 
+                    WHERE ledger.txdate BETWEEN ${startDate} AND ${endDate} 
+                    GROUP BY account_name`;
+        }
+        const model = new Model();
+        model.query(sql, function(data){
+            callback(data);
+        });            
+
+        //this.report.trialBalance(startDate, endDate, function(lineItems){
+        //    const model = new Model();
+        //    model.query('SELECT SUM(debit) AS debit,SUM(credit) AS credit FROM trial_balance;',function(totals){
+        //        callback([lineItems,totals]);
+        //    });
+        //});
     }
 
     async retrieveReportDataSync(startDate,endDate) {
