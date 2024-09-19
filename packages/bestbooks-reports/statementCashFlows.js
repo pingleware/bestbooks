@@ -82,6 +82,17 @@ class StatementCashFlows extends BaseReport {
         const model = new Model();
         model.query(sql,callback);
     }
+    async retrieveReportDataSync(startDate,endDate) {
+        return new Promise((resolve, reject) => {
+            this.retrieveReportData(startDate, endDate, function(err, results) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
 }
 
 module.exports = StatementCashFlows;

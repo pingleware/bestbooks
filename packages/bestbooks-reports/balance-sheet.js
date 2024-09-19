@@ -141,8 +141,11 @@ class BalanceSheet extends BaseReport {
         if (startDate.length == 0 && endDate.length == 0) {
             sql = `SELECT * FROM balance_sheet;`;
         } else {
-            sql = `SELECT account_code AS code,
-                    account_name AS name,SUM(debit)-SUM(credit) AS balance,
+            sql = `SELECT txdate AS date,
+                    account_code AS code,
+                    account_name AS name,
+                    note AS description,
+                    SUM(debit)-SUM(credit) AS balance,
                     accounts.base_type AS type FROM ledger 
                     JOIN accounts ON accounts.name=ledger.account_name 
                     WHERE ledger.txdate BETWEEN ${startDate} AND ${endDate} 
@@ -150,6 +153,18 @@ class BalanceSheet extends BaseReport {
         }
         const model = new Model();
         model.query(sql,callback);
+    }
+
+    async retrieveReportDataSync(startDate, endDate) {
+        return new Promise((resolve, reject) => {
+            this.retrieveReportData(startDate, endDate, function(err, results) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
     }
 }
 

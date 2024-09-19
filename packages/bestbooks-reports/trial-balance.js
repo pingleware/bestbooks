@@ -50,7 +50,7 @@ class TrialBalance extends BaseReport {
         });
     }
 
-    async retrieveReportData(startDate,endDate,callback) {
+    retrieveReportData(startDate,endDate,callback) {
         this.report.trialBalance(startDate, endDate, function(lineItems){
             const model = new Model();
             model.query('SELECT SUM(debit) AS debit,SUM(credit) AS credit FROM trial_balance;',function(totals){
@@ -58,6 +58,17 @@ class TrialBalance extends BaseReport {
             });
         });
     }
-}
+
+    async retrieveReportDataSync(startDate,endDate) {
+        return new Promise((resolve, reject) => {
+            this.retrieveReportData(startDate, endDate, function(err, results) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }}
 
 module.exports = TrialBalance;

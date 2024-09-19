@@ -74,16 +74,34 @@ class IncomeStatement extends BaseReport {
     }
 
     retrieveReportData(startDate,endDate,callback) {
-        const sql = `SELECT account_code AS code,account_name AS name,
+        var sql = '';
+        if (startDate.length == 0 && endDate.length == 0) {
+            sql = 'SELECT * FROM income_statement;';
+        } else {
+            sql = `SELECT txdate AS date, account_code AS code,account_name AS name, note AS description,
                     ROUND(SUM(debit)-SUM(credit),2) AS balance,accounts.base_type AS type 
                     FROM ledger JOIN accounts ON accounts.name=ledger.account_name 
-                    WHERE accounts.type='Income' OR accounts.type='Expense'  OR accounts.type='Revenue'
+                    WHERE accounts.type='Income' OR accounts.type='Expense'  OR accounts.type='Revenue' AND 
+                    ledger.txdate BETWEEN ${startDate} AND ${endDate} 
                     GROUP BY account_name 
                     ORDER BY accounts.type`;
+        }
         const model = new Model();
         model.query(sql, function(data){
             callback(data);
         });            
+    }
+
+    async retrieveReportDataSync(startDate,endDate) {
+        return new Promise((resolve, reject) => {
+            this.retrieveReportData(startDate, endDate, function(err, results) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
     }
 }
 
