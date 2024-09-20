@@ -361,7 +361,7 @@ const {
   InternalControlMonitoring,
   ComplianceMonitoring,
   ITGovernanceAssurance,
-} = require('./COBITAudit');
+} = require('./cobit/COBITAudit.js');
 
 // SOC 1 Framework
 /*
@@ -376,11 +376,15 @@ const {
         // Handle authentication failure
     }
 */
-const {Soc1Framework} = require('./Soc1Framework');
+const {
+  Soc1Framework,
+  Soc2Framework,
+  Soc3Framework
+} = require('./soc/SocFramework.js');
 
 const {
   RAG_SERVER_URL
-} = require('./llamaAudit.js')
+} = require('./ai/llamaAudit.js')
 
 
 module.exports = {
@@ -428,5 +432,7 @@ module.exports = {
   ComplianceMonitoring,
   ITGovernanceAssurance,
   Soc1Framework,
+  Soc2Framework,
+  Soc3Framework,
   RAG_SERVER_URL,
 };

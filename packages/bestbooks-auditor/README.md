@@ -16,6 +16,132 @@ R language is required and can be installed from https://www.r-project.org/. The
 
 When the SEC brought action against the audit firm [Prager Metis for negligence](https://www.sec.gov/newsroom/press-releases/2024-133), the [complaint](https://www.sec.gov/files/litigation/complaints/2024/comp-pr2024-133.pdf) starting in paragragh II details the mechanics for conducting an audit which is based on [Auditing Standards Board clarified statements](https://us.aicpa.org/research/standards/auditattest/clarifiedsas).
 
+To design an audit to identify whether certain assets were appropriately recognized and presented in the financial statements, follow these steps:
+
+**On line item 29.**
+
+"*Moreover, because Prager Metis did not understand Alameda’s role as a purported custodian of cash belonging to FTX customers, its engagement team could not reasonably analyze FTX’s decision not to recognize its customers’ crypto assets or cash on its balance sheet. and because the Engagement Partner did not understand basic aspects of FTX’s business model, he failed to design an audit that included procedures to identify whether certain assets were appropriately recognized and presented in FTX’s financial statements, and if included, whether they contained sufficient footnote disclosure."*
+
+### 1. **Planning and Understanding the Entity**
+
+- **Understand the Business**: Gain an understanding of the entity's business operations, industry, and environment. This includes understanding how assets are acquired, managed, and recorded.
+- **Identify Significant Accounts and Assertions**: Identify which asset accounts (e.g., property, plant, equipment, inventory, investments) are material to the financial statements. Focus on relevant assertions such as existence, completeness, valuation, rights and obligations, and presentation and disclosure.
+
+### 2. **Risk Assessment**
+
+- **Identify Risks of Material Misstatement**: Identify the risks associated with asset recognition and presentation. Consider industry-specific risks, past audit issues, and the complexity of transactions.
+- **Assess Control Environment**: Evaluate the effectiveness of internal controls related to asset recognition and presentation. This includes assessing controls over acquisition, disposal, and valuation of assets.
+
+### 3. **Audit Procedures**
+
+   Design and perform audit procedures that address the risks identified:
+
+#### **Existence**
+
+- **Physical Inspection**: Conduct physical inspections of tangible assets like inventory and fixed assets to ensure they exist and are not fictitious.
+- **Confirmation**: Obtain confirmations from third parties (e.g., custodians, financial institutions) for assets like investments or bank accounts.
+
+#### **Completeness**
+
+- **Review Transactions**: Examine purchase records, invoices, and other documents to ensure all assets are recorded.
+- **Analytical Procedures**: Perform analytical procedures to identify any unusual trends or discrepancies in asset balances that may indicate unrecorded assets.
+
+#### **Valuation and Allocation**
+
+- **Recalculate Depreciation/Amortization**: Verify the accuracy of depreciation or amortization calculations for fixed and intangible assets.
+- **Impairment Testing**: Review impairment assessments to ensure assets are not carried at amounts exceeding their recoverable amounts.
+- **Fair Value Assessment**: For investments and other assets measured at fair value, assess whether the fair value measurements and disclosures are appropriate.
+
+#### **Rights and Obligations**
+
+- **Review Legal Documents**: Examine titles, deeds, and lease agreements to confirm the entity's rights to the assets.
+- **Inspection of Contracts**: Inspect contracts and agreements to ensure that assets are not pledged as collateral or encumbered in a way that affects the entity’s rights.
+
+#### **Presentation and Disclosure**
+
+- **Review Financial Statements**: Ensure that assets are classified and presented correctly in the financial statements (e.g., current vs. non-current assets).
+- **Disclosure Testing**: Verify that the disclosures related to assets (e.g., fair value measurements, depreciation methods, restrictions) are complete and in accordance with the applicable financial reporting framework.
+
+### 4. **Test of Controls (if applicable)**
+
+- **Walkthroughs**: Perform walkthroughs of the processes related to asset acquisition, disposal, and valuation to understand and test the design of internal controls.
+- **Control Testing**: Test the operating effectiveness of controls, such as authorization of asset acquisitions, periodic reconciliations, and review of asset valuations.
+
+### 5. **Substantive Procedures**
+
+- **Substantive Analytical Procedures**: Perform ratio analysis and other analytical procedures to identify unusual trends or variances in asset balances.
+- **Detailed Testing**: Select samples of asset transactions (acquisitions, disposals) and trace them to supporting documentation to verify the recognition and measurement of assets.
+
+### 6. **Conclusion and Reporting**
+
+- **Evaluate Audit Evidence**: Assess whether sufficient and appropriate audit evidence has been obtained to conclude on the assertions related to asset recognition and presentation.
+- **Communicate Findings**: Communicate any misstatements or control deficiencies identified during the audit to management and those charged with governance.
+- **Form an Opinion**: Based on the audit evidence gathered, form an opinion on whether the assets are appropriately recognized and presented in the financial statements.
+
+### 7. **Documentation**
+
+- **Audit Documentation**: Document all audit procedures performed, evidence obtained, and conclusions reached to provide a record of the audit and support the audit opinion.
+
+This audit design ensures that assets are appropriately recognized, measured, and presented in the financial statements, complying with the applicable financial reporting framework.
+
+**Loaning monies between affiliated firms**
+
+Line item 30: "*FTX told Prager Metis that it loaned funds to Alameda, but the Prager Metis team did not design and execute sufficient procedures to obtain audit evidence for this activity. Instead, Prager Metis memorialized the limited audit evidence they collected on this issue with this one-line workpaper*"
+
+To audit the lending of funds between affiliated firms, you need to gather evidence that confirms the existence, terms, and appropriate accounting treatment of the intercompany loan. Here's a list of the audit evidence required:
+
+### 1. **Loan Agreement**
+
+- **Written Agreement**: Obtain the formal loan agreement between the affiliated firms. This document should detail the terms of the loan, including the principal amount, interest rate, repayment schedule, and any covenants.
+- **Authorization**: Verify that the loan agreement was properly authorized by the appropriate level of management or governing body within both affiliated firms.
+
+### 2. **Board Resolutions and Meeting Minutes**
+
+- **Board Resolutions**: Review board resolutions or meeting minutes from both firms to confirm that the intercompany loan was discussed, approved, and properly documented at the governance level.
+- **Management Approvals**: Check for documented management approvals and that all necessary parties were involved in the decision-making process.
+
+### 3. **Bank Statements and Cash Flow Records**
+
+- **Bank Statements**: Obtain and review bank statements to verify the transfer of funds between the affiliated firms. Ensure that the loan amount was transferred on the dates specified in the loan agreement.
+- **Cash Flow Statements**: Check the cash flow statements of both firms to confirm that the loan is appropriately reflected as an inflow (for the lender) and an outflow (for the borrower).
+
+### 4. **General Ledger and Journal Entries**
+
+- **Ledger Entries**: Inspect the general ledger accounts for both firms to verify that the loan was recorded accurately. The lender should have a loan receivable, and the borrower should have a loan payable.
+- **Journal Entries**: Review the journal entries related to the loan to ensure they were recorded correctly, with appropriate debits and credits that align with the terms of the loan agreement.
+
+### 5. **Interest Payments and Calculations**
+
+- **Interest Payment Records**: Obtain evidence of interest payments made on the loan. Verify the payment dates, amounts, and that they align with the terms of the loan agreement.
+- **Interest Calculations**: Recalculate the interest to confirm that it was calculated correctly based on the agreed-upon interest rate and terms.
+
+### 6. **Repayment Schedule**
+
+- **Amortization Schedule**: Review the loan's repayment schedule, if available, including principal and interest payments over time. Verify that the repayments are in line with the schedule and recorded in the financial statements accordingly.
+- **Payment Receipts**: Collect evidence of payments made by the borrower firm to the lender firm, including bank transfer records or payment receipts.
+
+### 7. **Confirmation of Intercompany Balances**
+
+- **Intercompany Confirmation**: Send intercompany balance confirmations to both affiliated firms to verify that they agree on the loan balances as of the reporting date.
+- **Reconciliation**: Perform reconciliations of intercompany accounts to ensure that the loan receivable and payable are properly recorded and that there are no discrepancies.
+
+### 8. **Disclosure in Financial Statements**
+
+- **Financial Statement Review**: Review both firms' financial statements to ensure that the loan is appropriately disclosed. This includes the loan's nature, terms, amounts, interest rates, and any relevant conditions.
+- **Related Party Disclosures**: Verify that the loan is disclosed as a related party transaction, as required by the applicable financial reporting framework (e.g., IFRS, GAAP).
+
+### 9. **Legal and Tax Compliance**
+
+- **Legal Review**: Obtain any legal opinions or correspondence related to the loan to ensure compliance with legal requirements, such as transfer pricing regulations.
+- **Tax Documentation**: Review the tax treatment of the loan, including the deductibility of interest expense and any transfer pricing considerations, to ensure compliance with tax laws.
+
+### 10. **Subsequent Events**
+
+- **Subsequent Payments**: Check for any payments made after the reporting period but before the audit report date to confirm the ongoing status of the loan.
+- **Changes in Terms**: Obtain evidence of any changes to the loan terms, including renegotiations, waivers, or extensions, that occurred after the reporting date.
+
+Collecting and reviewing this evidence helps ensure that the intercompany loan is properly recognized, measured, and disclosed in the financial statements of both affiliated firms.
+
 ## Audit Rules
 
 A financial audit involves a thorough examination of an organization's financial statements, transactions, and controls to ensure accuracy, compliance with accounting standards, and the prevention of fraud. The specific rules and procedures for a financial audit can vary based on the auditing standards followed (such as Generally Accepted Auditing Standards or International Standards on Auditing). Below are some common rules and principles typically applied in financial audits:
@@ -559,3 +685,93 @@ To use LLaMA.cpp and Large Language Models (LLMs) for GAAS (Generally Accepted A
 This setup allows you to leverage LLaMA.cpp for generating responses based on ASB statements and GAAS guidelines, providing a practical auditing tool. If you have any specific requirements or need further customization, let me know!
 
 Using the company's developed [RAG Server](https://snapcraft.io/rag-server) to provide this interface for bestbooks-auditor.
+
+## Keeping the Auditing Costs within budget
+
+To keep the cost of an audit low while ensuring its effectiveness and compliance with auditing standards, consider the following strategies:
+
+### 1. **Prepare and Organize Financial Records**
+   - **Timely and Accurate Record-Keeping**: Ensure that all financial records are up-to-date, accurate, and properly organized before the audit begins. This includes having all documentation like invoices, bank statements, contracts, and ledger entries readily available.
+   - **Use an Accounting Software**: Implement accounting software to automate and streamline financial processes. Well-maintained accounting systems reduce the time auditors spend on data gathering and verification.
+
+### 2. **Perform Internal Reviews**
+   - **Internal Audit or Pre-Audit Check**: Conduct an internal audit or pre-audit check before the external audit. This helps identify and correct errors, discrepancies, or compliance issues in advance, reducing the auditor's workload.
+   - **Reconcile Accounts**: Reconcile key accounts such as bank accounts, accounts receivable, and accounts payable before the audit. This ensures the financial statements are accurate and reduces the need for extensive auditor testing.
+
+### 3. **Improve Internal Controls**
+   - **Strengthen Internal Controls**: A robust internal control environment can reduce the amount of detailed testing the auditor needs to perform. Auditors may rely more on strong internal controls, reducing the extent of substantive procedures.
+   - **Document Controls**: Clearly document all internal controls, policies, and procedures. Providing this documentation to auditors can demonstrate control effectiveness and potentially reduce audit time.
+
+### 4. **Develop a Clear Audit Plan**
+   - **Coordinate with Auditors**: Communicate with the auditors early in the planning process to understand their requirements. A well-coordinated plan helps prevent delays and minimizes disruptions.
+   - **Provide a List of Needed Documents**: Request a detailed list of required documents from the auditors in advance. This allows you to gather all necessary materials before the audit starts, reducing back-and-forth and audit time.
+
+### 5. **Use Technology and Automation**
+   - **Leverage Audit Software**: Use audit and accounting software that integrates with the auditors' systems. Digital records facilitate quicker data analysis and reduce the need for manual data extraction.
+   - **Automate Routine Processes**: Automate routine processes like reconciliations and report generation. Automation reduces errors and ensures that the financial data is readily available for the audit.
+
+### 6. **Designate an Audit Liaison**
+   - **Appoint a Single Point of Contact**: Designate an internal team member to serve as the liaison with the audit team. This person can coordinate requests, gather information, and streamline communication, reducing misunderstandings and delays.
+   - **Train Staff**: Ensure that the designated liaison and key staff members are familiar with the audit process and can efficiently provide the necessary information and documentation.
+
+### 7. **Schedule the Audit During a Low-Activity Period**
+   - **Choose an Off-Peak Period**: Schedule the audit during a time when the company has lower operational activity, such as a less busy season. This allows the audit team to work more efficiently with minimal disruption.
+   - **Plan for Offsite Work**: If possible, arrange for some portions of the audit to be conducted offsite. This can be more cost-effective and less disruptive to daily operations.
+
+### 8. **Limit the Scope of the Audit**
+   - **Define the Audit Scope**: Clearly define the scope of the audit in the engagement letter. If a full audit is not required, consider requesting a review or agreed-upon procedures engagement, which may be less costly.
+   - **Focus on Key Risk Areas**: Work with the auditors to focus on the key risk areas of the business. By concentrating on the most significant accounts and transactions, auditors may spend less time on areas with minimal risk.
+
+### 9. **Provide Electronic Documentation**
+   - **Submit Documents Electronically**: Providing documents in electronic format (e.g., PDFs, spreadsheets) can save time and reduce audit costs. It allows auditors to use data analytics and other tools more effectively.
+   - **Implement a Secure Portal**: Use a secure file-sharing portal to exchange information with auditors. This can streamline document requests and responses, reducing delays.
+
+### 10. **Regular Communication with Auditors**
+   - **Regular Updates**: Maintain regular communication with the auditors throughout the year, not just during the audit period. This helps address any potential issues early and reduces the time needed during the actual audit.
+   - **Timely Response**: Respond promptly to audit queries and requests for additional information. Delays in providing information can extend the audit timeline and increase costs.
+
+### 11. **Continuous Improvement**
+   - **Learn from Past Audits**: Review the findings and recommendations from previous audits to improve processes and controls. Addressing recurring issues reduces the risk of additional testing in future audits.
+   - **Implement Auditor Suggestions**: Implement any operational or procedural improvements suggested by auditors to strengthen controls and reduce the scope of future audits.
+
+By proactively managing the audit process, enhancing internal controls, and maintaining organized financial records, you can reduce the time and effort auditors spend, ultimately lowering the cost of the audit while still meeting regulatory and reporting requirements.
+
+## When Financial Statements are in compliance with GAAP
+Financial statements are considered to be in accordance with Generally Accepted Accounting Principles (GAAP) when they are prepared and presented following the established standards, principles, and guidelines set by the Financial Accounting Standards Board (FASB) in the United States. Here’s an explanation of the key conditions that must be met for financial statements to be in accordance with GAAP:
+
+### 1. **Adherence to GAAP Principles**
+   - **Accrual Basis of Accounting**: GAAP requires the use of the accrual basis of accounting. This means that revenue is recognized when earned, and expenses are recognized when incurred, regardless of when cash is exchanged.
+   - **Consistency**: The financial statements must be prepared using consistent accounting methods and practices from one period to another. If any changes in accounting policies occur, they should be disclosed.
+   - **Matching Principle**: Expenses should be matched with the revenues they help generate within the same period. This ensures that the financial results accurately reflect the company's performance.
+   - **Historical Cost Principle**: Assets and liabilities should generally be recorded at their original cost. Some exceptions include certain investments and assets that may be recorded at fair value.
+
+### 2. **Comprehensive Presentation**
+   - **Full Disclosure**: All relevant financial information that could affect the users' understanding of the financial statements should be disclosed. This includes footnotes that explain accounting policies, contingent liabilities, and other significant matters.
+   - **Materiality**: Financial statements should include all material items that could influence the decision-making of users. Materiality is determined based on the size and nature of the item in relation to the financial statements.
+   - **Comparability**: Financial statements should include comparative information for previous periods to help users understand trends and changes in the company's financial position and performance.
+  
+### 3. **Compliance with Specific GAAP Standards**
+   - **Revenue Recognition**: Revenue should be recognized in line with GAAP standards, such as the revenue recognition principle, which requires recognizing revenue when the performance obligation is satisfied.
+   - **Expense Recognition**: Expenses should be recorded in the period in which they are incurred, following the matching principle.
+   - **Asset Valuation**: Assets should be valued and reported according to GAAP standards, which may involve using historical cost, net realizable value, or fair value depending on the type of asset.
+   - **Liability Recognition**: Liabilities should be recognized when it is probable that a future outflow of resources will result from past transactions or events, and the amount can be reasonably estimated.
+
+### 4. **Proper Financial Statement Structure**
+   - **Balance Sheet**: The balance sheet should present assets, liabilities, and equity in accordance with GAAP, distinguishing between current and non-current classifications.
+   - **Income Statement**: The income statement should report revenue, expenses, gains, and losses, clearly showing the company’s net income or loss for the period.
+   - **Statement of Cash Flows**: The statement of cash flows should categorize cash flows into operating, investing, and financing activities, providing a comprehensive view of cash movements during the period.
+   - **Statement of Changes in Equity**: This statement should detail changes in equity accounts, including retained earnings, dividends, and other comprehensive income.
+
+### 5. **Disclosure of Significant Accounting Policies**
+   - **Summary of Significant Accounting Policies**: Financial statements should include a note disclosing the significant accounting policies used in preparing the statements. This includes methods of depreciation, inventory valuation, revenue recognition, etc.
+   - **Changes in Accounting Policies**: If there are any changes in accounting policies or estimates, these should be disclosed, including the reason for the change and its effect on the financial statements.
+
+### 6. **Auditor’s Opinion**
+   - **Unqualified (Clean) Opinion**: An external auditor’s unqualified opinion indicates that the financial statements are presented fairly in all material respects and in accordance with GAAP. This opinion provides assurance to users that the statements adhere to GAAP.
+   - **Qualified, Adverse, or Disclaimer Opinion**: If the auditor issues a qualified, adverse, or disclaimer opinion, this may indicate that the financial statements are not fully in accordance with GAAP due to specific issues or limitations.
+
+### 7. **Compliance with Industry-Specific GAAP Standards**
+   - Different industries have specific GAAP standards and guidelines. For example, financial institutions, insurance companies, and non-profit organizations must follow additional rules tailored to their unique operations. Compliance with these industry-specific standards is also required for GAAP adherence.
+
+### Summary
+Financial statements are in accordance with GAAP when they faithfully represent the company's financial position, performance, and cash flows, following the principles, standards, and requirements set by the FASB. They must be prepared using consistent accounting methods, disclose all material and relevant information, and be structured to provide clarity and comparability for users. An independent auditor's unqualified opinion typically confirms compliance with GAAP.

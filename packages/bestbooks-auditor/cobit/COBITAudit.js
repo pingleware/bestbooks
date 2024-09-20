@@ -58,7 +58,7 @@ const {
   InternalControlMonitoring,
   ComplianceMonitoring,
   ITGovernanceAssurance,
-} = require("./cobit/cobit.js");
+} = require("./cobit.js");
 
 // Define a COBITAudit object constructor
 function COBITAudit() {
