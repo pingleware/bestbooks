@@ -47,6 +47,7 @@ const ContraEquity = require('./contra-equity');
 const DigitalCurrency = require('./digitalcurrency');
 const Bitcoin = require('./bitcoin');
 const Ether = require('./ether');
+const Disclosures = require('./disclosures');
 
 const {
     warn,
@@ -84,6 +85,7 @@ module.exports = {
     DigitalCurrency: DigitalCurrency,
     Bitcoin: Bitcoin,
     Ether: Ether,
+    Disclosures: Disclosures,
     warn,
     info,
     error,

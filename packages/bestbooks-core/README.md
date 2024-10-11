@@ -198,3 +198,192 @@ Creating a chart of accounts in accordance with GAAP is the first step towards G
     * 7330 - Digital Currency Losses
       * 7331 - Realized Digital Currency Losses
       * 7332 - Unrealized Digital Currency Losses
+
+# About the Disclousres table
+The `Disclosures` table holds crucial financial information that must comply with regulatory and accounting standards. It is designed to track the company's public disclosures related to financial statements, which are required for audits, SEC filings, and general financial transparency.
+
+## Use Cases for the `Disclosures` Table
+
+1. **Tracking Financial Disclosures Compliance**  
+   The primary use case for the `Disclosures` table is to ensure that financial disclosures (such as income statements, balance sheets, and cash flow statements) are compliant with applicable standards like GAAP, GAAS, and SEC regulations.
+   
+   **Example**:  
+   The company must disclose the financial health of the company by publishing a **Cash Flow Statement**. The table tracks whether the disclosure was made on time, whether it's compliant, and if any issues were found (like missing notes or improper methodology).
+   
+   **Disclosure Record**:
+   ```json
+   {
+     "name": "Cash Flow Statement",
+     "description": "Cash Flow Statement for FY 2023",
+     "is_compliant": 1,
+     "date_disclosed": "2023-01-15",
+     "compliance_note": "Compliant"
+   }
+   ```
+
+2. **Monitoring Non-Compliant Disclosures**  
+   Identifying and monitoring disclosures that have failed to comply with the necessary accounting or regulatory standards is critical for audits and assessments.
+   
+   **Example**:  
+   If an **Income Statement** lacks proper notes on revenue recognition, the audit team may flag this as non-compliant, and the company will be required to correct it before final approval.
+
+   **Non-compliant Disclosure Record**:
+   ```json
+   {
+     "name": "Income Statement",
+     "description": "Income Statement for FY 2023",
+     "is_compliant": 0,
+     "date_disclosed": "2023-03-01",
+     "compliance_note": "Methodology not disclosed"
+   }
+   ```
+
+3. **Reporting on Disclosure History**  
+   The `Disclosures` table can provide a historical record of all financial statements and other disclosures the company has made over a period of time. This helps auditors and regulatory bodies to review the company’s compliance with financial reporting over time.
+
+   **Example**:  
+   The audit team retrieves all financial disclosures made by the company over the last five years to confirm continuous compliance.
+
+   **Historical Disclosure Records**:
+   ```json
+   [
+     {
+       "name": "Balance Sheet",
+       "description": "Balance Sheet for FY 2022",
+       "is_compliant": 1,
+       "date_disclosed": "2022-03-01",
+       "compliance_note": "Compliant"
+     },
+     {
+       "name": "Income Statement",
+       "description": "Income Statement for FY 2022",
+       "is_compliant": 1,
+       "date_disclosed": "2022-03-01",
+       "compliance_note": "Compliant"
+     }
+   ]
+   ```
+
+4. **Generating Compliance Reports for Audits**  
+   The disclosures data can be used to generate detailed reports for external audits, including management and public audit reports. These reports indicate whether the company is in compliance with disclosure requirements, pinpointing areas of improvement.
+
+   **Example**:  
+   A **Management Audit Report** is generated, summarizing which disclosures were compliant and which required corrective actions.
+   
+   **Audit Report Example**:
+   ```json
+   {
+     "total_disclosures": 10,
+     "compliant_disclosures": 9,
+     "non_compliant_disclosures": 1,
+     "non_compliant_details": [
+       {
+         "disclosure": "Income Statement",
+         "compliance_note": "Methodology not disclosed"
+       }
+     ]
+   }
+   ```
+
+5. **Ensuring Timeliness of Disclosures**  
+   The `Disclosures` table allows tracking the timeliness of financial disclosures, which is important for SEC reporting deadlines. Late filings can lead to penalties or regulatory scrutiny.
+   
+   **Example**:  
+   The **Balance Sheet** for Q2 is supposed to be disclosed by the end of the quarter. If it is delayed beyond the disclosure deadline, the company may face penalties.
+
+   **Late Disclosure Record**:
+   ```json
+   {
+     "name": "Balance Sheet",
+     "description": "Balance Sheet for Q2 2023",
+     "is_compliant": 0,
+     "date_disclosed": "2023-07-15",
+     "compliance_note": "Late submission"
+   }
+   ```
+
+6. **Tracking Disclosure Corrections**  
+   Companies may need to revise their disclosures if auditors or regulators find errors. Tracking when disclosures were corrected helps maintain an audit trail.
+   
+   **Example**:  
+   The **Cash Flow Statement** initially failed to disclose a cash outflow correctly. After a revision, it was marked as compliant.
+
+   **Corrected Disclosure Record**:
+   ```json
+   {
+     "name": "Cash Flow Statement",
+     "description": "Revised Cash Flow Statement for FY 2023",
+     "is_compliant": 1,
+     "date_disclosed": "2023-04-01",
+     "compliance_note": "Revised disclosure"
+   }
+   ```
+
+7. **Tracking Key Financial Metrics and Their Presentation**  
+   Ensure that key financial metrics such as earnings per share (EPS), total assets, liabilities, and cash flows are properly disclosed and are consistent across the disclosures.
+   
+   **Example**:  
+   The company's **Equity Statement** must include the proper breakdown of share transactions and equity changes. If some key equity metrics are omitted, it would be considered non-compliant.
+
+   **Equity Statement Disclosure**:
+   ```json
+   {
+     "name": "Equity Statement",
+     "description": "Equity Statement for FY 2023",
+     "is_compliant": 1,
+     "date_disclosed": "2023-01-15",
+     "compliance_note": "Includes EPS, dividends, and other changes in equity"
+   }
+   ```
+
+8. **Ensuring Compliance with Regulatory Changes**  
+   As regulations evolve, the company must ensure that disclosures are updated to reflect new accounting standards or regulatory requirements.
+   
+   **Example**:  
+   New SEC regulations may require additional disclosure of **Related Party Transactions**. The `Disclosures` table tracks whether this new requirement has been implemented.
+
+   **Related Party Transaction Disclosure**:
+   ```json
+   {
+     "name": "Related Party Transactions",
+     "description": "Disclosures of transactions with related parties for FY 2023",
+     "is_compliant": 1,
+     "date_disclosed": "2023-01-15",
+     "compliance_note": "Compliant with new SEC regulations"
+   }
+   ```
+
+9. **Support for Public Disclosure Reporting**  
+   The `Disclosures` table is also useful for generating **Public Disclosure Audit Reports**, which summarize the financial information made available to investors and the public, ensuring transparency and accountability.
+   
+   **Example**:  
+   A **Public Disclosure Report** is generated to confirm that all mandatory filings have been made and publicly disclosed by the company in accordance with SEC regulations.
+   
+   **Public Disclosure Report Example**:
+   ```json
+   {
+     "total_disclosures": 12,
+     "compliant_disclosures": 11,
+     "non_compliant_disclosures": 1,
+     "non_compliant_details": [
+       {
+         "disclosure": "Income Statement",
+         "compliance_note": "Disclosure methodology missing"
+       }
+     ],
+     "date": "2023-12-31"
+   }
+   ```
+
+### Summary of Use Cases
+1. **Tracking Financial Disclosures Compliance** (e.g., Balance Sheet, Income Statement)
+2. **Monitoring Non-Compliant Disclosures** (e.g., flagging incomplete/missing disclosures)
+3. **Reporting on Disclosure History** (e.g., view historical disclosure records)
+4. **Generating Compliance Reports for Audits** (e.g., create audit reports)
+5. **Ensuring Timeliness of Disclosures** (e.g., track on-time vs late disclosures)
+6. **Tracking Disclosure Corrections** (e.g., track revisions to disclosures)
+7. **Tracking Key Financial Metrics** (e.g., EPS, liabilities, cash flows)
+8. **Ensuring Compliance with Regulatory Changes** (e.g., adaptation to new regulations)
+9. **Support for Public Disclosure Reporting** (e.g., ensure investor disclosures are accurate)
+
+These use cases are essential for maintaining financial transparency, ensuring regulatory compliance, and assisting in internal and external audits.
