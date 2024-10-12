@@ -1,43 +1,55 @@
-const assert = require('assert').strict
-const Ledger = require("../ledger.js");
-const ChartOfAccounts = require("../chartOfAccounts");
-const AccountTypes = require("../accountTypes");
-const Model = require("../model");
+"use strict";
 
+const assert = require('assert');
+const Ledger = require('../ledger');
+const Model = require('../model');
 
-describe("testing Ledger class",function(){
-    it("deposit $100 to Cash account",async function(){
-        var coa = new ChartOfAccounts();
-        await coa.add("Cash",AccountTypes.Cash,1);
+describe('Ledger Class', function() {
+    let ledger;
 
-        var cash = new Ledger("Cash",AccountTypes.Cash);
-        var ids = await cash.addDebit(new Date().toISOString(),"Deposit",100.00,1,0);
+    before(async function() {
+        // This is run before any tests to set up the environment
+        // Here you might want to clear the ledger table or initialize the database
+        ledger = new Ledger('Test Account', 'Asset');
+    });
 
-        var model = new Model();
-        var cash_account_row = await model.querySync(`SELECT * FROM accounts WHERE name='Cash';`)
-        var ledger_row = await model.querySync(`SELECT * FROM ledger WHERE id=${ids[0]};`)
-        var journal_row = await model.querySync(`SELECT * FROM journal WHERE id=${ids[1]};`)
+    it('should create an instance of Ledger', function() {
+        assert.ok(ledger instanceof Ledger);
+        assert.strictEqual(ledger.getName(), 'Test Account');
+        assert.strictEqual(ledger.getType(), 'Asset');
+        assert.strictEqual(ledger.balance, 0);
+    });
 
-        assert.equal(Number(cash_account_row[0].code),100,`Expected Cash account code to be 100 [${cash_account_row[0].code}]`)
-        assert.equal(ledger_row[0].company_id,journal_row[0].company_id,"Company ID is NOT updated between Ledger and Journal");
-        assert.equal(Number(ledger_row[0].debit),100.00,`Debit entry is incorrect [${ledger_row[0].debit}]`)
-    })
-    it("withdrawl $50 from Cash account",async function(){
-        var coa = new ChartOfAccounts();
-        await coa.add("Cash",AccountTypes.Cash,1);
+    it('should create ledger table if it does not exist', async function() {
+        await ledger.createLedgerTable();
+        
+        // You might want to check if the table was created successfully
+        const sql = `SELECT name FROM sqlite_master WHERE type='table' AND name='ledger';`;
+        const result = await ledger.model.querySync(sql);
+        
+        assert.strictEqual(result.length > 0, true);
+    });
 
-        var cash = new Ledger("Cash",AccountTypes.Cash);
-        var ids = await cash.addCredit(new Date().toISOString(),"Withdrawal",50.00,1,0);
+    it('should be able to remove an entry', async function() {
+        // You might want to add a test entry first
+        const insertSql = `INSERT INTO ledger (account_name, txdate, debit, credit) VALUES ('Test Account', datetime('now'), 100, 0);`;
+        await ledger.model.querySync(insertSql);
 
-        var model = new Model();
-        var ledger_row = await model.querySync(`SELECT * FROM ledger WHERE id=${ids[0]};`)
+        // Check if entry is there
+        let rows = await ledger.getAll();
+        assert.strictEqual(rows.total, 1);
 
-        assert.equal(Number(ledger_row[0].credit),50.00,`Credit entry is incorrect [${ledger_row[0].credit}]`)
-    })
-    this.afterAll(function(){
-        var model = new Model();
-        model.emptyTableSync("ledger");
-        model.emptyTableSync("journal");
-        model.emptyTableSync("accounts");
-    })
-})
+        // Now remove it
+        const deleteId = 1; // Assuming the ID of the inserted entry is 1
+        await ledger.remove(deleteId);
+
+        // Check if entry is removed
+        rows = await ledger.getAll();
+        assert.strictEqual(rows.total, 0);
+    });
+
+    after(async function() {
+        // Cleanup if necessary, like purging the ledger table
+        await ledger.purgeLedgerTable();
+    });
+});

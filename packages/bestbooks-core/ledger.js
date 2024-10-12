@@ -6,8 +6,7 @@
 
 const TAccount = require('./taccount');
 const Model = require('./model');
-const Journal = require('./journal');
-const localStorage = require('localStorage');
+const ChartOfAccounts = require('./chartOfAccounts');
 
 const {
     info,
@@ -35,6 +34,8 @@ class Ledger extends TAccount {
         // create ledger table if not exist
         this.createLedgerTable();
         //this.getBalance();
+        this.coa = new ChartOfAccounts();
+        this.coa.add(name,type);
     }
 
     getName(){
@@ -49,74 +50,6 @@ class Ledger extends TAccount {
         info(sql);
         var rows = this.model.querySync(sql);
         return (rows.length > 0 ? rows[0].type : 'not found');
-    }
-    
-    async addDebit(date,desc,amount,company_id=0,office_id=0){
-        try {
-            this.debit = amount;
-            var sql = `INSERT OR IGNORE INTO ledger (company_id,office_id,account_name,account_code,txdate,note,debit,balance) VALUES (${company_id},${office_id},'${this.name}',(SELECT code FROM accounts WHERE name='${this.name}'),'${date}','${desc}','${amount}',(SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+${amount},${amount}) FROM ledger WHERE account_name='${this.name}'));`;
-            info(sql);
-            let ledger_insert_id = await this.model.insertSync(sql);
-
-            //let ledger_insert_id = localStorage.getItem('lastID');
-            let journal_insert_id = 0;
-
-            if (this.name !== 'Uncategorized') {
-                var journal = new Journal('General');
-                journal_insert_id = await journal.add(date,ledger_insert_id,this.name,amount,0.00,company_id,office_id);
-                sql = `UPDATE ledger SET ref=${journal_insert_id} WHERE id=${ledger_insert_id};`;
-                info(sql);
-                await this.model.insertSync(sql);
-            }            
-            return [ledger_insert_id,journal_insert_id];
-        } catch(err) {
-            console.error(err);
-        }
-    }
-    async addCredit(date,desc,amount,company_id=0,office_id=0){
-        try {
-            this.credit = amount;
-            var sql = `INSERT OR IGNORE INTO ledger (company_id,office_id,account_name,account_code,txdate,note,credit,balance) VALUES (${company_id},${office_id},'${this.name}',(SELECT code FROM accounts WHERE name='${this.name}'),'${date}','${desc}','${amount}',(SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+${amount},${amount}) FROM ledger WHERE account_name='${this.name}'));`;
-            info(sql);
-
-            let ledger_insert_id = await this.model.insertSync(sql);
-            //let ledger_insert_id = localStorage.getItem('lastID');
-            let journal_insert_id = 0;
-
-            if (this.name !== 'Uncategorized') {
-                var journal = new Journal('General');
-                journal_insert_id = await journal.add(date,ledger_insert_id,this.name,0.00,amount, company_id, office_id);
-                //journal_insert_id = localStorage.getItem('lastID');
-                sql = `UPDATE ledger SET ref=${journal_insert_id} WHERE id=${ledger_insert_id};`;
-                await this.model.insertSync(sql);
-            }
-            return [ledger_insert_id,journal_insert_id];
-        } catch(err) {
-            error(JSON.stringify(err));
-        }
-    }
-    
-    getDebit(){
-        return this.debit;
-    }
-    getCredit(){
-        return this.credit;
-    }
-    
-    async getBalance(){
-        try {
-            const sql = `SELECT SUM(debit)-SUM(credit) AS balance FROM ledger WHERE account_name='${this.name}';`;
-            info(sql);
-            var rows = await this.model.querySync(sql);
-            this.balance = Number(rows[0].balance);
-        } catch(err) {
-            error(JSON.stringify(err));
-        }
-        return this.balance;
-    }
-
-    setBalance(balance) {
-        this.balance = balance;
     }
 
     async getAll() {
@@ -189,8 +122,8 @@ class Ledger extends TAccount {
                 "debit"	REAL DEFAULT 0,
                 "credit" REAL DEFAULT 0,
                 "balance" REAL DEFAULT 0,
-                "action" TEXT NOT NULL,          -- e.g., 'Authorize', 'Custody', 'Record'
-                "performed_by" INTEGER,          -- User ID
+                "action" TEXT DEFAULT 'Record',          -- e.g., 'Authorize', 'Custody', 'Record'
+                "performed_by" INTEGER DEFAULT 0,          -- User ID
                 PRIMARY KEY("id" AUTOINCREMENT),
                 FOREIGN KEY ("performed_by") REFERENCES users("id")
             );`;
