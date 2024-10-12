@@ -9,33 +9,56 @@
  const fs = require('fs');
  const localStorage = require('localStorage');
  const os = require('os');
+
+ const {
+    info,
+    warn,
+    error
+} = require('./logger');
+
  
  class Model {
-     LastID;
- 
-     constructor() {
+    constructor() {
         if (fs.existsSync(path.join(os.homedir(),'.bestbooks')) == false) {
             fs.mkdirSync(path.join(os.homedir(),'.bestbooks'));
         }
         this.filePath = path.join(os.homedir(),'.bestbooks/bestbooks.db');
          this.db = new sqlite3.Database(this.filePath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, 
             (err) => { 
-             // do your thing 
-             console.error(err);
+                // do your thing 
+                error(err);
             });         
-     }
+    }
+
+    close() {
+        return new Promise((resolve, reject) => {
+            this.db.close((err) => {
+                if (err) {
+                    error(err);
+                    return reject(err);
+                }
+                resolve();
+            });
+        });
+    }
  
      getFilePath() {
          return this.filePath;
      }
  
-     deleteDatabaseFile() {
-         if (fs.existsSync(this.filePath)) {
-             fs.rm(this.filePath);
-             return true;
-         }
-         return false;
-     }
+     async deleteDatabaseFile() {
+        return new Promise((resolve, reject) => {
+            if (fs.existsSync(this.filePath)) {
+                fs.rm(this.filePath, { force: true }, (err) => {
+                    if (err) return reject(err);
+                    resolve(true);
+                });
+            } else {
+                resolve(false); // Return false if the file does not exist
+            }
+        });
+    }
+    
  
      query(sql, callback) {
          this.db.all(sql, (err, rows) => {
@@ -46,8 +69,13 @@
  
      querySync(sql) {
          return new Promise((resolve, reject) => {
+            info(sql);
              this.db.all(sql, (err, rows) => {
-                 if (err) reject(err);
+                 if (err) {
+                    error(err);
+                    reject(err);
+                 }
+                 info(JSON.stringify(rows))
                  resolve(rows);
              });
          });
@@ -60,15 +88,27 @@
       * @param {*} params   [value1, value2]; // These are your actual values
       * @param {*} callback 
       */
-     insert(sql, params, callback) {
-         this.db.run(sql, params, (err, rows) => {
-             if (err) throw new Error(err);
-             localStorage.setItem('lastID',this.lastID);
-             localStorage.setItem('changes',this.changes);
-             callback(this.lastID,this.changes);
-         });
-     }
- 
+    insert(sql, params, callback) {
+        info(sql); // Log the SQL statement for debugging
+    
+        // Use traditional function syntax for the callback
+        this.db.run(sql, params, function(err) {
+            if (err) {
+                throw new Error(err); // Handle error by throwing an error
+            }
+    
+            // Set local storage items using the context from this callback
+            localStorage.setItem('lastID', this.lastID);
+            localStorage.setItem('changes', this.changes);
+    
+            // Log the database state for debugging
+            info(JSON.stringify(this)); // Log the current state of the database
+    
+            // Call the callback function with the correct lastID and changes
+            callback(this.lastID, this.changes);
+        });
+    }
+    
      /**
       * To prevent SQL injection, using parameterized queries.
       * 
@@ -76,17 +116,27 @@
       * @param {*} params   [value1, value2]; // These are your actual values
       * @returns 
       */
-     async insertSync(sql,params) {
-         return new Promise((resolve, reject) => {
-            //  deepcode ignore Sqli: change to using parameterized queries but Snyk does not recognized this implementation
-             this.db.run(sql, params, (err, rows) => {
-                 if (err) reject(err);
-                 localStorage.setItem('lastID',this.lastID);
-                 localStorage.setItem('changes',this.changes);
-                 resolve(this.lastID);
-             });
-         });
-     }
+    async insertSync(sql, params) {
+        return new Promise((resolve, reject) => {
+            // Log the SQL statement for debugging
+            info(sql);
+    
+            this.db.run(sql, params, function(err) { // Use traditional function syntax here
+                if (err) {
+                    reject(err); // Reject the promise on error
+                    return; // Exit to prevent further execution
+                }
+    
+                // Set local storage items using this context from the callback
+                localStorage.setItem('lastID', this.lastID);
+                localStorage.setItem('changes', this.changes);
+    
+                // Log rows for debugging
+                resolve(this.lastID); // Use this.lastID from the callback context
+            });
+        });
+    }
+    
  
      getLastID() {
          return this.LastID;
