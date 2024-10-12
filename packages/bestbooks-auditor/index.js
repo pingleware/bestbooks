@@ -2,6 +2,32 @@
 
 const { exec } = require('child_process');
 const {  NoteToFinancialStatements } = require('@pingleware/bestbooks-reports');
+const {
+  train,
+  query
+} = require('./ai/brain.js');
+const { 
+  performAuditChecks, 
+  performRevenueRecognitionCheck,
+  performExpenseRecognitionCheck,
+  performCompletenessCheck,
+  performAssetValuationCheck,
+  performInventoryValuationCheck,
+  performAccountsReceivableCheck,
+  performAccountsPayableCheck,
+  performEquityTransactionsCheck,
+  performCashFlowStatementCheck,
+  performDisclosureComplianceCheck,
+  performConsistencyPrincipleCheck,
+  performMaterialityCheck,
+  performConservatismCheck,
+  performGoingConcernCheck,
+  performSegregationOfDutiesCheck,
+  performFairPresentationCheck,
+  performEstimatesCheck,
+  performForeignCurrencyCheck,
+  performLeasesAndIncomeTaxesCheck,
+} = require('./gaapCheckService.js');
 
 function invoke(rexepathname,scriptpathname,reportId,reportName,callback=null) {
     exec(`${rexepathname} ${scriptpathname} ${reportName}`, (error, stdout, stderr) => {
@@ -386,6 +412,12 @@ const {
   RAG_SERVER_URL
 } = require('./ai/llamaAudit.js')
 
+const {
+  ToJSON,
+  ToXML,
+} = require('./formatAuditResults.js');
+
+const { sendAlertEmail } = require('./notificationService.js')
 
 module.exports = {
   invoke,
@@ -435,4 +467,29 @@ module.exports = {
   Soc2Framework,
   Soc3Framework,
   RAG_SERVER_URL,
+  train,
+  query,
+  performAuditChecks,
+  performRevenueRecognitionCheck,
+  performExpenseRecognitionCheck,
+  performCompletenessCheck,
+  performAssetValuationCheck,
+  performInventoryValuationCheck,
+  performAccountsReceivableCheck,
+  performAccountsPayableCheck,
+  performEquityTransactionsCheck,
+  performCashFlowStatementCheck,
+  performDisclosureComplianceCheck,
+  performConsistencyPrincipleCheck,
+  performMaterialityCheck,
+  performConservatismCheck,
+  performGoingConcernCheck,
+  performSegregationOfDutiesCheck,
+  performFairPresentationCheck,
+  performEstimatesCheck,
+  performForeignCurrencyCheck,
+  performLeasesAndIncomeTaxesCheck,
+  ToJSON,
+  ToXML,
+  sendAlertEmail,
 };

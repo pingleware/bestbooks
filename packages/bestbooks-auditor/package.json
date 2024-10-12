@@ -32,8 +32,10 @@
   },
   "engineStrict": true,
   "dependencies": {
-    "@pingleware/bestbooks-reports": "^1.0.16",
-    "child-process": "^1.0.2"
+    "@pingleware/bestbooks-reports": "^1.0.20",
+    "@programphile/brain.js": "^1.1.3-a",
+    "child-process": "^1.0.2",
+    "nodemailer": "^6.9.15"
   },
   "devDependencies": {
     "@pingleware/bestbooks-api": "^1.0.9",
