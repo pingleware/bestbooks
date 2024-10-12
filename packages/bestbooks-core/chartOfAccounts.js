@@ -4,9 +4,14 @@
 
 "use struct"
 
-const promisify = require('util').promisify;
 const Model = require('./model');
-const localStorage = require('localStorage');
+
+const {
+    info,
+    warn,
+    error
+} = require('./logger');
+
 
 class ChartOfAccounts {
 
@@ -15,44 +20,45 @@ class ChartOfAccounts {
     constructor() {
         // create and open database
         this.model = new Model();
-        this.createTable();    
-        //this.getList();
+        this.createTable();
     }
 
     async add(name,type,company_id=0) {
         try {
-            //if (!this.accounts[name]) {
-                this.accounts[name] = type;
-                this.count = this.accounts.length;
+            this.accounts[name] = type;
+            this.count = this.accounts.length;
 
-                //let company_id = localStorage.getItem('company_id') + Number(0);
-                var account = this.getAccountTypeCode(type);
-                var new_code = `SELECT count(id)+${account[1]} AS code FROM accounts WHERE base_type='${account[0]}'`;
-                var sql = `INSERT OR IGNORE INTO accounts (company_id,code,name,type,base_type) VALUES (${company_id},(${new_code}),'${name}','${type}','${account[0]}');`;
-                //console.log(sql);
-                return await this.model.insertSync(sql);
-                //return localStorage.getItem("lastID"); //`${name} added to Accounts successfully`;    
-            //} else {
-            //    return `Account: ${name} already exists`;
-            //}
-        } catch(error) {
-            console.error(error);
+            var account = this.getAccountTypeCode(type);
+            var new_code = `SELECT count(id)+${account[1]} AS code FROM accounts WHERE base_type='${account[0]}'`;
+            var sql = `INSERT OR IGNORE INTO accounts (company_id,code,name,type,base_type) VALUES (${company_id},(${new_code}),'${name}','${type}','${account[0]}');`;
+            info(`chartofaccounts.add: ${sql}`);
+            const result = await this.model.insertSync(sql);
+            if (!result) {
+                return true;
+            }
+            return result;
+        } catch(err) {
+            error(err);
+            throw error;  // Optionally rethrow the error to be handled in your tests
         }
     }
 
     async remove(name) {
         try {
             var sql = `DELETE FROM accounts WHERE name='${name}';`;
+            info(`chartofaccounts.remove: ${sql}`);
             await this.model.querySync(sql);
             return `${name} removed from accounts successfully`;
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(err);
+            throw error;  // Optionally rethrow the error to be handled in your tests
         }
     }
 
     in_use(name,callback) {
         try {
             var sql = `SELECT COUNT(id) AS count FROM journal WHERE account='${name}';`;
+            info(`chartofaccounts.in_use: ${sql}`);
             this.model.query(sql, function(results){
                 if (results[0].count > 0) {
                     callback(true);
@@ -60,21 +66,22 @@ class ChartOfAccounts {
                     callback(false);
                 }
             })
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(err);
         }
     }
 
     async in_use_sync(name) {
         try {
             var sql = `SELECT COUNT(id) AS count FROM journal WHERE account='${name}';`;
+            info(`chartofaccounts.in_use_sync: ${sql}`);
             var rows = await this.model.querySync(sql);
             if (rows[0].count > 0) {
                 return true;
             }
             return false;
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(err);
         }    
     }
 
@@ -90,18 +97,17 @@ class ChartOfAccounts {
             CASE WHEN (SELECT id FROM journal WHERE account=accounts.name) > 0 THEN true ELSE false END AS inuse 
             FROM accounts;`;
             if (company_id > 0) {
-                //sql = `SELECT id,name,type,code,false AS in_use FROM accounts WHERE company_id=${company_id};`;
-                //sql = `SELECT a.id,a.name,a.type,a.code,(SELECT COUNT(id) FROM journal WHERE account='UBER') AS count,IFNULL((SELECT  debit-credit  FROM journal WHERE account='UBER') ,0.00) AS balance FROM accounts  a WHERE a.company_id=1`;
                 sql = `SELECT id,name,type,code,base_type,
                 IFNULL((SELECT SUM(debit-credit) FROM journal WHERE account=accounts.name) ,0.00) AS balance,
                 CASE WHEN (SELECT id FROM journal WHERE account=accounts.name) > 0 THEN true ELSE false END AS inuse 
                 FROM accounts WHERE company_id=${company_id};`;
             }
+            info(`chartofaccounts.getList: ${sql}`);
             this.model.query(sql,function(accounts){
                 callback(accounts);
             });
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(err);
         }
     }
 
@@ -118,9 +124,10 @@ class ChartOfAccounts {
                 CASE WHEN (SELECT id FROM journal WHERE account=accounts.name) > 0 THEN true ELSE false END AS inuse 
                 FROM accounts WHERE company_id=${company_id};`;
             }
+            info(`chartofaccounts.getListSync: ${sql}`);
             return await this.model.querySync(sql);
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(err);
         }
     }
 
@@ -202,10 +209,11 @@ class ChartOfAccounts {
             }
           
             var sql = `SELECT count(id)+${account_value} AS code FROM accounts WHERE base_type='${account_type}';`;
+            info(`chartofaccounts.getNestAccountCode: ${sql}`);
             var rows = await this.model.querySync(sql);
             return rows[0].code;
-        } catch(error) {
-            console.error(error);
+        } catch(err) {
+            error(err);
         }
     }
 
@@ -271,10 +279,11 @@ class ChartOfAccounts {
             PRIMARY KEY("id")
         );`;
         try {
-            var result = await this.model.querySync(sql);
-            console.log(result);
-        } catch(error) {
-            console.error(error);
+            info(`chartofaccounts.createTable: ${sql}`);
+            await this.model.querySync(sql);
+            return true;
+        } catch(err) {
+            error(err);
         }
     }
 }
