@@ -387,3 +387,76 @@ The `Disclosures` table holds crucial financial information that must comply wit
 9. **Support for Public Disclosure Reporting** (e.g., ensure investor disclosures are accurate)
 
 These use cases are essential for maintaining financial transparency, ensuring regulatory compliance, and assisting in internal and external audits.
+
+## Conservatism Principle
+The Conservatism Principle should be applied and potentially updated when a ledger transaction is added, based on the type and certainty of the transaction. The principle specifically requires that:
+
+Expenses and Liabilities:
+
+These are to be recorded as soon as they are probable, even if the exact amount is uncertain. Therefore, when any transaction classified as an expense or liability is added to the ledger, it should be immediately flagged as "conservative."
+Revenues and Assets:
+
+These should only be recorded when they are certain. When a transaction classified as revenue or an asset is added, it should be flagged as "non-conservative" unless there is a high level of certainty regarding the transaction.
+In practical terms, when a new transaction is added to the ledger, the system should evaluate the nature of the transaction and apply or update the conservatism flag based on this logic.
+
+When to Update Conservatism in the Ledger
+Expenses and Liabilities should be updated and flagged immediately when they are recorded in the ledger (e.g., estimated costs, potential legal settlements, contingent liabilities).
+
+Revenues and Assets should be deferred or marked as uncertain until they are realized or certain (e.g., expected future sales, unrealized asset gains).
+
+Process to Update Conservatism Principle on Ledger Transactions
+Evaluate Transaction Type:
+
+If the transaction is an expense or liability, the conservatism principle should immediately flag it as conservative.
+If the transaction is revenue or asset, it should be flagged as non-conservative until certainty is achieved (i.e., confirmation of actual receipt or asset ownership).
+Update the Transaction Record:
+
+The transaction should be inserted into the ledger with the corresponding conservatism flag (is_conservative) based on the evaluation.
+
+## Going Concern Assumption
+The Going Concern Assumption in accounting is the assumption that a company will continue to operate in the foreseeable future and not be forced to halt its operations or liquidate its assets. In an audit or financial assessment, this principle is crucial because it affects the valuation of assets, liabilities, and other financial items.
+
+### How to Implement the Going Concern Assumption
+The logic for this can be applied by monitoring specific financial indicators that could suggest that the company may no longer continue as a going concern. These indicators might include:
+
+- Declining revenues
+- High debt levels
+- Negative cash flows
+- Inability to meet obligations
+
+### Key Logic Explained
+1. Adding Financial Indicators: Each financial indicator (like revenue, debt, or cash flow) is inserted into the financial_indicators table. Each entry has a value, a predefined threshold, and a status:
+
+  - If the value exceeds the threshold by a critical amount (e.g., 1.5 times), the status is marked as "critical."
+  - If the value exceeds the threshold but is not critical, it is marked as "warning."
+  - If the value is within normal range, it is marked as "normal."
+2. Evaluating the Going Concern Assumption: The evaluateGoingConcern() function checks for any critical financial indicators. If one or more indicators are critical, the company is flagged as not a going concern. Otherwise, it is considered a going concern.
+
+Financial Indicators:
+```
+[
+    {
+        "id": 1,
+        "indicator_name": "debt_to_equity_ratio",
+        "value": 4.5,
+        "threshold": 3.0,
+        "status": "critical",
+        "recorded_at": "2024-10-12"
+    },
+    {
+        "id": 2,
+        "indicator_name": "net_profit_margin",
+        "value": 0.1,
+        "threshold": 0.05,
+        "status": "normal",
+        "recorded_at": "2024-10-12"
+    }
+]
+```
+ Evaluate the Going Concern Assumption
+ ```
+{
+    "going_concern": true,
+    "message": "Company is operating as a going concern."
+}
+ ```

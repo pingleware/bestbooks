@@ -55,6 +55,11 @@ const {
     error
 } = require('./logger');
 
+const { ConsistencyPrinciple } = require('./consistencyPrinciple.js');
+const { Materiality } = require('./materiality.js');
+const { ConservatismPrinciple } = require('./conservatismPrinciple.js');
+const { GoingConcernAssumption } = require('./goingConcernAssumption.js');
+
 module.exports = {
     Model: Model,
     AccountTypes: AccountTypes,
@@ -86,6 +91,10 @@ module.exports = {
     Bitcoin: Bitcoin,
     Ether: Ether,
     Disclosures: Disclosures,
+    ConsistencyPrinciple: ConsistencyPrinciple,
+    Materiality: Materiality,
+    ConservatismPrinciple: ConservatismPrinciple,
+    GoingConcernAssumption: GoingConcernAssumption,
     warn,
     info,
     error,

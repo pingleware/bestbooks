@@ -22,11 +22,11 @@ function logError(message) {
 // Function to get the path of the log file
 function getLogFilePath() {
     const homeDir = os.homedir();
-    const logDir = path.join(homeDir,'.redeecashexchange');
+    const logDir = path.join(homeDir,'.bestbooks');
     if (!fs.existsSync(logDir)) {
         fs.mkdirSync(logDir);
     }
-    const logFileName = 'rcex.log';
+    const logFileName = 'bestbooks.log';
     return path.join(logDir, logFileName);
 }
 

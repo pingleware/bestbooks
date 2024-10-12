@@ -189,7 +189,10 @@ class Ledger extends TAccount {
                 "debit"	REAL DEFAULT 0,
                 "credit" REAL DEFAULT 0,
                 "balance" REAL DEFAULT 0,
-                PRIMARY KEY("id" AUTOINCREMENT)
+                "action" TEXT NOT NULL,          -- e.g., 'Authorize', 'Custody', 'Record'
+                "performed_by" INTEGER,          -- User ID
+                PRIMARY KEY("id" AUTOINCREMENT),
+                FOREIGN KEY ("performed_by") REFERENCES users("id")
             );`;
             info(sql);
     
