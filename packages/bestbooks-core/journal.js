@@ -20,16 +20,22 @@ class Journal {
         this.createTable();
     }
 
-    async add(date,ref,account,debit,credit,company_id=0,office_id=0) {
+    async add(date, ref, account, debit, credit, company_id = 0, office_id = 0) {
         try {
-            const sql = `INSERT OR IGNORE INTO  journal (company_id,office_id,txdate,ref,account,debit,credit) VALUES (${company_id},${office_id},'${date}','${ref}','${account}','${debit}','${credit}');`;
-            info(sql);
-            var results = await this.model.insertSync(sql);
-            return results;
-        } catch(err) {
+            const sql = `INSERT OR IGNORE INTO journal (company_id, office_id, txdate, ref, account, debit, credit) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    
+            // Use an array for parameters to prevent SQL injection
+            const params = [company_id, office_id, date, ref, account, debit, credit];
+            const id = await this.model.insertSync(sql, params); // Pass params here
+    
+            info(`journal.add.lastID: ${id}`);
+            return id;
+        } catch (err) {
             error(JSON.stringify(err));
         }
     }
+    
+
     async update(id,date,account,debit,credit,ref=0) {
         try {
             const sql = `UPDATE journal SET txdate='${date}',account='${account}',ref='${ref}',debit=${debit},credit=${credit} WHERE id=${id};`;
@@ -52,9 +58,9 @@ class Journal {
 
     async inBalance() {
         try {
-            const sql = `SELECT SUM(debit)=SUM(credit) AS INBALANCE FROM journal WHERE account="${this.name}";'`;
+            const sql = `SELECT SUM(debit)=SUM(credit) AS INBALANCE FROM journal;'`;
             info(sql);
-            var rows = await this.model.querySync(sql);
+            const rows = await this.model.querySync(sql);
             return rows[0].INBALANCE;
         } catch(err) {
             error(JSON.stringify(err));
@@ -90,6 +96,7 @@ class Journal {
         try {
             const sql = `CREATE TABLE IF NOT EXISTS "journal" (
                 "id" INTEGER,
+                "name" TEXT,
                 "company_id" INTEGER,
                 "office_id"	INTEGER,
                 "txdate" TIMESTAMP,
@@ -130,7 +137,7 @@ class Journal {
     }
 
     async setXRef(id, value) {
-        const sql = `UPDATE journal SET xref=${value} WHERE id=${id};`;
+        const sql = `UPDATE journal SET ref=${value} WHERE id=${id};`;
         info(sql);
         return this.model.querySync(sql);
     }
