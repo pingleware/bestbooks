@@ -35,6 +35,7 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
+    "assert": "^2.1.0",
     "chai": "^5.1.1",
     "mocha": "^10.7.3",
     "sinon": "^19.0.2"
