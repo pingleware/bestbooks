@@ -15,20 +15,14 @@ const {
 } = require('./logger');
 
 class Ledger extends TAccount {
-    balance = 0;
 	name = null;
 	type = null;
-	debit = 0;
-	credit = 0;
 
     constructor(name, type) {
         super();
         // initialize instance variables
-        this.balance = 0;
         this.name = name;
         this.type = type;
-        this.debit = 0;
-        this.credit = 0;
         // create and open database
         this.model = new Model();
         // create ledger table if not exist
@@ -135,9 +129,9 @@ class Ledger extends TAccount {
         }
     }
 
-    async purgeLedgerTable() {
+    async purgeTable(where='') {
         try {
-            const sql = `DELETE FROM ledger;`;
+            const sql = `DELETE FROM ledger ${where};`;
             info(sql);
             await this.model.insertSync(sql);
         } catch(err) {

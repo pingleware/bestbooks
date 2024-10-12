@@ -22,10 +22,10 @@ class Journal {
 
     async add(date, ref, account, debit, credit, company_id = 0, office_id = 0) {
         try {
-            const sql = `INSERT OR IGNORE INTO journal (company_id, office_id, txdate, ref, account, debit, credit) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+            const sql = `INSERT OR IGNORE INTO journal (name, company_id, office_id, txdate, ref, account, debit, credit) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     
             // Use an array for parameters to prevent SQL injection
-            const params = [company_id, office_id, date, ref, account, debit, credit];
+            const params = [this.name, company_id, office_id, date, ref, account, debit, credit];
             const id = await this.model.insertSync(sql, params); // Pass params here
     
             info(`journal.add.lastID: ${id}`);

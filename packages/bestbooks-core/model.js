@@ -170,6 +170,10 @@
             await this.emptyTableSync(row.name);
         })
      }
+
+     async purge(table) {
+        await this.emptyTableSync(table);
+     }
  }
  
  module.exports = Model;
