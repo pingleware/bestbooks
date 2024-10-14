@@ -43,11 +43,19 @@ class ChartOfAccounts {
         }
     }
 
+    // account deletion permitted when NOT IN USE!
     async remove(name) {
         try {
-            var sql = `DELETE FROM accounts WHERE name='${name}';`;
-            info(`chartofaccounts.remove: ${sql}`);
-            await this.model.querySync(sql);
+            var sql = `DELETE FROM accounts WHERE name=?
+            AND NOT EXISTS (
+                SELECT 1 FROM ledger WHERE ledger.account_name = accounts.name
+            )
+            AND NOT EXISTS (
+                SELECT 1 FROM journal WHERE journal.account = accounts.name
+            );
+            `;
+            const params = [name];
+            await this.model.insertSync(sql,params);
             return `${name} removed from accounts successfully`;
         } catch(err) {
             error(err);
