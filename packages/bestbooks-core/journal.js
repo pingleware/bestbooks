@@ -4,6 +4,54 @@
 
 "use strict"
 
+/**
+ * In an accounting system, several types of journals are typically used to record financial 
+ * transactions. Here’s a list of common journals:
+ * 
+ * 1. **General Journal**  
+ *    - Used to record non-specialized or infrequent transactions that do not fit into other 
+ *      specialized journals. Examples include corrections and adjustments.
+ * 
+ * 2. **Sales Journal**  
+ *    - Records all credit sales of goods or services. Cash sales are generally recorded in the 
+ *      cash receipts journal.
+ * 
+ * 3. **Purchases Journal**  
+ *    - Records all credit purchases of goods or services. Cash purchases are usually recorded 
+ *      in the cash payments journal.
+ * 
+ * 4. **Cash Receipts Journal**  
+ *    - Tracks all receipts of cash, including cash sales and payments received from debtors.
+ * 
+ * 5. **Cash Payments (Disbursements) Journal**  
+ *    - Tracks all cash payments, such as payments to creditors, cash purchases, 
+ *      and operating expenses.
+ * 
+ * 6. **Sales Returns and Allowances Journal**  
+ *    - Used to record returns of goods sold on credit or sales allowances granted to customers.
+ * 
+ * 7. **Purchase Returns and Allowances Journal**  
+ *    - Used to record returns of goods purchased on credit or allowances received from suppliers.
+ * 
+ * 8. **Payroll Journal**  
+ *    - Records all payroll-related transactions, including wages, taxes withheld, 
+ *      and employee benefits.
+ * 
+ * 9. **Petty Cash Journal**  
+ *    - Used to track small cash expenditures made from a petty cash fund.
+ * 
+ * 10. **Fixed Asset Journal**  
+ *     - Records transactions related to the purchase, sale, or depreciation of fixed assets 
+ *       like machinery, buildings, and equipment.
+ * 
+ * 11. **Inventory Journal**  
+ *     - Records adjustments to inventory such as stock purchases, sales, and inventory write-downs 
+ *       or losses.
+ * 
+ * These journals serve as primary sources for entering transaction data before the entries are 
+ * posted to the general ledger.
+ */
+
 const Model = require('./model');
 const localStorage = require('localStorage');
 const {
