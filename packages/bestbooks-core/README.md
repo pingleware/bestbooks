@@ -1,6 +1,6 @@
 # BestBooks Accounting Application Framework - CORE
 
-[![Node.js TEST CI](https://github.com/pingleware/bestbooks-core/actions/workflows/node.js.yml/badge.svg)](https://github.com/pingleware/bestbooks-core/actions/workflows/node.js.yml)
+[![npm test](https://github.com/pingleware/bestbooks-core/actions/workflows/npm-test.yml/badge.svg)](https://github.com/pingleware/bestbooks-core/actions/workflows/npm-test.yml)
 
 BestBooks is an open source accounting application framework based on accounting terminology. Originally developed in Java to support multiple database because at the time the accounting applications had a close data model. Then migrated to PHP and as a WordPress plugin. BestBooks grew and matured as a WordPress plugin and became to cumbersome for a multiple site bookkeeping record system. A decision to rearchitect the framework with minimal web functionality interacting with a backend desktop-server component that can be placed behind a firewall.
 
