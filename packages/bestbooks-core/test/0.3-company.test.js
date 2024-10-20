@@ -11,13 +11,13 @@ describe("Company class",function(){
     })
 
     after(async function(){
-        await company.model.insertSync(`DELETE FROM accounts;`);
+        //await company.model.insertSync(`DELETE FROM accounts;`);
         await company.model.insertSync(`DELETE FROM ledger;`);
         await company.model.insertSync(`DELETE FROM journal;`);
         await company.model.insertSync(`DELETE FROM company;`);
         await company.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
         await company.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
-        await company.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
+        //await company.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
         await company.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='company';`);
     })
 
