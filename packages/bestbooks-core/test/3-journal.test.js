@@ -2,9 +2,8 @@
 
 "use strict";
 
-const Journal = require('../journal'); // Adjust the path as needed
-const Model = require('../model'); // Mock or adjust according to your needs
 const assert = require('assert');
+const {Journal} = require('../index'); // Adjust the path as needed
 
 describe('Journal Class', function () {
     let journal, id;
@@ -14,15 +13,13 @@ describe('Journal Class', function () {
     });
 
     after(async function () {
-        await journal.purgeTable();
-        await resetSequence();
+        await journal.model.insertSync(`DELETE FROM accounts;`);
+        await journal.model.insertSync(`DELETE FROM ledger;`);
+        await journal.model.insertSync(`DELETE FROM journal`);
+        await journal.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
+        await journal.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
+        await journal.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
     });
-
-    async function resetSequence() {
-        const sql = `UPDATE sqlite_sequence SET seq = 0 WHERE name = 'journal';`;
-        await journal.model.querySync(sql); // Assuming you have a querySync method to execute SQL
-    }
-
 
     it('should create the journal table', async function () {
         const result = await journal.listJournals();
@@ -36,7 +33,7 @@ describe('Journal Class', function () {
 
     it('should update a journal entry', async function () {
         const updatedRows = await journal.update(id, '2024-10-12', 'TestAccount', 150, 50, 1);
-        assert.strictEqual(updatedRows, 4); // Check that the number of updated rows is returned
+        assert.strictEqual(updatedRows, 1); // Check that the number of updated rows is returned
     });
 
     it('should calculate the balance', async function () {

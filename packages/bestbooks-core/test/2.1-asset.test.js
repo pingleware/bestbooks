@@ -1,26 +1,28 @@
-// asset.test.js
 const assert = require('assert');
 const Asset = require('../asset'); // Adjust the path as necessary
 const Journal = require('../journal');
-const Model = require('../model');
 
 describe('Asset Class', function () {
-    let asset;
+    let asset, journal;
 
     beforeEach(async function () {
         // Create a new Asset instance before each test
         asset = new Asset('Cash');
+        journal = new Journal("General");
     });
-
+    
     after(async function(){
         await asset.purgeTable();
-
-        const journal = new Journal();
         await journal.purgeTable()
 
-        const model = new Model();
-        await model.updateSync("UPDATE sqlite_sequence SET seq=0 WHERE name='journal';");
-        await model.updateSync("UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';");
+        await asset.model.insertSync(`DELETE FROM accounts`);
+        await asset.model.updateSync("UPDATE sqlite_sequence SET seq=0 WHERE name='journal';");
+        await asset.model.updateSync("UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';");
+    })
+    
+
+    it("should create an instance of Asset", async function(){
+        assert.ok(asset instanceof Asset);
     })
 
     it('should add a debit and return the correct ledger ID', async function () {
@@ -50,5 +52,3 @@ describe('Asset Class', function () {
         assert.strictEqual(await asset.getBalance(), 600, 'Balance should be 600 after credit');
     });
 });
-
-// Run tests with: mocha asset.test.js
