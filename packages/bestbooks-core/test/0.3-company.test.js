@@ -19,19 +19,18 @@ describe("Company class",function(){
         assert.ok(company instanceof Company);
     })
 
-    /* TODO: FIX github workflow
     it("add Sample Company",async function(){
         const result = await company.add("Sample Company","not a real company");
+        assert.strictEqual(result,1,"company id is NOT 1");
     })
 
     it("get company list",async function(){
-        await company.getAll(function(companies){
-            console.log(companies)
-        })
+        const companies = await company.getAll();
+        assert.strictEqual(companies[0].name,"Sample Company","expected 'Sample Company' for the name");
     })
 
     it("remove Sample Company",async function(){
         const result = await company.remove("Sample Company");
+        assert.strictEqual(result,1,"company id is NOT 1");
     })
-    */
 })
