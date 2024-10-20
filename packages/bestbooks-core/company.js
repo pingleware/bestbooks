@@ -57,21 +57,21 @@ class Company {
         return await this.model.insertSync(sql,params);
     }
 
-    async remove(name) {
-        /*
-        var sql = `DELETE FROM company WHERE name = ? 
-            AND NOT EXISTS (
-                SELECT 1 FROM accounts WHERE accounts.company_id = company.id
-            )
-            AND NOT EXISTS (
-                SELECT 1 FROM ledger WHERE ledger.company_id = company.id
-            )
-            AND NOT EXISTS (
-                SELECT 1 FROM journal WHERE journal.company_id = company.id
-            );
-        `;
-        */
+    async remove(name,in_use=false) {
         var sql = `DELETE FROM company WHERE name = ?;`;
+        if (in_use) {
+            sql = `DELETE FROM company WHERE name = ? 
+                AND NOT EXISTS (
+                    SELECT 1 FROM accounts WHERE accounts.company_id = company.id
+                )
+                AND NOT EXISTS (
+                    SELECT 1 FROM ledger WHERE ledger.company_id = company.id
+                )
+                AND NOT EXISTS (
+                    SELECT 1 FROM journal WHERE journal.company_id = company.id
+                );
+            `;
+        }
         const params = [name];
         return await this.model.insertSync(sql,params);
     }
