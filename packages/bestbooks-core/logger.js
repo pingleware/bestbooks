@@ -4,20 +4,16 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-function logError(message) {
+async function logError(message) {
     const errorLogPath = path.join(os.homedir(), '.bestbooks', 'bestbooks.log');
     
     // Create directory if it doesn't exist
-    if (!fs.existsSync(path.dirname(errorLogPath))) {
-        fs.mkdirSync(path.dirname(errorLogPath), { recursive: true });
+    if (!await fs.existsSync(path.dirname(errorLogPath))) {
+        await fs.mkdirSync(path.dirname(errorLogPath), { recursive: true });
     }
 
     // Append error to log file
-    fs.appendFile(errorLogPath, `${message}`, (err) => {
-        if (err) {
-            console.error('Error appending to error log:', err);
-        }
-    });
+    await fs.appendFileSync(errorLogPath, message);
 }
 // Function to get the path of the log file
 function getLogFilePath() {
@@ -45,7 +41,7 @@ function handleExit() {
     process.on('uncaughtException', (error) => {
         console.error('Uncaught exception occurred:', error);
         log('error',error);
-        process.exit(1); // Exit with failure status
+        //process.exit(1); // Exit with failure status
     });
 
     process.on('unhandledRejection', (reason, promise) => {

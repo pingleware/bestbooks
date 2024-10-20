@@ -67,10 +67,10 @@
          });
      }
  
-     querySync(sql) {
+     querySync(sql,params=[]) {
          return new Promise((resolve, reject) => {
-            info(sql);
-             this.db.all(sql, (err, rows) => {
+            info(this.getCompletedSQL(sql,params));
+            this.db.all(sql, params, (err, rows) => {
                  if (err) {
                     error(err);
                     reject(err);
@@ -89,7 +89,8 @@
       * @param {*} callback 
       */
     insert(sql, params, callback) {
-        info(sql); // Log the SQL statement for debugging
+        // Log the SQL statement for debugging
+        info(this.getCompletedSQL(sql,params));
     
         // Use traditional function syntax for the callback
         this.db.run(sql, params, function(err) {
@@ -119,7 +120,7 @@
     async insertSync(sql, params) {
         return new Promise((resolve, reject) => {
             // Log the SQL statement for debugging
-            info(sql);
+            info(this.getCompletedSQL(sql,params));
     
             this.db.run(sql, params, function(err) { // Use traditional function syntax here
                 if (err) {
@@ -137,43 +138,74 @@
         });
     }
     
+    async deleteSync(sql, params) {
+        return new Promise((resolve, reject) => {
+            // Log the SQL statement for debugging
+            info(this.getCompletedSQL(sql,params));
+    
+            this.db.run(sql, params, function(err) { // Use traditional function syntax here
+                if (err) {
+                    reject(err); // Reject the promise on error
+                    return; // Exit to prevent further execution
+                }
+    
+                // Set local storage items using this context from the callback
+                localStorage.setItem('lastID', this.lastID);
+                localStorage.setItem('changes', this.changes);
+    
+                // Log rows for debugging
+                resolve(this.changes); // Use this.changes from the callback context
+            });
+        });
+    }
  
-     getLastID() {
-         return this.LastID;
-     }
+    getLastID() {
+        return this.LastID;
+    }
  
-     async updateSync(sql) {
-         return this.insertSync(sql);
-     }
+    async updateSync(sql,params=[]) {
+        return this.insertSync(sql,params);
+    }
 
-     emptyTable(table,callback) {
+    emptyTable(table,callback) {
         this.insert(`DELETE FROM ${table};`,callback);
-     }
+    }
 
-     async emptyTableSync(table) {
+    async emptyTableSync(table) {
         return await this.insertSync(`DELETE FROM ${table};`)  
-     }
+    }
 
-     getAllTables(callback) {
+    getAllTables(callback) {
         var sql = `SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%';`;
         this.query(sql,callback);
-     }
+    }
 
-     async getAllTablesSync() {
+    async getAllTablesSync() {
         var sql = `SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%';`;
         return await this.querySync(sql);
-     }
+    }
 
-     async emptyAllTablesSync() {
+    async emptyAllTablesSync() {
         var rows = await this.getAllTablesSync();
         rows.forEach(async row => {
             await this.emptyTableSync(row.name);
         })
-     }
+    }
 
-     async purge(table) {
+    async purge(table) {
         await this.emptyTableSync(table);
-     }
+    }
+
+    getCompletedSQL(query, params) {
+        let i = 0;
+        return query.replace(/\?/g, () => {
+            let param = params[i++];
+            if (typeof param === 'string') {
+                param = `'${param}'`; // wrap strings in quotes
+            }
+            return param;
+        });
+    }
  }
  
  module.exports = Model;

@@ -1,26 +1,37 @@
 "use strict"
 
 const Model = require('./model');
-const localStorage = require('localStorage');
 
 class Company {
 
     constructor(name="") {
-        try {
-            this.model = new Model();
-            this.createTable();
+        this.model = new Model();
+        this.createTable().then(() => {
             if (name.length > 0) {
-                var sql = `SELECT * FROM company WHERE name='${name}';`;
-                this.model.query(sql, function(result){
+                this.find(name).then(result => {
                     if (result.length > 0) {
                         this.name = result[0].name;
                         this.id = result[0].id;
                     }
-                });    
+                });
             }
-        } catch(error) {
-            console.error(error);
-        }
+        });
+    }
+    
+
+    find(name) {
+        return new Promise((resolve,reject) => {
+            try {
+                resolve(this.findSync(name));
+            } catch(err) {
+                reject(err);
+            }
+        })
+    }
+
+    async findSync(name) {
+        var sql = `SELECT * FROM company WHERE name='%${name}%';`;
+        return await this.model.querySync(sql);
     }
 
     getID() {
@@ -31,18 +42,31 @@ class Company {
         return this.name;
     }
 
-    getCompanies(callback) {
-        var sql = `SELECT * FROM company;`;
-        this.model.query(sql, function(result){
-            callback(result);
-        });
+    async getAll() {
+        const sql = `SELECT * FROM company;`;
+        return await this.model.querySync(sql);
     }
 
-    addCompany(name,note,callback) {
-        var sql = `INSERT INTO company (name,txdate,note) VALUES ('${name}',CURRENT_TIMESTAMP,'${note}')`;
-        this.model.insert(sql, function(lastID, changes){
-            callback(lastID, changes);
-        })
+    async add(name,note) {
+        var sql = `INSERT OR IGNORE INTO company (name,txdate,note) VALUES (?,CURRENT_TIMESTAMP,?)`;
+        const params = [name, note];
+        return await this.model.insertSync(sql,params);
+    }
+
+    async remove(name) {
+        var sql = `DELETE FROM company WHERE name = ? 
+            AND NOT EXISTS (
+                SELECT 1 FROM accounts WHERE accounts.company_id = company.id
+            )
+            AND NOT EXISTS (
+                SELECT 1 FROM ledger WHERE ledger.company_id = company.id
+            )
+            AND NOT EXISTS (
+                SELECT 1 FROM journal WHERE journal.company_id = company.id
+            );
+        `;
+        const params = [name];
+        return await this.model.insertSync(sql,params);
     }
 
     async createTable() {
@@ -55,7 +79,7 @@ class Company {
                 PRIMARY KEY("id" AUTOINCREMENT)
             );`;
 
-            await this.model.querySync(sql);
+            await this.model.insertSync(sql);
         } catch(error) {
             console.error(error);
         }
