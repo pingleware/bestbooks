@@ -65,7 +65,11 @@ class Report {
         // create and open database
         this.model = new Model();
         // create ledger views
-        this.createViews();
+        this.init();
+    }
+
+    async init() {
+        await this.createViews();
     }
 
     async incomeStatement(startTxDate="",endTxDate="",callback) {
