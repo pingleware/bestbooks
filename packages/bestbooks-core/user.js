@@ -7,8 +7,7 @@ class User {
 
     constructor(role,name="") {
         this.model = new Model();
-        this.createTable();
-        this.createSystemUser();
+        this.init();
 
         if (name !== "") {
             var sql = `SELECT * FROM users WHERE name='${name}';`;
@@ -22,6 +21,11 @@ class User {
         }
 
         this.role = role;
+    }
+
+    async init() {
+        await this.createTable();
+        await this.createSystemUser();
     }
 
     MD5(d){
