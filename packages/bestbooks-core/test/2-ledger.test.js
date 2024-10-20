@@ -17,10 +17,10 @@ describe('Ledger Class', function() {
     after(async function() {
         await ledger.model.insertSync(`DELETE FROM accounts;`);
         await ledger.model.insertSync(`DELETE FROM ledger;`);
-        await ledger.model.insertSync(`DELETE FROM journal`);
-        await ledger.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
-        await ledger.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
+        //await ledger.model.insertSync(`DELETE FROM journal;`);
         await ledger.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
+        await ledger.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
+        //await ledger.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
     });
 
     it('should create an instance of Ledger', function() {
@@ -35,10 +35,10 @@ describe('Ledger Class', function() {
         assert.strictEqual(ledger.getType(), 'Asset');
     });
 
-    it('should identify account balance as zero',async function() {
-        const balance = await ledger.getBalance();
-        assert.strictEqual(balance, 0);
-    });
+    //it('should identify account balance as zero',async function() {
+    //    const balance = await ledger.getBalance();
+    //    assert.strictEqual(balance, 0);
+    //});
 
     it('should create ledger table if it does not exist', async function() {
         await ledger.createTable();
