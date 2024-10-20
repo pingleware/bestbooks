@@ -96,6 +96,7 @@ class ShareholderEquity extends Equity {
         await this.Investment.disbursement(user,totalDividend);
         await this.Investment.dividend(user,totalDividend);
     }
+
 }
 
 module.exports = ShareholderEquity;
