@@ -7,10 +7,10 @@ const {
 describe("ShareholderEquity Class", async function(){
     let equity, investments;
 
-    //before(function(){
-    //    equity = new ShareholderEquity();
+    before(function(){
+        equity = new ShareholderEquity();
     //    investments = new Investment("ShareholderEquity");
-    //})
+    })
     
     //after(async function(){
     //    await equity.model.insertSync(`DELETE FROM accounts`);
@@ -24,9 +24,9 @@ describe("ShareholderEquity Class", async function(){
     //})
     
 
-    //it("should create an instance of ShareholderEquity", async function(){
-    //    assert.ok(equity instanceof ShareholderEquity);
-    //})
+    it("should create an instance of ShareholderEquity", async function(){
+        assert.ok(equity instanceof ShareholderEquity);
+    })
 
     /* TODO: FIX github workflow npm test
     it("should handle shareholder contributions correctly", async function () {

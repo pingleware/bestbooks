@@ -47,6 +47,10 @@ class ShareholderEquity extends Equity {
         this.cash = new Cash();
         this.user = new User();
         this.Investment = new Investment("ShareholderCapital");
+        this.init();
+    }
+
+    async init() {
     }
 
     async contribution(date, description, price, numberOfShares, user = 0, parValue = 5) {
