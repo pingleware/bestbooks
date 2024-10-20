@@ -44,36 +44,6 @@ describe("Report Class", async function(){
         await expense.addCredit("2024-01-01","COGS",500.0);
 
         const rows = await report.trialBalanceSync();
-        /**
-         * Output:
-         * 
-         * [
-         *   {
-         *     code: '100',
-         *     name: 'Cash',
-         *     type: 'Asset',
-         *     debit: 1000,
-         *     credit: 0,
-         *     txdate: '2024-01-01'
-         *   },
-         *   {
-         *     code: '400',
-         *     name: 'Expense',
-         *     type: 'Expense',
-         *     debit: 0,
-         *     credit: 500,
-         *     txdate: '2024-01-01'
-         *   },
-         *   {
-         *     code: '500',
-         *     name: 'Revenue',
-         *     type: 'Revenue',
-         *     debit: 0,
-         *     credit: 500,
-         *     txdate: '2024-01-01'
-         *   }
-         * ]
-         */
 
         // We expect 3 rows in the trial_balance for Cash, Revenue, and Expense
         assert.strictEqual(rows.length, 3);
