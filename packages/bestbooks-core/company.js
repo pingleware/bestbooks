@@ -58,6 +58,7 @@ class Company {
     }
 
     async remove(name) {
+        /*
         var sql = `DELETE FROM company WHERE name = ? 
             AND NOT EXISTS (
                 SELECT 1 FROM accounts WHERE accounts.company_id = company.id
@@ -69,6 +70,8 @@ class Company {
                 SELECT 1 FROM journal WHERE journal.company_id = company.id
             );
         `;
+        */
+        var sql = `DELETE FROM company WHERE name = ?;`;
         const params = [name];
         return await this.model.insertSync(sql,params);
     }
