@@ -1,22 +1,42 @@
 "use strict";
 
 const assert = require('assert');
-const Company = require("../company");
+const {
+    Cash,
+    Journal,
+    Company
+} = require("../index");
 
 describe("Company class",function(){
-    let company;
+    let company, cash, petty_cash;
 
     before(function(){
         company = new Company();
+        cash = new Cash("Cash");
+        petty_cash = new Journal("PettyCash");
     })
 
     after(async function(){
         await company.model.insertSync(`DELETE FROM company;`);
+        await company.model.insertSync(`DELETE FROM accounts;`);
+        await company.model.insertSync(`DELETE FROM ledger;`);
+        await company.model.insertSync(`DELETE FROM journal;`);
         await company.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='company';`);
+        await company.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
+        await company.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
+        await company.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
     })
 
     it("should create an instance of Company", async function(){
         assert.ok(company instanceof Company);
+    })
+
+    it("should create an instance of Cash", async function(){
+        assert.ok(cash instanceof Cash);
+    })
+
+    it("should create an instance of Journal", async function(){
+        assert.ok(petty_cash instanceof Journal);
     })
 
     it("add Sample Company",async function(){
