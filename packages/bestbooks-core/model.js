@@ -93,20 +93,22 @@
         info(this.getCompletedSQL(sql,params));
     
         // Use traditional function syntax for the callback
-        this.db.run(sql, params, function(err) {
-            if (err) {
-                throw new Error(err); // Handle error by throwing an error
-            }
-    
-            // Set local storage items using the context from this callback
-            localStorage.setItem('lastID', this.lastID);
-            localStorage.setItem('changes', this.changes);
-    
-            // Log the database state for debugging
-            info(JSON.stringify(this)); // Log the current state of the database
-    
-            // Call the callback function with the correct lastID and changes
-            callback(this.lastID, this.changes);
+        this.db.serialize(() => {
+            this.db.run(sql, params, function(err) {
+                if (err) {
+                    throw new Error(err); // Handle error by throwing an error
+                }
+        
+                // Set local storage items using the context from this callback
+                localStorage.setItem('lastID', this.lastID);
+                localStorage.setItem('changes', this.changes);
+        
+                // Log the database state for debugging
+                info(JSON.stringify(this)); // Log the current state of the database
+        
+                // Call the callback function with the correct lastID and changes
+                callback(this.lastID, this.changes);
+            });    
         });
     }
     
@@ -121,20 +123,23 @@
         return new Promise((resolve, reject) => {
             // Log the SQL statement for debugging
             info(this.getCompletedSQL(sql,params));
-    
-            this.db.run(sql, params, function(err) { // Use traditional function syntax here
-                if (err) {
-                    reject(err); // Reject the promise on error
-                    return; // Exit to prevent further execution
-                }
-    
-                // Set local storage items using this context from the callback
-                localStorage.setItem('lastID', this.lastID);
-                localStorage.setItem('changes', this.changes);
-    
-                // Log rows for debugging
-                resolve(this.lastID); // Use this.lastID from the callback context
+
+            this.db.serialize(() => {
+                this.db.run(sql, params, function(err) { // Use traditional function syntax here
+                    if (err) {
+                        reject(err); // Reject the promise on error
+                        return; // Exit to prevent further execution
+                    }
+        
+                    // Set local storage items using this context from the callback
+                    localStorage.setItem('lastID', this.lastID);
+                    localStorage.setItem('changes', this.changes);
+        
+                    // Log rows for debugging
+                    resolve(this.lastID); // Use this.lastID from the callback context
+                });    
             });
+
         });
     }
     
@@ -143,18 +148,20 @@
             // Log the SQL statement for debugging
             info(this.getCompletedSQL(sql,params));
     
-            this.db.run(sql, params, function(err) { // Use traditional function syntax here
-                if (err) {
-                    reject(err); // Reject the promise on error
-                    return; // Exit to prevent further execution
-                }
-    
-                // Set local storage items using this context from the callback
-                localStorage.setItem('lastID', this.lastID);
-                localStorage.setItem('changes', this.changes);
-    
-                // Log rows for debugging
-                resolve(this.changes); // Use this.changes from the callback context
+            this.db.serialize(() => {
+                this.db.run(sql, params, function(err) { // Use traditional function syntax here
+                    if (err) {
+                        reject(err); // Reject the promise on error
+                        return; // Exit to prevent further execution
+                    }
+        
+                    // Set local storage items using this context from the callback
+                    localStorage.setItem('lastID', this.lastID);
+                    localStorage.setItem('changes', this.changes);
+        
+                    // Log rows for debugging
+                    resolve(this.changes); // Use this.changes from the callback context
+                });    
             });
         });
     }
