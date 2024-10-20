@@ -87,7 +87,6 @@ class Journal {
     async update(id,date,account,debit,credit,ref=0) {
         try {
             const sql = `UPDATE journal SET txdate='${date}',account='${account}',ref='${ref}',debit=${debit},credit=${credit} WHERE id=${id};`;
-            info(sql);
             return await this.model.updateSync(sql);
         } catch(err) {
             error(JSON.stringify(err));
@@ -97,7 +96,6 @@ class Journal {
     async remove(id) {
         try {
             const sql = `DELETE FROM journal WHERE id='${id}';`;
-            info(sql);
             await this.model.querySync(sql);
         } catch(err) {
             error(JSON.stringify(err));
@@ -107,7 +105,6 @@ class Journal {
     async inBalance() {
         try {
             const sql = `SELECT SUM(debit)=SUM(credit) AS INBALANCE FROM journal;'`;
-            info(sql);
             const rows = await this.model.querySync(sql);
             return rows[0].INBALANCE;
         } catch(err) {
@@ -118,7 +115,6 @@ class Journal {
     async balance() {
         try {
             const sql = `SELECT SUM(credit)-SUM(debit) AS balance FROM journal WHERE account='${this.name}";'`;
-            info(sql);
             var rows = await this.model.querySync(sql);
             return Number(rows[0].balance);
         } catch(err) {
@@ -133,7 +129,6 @@ class Journal {
     async transaction(where="") {
         try {
             const sql = `SELECT * FROM journal WHERE account="${this.name}" ${where} ORDER BY txdate ASC;`;
-            info(sql);
             return await this.model.querySync(sql);
         } catch(err) {
             error(JSON.stringify(err));
@@ -154,8 +149,7 @@ class Journal {
                 "credit" REAL,
                 PRIMARY KEY("id" AUTOINCREMENT)
             );`;
-            info(sql);
-            await this.model.querySync(sql);    
+            await this.model.updateSync(sql);    
         } catch(err) {
             error(JSON.stringify(err));
         }
@@ -164,7 +158,6 @@ class Journal {
     async purgeTable() {
         try {
             const sql = `DELETE FROM journal;`;
-            info(sql);
             await this.model.insertSync(sql);
         } catch(err) {
             error(JSON.stringify(err));
@@ -173,21 +166,19 @@ class Journal {
 
     async listJournals() {
         const sql = `SELECT name FROM journal GROUP BY name`;
-        info(sql);
         var rows = this.model.querySync(sql);
         return rows;
     }
 
     async getDebitCreditTotals(where='') {
         const sql = `SELECT SUM(debit) AS total_debit,SUM(credit) AS total_credit FROM journal ${where} ORDER BY txdate ASC`;
-        info(sql);
         return this.model.querySync(sql);
     }
 
     async setXRef(id, value) {
-        const sql = `UPDATE journal SET ref=${value} WHERE id=${id};`;
-        info(sql);
-        return this.model.querySync(sql);
+        let sql = `UPDATE journal SET ref=? WHERE id=?;`;
+        const params = [value, id];
+        return this.model.updateSync(sql,params);
     }
 }
 
