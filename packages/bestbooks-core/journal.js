@@ -65,7 +65,11 @@ class Journal {
     constructor(name) {
         this.name = name;
         this.model = new Model();
-        this.createTable();
+        this.init();
+    }
+
+    async init() {
+        await this.createTable();
     }
 
     async add(date, ref, account, debit, credit, company_id = 0, office_id = 0) {

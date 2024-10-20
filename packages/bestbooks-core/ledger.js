@@ -25,11 +25,15 @@ class Ledger extends TAccount {
         this.type = type;
         // create and open database
         this.model = new Model();
-        // create ledger table if not exist
-        this.createTable();
+        this.init();
         //this.getBalance();
         this.coa = new ChartOfAccounts();
         this.coa.add(name,type);
+    }
+
+    async init() {
+        // create ledger table if not exist
+        await this.createTable();
     }
 
     getName(){
