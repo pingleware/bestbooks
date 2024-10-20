@@ -15,9 +15,12 @@ describe('Ledger Class', function() {
     });
 
     after(async function() {
-        // Cleanup if necessary, like purging the ledger table
-        await ledger.purgeTable();
-        await coa.remove('Test Account');
+        await company.model.insertSync(`DELETE FROM accounts;`);
+        await company.model.insertSync(`DELETE FROM ledger;`);
+        await company.model.insertSync(`DELETE FROM journal`);
+        await company.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
+        await company.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
+        await company.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
     });
 
     it('should create an instance of Ledger', function() {
