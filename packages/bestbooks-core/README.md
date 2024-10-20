@@ -6,6 +6,8 @@ NodeJS was chosen for the code base of the architecture because of one-code-base
 
 The core module is a migration of the PHP classes from the WordPress plugin.
 
+[![Node.js Package](https://github.com/pingleware/bestbooks-core/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/pingleware/bestbooks-core/actions/workflows/npm-publish.yml)
+
 # Test Driven Development
 
 TDD will be utilized during the development and maintenance, using the mocha test framework.
