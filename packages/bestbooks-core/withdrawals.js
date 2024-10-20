@@ -4,7 +4,8 @@
 
  "use strict"
 
-const Expense = require('./expense');
+ const Expense = require('./expense');
+
 
 class Withdrawals extends Expense {
     constructor(name) {
