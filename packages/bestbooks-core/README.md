@@ -8,6 +8,19 @@ NodeJS was chosen for the code base of the architecture because of one-code-base
 
 The core module is a migration of the PHP classes from the WordPress plugin.
 
+## Overview of the components
+| Module | Description                                                                  |
+|--------|------------------------------------------------------------------------------|
+| core   | The core which provides database connectivity and logging |
+| audit  | algorithmic auditing |
+| helpers | common methods used in accounting |
+| api | an API server interface |
+| reports | an XML based report generation without any third-party reporting frameworks |
+| exports | permit exporting the records to other formats |
+| import  | permit importing financial information from other formats |
+| mailer  | a built SMTP mail server |
+| hrm     | a human resource management integration |
+
 # Test Driven Development
 
 TDD will be utilized during the development and maintenance, using the mocha test framework.
