@@ -20,7 +20,11 @@ const Asset = require('./asset');
 class Inventory extends Asset {
     constructor(name) {
         super(name);
-        this.createTable();
+        this.init();
+    }
+
+    async init() {
+        await this.createTable();
     }
 
     // Add new inventory item with cost flow assumption (FIFO, LIFO, or Weighted Average)
