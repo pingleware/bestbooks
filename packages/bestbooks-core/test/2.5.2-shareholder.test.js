@@ -9,10 +9,10 @@ describe("ShareholderEquity Class", async function(){
 
     before(function(){
         equity = new ShareholderEquity();
-    //    investments = new Investment("ShareholderEquity");
+        investments = new Investment("ShareholderEquity");
     })
     
-    //after(async function(){
+    after(async function(){
     //    await equity.model.insertSync(`DELETE FROM accounts`);
     //    await equity.model.insertSync(`DELETE FROM ledger`);
     //    await equity.model.insertSync(`DELETE FROM journal`);
@@ -21,11 +21,15 @@ describe("ShareholderEquity Class", async function(){
     //    await equity.model.updateSync("UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';");
     //    await equity.model.updateSync("UPDATE sqlite_sequence SET seq=0 WHERE name='journal';");
     //    await equity.model.updateSync("UPDATE sqlite_sequence SET seq=0 WHERE name='investment_account';");
-    //})
+    })
     
 
     it("should create an instance of ShareholderEquity", async function(){
         assert.ok(equity instanceof ShareholderEquity);
+    })
+
+    it("should create an instance of Investment", async function(){
+        assert.ok(investments instanceof Investment);
     })
 
     /* TODO: FIX github workflow npm test

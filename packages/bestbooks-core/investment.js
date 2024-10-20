@@ -9,7 +9,11 @@ const Asset = require('./asset');
 class Investment extends Asset {
     constructor(name) {
         super(name);
-        this.createTable();
+        this.init();
+    }
+
+    async init() {
+        await this.createTable();
     }
 
     async contribution(user, amount) {
