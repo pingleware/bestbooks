@@ -6,16 +6,20 @@ class Company {
 
     constructor(name="") {
         this.model = new Model();
-        this.createTable().then(() => {
-            if (name.length > 0) {
-                this.find(name).then(result => {
-                    if (result.length > 0) {
-                        this.name = result[0].name;
-                        this.id = result[0].id;
-                    }
-                });
-            }
-        });
+        this.init();
+
+        if (name.length > 0) {
+            this.find(name).then(result => {
+                if (result.length > 0) {
+                    this.name = result[0].name;
+                    this.id = result[0].id;
+                }
+            });
+        }
+    }
+
+    async init() {
+        await this.createTable();
     }
     
 
