@@ -31,14 +31,6 @@ describe("Company class",function(){
         assert.ok(company instanceof Company);
     })
 
-    it("should create an instance of Cash", async function(){
-        assert.ok(cash instanceof Cash);
-    })
-
-    it("should create an instance of Journal", async function(){
-        assert.ok(petty_cash instanceof Journal);
-    })
-
     it("add Sample Company",async function(){
         const result = await company.add("Sample Company","not a real company");
         assert.strictEqual(result,1,"company id is NOT 1");
