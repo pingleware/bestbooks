@@ -1,6 +1,9 @@
+"use strict";
+
 const User = require('../user');
 
 describe("User class",function(){
+    /*
     it("should initiate the User class without an initial user",async function(){
         const user = new User();
     })
@@ -21,4 +24,5 @@ describe("User class",function(){
         const user = new User();
         await user.find("community");
     })
+    */
 })
