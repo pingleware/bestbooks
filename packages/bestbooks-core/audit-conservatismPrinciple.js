@@ -14,7 +14,6 @@ const {
 
 class ConservatismPrinciple {
     constructor() {
-        super();
         // create and open database
         this.model = new Model();
         // create disclosures table if not exist
@@ -83,9 +82,7 @@ class ConservatismPrinciple {
                 type TEXT NOT NULL CHECK (type IN ('expense', 'liability', 'revenue', 'asset')),
                 transaction_date TEXT NOT NULL,
                 is_conservative BOOLEAN DEFAULT 0
-            );`;
-            info(sql);
-    
+            );`;   
             await this.model.querySync(sql);
         } catch(err) {
             error(JSON.stringify(err));
@@ -95,10 +92,11 @@ class ConservatismPrinciple {
     async purgeTable() {
         try {
             const sql = `DELETE FROM conservative_transactions ;`;
-            info(sql);
-            await this.model.insertSync(sql);
+            await this.model.deleteSync(sql);
         } catch(err) {
             error(JSON.stringify(err));
         }
     }
 }
+
+module.exports = ConservatismPrinciple;

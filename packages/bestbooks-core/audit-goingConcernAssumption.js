@@ -14,7 +14,6 @@ const {
 
 class GoingConcernAssumption {
     constructor() {
-        super();
         // create and open database
         this.model = new Model();
         // create disclosures table if not exist
@@ -104,8 +103,6 @@ class GoingConcernAssumption {
                 status TEXT NOT NULL CHECK (status IN ('normal', 'warning', 'critical')),
                 recorded_at TEXT NOT NULL
             );`;
-            info(sql);
-    
             await this.model.querySync(sql);
         } catch(err) {
             error(JSON.stringify(err));
@@ -115,8 +112,7 @@ class GoingConcernAssumption {
     async purgeTable() {
         try {
             const sql = `DELETE FROM financial_indicators;`;
-            info(sql);
-            await this.model.insertSync(sql);
+            await this.model.deleteSync(sql);
         } catch(err) {
             error(JSON.stringify(err));
         }

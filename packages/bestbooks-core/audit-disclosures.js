@@ -15,7 +15,6 @@ const {
 class Disclosures {
 
     constructor() {
-        super();
         // create and open database
         this.model = new Model();
         // create disclosures table if not exist
@@ -101,8 +100,6 @@ class Disclosures {
                 date_disclosed TEXT NOT NULL,
                 compliance_note TEXT
             );`;
-            info(sql);
-    
             await this.model.querySync(sql);
         } catch(err) {
             error(JSON.stringify(err));
@@ -112,8 +109,7 @@ class Disclosures {
     async purgeTable() {
         try {
             const sql = `DELETE FROM disclosures;`;
-            info(sql);
-            await this.model.insertSync(sql);
+            await this.model.deleteSync(sql);
         } catch(err) {
             error(JSON.stringify(err));
         }

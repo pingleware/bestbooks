@@ -14,7 +14,6 @@ const {
 
 class Materiality {
     constructor() {
-        super();
         // create and open database
         this.model = new Model();
         // create disclosures table if not exist
@@ -84,8 +83,6 @@ class Materiality {
                 is_material BOOLEAN DEFAULT 0,
                 materiality_threshold REAL NOT NULL
             );`;
-            info(sql);
-    
             await this.model.querySync(sql);
         } catch(err) {
             error(JSON.stringify(err));
@@ -95,8 +92,7 @@ class Materiality {
     async purgeTable() {
         try {
             const sql = `DELETE FROM transactions;`;
-            info(sql);
-            await this.model.insertSync(sql);
+            await this.model.deleteSync(sql);
         } catch(err) {
             error(JSON.stringify(err));
         }

@@ -14,7 +14,6 @@ const {
 
 class ConsistencyPrinciple {
     constructor() {
-        super();
         // create and open database
         this.model = new Model();
         // create disclosures table if not exist
@@ -79,8 +78,6 @@ class ConsistencyPrinciple {
                 date_changed TEXT,
                 is_consistent BOOLEAN NOT NULL
             );`;
-            info(sql);
-    
             await this.model.querySync(sql);
         } catch(err) {
             error(JSON.stringify(err));
@@ -90,8 +87,7 @@ class ConsistencyPrinciple {
     async purgeTable() {
         try {
             const sql = `DELETE FROM consistency;`;
-            info(sql);
-            await this.model.insertSync(sql);
+            await this.model.deleteSync(sql);
         } catch(err) {
             error(JSON.stringify(err));
         }
