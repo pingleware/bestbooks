@@ -17,10 +17,10 @@ describe('Ledger Class', function() {
     after(async function() {
         await ledger.model.insertSync(`DELETE FROM accounts;`);
         await ledger.model.insertSync(`DELETE FROM ledger;`);
-        //await ledger.model.insertSync(`DELETE FROM journal;`);
+        await ledger.model.insertSync(`DELETE FROM journal;`);
         await ledger.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
         await ledger.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
-        //await ledger.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
+        await ledger.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
     });
 
     it('should create an instance of Ledger', function() {

@@ -12,12 +12,12 @@ describe('Asset Class', function () {
     });
     
     after(async function(){
-        await asset.purgeTable();
-        await journal.purgeTable()
-
-        await asset.model.insertSync(`DELETE FROM accounts`);
-        await asset.model.updateSync("UPDATE sqlite_sequence SET seq=0 WHERE name='journal';");
-        await asset.model.updateSync("UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';");
+        await ledger.model.insertSync(`DELETE FROM accounts;`);
+        await ledger.model.insertSync(`DELETE FROM ledger;`);
+        await ledger.model.insertSync(`DELETE FROM journal;`);
+        await ledger.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
+        await ledger.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
+        await ledger.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
     })
     
 
