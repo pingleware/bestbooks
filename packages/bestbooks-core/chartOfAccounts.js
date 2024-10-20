@@ -294,6 +294,15 @@ class ChartOfAccounts {
             error(err);
         }
     }
+
+    async purgeTable() {
+        try {
+            const sql = `DELETE FROM accounts;`;
+            await this.model.deleteSync(sql);
+        } catch(err) {
+            error(JSON.stringify(err));
+        }
+    }
 }
 
 
