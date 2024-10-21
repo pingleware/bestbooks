@@ -20,6 +20,7 @@ The core module is a migration of the PHP classes from the WordPress plugin.
 | import  | permit importing financial information from other formats |
 | mailer  | a built SMTP mail server |
 | hrm     | a human resource management integration |
+| tax     | tax integration for federal, state and local taxes |
 
 # Test Driven Development
 
