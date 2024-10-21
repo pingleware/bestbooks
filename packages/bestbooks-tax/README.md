@@ -1,4 +1,4 @@
-# BestBooks Accounting Aplication Framework - TAX
+# BestBooks Accounting Application Framework - TAX
 The new `bestbooks-tax` module will be an extension of the BestBooks accounting system, designed to handle various tax obligations including federal, state, and local taxes. It will support income tax calculations, sales tax management, and other specialized taxes, ensuring compliance and ease of use for businesses and individuals. Below is a detailed breakdown of the features:
 
 ### 1. **Federal Taxes**
