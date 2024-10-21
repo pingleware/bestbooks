@@ -51,4 +51,39 @@ describe("CommonShares Class", async function(){
         balance = await equity.getBalance();
         assert.equal(balance,500000000000);
     })
+
+    it('should initialize with the correct account name and group', function() {
+        assert.strictEqual(equity.getName(), 'CommonShares');
+        assert.strictEqual(equity.getGroup(), 300);
+    });
+
+    it('should issue shares (credit) and update balance', async function() {
+        await equity.issueShares('2024-10-21', 'Issue Common Shares', 10000);
+        const creditAmount = await equity.getCredit();
+        const balance = await equity.getBalance();
+
+        assert.strictEqual(creditAmount, 10000);
+        assert.strictEqual(balance, 500000010000);  // Assuming initial balance is 0
+    });
+
+    it('should buy back shares (debit) and update balance', async function() {
+        await equity.buybackShares('2024-10-21', 'Buyback Common Shares', 5000);
+        const debitAmount = equity.getDebit();
+        const balance = await equity.getBalance();
+
+        assert.strictEqual(debitAmount, 5000);
+        assert.strictEqual(balance, 500000005000);  // Assuming initial balance is 0
+    });
+
+    it('should correctly adjust balance with issued and bought-back shares', async function() {
+        await equity.issueShares('2024-10-21', 'Issue Common Shares', 15000);
+        await equity.buybackShares('2024-10-21', 'Buyback Common Shares', 5000);
+
+        const balance = await equity.getBalance();
+        assert.strictEqual(balance, 500000015000);  // 15000 - 5000 = 10000
+    });
+
+    it('should return the correct base account type', function() {
+        assert.strictEqual(equity.getAccountBaseType(), "Equity");
+    });
 })

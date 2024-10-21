@@ -21,6 +21,16 @@ class CommonShares extends Equity {
     constructor() {
         super("CommonShares");
     }
+
+    issueShares(date, desc, amount, company_id = 0, office_id = 0) {
+        // Issuing shares (credit to common shares)
+        return this.addCredit(date, desc, amount, company_id, office_id);
+    }
+
+    buybackShares(date, desc, amount, company_id = 0, office_id = 0) {
+        // Buying back shares (debit to common shares)
+        return this.addDebit(date, desc, amount, company_id, office_id);
+    }
 }
 
 module.exports = CommonShares;
