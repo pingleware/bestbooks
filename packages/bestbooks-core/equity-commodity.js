@@ -21,6 +21,16 @@ class CommodityShares extends Equity {
     constructor() {
         super("CommodityShares");
     }
+
+    invest(date, desc, amount, company_id = 0, office_id = 0) {
+        // Investing in commodity shares (credit to equity)
+        return this.addCredit(date, desc, amount, company_id, office_id);
+    }
+
+    liquidate(date, desc, amount, company_id = 0, office_id = 0) {
+        // Liquidating commodity shares (debit to equity)
+        return this.addDebit(date, desc, amount, company_id, office_id);
+    }
 }
 
 module.exports = CommodityShares;

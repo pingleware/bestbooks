@@ -43,4 +43,42 @@ describe("CommodityShares Class", async function(){
         balance = await equity.getBalance();
         assert.equal(balance,250000000000);
     })
+
+    it('should initialize with the correct account name and group', function() {
+        assert.strictEqual(equity.getName(), 'CommodityShares');
+        assert.strictEqual(equity.getGroup(), 300);
+    });
+
+    it('should invest (credit) and update balance', async function() {
+        await equity.invest('2024-10-21', 'Investment in Commodities', 5000);
+        const creditAmount = await equity.getCredit();
+        const balance = await equity.getBalance();
+
+        assert.strictEqual(creditAmount, 5000);
+        assert.strictEqual(balance, 250000005000); 
+    });
+
+    it('should liquidate (debit) and update balance', async function() {
+        await equity.invest('2024-10-21', 'Investment in Commodities', 8000);
+        await equity.liquidate('2024-10-21', 'Liquidation of Commodities', 3000);
+
+        const debitAmount = await equity.getDebit();
+        const balance = await equity.getBalance();
+
+        assert.strictEqual(debitAmount, 3000);
+        assert.strictEqual(balance, 250000010000); 
+    });
+
+    it('should correctly adjust balance with multiple investments and liquidations', async function() {
+        await equity.invest('2024-10-21', 'Investment in Commodities', 12000);
+        await equity.liquidate('2024-10-21', 'Liquidation of Commodities', 4000);
+        await equity.invest('2024-10-22', 'Further Investment', 2000);
+
+        const balance = await equity.getBalance();
+        assert.strictEqual(balance, 250000020000); 
+    });
+
+    it('should return the correct base account type',async function() {
+        assert.strictEqual(await equity.getAccountBaseType(), "Equity");
+    });
 })
