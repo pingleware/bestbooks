@@ -12,15 +12,15 @@ The core module is a migration of the PHP classes from the WordPress plugin.
 | Module | Description                                                                  |
 |--------|------------------------------------------------------------------------------|
 | core   | The core which provides database connectivity and logging |
-| audit  | algorithmic auditing |
-| helpers | common methods used in accounting |
-| api | an API server interface |
-| reports | an XML based report generation without any third-party reporting frameworks |
-| exports | permit exporting the records to other formats |
-| import  | permit importing financial information from other formats |
-| mailer  | a built SMTP mail server |
-| hrm     | a human resource management integration |
-| tax     | tax integration for federal, state and local taxes |
+| [auditor](https://github.com/pingleware/bestbooks-auditor)  | algorithmic auditing |
+| [helpers](https://github.com/pingleware/bestbooks-helpers) | common methods used in accounting |
+| [api](https://github.com/pingleware/bestbooks-api) | an API server interface |
+| [reports](https://github.com/pingleware/bestbooks-reports) | an XML based report generation without any third-party reporting frameworks |
+| [export](https://github.com/pingleware/bestbooks-export) | permit exporting the records to other formats |
+| [import](https://github.com/pingleware/bestbooks-import)  | permit importing financial information from other formats |
+| [mailer](https://github.com/pingleware/bestbooks-mailer)  | a built SMTP mail server |
+| [hrm](https://github.com/pingleware/bestbooks-hrm)     | a human resource management integration |
+| [tax](https://github.com/pingleware/bestbooks-tax)     | tax integration for federal, state and local taxes |
 
 # Test Driven Development
 
