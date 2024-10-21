@@ -21,6 +21,16 @@ class MergerAcquisitionShares extends Equity {
     constructor() {
         super("MergerAcquisitionShares");
     }
+
+    mergeEquity(date, desc, amount, company_id = 0, office_id = 0) {
+        // Merging equity increases the account (credit)
+        return this.addCredit(date, desc, amount, company_id, office_id);
+    }
+
+    acquireEquity(date, desc, amount, company_id = 0, office_id = 0) {
+        // Acquiring equity decreases the account (debit)
+        return this.addDebit(date, desc, amount, company_id, office_id);
+    }
 }
 
 module.exports = MergerAcquisitionShares;

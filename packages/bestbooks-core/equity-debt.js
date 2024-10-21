@@ -21,6 +21,16 @@ class DebtShares extends Equity {
     constructor() {
         super("DebtShares");
     }
+
+    borrow(date, desc, amount, company_id = 0, office_id = 0) {
+        // Borrowing (credit to debt)
+        return this.addCredit(date, desc, amount, company_id, office_id);
+    }
+
+    repay(date, desc, amount, company_id = 0, office_id = 0) {
+        // Repaying debt (debit to debt)
+        return this.addDebit(date, desc, amount, company_id, office_id);
+    }
 }
 
 module.exports = DebtShares;

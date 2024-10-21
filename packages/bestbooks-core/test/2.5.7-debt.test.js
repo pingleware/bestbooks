@@ -43,4 +43,42 @@ describe("DebtShares Class", async function(){
         balance = await equity.getBalance();
         assert.equal(balance,250000000000);
     })
+
+    it('should initialize with the correct account name and group', function() {
+        assert.strictEqual(equity.getName(), 'DebtShares');
+        assert.strictEqual(equity.getGroup(), 300);
+    });
+
+    it('should borrow (credit) and update balance', async function() {
+        await equity.borrow('2024-10-21', 'Borrow funds', 10000);
+        const creditAmount = equity.getCredit();
+        const balance = await equity.getBalance();
+
+        assert.strictEqual(creditAmount, 10000);
+        assert.strictEqual(balance, 250000010000); 
+    });
+
+    it('should repay (debit) and update balance', async function() {
+        await equity.borrow('2024-10-21', 'Borrow funds', 15000);
+        await equity.repay('2024-10-22', 'Repay part of the debt', 5000);
+
+        const debitAmount = equity.getDebit();
+        const balance = await equity.getBalance();
+
+        assert.strictEqual(debitAmount, 5000);
+        assert.strictEqual(balance, 250000020000); 
+    });
+
+    it('should correctly adjust balance with multiple borrows and repayments', async function() {
+        await equity.borrow('2024-10-21', 'Borrow funds', 20000);
+        await equity.repay('2024-10-22', 'Repay debt', 8000);
+        await equity.borrow('2024-10-23', 'Borrow more funds', 5000);
+
+        const balance = await equity.getBalance();
+        assert.strictEqual(balance, 250000037000); 
+    });
+
+    it('should return the correct base account type', function() {
+        assert.strictEqual(equity.getAccountBaseType(), "Equity");
+    });
 })

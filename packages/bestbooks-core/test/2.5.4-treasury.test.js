@@ -58,4 +58,42 @@ describe("Treasury Class", async function(){
         balance = await treasury.getBalance();
         assert.equal(balance,2550000000000);
     })
+
+    it('should initialize with the correct account name and group', function() {
+        assert.strictEqual(treasury.getName(), 'Treasury');
+        assert.strictEqual(treasury.getGroup(), 300);
+    });
+
+    it('should buyback shares (debit) and update balance', async function() {
+        await treasury.buybackShares('2024-10-21', 'Buyback Treasury Shares', 25000);
+        const debitAmount = await treasury.getDebit();
+        const balance = await treasury.getBalance();
+
+        assert.strictEqual(debitAmount, 25000);
+        assert.strictEqual(balance, 2550000025000); 
+    });
+
+    it('should reissue shares (credit) and update balance', async function() {
+        await treasury.buybackShares('2024-10-21', 'Buyback Treasury Shares', 25000);
+        await treasury.reissueShares('2024-10-22', 'Reissue Treasury Shares', 10000);
+
+        const creditAmount = await treasury.getCredit();
+        const balance = await treasury.getBalance();
+
+        assert.strictEqual(creditAmount, 10000);
+        assert.strictEqual(balance, 2550000040000);
+    });
+
+    it('should correctly adjust balance with multiple buybacks and reissues', async function() {
+        await treasury.buybackShares('2024-10-21', 'Buyback First Set of Shares', 30000);
+        await treasury.reissueShares('2024-10-22', 'Reissue First Set of Shares', 10000);
+        await treasury.buybackShares('2024-10-23', 'Buyback Second Set of Shares', 20000);
+
+        const balance = await treasury.getBalance();
+        assert.strictEqual(balance, 2550000080000); 
+    });
+
+    it('should return the correct base account type',async function() {
+        assert.strictEqual(await treasury.getAccountBaseType(), "ContraEquity");
+    });
 })

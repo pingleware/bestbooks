@@ -43,4 +43,42 @@ describe("MergerAcquisitionShares Class", async function(){
         balance = await equity.getBalance();
         assert.equal(balance,700000000000);
     })
+
+    it('should initialize with the correct account name and group', function() {
+        assert.strictEqual(equity.getName(), 'MergerAcquisitionShares');
+        assert.strictEqual(equity.getGroup(), 300);
+    });
+
+    it('should merge equity (credit) and update balance', async function() {
+        await equity.mergeEquity('2024-10-21', 'Merger with XYZ Corp', 10000);
+        const creditAmount = equity.getCredit();
+        const balance = await equity.getBalance();
+
+        assert.strictEqual(creditAmount, 10000);
+        assert.strictEqual(balance, 700000010000); 
+    });
+
+    it('should acquire equity (debit) and update balance', async function() {
+        await equity.mergeEquity('2024-10-21', 'Merger with XYZ Corp', 10000);
+        await equity.acquireEquity('2024-10-22', 'Acquisition of ABC Corp', 4000);
+
+        const debitAmount = equity.getDebit();
+        const balance = await equity.getBalance();
+
+        assert.strictEqual(debitAmount, 4000);
+        assert.strictEqual(balance, 700000016000);
+    });
+
+    it('should correctly adjust balance with multiple mergers and acquisitions', async function() {
+        await equity.mergeEquity('2024-10-21', 'Merger with XYZ Corp', 20000);
+        await equity.acquireEquity('2024-10-22', 'Acquisition of ABC Corp', 5000);
+        await equity.mergeEquity('2024-10-23', 'Merger with DEF Corp', 8000);
+
+        const balance = await equity.getBalance();
+        assert.strictEqual(balance, 700000039000); 
+    });
+
+    it('should return the correct base account type',async function() {
+        assert.strictEqual(await equity.getAccountBaseType(), "Equity");
+    });
 })

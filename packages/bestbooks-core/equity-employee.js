@@ -21,6 +21,16 @@ class EmployeeShares extends Equity {
     constructor() {
         super("EmployeeShares");
     }
+
+    issueShares(date, desc, amount, company_id = 0, office_id = 0) {
+        // Issuing shares increases equity (credit to Employee Equity)
+        return this.addCredit(date, desc, amount, company_id, office_id);
+    }
+
+    redeemShares(date, desc, amount, company_id = 0, office_id = 0) {
+        // Redeeming shares decreases equity (debit to Employee Equity)
+        return this.addDebit(date, desc, amount, company_id, office_id);
+    }
 }
 
 module.exports = EmployeeShares;

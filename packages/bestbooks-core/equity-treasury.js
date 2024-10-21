@@ -42,6 +42,20 @@ class Treasury extends ContraEquity {
     constructor() {
         super("Treasury");
     }
+
+    getAccountBaseType() {
+        return "ContraEquity";
+    }
+
+    // Buyback shares (debit operation, reducing equity)
+    buybackShares(date, desc, amount, company_id = 0, office_id = 0) {
+        return this.addDebit(date, desc, amount, company_id, office_id);
+    }
+
+    // Reissue treasury shares (credit operation, increasing equity)
+    reissueShares(date, desc, amount, company_id = 0, office_id = 0) {
+        return this.addCredit(date, desc, amount, company_id, office_id);
+    }
 }
 
 module.exports = Treasury;

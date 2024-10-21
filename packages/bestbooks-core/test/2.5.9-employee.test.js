@@ -43,4 +43,42 @@ describe("EmployeeShares Class", async function(){
         balance = await equity.getBalance();
         assert.equal(balance,250000000000);
     })
+
+    it('should initialize with the correct account name and group', function() {
+        assert.strictEqual(equity.getName(), 'EmployeeShares');
+        assert.strictEqual(equity.getGroup(), 300);
+    });
+
+    it('should issue shares (credit) and update balance', async function() {
+        await equity.issueShares('2024-10-21', 'Issue shares to employee', 5000);
+        const creditAmount = await equity.getCredit();
+        const balance = await equity.getBalance();
+
+        assert.strictEqual(creditAmount, 5000);
+        assert.strictEqual(balance, 250000005000); 
+    });
+
+    it('should redeem shares (debit) and update balance', async function() {
+        await equity.issueShares('2024-10-21', 'Issue shares to employee', 10000);
+        await equity.redeemShares('2024-10-22', 'Redeem shares from employee', 3000);
+
+        const debitAmount = await equity.getDebit();
+        const balance = await equity.getBalance();
+
+        assert.strictEqual(debitAmount, 3000);
+        assert.strictEqual(balance, 250000012000); 
+    });
+
+    it('should correctly adjust balance with multiple issues and redemptions', async function() {
+        await equity.issueShares('2024-10-21', 'Issue shares to employee', 15000);
+        await equity.redeemShares('2024-10-22', 'Redeem shares from employee', 5000);
+        await equity.issueShares('2024-10-23', 'Issue additional shares', 2000);
+
+        const balance = await equity.getBalance();
+        assert.strictEqual(balance, 250000024000); 
+    });
+
+    it('should return the correct base account type',async function() {
+        assert.strictEqual(await equity.getAccountBaseType(), "Equity");
+    });
 })
