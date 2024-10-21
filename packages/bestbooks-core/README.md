@@ -23,7 +23,7 @@ The core module is a migration of the PHP classes from the WordPress plugin.
 | [tax](https://github.com/pingleware/bestbooks-tax)     | tax integration for federal, state and local taxes |
 
 ## Application
-The above modules mentioned above define the BestBooks Accounting Application Framework that is used to create an accounting application at [https://github.com/pingleware/bestbooks](https://github.com/pingleware/bestbooks)
+The modules mentioned above define the BestBooks Accounting Application Framework that is used to create an accounting application at [https://github.com/pingleware/bestbooks](https://github.com/pingleware/bestbooks)
 
 # Test Driven Development
 
