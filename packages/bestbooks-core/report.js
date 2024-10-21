@@ -69,12 +69,18 @@ class Report {
     }
 
     async init() {
+        await this.createTable();
         await this.createViews();
     }
 
-    async incomeStatement(startTxDate="",endTxDate="",callback) {
+
+    async incomeStatement(startTxDate="",endTxDate="",geographic=false,callback) {
         try {
             let sql = `SELECT * FROM IncomeStatement`; // Base SQL query
+
+            if (geographic) {
+                sql = `SELECT * FROM IncomeStatementGeographic`;
+            }
 
             // Adding WHERE clause if txdate conditions are provided
             const conditions = [];
@@ -100,10 +106,10 @@ class Report {
         }
     }
 
-    async incomeStatementSync(startTxDate="",endTxDate="") {
+    async incomeStatementSync(startTxDate="",endTxDate="",geographic=false) {
         return new Promise((resolve, reject) => {
             try {
-                this.incomeStatement(startTxDate, endTxDate, (error, results) => {
+                this.incomeStatement(startTxDate, endTxDate, geographic, (error, results) => {
                     if (error) {
                         reject(error); // Reject the promise if there's an error
                     } else {
@@ -526,9 +532,19 @@ class Report {
         });
     }
 
+    async createTable() {
+        var sql = `CREATE TABLE IF NOT EXISTS locations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            location TEXT,  -- e.g., country or region
+            region TEXT      -- e.g., broader region, like North America, Europe, etc.
+        );`;
+        return await this.model.insertSync(sql);
+    }
+
 
     async createViews() {
         await this.incomeStatementView();
+        await this.incomeStatementViewGeographic();
         await this.balanceSheetView();
         await this.cashFlowStatementView();
         await this.statementOfRetainedEarningsView();
@@ -588,6 +604,34 @@ class Report {
                 accounts.base_type, accounts.name;
         `;
         await this.model.insertSync(sql);
+    }
+
+    async incomeStatementViewGeographic() {
+        var sql = `CREATE VIEW IncomeStatementGeographic AS
+            WITH total_revenue AS (
+                SELECT 
+                    SUM(CASE WHEN tr.type = 'revenue' THEN tr.amount ELSE 0 END) AS grand_total_revenue
+                FROM 
+                    transactions tr
+            )
+            SELECT 
+                loc.region AS Region,
+                SUM(CASE WHEN tr.type = 'revenue' THEN tr.amount ELSE 0 END) AS Total_Revenue,
+                SUM(CASE WHEN tr.type = 'expense' THEN tr.amount ELSE 0 END) AS Total_Expenses,
+                SUM(CASE WHEN tr.type = 'revenue' THEN tr.amount ELSE 0 END) - 
+                SUM(CASE WHEN tr.type = 'expense' THEN tr.amount ELSE 0 END) AS Net_Income,
+                ROUND(
+                    (SUM(CASE WHEN tr.type = 'revenue' THEN tr.amount ELSE 0 END) / 
+                    (SELECT grand_total_revenue FROM total_revenue) * 100), 2
+                ) AS Percent_Of_Total_Revenue
+            FROM 
+                transactions tr
+            JOIN 
+                locations loc ON tr.location = loc.location
+            GROUP BY 
+                loc.region;
+            `;
+            await this.model.insertSync(sql);
     }
 
     async balanceSheetView() {
