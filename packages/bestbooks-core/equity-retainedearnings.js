@@ -11,6 +11,15 @@ class RetainedEarnings extends Equity {
         super("RetainedEarnings");
     }
 
+    distributeEarnings(date, desc, amount, company_id = 0, office_id = 0) {
+        // Specific method for Retained Earnings
+        return this.addDebit(date, desc, amount, company_id, office_id);
+    }
+
+    retainEarnings(date, desc, amount, company_id = 0, office_id = 0) {
+        // Retain earnings by crediting the account
+        return this.addCredit(date, desc, amount, company_id, office_id);
+    }
 }
 
 module.exports = RetainedEarnings;
