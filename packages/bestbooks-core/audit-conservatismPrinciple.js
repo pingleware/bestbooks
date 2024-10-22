@@ -31,21 +31,12 @@ class ConservatismPrinciple {
 
     async createConservativeTransaction(transaction) {
         const { description, amount, type, transaction_date } = transaction;
-        const is_conservative = applyConservatism(type, amount);
+        const is_conservative = this.applyConservatism(type, amount);
 
-        return await this.model.insertSync(`INSERT INTO conservative_transactions (
-            description, 
-            amount, 
-            type, 
-            transaction_date, 
-            is_conservative
-            ) VALUES (
-             '${description}', 
-             '${amount}', 
-             '${type}', 
-             '${transaction_date}', 
-             ${is_conservative}
-        )`);
+        var sql = `INSERT INTO conservative_transactions (description, amount, type, transaction_date, is_conservative) VALUES (?, ?, ?, ?, ?)`;
+        const params = [description,amount,type,transaction_date,is_conservative];
+
+        return await this.model.insertSync(sql,params);
     }
 
     async getTransactions() {
@@ -62,7 +53,7 @@ class ConservatismPrinciple {
 
     async updateTransaction(transaction, id) {
         const { description, amount, type, transaction_date } = transaction;
-        const is_conservative = applyConservatism(type, amount);
+        const is_conservative = this.applyConservatism(type, amount);
 
         return await this.model.updateSync(`UPDATE conservative_transactions 
             SET description = '${description}', 
