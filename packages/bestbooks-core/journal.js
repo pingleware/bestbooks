@@ -53,7 +53,6 @@
  */
 
 const Model = require('./model');
-const localStorage = require('localStorage');
 const {
     info,
     warn,
@@ -108,32 +107,39 @@ class Journal {
 
     async inBalance() {
         try {
-            const sql = `SELECT SUM(debit)=SUM(credit) AS INBALANCE FROM journal;'`;
+            const sql = `SELECT SUM(debit)=SUM(credit) AS INBALANCE FROM journal WHERE name="${this.name}";`;
             const rows = await this.model.querySync(sql);
-            return rows[0].INBALANCE;
+            return (rows[0].INBALANCE==1);
         } catch(err) {
             error(JSON.stringify(err));
         }
+        return false;
     }
 
     async balance() {
         try {
-            const sql = `SELECT SUM(credit)-SUM(debit) AS balance FROM journal WHERE account='${this.name}";'`;
+            const sql = `SELECT SUM(credit)-SUM(debit) AS balance FROM journal WHERE name="${this.name}";`;
             var rows = await this.model.querySync(sql);
             return Number(rows[0].balance);
         } catch(err) {
             error(JSON.stringify(err));
         }
+        return 0;
     }
 
     getBalance() {
         return this.balance();
     }
 
-    async transaction(where="") {
+    async transaction(account="",where="") {
         try {
-            const sql = `SELECT * FROM journal WHERE account="${this.name}" ${where} ORDER BY txdate ASC;`;
-            return await this.model.querySync(sql);
+            var sql = `SELECT * FROM journal WHERE account=? AND name=? ${where} ORDER BY txdate ASC;`;
+            let params = [account,this.name];
+            if (account.length == 0) {
+                sql = `SELECT * FROM journal WHERE name=? ${where} ORDER BY txdate ASC;`;
+                params = [this.name];
+            }
+            return await this.model.querySync(sql,params);
         } catch(err) {
             error(JSON.stringify(err));
         }

@@ -43,7 +43,7 @@ describe('Journal Class', function () {
 
     it('should check if the journal is in balance', async function () {
         const isInBalance = await journal.inBalance();
-        assert.strictEqual(isInBalance, 0); // Check if in balance (1 means true in SQLite)
+        assert.strictEqual(isInBalance, false); 
     });
 
     it('should remove a journal entry', async function () {
