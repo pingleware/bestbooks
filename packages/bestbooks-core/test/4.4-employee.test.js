@@ -8,6 +8,11 @@ describe("Employee Class", async function(){
         user = new Employee();
     })
 
+    after(async function(){
+        await user.model.insertSync(`DELETE FROM users;`);
+        await user.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='users';`);
+    })
+
     it("should create an instance of Employee", async function(){
         assert.ok(user instanceof Employee);
     })
@@ -27,7 +32,7 @@ describe("Employee Class", async function(){
 
         await user.add(usermeta);
         const users = await user.getUsersSync();
-        assert.strictEqual(users.length, 2, 'User count should be 1');
+        assert.strictEqual(users.length, 2, 'User count should be 2');
         assert.strictEqual(users[1].user_name, usermeta.name, 'User name should match');
     });
 

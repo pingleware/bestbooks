@@ -11,7 +11,8 @@ describe("User class",function(){
     })
 
     after(async function(){
-        await user.model.insertSync(`UPDATE sqlite_sequence SET seq=1 WHERE name='users';`);
+        await user.model.insertSync(`DELETE FROM users;`);
+        await user.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='users';`);
     })
 
     it("should create an instance of User", async function(){
@@ -42,18 +43,18 @@ describe("User class",function(){
         };
 
         const result = await user.add(usermeta);
-        assert.strictEqual(result, 2);
+        assert.strictEqual(result, 1);
     });
 
     it('should return users matching the given name', async function() {
         const user = new User();
         const results = await user.find('testuser');
-        assert.strictEqual(results[0].id,2);
+        assert.strictEqual(results[0].id,1);
     });
 
     it('should update shares and invested amount for a user', async function() {
         const user = new User('testuser');
-        await user.updateShares(2, 1000, 50);
+        await user.updateShares(1, 1000, 50);
     });
 
     it('should verify shares and invested amount for a user', async function(){
