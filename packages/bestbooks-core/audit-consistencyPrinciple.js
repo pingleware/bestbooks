@@ -22,34 +22,29 @@ class ConsistencyPrinciple {
 
     async createConsistency(consistency) {
         const { accounting_method, description, reporting_period, date_changed, is_consistent } = consistency;
-        return await this.model.insertSync(`INSERT INTO consistency_records (
+        var sql = `INSERT INTO consistency (
                     accounting_method, 
                     description, 
                     reporting_period, 
                     date_changed, 
                     is_consistent
-                ) VALUES (
-                    '${accounting_method}', 
-                    '${description}', 
-                    '${reporting_period}', 
-                    '${date_changed}', 
-                    ${is_consistent}
-                )
-        `);
+                ) VALUES (?, ?, ?, ?, ?)`;
+        const params = [accounting_method, description, reporting_period, date_changed, is_consistent];
+        return await this.model.insertSync(sql,params);
     }
 
     async getConsistency() {
-        return this.model.querySync(`SELECT * FROM consistency_records`);
+        return this.model.querySync(`SELECT * FROM consistency`);
     }
 
     async getConsistencyById(id) {
-        return this.model.querySync(`SELECT * FROM consistency_records WHERE id=${id}`);
+        return this.model.querySync(`SELECT * FROM consistency WHERE id=${id}`);
     }
 
     async updateConsistency(consistency, id) {
         const { accounting_method, description, reporting_period, date_changed, is_consistent } = consistency;
 
-        return this.model.updateSync(`UPDATE consistency_records 
+        return this.model.updateSync(`UPDATE consistency 
             SET accounting_method = '${accounting_method}', 
                 description = '${description}', 
                 reporting_period = '${reporting_period}', 
@@ -59,12 +54,12 @@ class ConsistencyPrinciple {
     }
 
     async deleteConsistency(id) {
-        return this.model.updateSync(`DELETE FROM consistency_records WHERE id = ${id}`);
+        return this.model.updateSync(`DELETE FROM consistency WHERE id = ${id}`);
     }
 
     async checkConsistency(accounting_method, reporting_period) {
         return await this.model.querySync(`SELECT * 
-            FROM consistency_records 
+            FROM consistency 
             WHERE accounting_method = '${accounting_method}' AND reporting_period = '${reporting_period}'`);
     }
 
