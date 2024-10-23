@@ -18,7 +18,11 @@ class Disclosures {
         // create and open database
         this.model = new Model();
         // create disclosures table if not exist
-        this.createTable();
+        this.init();
+    }
+
+    async init() {
+        await this.createTable();
     }
 
     async getDisclosures() {
@@ -31,16 +35,22 @@ class Disclosures {
 
     async createDisclosure(disclosure) {
         const { name, description, is_compliant, date_disclosed, compliance_note } = disclosure;
-        return await this.model.insertSync(`INSERT INTO disclosures (name, description, is_compliant, date_disclosed, compliance_note) VALUES ('${name}', '${description}', ${is_compliant}, '${date_disclosed}', '${compliance_note}');`);
+        var sql = `INSERT INTO disclosures (name, description, is_compliant, date_disclosed, compliance_note) VALUES (?,?,?,?,?);`;
+        const params = [name, description, is_compliant, date_disclosed, compliance_note];
+        return await this.model.insertSync(sql,params);
     }
 
     async updateDisclosure(id, disclosure) {
         const { name, description, is_compliant, date_disclosed, compliance_note } = disclosure;
-        return await this.model.updateSync(`UPDATE disclosures SET name = '${name}', description = '${description}', is_compliant = ${is_compliant}, date_disclosed = '${date_disclosed}', compliance_note = '${compliance_note}' WHERE id = ${id};`);
+        var sql = `UPDATE disclosures SET name = ?, description = ?, is_compliant = ?, date_disclosed = ?, compliance_note = ? WHERE id = ?;`;
+        const params = [name,description,is_compliant,date_disclosed,compliance_note,id];
+        return await this.model.updateSync(sql,params);
     }
 
     async deleteDisclosure(id) {
-        return await this.model.updateSync(`DELETE FROM disclosures WHERE id = ${id};`);
+        var sql = `DELETE FROM disclosures WHERE id = ?;`;
+        const params = [id];
+        return await this.model.deleteSync(sql,params);
     }
 
     async getNonCompliantDisclosures() {

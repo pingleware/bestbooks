@@ -17,7 +17,11 @@ class ConsistencyPrinciple {
         // create and open database
         this.model = new Model();
         // create disclosures table if not exist
-        this.createTable();
+        this.init();
+    }
+
+    async init() {
+        await this.createTable();
     }
 
     async createConsistency(consistency) {

@@ -17,7 +17,11 @@ class GoingConcernAssumption {
         // create and open database
         this.model = new Model();
         // create disclosures table if not exist
-        this.createTable();
+        this.init();
+    }
+
+    async init() {
+        await this.createTable();
     }
 
     // Function to evaluate the going concern based on financial indicators

@@ -17,7 +17,11 @@ class Materiality {
         // create and open database
         this.model = new Model();
         // create disclosures table if not exist
-        this.createTable();
+        this.init();
+    }
+
+    async init() {
+        await this.createTable();
     }
 
     // Function to determine if a transaction is material
@@ -27,21 +31,12 @@ class Materiality {
 
     async addTransaction(materiality) {
         const { description, amount, transaction_date, materiality_threshold } = materiality;
-        const is_material = isTransactionMaterial(amount, materiality_threshold) ? 1 : 0;
+        const is_material = this.isTransactionMaterial(amount, materiality_threshold) ? 1 : 0;
 
-        return await this.model.insertSync(`INSERT INTO transactions (
-            description, 
-            amount, 
-            transaction_date, 
-            is_material, 
-            materiality_threshold) 
-            VALUES (
-            '${description}', 
-            '${amount}', 
-            '${transaction_date}', 
-            ${is_material}, 
-            '${materiality_threshold}'
-        );`);
+        var sql = `INSERT INTO transactions (description, amount, transaction_date, is_material, materiality_threshold) VALUES (?, ?, ?, ?, ?);`;
+        const params = [description,amount,transaction_date,is_material,materiality_threshold];
+
+        return await this.model.insertSync(sql,params);
     }
 
     async getTransactions() {
@@ -58,15 +53,12 @@ class Materiality {
 
     async updateTransaction(materiality, id) {
         const { description, amount, transaction_date, materiality_threshold } = materiality;
-        const is_material = isTransactionMaterial(amount, materiality_threshold) ? 1 : 0;
+        const is_material = this.isTransactionMaterial(amount, materiality_threshold) ? 1 : 0;
 
-        return await this.model.updateSync(`UPDATE transactions 
-            SET description = '${description}', 
-                amount = '${amount}', 
-                transaction_date = '${transaction_date}', 
-                is_material = ${is_material}, 
-                materiality_threshold = '${materiality_threshold}'
-            WHERE id = ${id}`);
+        var sql = `UPDATE transactions SET description = ?,amount = ?,transaction_date = ?,is_material = ?,materiality_threshold = ? WHERE id = ?;`;
+        const params = [description,amount,transaction_date,is_material,materiality_threshold,id];
+
+        return await this.model.updateSync(sql,params);
     }
 
     async deleteTransaction(id) {

@@ -17,7 +17,11 @@ class ConservatismPrinciple {
         // create and open database
         this.model = new Model();
         // create disclosures table if not exist
-        this.createTable();
+        this.init();
+    }
+
+    async init() {
+        await this.createTable();
     }
 
     applyConservatism(type, amount) {
