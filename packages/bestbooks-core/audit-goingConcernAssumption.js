@@ -98,19 +98,15 @@ class GoingConcernAssumption {
      * recorded_at: Timestamp of the metric entry.
      */
     async createTable() {
-        try {
-            const sql = `CREATE TABLE IF NOT EXISTS  financial_indicators (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                indicator_name TEXT NOT NULL,
-                value REAL NOT NULL,
-                threshold REAL NOT NULL,
-                status TEXT NOT NULL CHECK (status IN ('normal', 'warning', 'critical')),
-                recorded_at TEXT NOT NULL
-            );`;
-            await this.model.querySync(sql);
-        } catch(err) {
-            error(JSON.stringify(err));
-        }
+        var sql = `CREATE TABLE IF NOT EXISTS  financial_indicators (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            indicator_name TEXT NOT NULL,
+            value REAL NOT NULL,
+            threshold REAL NOT NULL,
+            status TEXT NOT NULL CHECK (status IN ('normal', 'warning', 'critical')),
+            recorded_at TEXT NOT NULL
+        );`;
+        await this.model.insertSync(sql);
     }
 
     async purgeTable() {
