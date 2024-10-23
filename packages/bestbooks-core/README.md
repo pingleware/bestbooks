@@ -35,7 +35,7 @@ The reports module returns the report data in object-row format generate by SQL 
 There are two income statement reports, a regular and a geographic income statement. The Geographic
 income statement shows the percentage of total revenu by location as defined in the location table. Here is a sample view,
 
-[Income Statement Geographich](assets/income-statement-geographic.png)
+![Income Statement Geographic](assets/income-statement-geographic.png)
 
 # Test Driven Development
 
