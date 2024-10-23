@@ -28,6 +28,15 @@ The modules mentioned above define the BestBooks Accounting Application Framewor
 ## Official User Guide
 Avalable on [amazon](https://www.amazon.com/dp/B07H1GQZYC)
 
+# Reporting
+The reports module returns the report data in object-row format generate by SQL views.
+
+## Income Statement
+There are two income statement reports, a regular and a geographic income statement. The Geographic
+income statement shows the percentage of total revenu by location as defined in the location table. Here is a sample view,
+
+[Income Statement Geographich](assets/income-statement-geographic.png)
+
 # Test Driven Development
 
 TDD will be utilized during the development and maintenance, using the mocha test framework.
