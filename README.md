@@ -1,6 +1,6 @@
 # BestBooks ™️
 
-An open-source accounting framework used to build a full fledge accounting bookkeepign system based on accounting terms
+An open-source accounting framework used to build a full fledge accounting bookkeeping system based on accounting terms
 
 # New Architecture
 
@@ -40,8 +40,10 @@ The database is a SQLite datastore saved in the .bestbooks directory of the user
 
 This repository contains the following directories,
 
-    assets - for current and new assets
-    dotnet - a dotnet maui version
-    node-electron - the Node-Electron Desktop Administrator
-    wordpress.org - the original wordpress.org/plugins/bestbooks code
-    wordpress - the future wordpress.org/plugins/bestbooks refactor for the Desktop Administrator
+    / - the Node-Electron Desktop Administrator
+    /assets - for current and new assets
+    /samples - code samples from the user guider
+    /legacy - location for dotnet and wordpress versions
+    /legacy/dotnet - a dotnet maui version
+    /legacy/wordpress.org - the original wordpress.org/plugins/bestbooks code
+    /legacy/wordpress - the future wordpress.org/plugins/bestbooks refactor for the Desktop Administrator

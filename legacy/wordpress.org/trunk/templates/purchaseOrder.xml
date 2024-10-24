@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PurchaseOrder xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <PONumber>str123400000000000</PONumber>
+    <PODate>07/25/2021</PODate>
+    <Company>
+        <Name>PressPage Entertainment Inc</Name>
+        <Contact>Patrick Ingle</Contact>
+        <Email>presspage.entertainment@gmail.com</Email>
+        <Phone>(212) 879-0758</Phone>
+        <Website>https://presspage.info</Website>
+        <Billing>
+            <Address1>P.O. Box 142814</Address1>
+            <Address2></Address2>
+            <City>Gainesville</City>
+            <State>FL</State>
+            <ZipCode>32614-2814</ZipCode>
+            <Phone>(212) 879-0758</Phone>
+            <Fax>(212) 879-0758</Fax>
+        </Billing>
+        <Shipping>
+            <Contact>Patrick Ingle</Contact>
+            <Address1>4055 SW 15 PL</Address1>
+            <Address2>Apt G</Address2>
+            <City>Gainesville</City>
+            <State>FL</State>
+            <ZipCode>32607</ZipCode>
+            <Phone>(212) 879-0758</Phone>
+            <Fax>(212) 879-0758</Fax>
+        </Shipping>
+    </Company>
+    <Vendor>
+        <Name></Name>
+        <Contact></Contact>
+        <Address1></Address1>
+        <Address2></Address2>
+        <City></City>
+        <State></State>
+        <ZipCode></ZipCode>
+        <Phone></Phone>
+        <Fax></Fax>
+    </Vendor>
+    <Shipping>
+        <Service>Fedex</Service>
+        <Method>Second-day Air</Method>
+        <DeliveryDate>07/27/2021</DeliveryDate>
+    </Shipping>
+    <LineItems>
+        <LineItem>
+            <ProductID>1234</ProductID>
+            <Description>str1234</Description>
+            <Quantity>1</Quantity>
+            <UnitPrice>123.45</UnitPrice>
+            <Amount>123.45</Amount>
+        </LineItem>
+    </LineItems>
+    <Comments>Contact before shipping</Comments>
+    <Prices>
+        <Subtotal>0.00</Subtotal>
+        <Tax>0.00</Tax>
+        <Shipping>0.00</Shipping>
+        <Other>0.00</Other>
+        <Total>0.00</Total>
+    </Prices>
+</PurchaseOrder>

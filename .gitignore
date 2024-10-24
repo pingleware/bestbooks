@@ -4,3 +4,4 @@ settings.json
 dotNet/obj/
 .vs/
 package-lock.json
+dist/
