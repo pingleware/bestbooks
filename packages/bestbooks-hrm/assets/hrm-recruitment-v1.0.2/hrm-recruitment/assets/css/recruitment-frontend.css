@@ -1,0 +1,260 @@
+.hrm-recruitment-wrap .item-box {
+    padding: 25px;
+    margin-bottom: 1px;
+    border-left: 5px solid rgb(91, 192, 222);
+    box-shadow: 1px 1px 2px 0px #ddd;
+}
+.hrm-recruitment-wrap .item-box:nth-child(2n+1) {
+    background: #fdfdfd;
+    border-left: 5px solid rgb(217, 83, 79);
+}
+.hrm-recruitment-wrap .item-box h3 {
+    font-size: 20px;
+    padding-bottom: 5px;
+    font-weight: 500;
+    color: #4f84c4;
+    margin-top: 15px;
+    display: block;
+    margin-bottom: 0;
+}
+
+.hrm-recruitment-wrap .item-box h3 a {
+    text-decoration: none;
+    font-size: inherit;
+    color: inherit;
+    border-bottom: 0;
+}
+.hrm-recruitment-wrap .item-box .designation {
+    font-size: 14px;
+    color: #777;
+    display: block;
+}
+
+.submission-date span {
+    font-size: 12px;
+    margin-right: 10px;
+}
+
+.recritment-action {
+    margin-top: 20px;
+    display: block;
+    overflow: hidden;
+    position: relative;
+}
+.expact {
+  font-size: 12px;
+  display: block;
+}
+
+
+.hrm-recruitment-wrap .recruitment-single .item-box {
+  background: transparent;
+  border: 0px;
+  box-shadow: none;
+}
+
+/*form*/
+
+.hrm-recruitment-wrap .form-wraper{
+    margin-bottom:20px; 
+    border-radius:5px 5px 0 0;
+}
+.hrm-recruitment-wrap .form-wraper .title-head {
+    margin: 5px 0;
+    position: relative;
+    border-bottom: 1px solid #ddd;
+}
+
+.hrm-recruitment-wrap .form-wraper .form-inner{
+    padding:15px;
+}
+
+.hrm-recruitment-wrap .form-wraper .input-group{
+    margin-bottom:10px;
+    width:82%;
+ }
+
+.hrm-recruitment-wrap .form-wraper .input-group-addon{
+    width:35%;
+}
+
+.hrm-recruitment-wrap .form-wraper .input-group-addon span{
+    color:#FF040B;
+}
+
+.hrm-recruitment-wrap .form-wraper .form-inner .btn{background:#1ba6df; border-color:#1ba6df;}
+
+.hrm-recruitment-wrap .form-wraper .formsparator{background:#eee; margin: 10px 0; padding:15px 0;}
+
+.hrm-recruitment-wrap .form-wraper .splabl{float:left; font-size:14px; padding: 5px 0; width:40px;}
+
+.hrm-recruitment-wrap .form-wraper p{font-size:11px;}
+
+.hrm-recruitment-wrap button,
+.hrm-recruitment-wrap input,
+.hrm-recruitment-wrap optgroup,
+.hrm-recruitment-wrap select,
+.hrm-recruitment-wrap keygen::-webkit-keygen-select,
+.hrm-recruitment-wrap select[_moz-type="-mozilla-keygen"],
+.hrm-recruitment-wrap textarea {
+    color: inherit;
+    font: inherit;
+    margin: 0;
+    margin-top: 0.5em;
+}
+.hrm-recruitment-wrap .top-button {
+    margin-bottom: 10px;
+    overflow: hidden;
+    display: inline-block;
+}
+.hrm-recruitment-wrap label {
+    display: block;
+    margin: 0;
+    font-size: 11px;
+}
+
+.hrm-recruitment-wrap input[type="radio"] + label,
+.hrm-recruitment-wrap input[type="checkbox"] + label { 
+    margin: 0;
+    font-weight: 400; 
+}
+
+
+.hrm-recruitment-wrap textarea { line-height: 1.25em; }
+
+.hrm-recruitment-wrap select {
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+.hrm-recruitment-wrap input[type=checkbox],
+.hrm-recruitment-wrap input[type=radio] {
+    box-sizing: border-box;
+    padding: 0;
+    display: block;
+    margin-right: 0.25em;
+    margin-top: 2px;
+    float: left;
+    clear: both;
+}
+
+.hrm-recruitment-wrap input,
+.hrm-recruitment-wrap select,
+.hrm-recruitment-wrap textarea {
+    background: #FFF;
+    border: 1px solid #ccc;
+    font-size: 11px;
+    line-height: normal;
+    border-radius: 2px;
+    vertical-align: middle;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 400px;
+    padding: 0.5em 0.6em;
+    margin-bottom: 0.5em;
+}
+button.button, a.button{
+    background: #357DFD;
+    color: #FFF;
+    padding: 5px 15px;
+    text-decoration: none;
+    border: 0px;
+    font-size: 12px;
+}
+button:disabled {
+  opacity: 0.4;
+}
+span.more_add {
+    background: url(plusicon.png) no-repeat center;;
+    display: inline-block;
+    padding: 16px;
+    background-size: 16px;
+    position: absolute;
+    top: 0px;
+    right: -10px;
+}
+span.more_add.delete {
+  background: url(minusicon.png) no-repeat center;
+  background-size: 16px;
+  right: 10px;
+}
+.hrm-recruitment-wrap #crumbs {
+  text-align: center;
+}
+.hrm-recruitment-wrap #crumbs ul {
+  list-style: none;
+  display: inline-table;
+}
+.hrm-recruitment-wrap #crumbs ul li {
+  display: inline;
+}
+.hrm-recruitment-wrap #crumbs ul li a {
+  display: block;
+  float: left;
+  height: 40px;
+  background: #F3F5FA;
+  text-align: center;
+  padding: 9px 10px 0 30px;
+  position: relative;
+  margin: 0 10px 10px 0;
+  font-size: 12px;
+  text-decoration: none;
+  color: #8093A7;
+  border-bottom: 0px;
+}
+.hrm-recruitment-wrap #crumbs ul li a:after {
+  content: "";
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 20px solid #F3F5FA;
+  position: absolute;
+  right: -20px;
+  top: 0;
+  z-index: 1;
+}
+.hrm-recruitment-wrap #crumbs ul li a:before {
+  content: "";
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 20px solid #fff;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.hrm-recruitment-wrap #crumbs ul li:first-child a {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.hrm-recruitment-wrap #crumbs ul li:first-child a:before {
+  display: none;
+}
+
+.hrm-recruitment-wrap #crumbs ul li:last-child a {
+  padding-right: 40px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.hrm-recruitment-wrap #crumbs ul li:last-child a:after {
+  display: none;
+}
+
+.hrm-recruitment-wrap #crumbs ul li a.router-link-exact-active,
+.hrm-recruitment-wrap #crumbs ul li a:hover {
+  background: #357DFD;
+  color: #fff;
+}
+
+.hrm-recruitment-wrap #crumbs ul li a.router-link-exact-active:after,
+.hrm-recruitment-wrap #crumbs ul li a:hover:after {
+  border-left-color: #357DFD;
+  color: #fff;
+}
+
+.hrm-recruitment-wrap #crumbs ul li a:focus {
+    outline: 0;
+}

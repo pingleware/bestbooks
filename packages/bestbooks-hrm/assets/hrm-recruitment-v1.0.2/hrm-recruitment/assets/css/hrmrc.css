@@ -1,0 +1,17 @@
+
+#hrm-hidden-form .question-field select{ width: 120px; }
+.question-field-area { position: relative;display: block; overflow: hidden; }
+span.more_add {
+    background: url(plusicon.png) no-repeat center;;
+    display: inline-block;
+    padding: 16px;
+    background-size: 16px;
+    position: absolute;
+    top: 0px;
+    right: -9px;
+}
+span.more_add.delete {
+  background: url(minusicon.png) no-repeat center;
+  background-size: 16px;
+  right: 10px;
+}
