@@ -5,7 +5,8 @@ There are no free options for creating reports from content received from a data
 Hence the report design will go back to basics,
 
     1. creating an XML document for the data required for the report
-    2. display the XML using XSLT with CSS which can be printed or save as a PDF or DOCX (see https://www.geeksforgeeks.org/displaying-xml-using-xslt/)
+    2. display the XML using XSLT with CSS which can be printed or 
+       save as a PDF or DOCX (see https://www.geeksforgeeks.org/displaying-xml-using-xslt/)
 
 During initialization (invoking the init() function)), will copy the xslt template files to the user's home directory in the bestbooks system directory.
 
