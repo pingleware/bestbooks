@@ -2,14 +2,13 @@
 
 Human Resource Management for BestBooks Accounting Application Framework
 
-
 # Important Links
 
 * [Summary of the Major Laws of the Department of Labor](https://www.dol.gov/general/aboutdol/majorlaws)
 * [Labor Laws and Worker Protection](https://www.usa.gov/labor-laws)
 * [Prohibited Employment Practices](https://www.eeoc.gov/prohibited-employment-policiespractices)
 * [Workplace Laws](https://www.usa.gov/workplace-laws)
-* [Publication 15 (2024), (Circular E), Employer's Tax Guide](https://www.irs.gov/publications/p15)
+* [Publication 15 (2024), (Circular E), Employer&#39;s Tax Guide](https://www.irs.gov/publications/p15)
 * [Continuation of Health Coverage (COBRA)](https://www.dol.gov/general/topic/health-plans/cobra)
 
 # New Hire Onboarding
@@ -153,163 +152,215 @@ It's essential to note that state and local governments may have additional requ
 
 ## New Hire Reporting by State
 
-Each US State has their own requirement for new hire reporting as well as their own forms, and are listed here. The master list is available at [U.S. Department of Health & Human Services](https://www.acf.hhs.gov/css/contact-information/state-new-hire-reporting-websites)
+Each US State has their own requirement for new hire reporting as well as their own forms, and are listed here. The master list is available at [U.S. Department of Health &amp; Human Services](https://www.acf.hhs.gov/css/contact-information/state-new-hire-reporting-websites). To access the RAW JSON of new hire reporting links use [https://raw.githubusercontent.com/pingleware/bestbooks-hrm/refs/heads/main/newhirereporting.json](https://raw.githubusercontent.com/pingleware/bestbooks-hrm/refs/heads/main/newhirereporting.json)
 
 ### States
+
 A new hire reporting is required for each that your employee is a bonafide resident. Some minicipalities and local jurisdictions also required additional new hire reporting.
 
 #### Alabama
+
 [New Hire](https://adol.alabama.gov/employers/alabama-new-hire/)
 
 #### Alaska
+
 [Child Support Services Division](https://myalaska.state.ak.us/newhirereporting)
 
 #### Arizona
+
 [Department of Economic Security](https://newhire-reporting.com/az-newhire/empreg.aspx)
 
 #### Arkansas
+
 [Report New Hire or Re-hire](https://portal.arkansas.gov/service/report-new-hire-or-re-hire/)
 
 #### California
-[California's New Employee Registry](https://edd.ca.gov/en/payroll_taxes/new_hire_reporting/)
+
+[California&#39;s New Employee Registry](https://edd.ca.gov/en/payroll_taxes/new_hire_reporting/)
 
 #### Colorado
+
 [Office of Economic Security](https://newhire.state.co.us/#/public/public-landing/login)
 
 #### Connecticut
+
 [Department of Labor](https://www1.ctdol.state.ct.us/newhires/index2.asp)
 
 #### Delaware
+
 [One Stop](https://onestop.delaware.gov/Grow_Hire)
 
 #### District of Columbia (Washington DC)
+
 [District of Columbia Directory of New Hires](https://dc-newhire.com/)
 
 #### Florida
+
 [Department of Revenue - New Hire](https://servicesforemployers.floridarevenue.com/Pages/home.aspx)
 [Electronic Reporting Specifications](https://servicesforemployers.floridarevenue.com/Help%20Content/Electronic%20Reporting%20Specifications.aspx)
 
 #### Georgia
+
 [New Hire](https://ga-newhire.com/) redirected from [https://dol.georgia.gov/faqs-employers/employers-faqs-laws-and-regulations](https://dol.georgia.gov/faqs-employers/employers-faqs-laws-and-regulations)
 
 #### Hawaii
+
 [Child SUpport Enforcement Agency](https://ag.hawaii.gov/csea/employer-information/)
 
 #### Idaho
+
 [Department of Labor](https://www.labor.idaho.gov/businesses/report-new-hires/)
 
 #### Illinois
+
 [Illinois Department of Employment Security](https://ides.illinois.gov/employer-resources/taxes-reporting/new-hires.html)
 
 #### Indiana
+
 [New Hire Reporting](https://in-newhire.com/)
 
 #### Iowa
+
 [Department of Human Services](https://secureapp.dhs.state.ia.us/epay/)
 
 #### Kansas
+
 [Department of Labor](https://www.dol.ks.gov/employers/employer-services/new-hire-directory)
 
 #### Kentucky
+
 [New Hire Reporting](https://ky-newhire.com/#/public/public-landing/login)
 
 #### Louisiana
-[Department of Children & Family Services](https://newhire-reporting.com/LA-Newhire/Default.aspx)
+
+[Department of Children &amp; Family Services](https://newhire-reporting.com/LA-Newhire/Default.aspx)
 
 #### Maine
-[Department of Health & Human Services](https://www.maine.gov/dhhs/ofi/programs-services/child-support-services/employers)
+
+[Department of Health &amp; Human Services](https://www.maine.gov/dhhs/ofi/programs-services/child-support-services/employers)
 
 #### Maryland
+
 [Department of uman Services](https://www.mdnewhire.com/#/public/public-landing/login)
 
 #### Massachusetts
+
 [Child Support Services Division](https://www.mass.gov/info-details/learn-about-the-new-hire-reporting-program)
 
 #### Michigan
+
 [Child SUpport Program](https://www.mi-newhire.com/#/public/public-landing/login)
 
 #### Minnesota
+
 [New Hire Reporting](https://mn-newhire.com/)
 
 #### Mississippi
+
 [Department of Human Services](https://ms-newhire.com/)
 
 #### Missouri
+
 [Department of Social Services](https://www.missouriemployer.dss.mo.gov/NewHireInfo.aspx)
 
 #### Montana
+
 [Child Support Division](https://dphhs.mt.gov/cssd/employerinfo/nhrs)
 
 #### Nebraska
+
 [Department of Health and Human Services](https://ne-newhire.com/)
 
 #### Nevada
+
 [Department of Health and Human Services Division of Welfare and Supportive Services](https://dwss.nv.gov/Support/1_1_7_01-New-Hire-Reporting/)
 
 #### New Hampshire
+
 [Employment Security](https://www.nhes.nh.gov/services/employers/compliance.htm)
 
 #### New Jersey
+
 [Child Support Employer Services Portal](https://njcsesp.com/)
 
 #### New Mexico
+
 [New Hire Reporting](https://nm-newhire.com/)
 
 #### New York
+
 [New Hire Reporting](https://www.tax.ny.gov/bus/wt/newhire.htm)
 
 #### North Carolina
+
 [Division of Social Services](https://ncnewhires.ncdhhs.gov/)
 
 #### North Dakota
+
 [Child Support](https://www.childsupport.dhs.nd.gov/employers/new-hire-reporting)
 
 #### Ohio
-[Department of Job & Family Services](https://oh-newhire.com/#/public/public-landing/login)
+
+[Department of Job &amp; Family Services](https://oh-newhire.com/#/public/public-landing/login)
 
 #### Oklahoma
+
 [Employment Security Commission](https://www.ok.gov/oesc/newhire/app/index.php)
 
 #### Oregon
+
 [Child Support](https://www.doj.state.or.us/child-support/for-employers/report-new-hires/)
 
 #### Pennsylvania
+
 [PA One Stop-Shop](https://business.pa.gov/operate/hiring-workers/new-hire-reporting-requirements/)
 
 #### Rhode Island
+
 [Office of Child SUpport Services](https://ri-newhire.com/)
 
 #### South Carolina
+
 [Department of Social Services](https://newhire.sc.gov/#/)
 
 #### South Dakota
-[Department of Labor & Regulation](https://dlr.sd.gov/ra/new_hire_reporting/default.aspx)
+
+[Department of Labor &amp; Regulation](https://dlr.sd.gov/ra/new_hire_reporting/default.aspx)
 
 #### Tennessee
+
 [Department of Human Services](https://tnnewhire.com/)
 
 #### Texas
+
 [Texas Workforce Commission](https://www.twc.texas.gov/employer-resources/new-hire-reporting)
 
 #### Utah
-[U.S. Department of Health & Human Services](https://id.utah.gov/login?goto=https:%2F%2Flogin.dts.utah.gov:443%2Fsso%2Foauth2%2Fauthorize%3Fresponse_type%3Dcode%26ForceAuth%3Dtrue%26client_id%3Dfrizzante-volumetric-710834%26scope%3Dopenid%2520email%2520App:DWSApps%26redirect_uri%3Dhttps:%2F%2Fjobs.utah.gov%2Fsso%2FLogin.aspx&realm=%2F)
+
+[U.S. Department of Health &amp; Human Services](https://id.utah.gov/login?goto=https:%2F%2Flogin.dts.utah.gov:443%2Fsso%2Foauth2%2Fauthorize%3Fresponse_type%3Dcode%26ForceAuth%3Dtrue%26client_id%3Dfrizzante-volumetric-710834%26scope%3Dopenid%2520email%2520App:DWSApps%26redirect_uri%3Dhttps:%2F%2Fjobs.utah.gov%2Fsso%2FLogin.aspx&realm=%2F)
 
 #### Vermont
+
 [Department of Labor](https://labor.vermont.gov/unemployment-insurance/unemployment-information-employers/employer-online-services/new-hire)
 
 #### Virginia
+
 [New Hire Reporting](https://va-newhire.com/)
 
 #### Washington
+
 [Economic Services Administration](https://www.dshs.wa.gov/esa/division-child-support/new-hire-reporting)
 
 #### West Virginia
-[Health & Human Resources](https://wv-newhire.com/)
+
+[Health &amp; Human Resources](https://wv-newhire.com/)
 
 #### Wisconsin
+
 [New Hire Reporting](https://wi-newhire.com/)
 
 #### Wyoming
+
 [Department of Family Services](https://newhire-reporting.com/WY-Newhire/default.aspx)
 
 ### Territories
@@ -317,6 +368,7 @@ A new hire reporting is required for each that your employee is a bonafide resid
 #### American Samoa
 
 #### Guam
+
 [Child Support for employers](https://oagguam.org/cs-employers/)
 
 #### Northern Mariana Islands
@@ -324,6 +376,7 @@ A new hire reporting is required for each that your employee is a bonafide resid
 #### Puerto Rico
 
 #### U.S. Virgin Islands
+
 [Department of Labor](https://www.vidol.gov/)
 
 # Bookkeeping Accounting Entries for New Hires
