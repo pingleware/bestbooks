@@ -156,7 +156,7 @@ Each US State has their own requirement for new hire reporting as well as their 
 
 ### States
 
-A new hire reporting is required for each that your employee is a bonafide resident. Some minicipalities and local jurisdictions also required additional new hire reporting.
+A new hire reporting is required for each state or territory that your employee is a bonafide resident. Some minicipalities and local jurisdictions also required additional new hire reporting.
 
 #### Alabama
 
