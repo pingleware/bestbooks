@@ -10,6 +10,7 @@ Human Resource Management for BestBooks Accounting Application Framework
 * [Prohibited Employment Practices](https://www.eeoc.gov/prohibited-employment-policiespractices)
 * [Workplace Laws](https://www.usa.gov/workplace-laws)
 * [Publication 15 (2024), (Circular E), Employer's Tax Guide](https://www.irs.gov/publications/p15)
+* [Continuation of Health Coverage (COBRA)](https://www.dol.gov/general/topic/health-plans/cobra)
 
 # New Hire Onboarding
 
@@ -152,49 +153,74 @@ It's essential to note that state and local governments may have additional requ
 
 ## New Hire Reporting by State
 
-Each US State has their own requirement for new hire reporting as well as their own forms, and are listed here.
+Each US State has their own requirement for new hire reporting as well as their own forms, and are listed here. The master list is available at [U.S. Department of Health & Human Services](https://www.acf.hhs.gov/css/contact-information/state-new-hire-reporting-websites)
 
 ### States
+A new hire reporting is required for each that your employee is a bonafide resident. Some minicipalities and local jurisdictions also required additional new hire reporting.
 
 #### Alabama
+[New Hire](https://adol.alabama.gov/employers/alabama-new-hire/)
 
 #### Alaska
+[Child Support Services Division](https://myalaska.state.ak.us/newhirereporting)
 
 #### Arizona
+[Department of Economic Security](https://newhire-reporting.com/az-newhire/empreg.aspx)
 
 #### Arkansas
+[Report New Hire or Re-hire](https://portal.arkansas.gov/service/report-new-hire-or-re-hire/)
 
 #### California
+[California's New Employee Registry](https://edd.ca.gov/en/payroll_taxes/new_hire_reporting/)
 
 #### Colorado
+[Office of Economic Security](https://newhire.state.co.us/#/public/public-landing/login)
 
 #### Connecticut
+[Department of Labor](https://www1.ctdol.state.ct.us/newhires/index2.asp)
 
 #### Delaware
+[One Stop](https://onestop.delaware.gov/Grow_Hire)
+
+#### District of Columbia (Washington DC)
+[District of Columbia Directory of New Hires](https://dc-newhire.com/)
 
 #### Florida
+[Department of Revenue - New Hire](https://servicesforemployers.floridarevenue.com/Pages/home.aspx)
+[Electronic Reporting Specifications](https://servicesforemployers.floridarevenue.com/Help%20Content/Electronic%20Reporting%20Specifications.aspx)
 
 #### Georgia
+[New Hire](https://ga-newhire.com/) redirected from [https://dol.georgia.gov/faqs-employers/employers-faqs-laws-and-regulations](https://dol.georgia.gov/faqs-employers/employers-faqs-laws-and-regulations)
 
 #### Hawaii
+[Child SUpport Enforcement Agency](https://ag.hawaii.gov/csea/employer-information/)
 
 #### Idaho
+[Department of Labor](https://www.labor.idaho.gov/businesses/report-new-hires/)
 
 #### Illinois
+[Illinois Department of Employment Security](https://ides.illinois.gov/employer-resources/taxes-reporting/new-hires.html)
 
 #### Indiana
+[New Hire Reporting](https://in-newhire.com/)
 
 #### Iowa
+[Department of Human Services](https://secureapp.dhs.state.ia.us/epay/)
 
 #### Kansas
+[Department of Labor](https://www.dol.ks.gov/employers/employer-services/new-hire-directory)
 
 #### Kentucky
+[New Hire Reporting](https://ky-newhire.com/#/public/public-landing/login)
 
 #### Louisiana
+[Department of Children & Family Services](https://newhire-reporting.com/LA-Newhire/Default.aspx)
 
 #### Maine
+[Department of Health & Human Services](https://www.maine.gov/dhhs/ofi/programs-services/child-support-services/employers)
 
 #### Maryland
+[Department of uman Services](https://www.mdnewhire.com/#/public/public-landing/login)
 
 #### Massachusetts
 
@@ -219,6 +245,7 @@ Each US State has their own requirement for new hire reporting as well as their 
 #### New Mexico
 
 #### New York
+[New Hire Reporting](https://www.tax.ny.gov/bus/wt/newhire.htm)
 
 #### North Carolina
 
@@ -231,6 +258,7 @@ Each US State has their own requirement for new hire reporting as well as their 
 #### Oregon
 
 #### Pennsylvania
+[PA One Stop-Shop](https://business.pa.gov/operate/hiring-workers/new-hire-reporting-requirements/)
 
 #### Rhode Island
 
@@ -241,6 +269,7 @@ Each US State has their own requirement for new hire reporting as well as their 
 #### Tennessee
 
 #### Texas
+[Texas Workforce Commission](https://www.twc.texas.gov/employer-resources/new-hire-reporting)
 
 #### Utah
 
@@ -261,12 +290,14 @@ Each US State has their own requirement for new hire reporting as well as their 
 #### American Samoa
 
 #### Guam
+[Child Support for employers](https://oagguam.org/cs-employers/)
 
 #### Northern Mariana Islands
 
 #### Puerto Rico
 
 #### U.S. Virgin Islands
+[Department of Labor](https://www.vidol.gov/)
 
 # Bookkeeping Accounting Entries for New Hires
 
