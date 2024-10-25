@@ -21,6 +21,7 @@ function init() {
         "balance-sheet.xslt",
         "customer-estimate.xslt",
         "income-statement.xslt",
+        "income-statement-geographic.xslt",
         "note-to-financial-statements.xslt",
         "purchase-order.xslt",
         "statement-in-change-in-equity.xslt",

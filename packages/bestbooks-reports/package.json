@@ -1,6 +1,6 @@
 {
   "name": "@pingleware/bestbooks-reports",
-  "version": "1.0.20",
+  "version": "1.2.0",
   "description": "Reports module for BestBooks Accounting Application Framework",
   "main": "index.js",
   "files": [
@@ -52,7 +52,7 @@
     "mocha": "^10.1.0"
   },
   "dependencies": {
-    "@pingleware/bestbooks-core": "^1.1.18",
+    "@pingleware/bestbooks-core": "^1.2.0",
     "js2xmlparser": "^5.0.0",
     "xml2js": "^0.6.2",
     "xslt-processor": "^0.11.7"

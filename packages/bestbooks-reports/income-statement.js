@@ -1,6 +1,9 @@
 "use strict"
 
-const { Model } = require('@pingleware/bestbooks-core');
+const { 
+    Report,
+    Model 
+} = require('@pingleware/bestbooks-core');
 const BaseReport = require('./report');
 const {format, array2xml} = require('./formatReport');
 const os = require('os');
@@ -12,7 +15,7 @@ class IncomeStatement extends BaseReport {
         super();
     }
 
-    createReport(startDate,endDate,_format,callback,notes="") {
+    createReport(startDate,endDate,_format,callback,notes="",geographic=false) {
         this.retrieveReportData(startDate, endDate, function(data){
             if (_format == "array") {
                 var _data = {
@@ -73,23 +76,9 @@ class IncomeStatement extends BaseReport {
         });
     }
 
-    retrieveReportData(startDate,endDate,callback) {
-        var sql = '';
-        if (startDate.length == 0 && endDate.length == 0) {
-            sql = 'SELECT * FROM income_statement;';
-        } else {
-            sql = `SELECT txdate AS date, account_code AS code,account_name AS name, note AS description,
-                    ROUND(SUM(debit)-SUM(credit),2) AS balance,accounts.base_type AS type 
-                    FROM ledger JOIN accounts ON accounts.name=ledger.account_name 
-                    WHERE accounts.type='Income' OR accounts.type='Expense'  OR accounts.type='Revenue' AND 
-                    ledger.txdate BETWEEN ${startDate} AND ${endDate} 
-                    GROUP BY account_name 
-                    ORDER BY accounts.type`;
-        }
-        const model = new Model();
-        model.query(sql, function(data){
-            callback(data);
-        });            
+    retrieveReportData(startDate,endDate,callback,geographic=false) {
+        const report = new Report();
+        callback(report.incomeStatementSync(startDate,endDate,geographic));
     }
 
     async retrieveReportDataSync(startDate,endDate) {
