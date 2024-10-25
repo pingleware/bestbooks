@@ -136,7 +136,7 @@ When hiring a new employee in the United States, employers are required to compl
 4. **[Form SS-4, Application for Employer Identification Number (EIN)](assets/fss4-2.pdf):**
 
    - If the employer doesn't have an EIN, they may need to obtain one by completing Form SS-4. This form is used to apply for an employer identification number, which is required for tax reporting purposes.
-5. **New Hire Reporting:**
+5. **[New Hire Reporting](https://www.acf.hhs.gov/css/contact-information/state-new-hire-reporting-websites):**
 
    - Some states require employers to report new hires to the state's new hire registry. While not a federal form, this process helps state agencies locate parents to enforce child support orders.
 6. **[Form 8850, Pre-Screening Notice and Certification Request for the Work Opportunity Credit](assets/f8850.pdf):**
@@ -223,67 +223,94 @@ A new hire reporting is required for each that your employee is a bonafide resid
 [Department of uman Services](https://www.mdnewhire.com/#/public/public-landing/login)
 
 #### Massachusetts
+[Child Support Services Division](https://www.mass.gov/info-details/learn-about-the-new-hire-reporting-program)
 
 #### Michigan
+[Child SUpport Program](https://www.mi-newhire.com/#/public/public-landing/login)
 
 #### Minnesota
+[New Hire Reporting](https://mn-newhire.com/)
 
 #### Mississippi
+[Department of Human Services](https://ms-newhire.com/)
 
 #### Missouri
+[Department of Social Services](https://www.missouriemployer.dss.mo.gov/NewHireInfo.aspx)
 
 #### Montana
+[Child Support Division](https://dphhs.mt.gov/cssd/employerinfo/nhrs)
 
 #### Nebraska
+[Department of Health and Human Services](https://ne-newhire.com/)
 
 #### Nevada
+[Department of Health and Human Services Division of Welfare and Supportive Services](https://dwss.nv.gov/Support/1_1_7_01-New-Hire-Reporting/)
 
 #### New Hampshire
+[Employment Security](https://www.nhes.nh.gov/services/employers/compliance.htm)
 
 #### New Jersey
+[Child Support Employer Services Portal](https://njcsesp.com/)
 
 #### New Mexico
+[New Hire Reporting](https://nm-newhire.com/)
 
 #### New York
 [New Hire Reporting](https://www.tax.ny.gov/bus/wt/newhire.htm)
 
 #### North Carolina
+[Division of Social Services](https://ncnewhires.ncdhhs.gov/)
 
 #### North Dakota
+[Child Support](https://www.childsupport.dhs.nd.gov/employers/new-hire-reporting)
 
 #### Ohio
+[Department of Job & Family Services](https://oh-newhire.com/#/public/public-landing/login)
 
 #### Oklahoma
+[Employment Security Commission](https://www.ok.gov/oesc/newhire/app/index.php)
 
 #### Oregon
+[Child Support](https://www.doj.state.or.us/child-support/for-employers/report-new-hires/)
 
 #### Pennsylvania
 [PA One Stop-Shop](https://business.pa.gov/operate/hiring-workers/new-hire-reporting-requirements/)
 
 #### Rhode Island
+[Office of Child SUpport Services](https://ri-newhire.com/)
 
 #### South Carolina
+[Department of Social Services](https://newhire.sc.gov/#/)
 
 #### South Dakota
+[Department of Labor & Regulation](https://dlr.sd.gov/ra/new_hire_reporting/default.aspx)
 
 #### Tennessee
+[Department of Human Services](https://tnnewhire.com/)
 
 #### Texas
 [Texas Workforce Commission](https://www.twc.texas.gov/employer-resources/new-hire-reporting)
 
 #### Utah
+[U.S. Department of Health & Human Services](https://id.utah.gov/login?goto=https:%2F%2Flogin.dts.utah.gov:443%2Fsso%2Foauth2%2Fauthorize%3Fresponse_type%3Dcode%26ForceAuth%3Dtrue%26client_id%3Dfrizzante-volumetric-710834%26scope%3Dopenid%2520email%2520App:DWSApps%26redirect_uri%3Dhttps:%2F%2Fjobs.utah.gov%2Fsso%2FLogin.aspx&realm=%2F)
 
 #### Vermont
+[Department of Labor](https://labor.vermont.gov/unemployment-insurance/unemployment-information-employers/employer-online-services/new-hire)
 
 #### Virginia
+[New Hire Reporting](https://va-newhire.com/)
 
 #### Washington
+[Economic Services Administration](https://www.dshs.wa.gov/esa/division-child-support/new-hire-reporting)
 
 #### West Virginia
+[Health & Human Resources](https://wv-newhire.com/)
 
 #### Wisconsin
+[New Hire Reporting](https://wi-newhire.com/)
 
 #### Wyoming
+[Department of Family Services](https://newhire-reporting.com/WY-Newhire/default.aspx)
 
 ### Territories
 
