@@ -1,0 +1,226 @@
+[
+    {
+        "jurisdiction": "Alabama",
+        "url": "https://adol.alabama.gov/employers/alabama-new-hire/"
+    },
+    {
+        "jurisdiction": "Alaska",
+        "url": "https://myalaska.state.ak.us/newhirereporting"
+    },
+    {
+        "jurisdiction": "Arizona",
+        "url": "https://newhire-reporting.com/az-newhire/empreg.aspx"
+    },
+    {
+        "jurisdiction": "Arkansas",
+        "url": "https://portal.arkansas.gov/service/report-new-hire-or-re-hire/"
+    },
+    {
+        "jurisdiction": "California",
+        "url": "https://edd.ca.gov/en/payroll_taxes/new_hire_reporting/"
+    },
+    {
+        "jurisdiction": "Colorado",
+        "url": "https://newhire.state.co.us/#/public/public-landing/login"
+    },
+    {
+        "jurisdiction": "Connecticut",
+        "url": "https://www1.ctdol.state.ct.us/newhires/index2.asp"
+    },
+    {
+        "jurisdiction": "Delaware",
+        "url": "https://onestop.delaware.gov/Grow_Hire"
+    },
+    {
+        "jurisdiction": "District of Columbia (Washington DC)",
+        "url": "https://dc-newhire.com/"
+    },
+    {
+        "jurisdiction": "Florida",
+        "url": "https://servicesforemployers.floridarevenue.com/Pages/home.aspx"
+    },
+    {
+        "jurisdiction": "Georgia[",
+        "url": "https://ga-newhire.com/"
+    },
+    {
+        "jurisdiction": "Hawaii",
+        "url": "https://ag.hawaii.gov/csea/employer-information/"
+    },
+    {
+        "jurisdiction": "Idaho",
+        "url": "https://www.labor.idaho.gov/businesses/report-new-hires/"
+    },
+    {
+        "jurisdiction": "Illinois",
+        "url": "https://ides.illinois.gov/employer-resources/taxes-reporting/new-hires.html"
+    },
+    {
+        "jurisdiction": "Indiana",
+        "url": "https://in-newhire.com/"
+    },
+    {
+        "jurisdiction": "Iowa",
+        "url": "https://secureapp.dhs.state.ia.us/epay/"
+    },
+    {
+        "jurisdiction": "Kansas",
+        "url": "https://www.dol.ks.gov/employers/employer-services/new-hire-directory"
+    },
+    {
+        "jurisdiction": "Kentucky",
+        "url": "https://ky-newhire.com/#/public/public-landing/login"
+    },
+    {
+        "jurisdiction": "Louisiana",
+        "url": "https://newhire-reporting.com/LA-Newhire/Default.aspx"
+    },
+    {
+        "jurisdiction": "Maine",
+        "url": "https://www.maine.gov/dhhs/ofi/programs-services/child-support-services/employers"
+    },
+    {
+        "jurisdiction": "Maryland",
+        "url": "https://www.mdnewhire.com/#/public/public-landing/login"
+    },
+    {
+        "jurisdiction": "Massachusetts",
+        "url": "https://www.mass.gov/info-details/learn-about-the-new-hire-reporting-program"
+    },
+    {
+        "jurisdiction": "Michigan",
+        "url": "https://www.mi-newhire.com/#/public/public-landing/login"
+    },
+    {
+        "jurisdiction": "Minnesota",
+        "url": "https://mn-newhire.com/"
+    },
+    {
+        "jurisdiction": "Mississippi",
+        "url": "https://ms-newhire.com/"
+    },
+    {
+        "jurisdiction": "Missouri",
+        "url": "https://www.missouriemployer.dss.mo.gov/NewHireInfo.aspx"
+    },
+    {
+        "jurisdiction": "Montana",
+        "url": "https://dphhs.mt.gov/cssd/employerinfo/nhrs"
+    },
+    {
+        "jurisdiction": "Nebraska",
+        "url": "https://ne-newhire.com/"
+    },
+    {
+        "jurisdiction": "Nevada",
+        "url": "https://dwss.nv.gov/Support/1_1_7_01-New-Hire-Reporting/"
+    },
+    {
+        "jurisdiction": "New Hampshire",
+        "url": "https://www.nhes.nh.gov/services/employers/compliance.htm"
+    },
+    {
+        "jurisdiction": "New Jersey",
+        "url": "https://njcsesp.com/"
+    },
+    {
+        "jurisdiction": "New Mexico",
+        "url": "https://nm-newhire.com/"
+    },
+    {
+        "jurisdiction": "New York",
+        "url": "https://www.tax.ny.gov/bus/wt/newhire.htm"
+    },
+    {
+        "jurisdiction": "North Carolina",
+        "url": "https://ncnewhires.ncdhhs.gov/"
+    },
+    {
+        "jurisdiction": "North Dakota",
+        "url": "https://www.childsupport.dhs.nd.gov/employers/new-hire-reporting"
+    },
+    {
+        "jurisdiction": "Ohio",
+        "url": "https://oh-newhire.com/#/public/public-landing/login"
+    },
+    {
+        "jurisdiction": "Oklahoma",
+        "url": "https://www.ok.gov/oesc/newhire/app/index.php"
+    },
+    {
+        "jurisdiction": "Oregon",
+        "url": "https://www.doj.state.or.us/child-support/for-employers/report-new-hires/"
+    },
+    {
+        "jurisdiction": "Pennsylvania",
+        "url": "https://business.pa.gov/operate/hiring-workers/new-hire-reporting-requirements/"
+    },
+    {
+        "jurisdiction": "Rhode Island",
+        "url": "https://ri-newhire.com/"
+    },
+    {
+        "jurisdiction": "South Carolina",
+        "url": "https://newhire.sc.gov/#/"
+    },
+    {
+        "jurisdiction": "South Dakota",
+        "url": "https://dlr.sd.gov/ra/new_hire_reporting/default.aspx"
+    },
+    {
+        "jurisdiction": "Tennessee",
+        "url": "https://tnnewhire.com/"
+    },
+    {
+        "jurisdiction": "Texas",
+        "url": "https://www.twc.texas.gov/employer-resources/new-hire-reporting"
+    },
+    {
+        "jurisdiction": "Utah",
+        "url": "https://id.utah.gov/login?goto=https:%2F%2Flogin.dts.utah.gov:443%2Fsso%2Foauth2%2Fauthorize%3Fresponse_type%3Dcode%26ForceAuth%3Dtrue%26client_id%3Dfrizzante-volumetric-710834%26scope%3Dopenid%2520email%2520App:DWSApps%26redirect_uri%3Dhttps:%2F%2Fjobs.utah.gov%2Fsso%2FLogin.aspx&realm=%2F"
+    },
+    {
+        "jurisdiction": "Vermont",
+        "url": "https://labor.vermont.gov/unemployment-insurance/unemployment-information-employers/employer-online-services/new-hire"
+    },
+    {
+        "jurisdiction": "Virginia",
+        "url": "https://va-newhire.com/"
+    },
+    {
+        "jurisdiction": "Washington",
+        "url": "https://www.dshs.wa.gov/esa/division-child-support/new-hire-reporting"
+    },
+    {
+        "jurisdiction": "West Virginia",
+        "url": "https://wv-newhire.com/"
+    },
+    {
+        "jurisdiction": "Wisconsin",
+        "url": "https://wi-newhire.com/"
+    },
+    {
+        "jurisdiction": "Wyoming",
+        "url": "https://newhire-reporting.com/WY-Newhire/default.aspx"
+    },
+    {
+        "jurisdiction": "American Samoa",
+        "url": ""
+    },
+    {
+        "jurisdiction": "Guam",
+        "url": "https://oagguam.org/cs-employers/"
+    },
+    {
+        "jurisdiction": "Northern Mariana Islands",
+        "url": ""
+    },
+    {
+        "jurisdiction": "Puerto Rico",
+        "url": ""
+    },
+    {
+        "jurisdiction": "U.S. Virgin Islands",
+        "url": "https://www.vidol.gov/"
+    }
+]
