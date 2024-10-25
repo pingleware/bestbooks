@@ -29,6 +29,7 @@ You can customize the style of the reports by modifying the XSLT file located in
 balance-sheet.xslt
 customer-estimate.xslt
 income-statement.xslt
+income-statement-geographic.xslt
 purchase-order.xslt
 statement-in-change-in-equity.xslt
 statement-of-cash-flows.xslt
@@ -43,6 +44,8 @@ retained-earnings.xslt
 ### Income Statement
 
 ![1712586856327](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712586856327.png)
+
+### Income Statement by Geography
 
 ### Customer Estimate
 
