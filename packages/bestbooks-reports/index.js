@@ -7,6 +7,7 @@ const ExcelJS = require('exceljs');
 
 
 function init() {
+    // TODO: move this INSERT in the Core.Report class per CODING STANDARDS
     const { Model } = require('@pingleware/bestbooks-core');
     const model = new Model();
     model.insertSync(`CREATE TABLE IF NOT EXISTS "report" (

@@ -60,6 +60,7 @@ class IncomeStatement extends BaseReport {
 
                 var txdate = new Date().getTime();
                 var buffer = require('buffer').Buffer;
+                // TODO: move this INSERT in the Core.Report class per CODING STANDARDS
                 var sql = `INSERT INTO report (txdate,name,contents) VALUES ('${txdate}','income-statement','${buffer.from(formattedData).toString('base64')}')`;
                 const model = new Model();
                 if (callback) {

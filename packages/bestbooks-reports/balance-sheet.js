@@ -117,6 +117,7 @@ class BalanceSheet extends BaseReport {
     
                     const txdate = new Date().getTime();
                     const buffer = require('buffer').Buffer;
+                    // TODO: move this INSERT in the Core.Report class per CODING STANDARDS
                     const sql = `INSERT INTO report (txdate,name,contents) VALUES ('${txdate}','balance-sheet','${buffer.from(formattedData).toString('base64')}')`;
                     const model = new Model();
                     if (callback) {
@@ -151,6 +152,7 @@ class BalanceSheet extends BaseReport {
                     WHERE ledger.txdate BETWEEN ${startDate} AND ${endDate} 
                     GROUP BY account_name ORDER BY accounts.base_type`;
         }
+        // TODO: move this INSERT in the Core.Report class per CODING STANDARDS
         const model = new Model();
         model.query(sql,callback);
     }

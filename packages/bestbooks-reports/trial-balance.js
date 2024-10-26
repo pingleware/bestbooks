@@ -59,6 +59,7 @@ class TrialBalance extends BaseReport {
                     WHERE ledger.txdate BETWEEN ${startDate} AND ${endDate} 
                     GROUP BY account_name`;
         }
+        // TODO: move this INSERT in the Core.Report class per CODING STANDARDS
         const model = new Model();
         model.query(sql, function(data){
             callback(data);

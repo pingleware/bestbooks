@@ -21,6 +21,7 @@ class NoteToFinancialStatements {
             sql = `SELECT * FROM report WHERE name='${report_rootfilename} LIMIT 1'`;
         }
 
+        // TODO: move this INSERT in the Core.Report class per CODING STANDARDS
         const model = new Model();
         model.query(sql,function(rows){
             if (rows.length > 0) {
