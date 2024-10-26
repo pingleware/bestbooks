@@ -22,6 +22,10 @@ Reporting is the most important feature of any accounting system, because report
 
 There is much discussion concerning GAAP compliance and accounting sofftware with some commentors stating that accounting software can never be GAAP compliance. First, GAAP compliance has to do with reporting and involves an accountant statement or notes added to the financial statements, this where the component noteToFinancialStatements permits the addition of a notes fields to the report XML data, thus making BestBooks GAAP compliance with the addition of a notes field on reports.
 
+Also to ensure GAAP compliance, standard labels as defined by FASB should be used in the report generation. See [FASB Segment Reporting (Topic 280)](https://www.fasb.org/page/ShowPdf?path=ASU%202023-07.pdf),  [2024 US GAAP Financial, SEC Reporting and DQC Rules Taxonomies ](https://xbrl.us/xbrl-taxonomy/2024-us-gaap/)with the updated link to [FASB Explanatory Page ](https://fasb.org/projects/fasb-taxonomies)
+
+An exempt offering under Section 3(a)(11) which is an intrastate public offering issuing unrestricted securities to a single state bonafide residents. To ensure compliance of this exempt offering, segment reporting is required if the securities become traded on a NMS Exchange.
+
 ## Sample Reports
 
 You can customize the style of the reports by modifying the XSLT file located in the **.bestbooks** system directory of the current user home directory. The package XSLT files are ONLY copied to this directory if they do not exist. The available report XSLT files include,
@@ -48,7 +52,7 @@ retained-earnings.xslt
 
 ### Income Statement by Geography
 
-aka Segment Reporting per [FASB](https://www.fasb.org/segmentreporting_2017) 
+aka Segment Reporting per [FASB](https://www.fasb.org/segmentreporting_2017). See also [https://www.fasb.org/revenue_2020.](https://www.fasb.org/revenue_2020)
 
 ![1729949969875](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1729949969875.png "Courtesy of FASB")
 
