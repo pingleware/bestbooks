@@ -5,7 +5,7 @@ There are no free options for creating reports from content received from a data
 Hence the report design will go back to basics,
 
     1. creating an XML document for the data required for the report
-    2. display the XML using XSLT with CSS which can be printed or 
+    2. display the XML using XSLT with CSS which can be printed or
        save as a PDF or DOCX (see https://www.geeksforgeeks.org/displaying-xml-using-xslt/)
 
 During initialization (invoking the init() function)), will copy the xslt template files to the user's home directory in the bestbooks system directory.
@@ -47,6 +47,12 @@ retained-earnings.xslt
 ![1712586856327](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712586856327.png)
 
 ### Income Statement by Geography
+
+aka Segment Reporting per [FASB](https://www.fasb.org/segmentreporting_2017) 
+
+![1729949969875](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1729949969875.png "Courtesy of FASB")
+
+(Courtesy of FASB)
 
 ### Customer Estimate
 
