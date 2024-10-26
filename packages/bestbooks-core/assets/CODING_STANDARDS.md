@@ -1,6 +1,9 @@
 # Coding Standards
 This is a living document for best practices, when applicable, for code implementation.
 
+## Direct Database Manipulation
+All database manipulation MUST BE done through the core framework. 
+
 ## Basic Test Script
 The minimum test for a module class is,
 
