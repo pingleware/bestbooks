@@ -31,9 +31,12 @@ const Investment = require('./investment');
 const Inventory = require("./inventory");
 // derived from Expense class
 const Withdrawals = require('./withdrawals');
+const FixedCost = require('./expense-fixed.js');
+const VariableCost = require('./expense-variable.js');
 // derived from Liability class
 const Equity = require('./equity');
 const Revenue = require('./revenue');
+const AccountsPayable = require('./liability-accountspayable.js');
 // derived from Equity class
 const CommodityShares = require('./equity-commodity.js');
 const CommonShares = require('./equity-common.js');
@@ -83,6 +86,7 @@ const ConsistencyPrinciple = require('./audit-consistencyPrinciple.js');
 const Disclosures = require('./audit-disclosures.js');
 const GoingConcernAssumption = require('./audit-goingConcernAssumption.js');
 const Materiality = require('./audit-materiality.js');
+const AccountsReceivable = require('./asset-accountsreceivable.js');
 
 module.exports = {
     Model: Model,
@@ -110,11 +114,15 @@ module.exports = {
     Investment: Investment,
     Inventory: Inventory,
     Withdrawals: Withdrawals,
+    FixedCost: FixedCost,
+    VariableCost: VariableCost,
     Equity: Equity,
     ContraEquity: ContraEquity,
     ContraRevenue: ContraRevenue,
     ContraExpense: ContraExpense,
     Revenue: Revenue,
+    AccountsPayable: AccountsPayable,
+    AccountsReceivable: AccountsReceivable,
     CommodityShares: CommodityShares,
     CommonShares: CommonShares,
     DebtShares: DebtShares,

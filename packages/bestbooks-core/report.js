@@ -52,7 +52,6 @@
  */
 
 const Model = require('./model');
-const localStorage = require('localStorage');
 const {
     info,
     warn,
@@ -109,7 +108,7 @@ class Report {
     async incomeStatementSync(startTxDate="",endTxDate="",geographic=false) {
         return new Promise((resolve, reject) => {
             try {
-                this.incomeStatement(startTxDate, endTxDate, geographic, (error, results) => {
+                this.incomeStatement(startTxDate, endTxDate, geographic, (results,error) => {
                     if (error) {
                         reject(error); // Reject the promise if there's an error
                     } else {
@@ -153,7 +152,7 @@ class Report {
     async balanceSheetSync(startTxDate="",endTxDate="") {
         return new Promise((resolve, reject) => {
             try {
-                this.balanceSheet(startTxDate, endTxDate, (error, results) => {
+                this.balanceSheet(startTxDate, endTxDate, (results,error) => {
                     if (error) {
                         reject(error); // Reject the promise if there's an error
                     } else {
@@ -196,7 +195,7 @@ class Report {
     async cashFlowStatementSync(startTxDate="",endTxDate="") {
         return new Promise((resolve, reject) => {
             try {
-                this.cashFlowStatement(startTxDate, endTxDate, (error, results) => {
+                this.cashFlowStatement(startTxDate, endTxDate, (results,error) => {
                     if (error) {
                         reject(error); // Reject the promise if there's an error
                     } else {
@@ -255,7 +254,7 @@ class Report {
     async statementOfRetainedEarningsSync(startTxDate="",endTxDate="") {
         return new Promise((resolve, reject) => {
             try {
-                this.statementOfRetainedEarnings(startTxDate, endTxDate, (error, results) => {
+                this.statementOfRetainedEarnings(startTxDate, endTxDate, (results,error) => {
                     if (error) {
                         reject(error); // Reject the promise if there's an error
                     } else {
@@ -298,7 +297,7 @@ class Report {
     async statementOfChangesInEquitySync(startTxDate="",endTxDate="") {
         return new Promise((resolve, reject) => {
             try {
-                this.statementOfChangesInEquity(startTxDate, endTxDate, (error, results) => {
+                this.statementOfChangesInEquity(startTxDate, endTxDate, (results,error) => {
                     if (error) {
                         reject(error); // Reject the promise if there's an error
                     } else {
@@ -335,27 +334,22 @@ class Report {
 
             // Execute the query and pass the callback
             const results = await this.model.querySync(sql);
-            callback(0,results);
+            callback(results,0);
         } catch(err) {
-            error(err);
+            callback([], err);
         }
     }
 
     async trialBalanceSync(startTxDate="",endTxDate=""){
         return new Promise((resolve, reject) => {
-            try {
-                this.trialBalance(startTxDate, endTxDate, (err, results) => {
-                    if (err) {
-                        error(err);
-                        reject(err); // Reject the promise if there's an error
-                    } else {
-                        resolve(results); // Resolve with the results if successful
-                    }
-                });
-            } catch (err) {
-                error(err);
-                reject(err); // Reject the promise if there's an error
-            }
+            this.trialBalance(startTxDate, endTxDate, (results, err) => {
+                if (err) {
+                    error(err);
+                    reject(err); // Reject the promise if there's an error
+                } else {
+                    resolve(results); // Resolve with the results if successful
+                }
+            });
         });
     }
 
@@ -389,7 +383,7 @@ class Report {
     async budgetVsActualSync(startTxDate="",endTxDate="") {
         return new Promise((resolve, reject) => {
             try {
-                this.budgetVsActual(startTxDate, endTxDate, (error, results) => {
+                this.budgetVsActual(startTxDate, endTxDate, (results,error) => {
                     if (error) {
                         reject(error); // Reject the promise if there's an error
                     } else {
@@ -432,7 +426,7 @@ class Report {
     async accountReceivablesAgingReportSync(startTxDate="",endTxDate="") {
         return new Promise((resolve, reject) => {
             try {
-                this.accountReceivablesAgingReport(startTxDate, endTxDate, (error, results) => {
+                this.accountReceivablesAgingReport(startTxDate, endTxDate, (results, error) => {
                     if (error) {
                         reject(error); // Reject the promise if there's an error
                     } else {
@@ -474,18 +468,13 @@ class Report {
     }
     async accountsPayableAgingReportSync(startTxDate="",endTxDate="") {
         return new Promise((resolve, reject) => {
-            try {
-                this.accountsPayableAgingReport(startTxDate, endTxDate, (error, results) => {
-                    if (error) {
-                        reject(error); // Reject the promise if there's an error
-                    } else {
-                        resolve(results); // Resolve with the results if successful
-                    }
-                });
-            } catch (err) {
-                console.error(err);
-                reject(err); // Reject the promise if there's an error
-            }
+            this.accountsPayableAgingReport(startTxDate, endTxDate, (results,error) => {
+                if (error) {
+                    reject(error); // Reject the promise if there's an error
+                } else {
+                    resolve(results); // Resolve with the results if successful
+                }
+            });
         });
     }
     async breakevenAnalysisReport(startTxDate="",endTxDate="",callback) {
@@ -517,18 +506,13 @@ class Report {
     }
     async breakevenAnalysisReportSync(startTxDate="",endTxDate="") {
         return new Promise((resolve, reject) => {
-            try {
-                this.breakevenAnalysisReport(startTxDate, endTxDate, (error, results) => {
-                    if (error) {
-                        reject(error); // Reject the promise if there's an error
-                    } else {
-                        resolve(results); // Resolve with the results if successful
-                    }
-                });
-            } catch (err) {
-                console.error(err);
-                reject(err); // Reject the promise if there's an error
-            }
+            this.breakevenAnalysisReport(startTxDate, endTxDate, (results,error) => {
+                if (error) {
+                    reject(error); // Reject the promise if there's an error
+                } else {
+                    resolve(results); // Resolve with the results if successful
+                }
+            });
         });
     }
 
@@ -542,26 +526,31 @@ class Report {
     }
 
 
-    async createViews() {
-        await this.incomeStatementView();
-        await this.incomeStatementViewGeographic();
-        await this.balanceSheetView();
-        await this.cashFlowStatementView();
-        await this.statementOfRetainedEarningsView();
-        await this.statementOfChangesInEquityView();
-        await this.trialBalanceView();
-        await this.budgetVsActualView();
-        await this.accountReceivablesAgingReportView();
-        await this.accountsPayableAgingReportView();
-        await this.breakevenAnalysisReportView();
+    async createViews(drop=false) {
+        await this.incomeStatementView(drop);
+        await this.incomeStatementViewGeographic(drop);
+        await this.balanceSheetView(drop);
+        await this.cashFlowStatementView(drop);
+        await this.statementOfRetainedEarningsView(drop);
+        await this.statementOfChangesInEquityView(drop);
+        await this.trialBalanceView(drop);
+        await this.budgetVsActualView(drop);
+        await this.accountReceivablesAgingReportView(drop);
+        await this.accountsPayableAgingReportView(drop);
+        await this.breakevenAnalysisReportView(drop);
     }
 
-    async trialBalanceView() {
-        var sql = `CREATE VIEW IF NOT EXISTS TrialBalance AS 
+    async trialBalanceView(drop=false) {
+        var dropSQL = ``;
+        if (drop) {
+            dropSQL = `DROP VIEW IF EXISTS "main"."TrialBalance";`
+        }
+        var sql = `${dropSQL} CREATE VIEW IF NOT EXISTS TrialBalance AS 
             SELECT 
-                account_code AS code, 
-                account_name AS name,
-                accounts.base_type AS type,
+                code, 
+                name,
+                type,
+                base_type,
                 SUM(debit) AS total_debit,
                 SUM(credit) AS total_credit,
                 ledger.txdate  -- Including txdate for filtering in the query
@@ -570,15 +559,19 @@ class Report {
             JOIN 
                 accounts ON accounts.name = ledger.account_name
             GROUP BY 
-                accounts.account_code, accounts.account_name, accounts.base_type
+                accounts.code, accounts.name, accounts.base_type
             ORDER BY 
-                accounts.base_type, accounts.account_name;
+                accounts.base_type, accounts.name;
         `;
         await this.model.insertSync(sql);
     }
 
-    async incomeStatementView() {
-        var sql = `CREATE VIEW IF NOT EXISTS IncomeStatement AS 
+    async incomeStatementView(drop=false) {
+        var dropSQL = ``;
+        if (drop) {
+            dropSQL = `DROP VIEW IF EXISTS "main"."IncomeStatement";`
+        }
+        var sql = `${dropSQL} CREATE VIEW IF NOT EXISTS IncomeStatement AS 
             SELECT 
                 accounts.code AS account_code,
                 accounts.name AS account_name,
@@ -606,36 +599,53 @@ class Report {
         await this.model.insertSync(sql);
     }
 
-    async incomeStatementViewGeographic() {
-        var sql = `CREATE VIEW IncomeStatementGeographic AS
-            WITH total_revenue AS (
-                SELECT 
-                    SUM(CASE WHEN tr.type = 'revenue' THEN tr.amount ELSE 0 END) AS grand_total_revenue
+    async incomeStatementViewGeographic(drop=false) {
+        var dropSQL = ``;
+        if (drop) {
+            dropSQL = `DROP VIEW IF EXISTS "main"."IncomeStatementGeographic";`
+        }
+        var sql = `${dropSQL} CREATE VIEW IF NOT EXISTS IncomeStatementGeographic AS
+                        SELECT 
+                    loc.location AS Location,
+                    loc.region AS Region,
+                    SUM(CASE 
+                        WHEN ledger.debit > 0 THEN ledger.debit 
+                        ELSE 0 
+                    END) AS total_revenue,
+                    SUM(CASE 
+                        WHEN ledger.credit > 0 THEN ledger.credit 
+                        ELSE 0 
+                    END) AS total_expense,
+                    -- Calculating percent of total by location
+                    ROUND((SUM(CASE 
+                        WHEN ledger.debit > 0 THEN ledger.debit 
+                        ELSE 0 
+                    END) * 100.0 / SUM(SUM(CASE 
+                        WHEN ledger.debit > 0 THEN ledger.debit 
+                        ELSE 0 
+                    END)) OVER ()), 2) AS percent_of_total_revenue
                 FROM 
-                    transactions tr
-            )
-            SELECT 
-                loc.region AS Region,
-                SUM(CASE WHEN tr.type = 'revenue' THEN tr.amount ELSE 0 END) AS Total_Revenue,
-                SUM(CASE WHEN tr.type = 'expense' THEN tr.amount ELSE 0 END) AS Total_Expenses,
-                SUM(CASE WHEN tr.type = 'revenue' THEN tr.amount ELSE 0 END) - 
-                SUM(CASE WHEN tr.type = 'expense' THEN tr.amount ELSE 0 END) AS Net_Income,
-                ROUND(
-                    (SUM(CASE WHEN tr.type = 'revenue' THEN tr.amount ELSE 0 END) / 
-                    (SELECT grand_total_revenue FROM total_revenue) * 100), 2
-                ) AS Percent_Of_Total_Revenue
-            FROM 
-                transactions tr
-            JOIN 
-                locations loc ON tr.location = loc.location
-            GROUP BY 
-                loc.region;
+                    ledger
+                JOIN 
+                    accounts ON accounts.name = ledger.account_name
+                JOIN 
+                    locations loc ON ledger.location = loc.id
+                WHERE 
+                    accounts.base_type IN ('Revenue', 'Expense')  -- Filter for relevant accounts
+                GROUP BY 
+                    loc.location, loc.region
+                ORDER BY 
+                    loc.location;
             `;
             await this.model.insertSync(sql);
     }
 
-    async balanceSheetView() {
-        var sql = `CREATE VIEW IF NOT EXISTS BalanceSheet AS 
+    async balanceSheetView(drop=false) {
+        var dropSQL = ``;
+        if (drop) {
+            dropSQL = `DROP VIEW IF EXISTS "main"."BalanceSheet";`
+        }
+        var sql = `${dropSQL} CREATE VIEW IF NOT EXISTS BalanceSheet AS 
             SELECT 
                 account_code AS code, 
                 account_name AS name, 
@@ -661,13 +671,18 @@ class Report {
         await this.model.insertSync(sql);
     }
 
-    async cashFlowStatementView() {
-        var sql = `CREATE VIEW IF NOT EXISTS CashFlowStatement AS
+    async cashFlowStatementView(drop=false) {
+        var dropSQL = ``;
+        if (drop) {
+            dropSQL = `DROP VIEW IF EXISTS "main"."CashFlowStatement";`
+        }
+        var sql = `${dropSQL} CREATE VIEW IF NOT EXISTS CashFlowStatement AS
             SELECT 
                 transaction_type,
                 account_code AS code, 
-                account_name AS name, 
-                accounts.base_type AS type, 
+                account_name AS name,
+                accounts.type, 
+                accounts.base_type, 
                 SUM(debit) AS debit, 
                 SUM(credit) AS credit,
                 (SUM(credit) - SUM(debit)) AS net_cash_flow,
@@ -688,8 +703,12 @@ class Report {
         await this.model.insertSync(sql);
     }
 
-    async statementOfRetainedEarningsView() {
-        var sql = `CREATE VIEW IF NOT EXISTS StatementOfRetainedEarnings AS
+    async statementOfRetainedEarningsView(drop=false) {
+        var dropSQL = ``;
+        if (drop) {
+            dropSQL = `DROP VIEW IF EXISTS "main"."StatementOfRetainedEarnings";`
+        }
+        var sql = `${dropSQL} CREATE VIEW IF NOT EXISTS StatementOfRetainedEarnings AS
             SELECT 
                 (SELECT SUM(credit - debit) 
                     FROM ledger 
@@ -736,10 +755,14 @@ class Report {
         await this.model.insertSync(sql);
     }
 
-    async statementOfChangesInEquityView() {
-        var sql = `CREATE VIEW IF NOT EXISTS StatementOfChangesInEquity AS
+    async statementOfChangesInEquityView(drop=false) {
+        var dropSQL = ``;
+        if (drop) {
+            dropSQL = `DROP VIEW IF EXISTS "main"."StatementOfChangesInEquity";`
+        }
+        var sql = `${dropSQL} CREATE VIEW IF NOT EXISTS StatementOfChangesInEquity AS
             SELECT 
-                accounts.account_name AS equity_component,
+                accounts.name AS equity_component,
                 accounts.base_type AS type,
                 
                 -- Beginning balance of each equity component
@@ -789,15 +812,19 @@ class Report {
             WHERE 
                 accounts.base_type = 'Equity'
             GROUP BY 
-                accounts.account_name
+                accounts.name
             ORDER BY 
-                accounts.account_name;
+                accounts.name;
         `;
         await this.model.insertSync(sql);
     }
 
-    async budgetVsActualView() {
-        var sql = `CREATE VIEW IF NOT EXISTS BudgetVsActual AS
+    async budgetVsActualView(drop=false) {
+        var dropSQL = ``;
+        if (drop) {
+            dropSQL = `DROP VIEW IF EXISTS "main"."BudgetVsActual";`
+        }
+        var sql = `${dropSQL} CREATE VIEW IF NOT EXISTS BudgetVsActual AS
             SELECT 
                 code AS account_code,
                 name AS account_name,
@@ -841,8 +868,12 @@ class Report {
         await this.model.insertSync(sql);
     }
 
-    async accountReceivablesAgingReportView() {
-        var sql = `CREATE VIEW IF NOT EXISTS AccountsReceivableAging AS
+    async accountReceivablesAgingReportView(drop=false) {
+        var dropSQL = ``;
+        if (drop) {
+            dropSQL = `DROP VIEW IF EXISTS "main"."AccountsReceivableAging";`
+        }
+        var sql = `${dropSQL} CREATE VIEW IF NOT EXISTS AccountsReceivableAging AS
             SELECT 
                 accounts.code AS account_code,
                 accounts.name AS account_name,
@@ -882,8 +913,12 @@ class Report {
         await this.model.insertSync(sql);
     }
 
-    async accountsPayableAgingReportView() {
-        var sql = `CREATE VIEW IF NOT EXISTS AccountsPayableAging AS
+    async accountsPayableAgingReportView(drop=false) {
+        var dropSQL = ``;
+        if (drop) {
+            dropSQL = `DROP VIEW IF EXISTS "main"."AccountsPayableAging";`
+        }
+        var sql = `${dropSQL} CREATE VIEW IF NOT EXISTS AccountsPayableAging AS
             SELECT 
                 accounts.code AS account_code,
                 accounts.name AS account_name,
@@ -923,30 +958,34 @@ class Report {
         await this.model.insertSync(sql);
     }
 
-    async breakevenAnalysisReportView() {
-        var sql = `CREATE VIEW IF NOT EXISTS BreakEvenAnalysis AS
+    async breakevenAnalysisReportView(drop=false) {
+        var dropSQL = ``;
+        if (drop) {
+            dropSQL = `DROP VIEW IF EXISTS "main"."BreakEvenAnalysis";`
+        }
+        var sql = `${dropSQL} CREATE VIEW IF NOT EXISTS BreakEvenAnalysis AS
              SELECT 
                 SUM(CASE 
-                    WHEN accounts.base_type = 'FixedCost' THEN ledger.debit 
+                    WHEN accounts.type = 'FixedCost' THEN ledger.debit 
                     ELSE 0 
                 END) AS total_fixed_costs,
                 SUM(CASE 
-                    WHEN accounts.base_type = 'VariableCost' THEN ledger.debit 
+                    WHEN accounts.type = 'VariableCost' THEN ledger.debit 
                     ELSE 0 
                 END) AS total_variable_costs,
                 SUM(CASE 
-                    WHEN accounts.base_type = 'Revenue' THEN ledger.credit 
+                    WHEN accounts.type = 'Revenue' THEN ledger.credit 
                     ELSE 0 
                 END) AS total_revenue,
                 SUM(CASE 
-                    WHEN accounts.base_type = 'Revenue' THEN ledger.credit 
+                    WHEN accounts.type = 'Revenue' THEN ledger.credit 
                     ELSE 0 
                 END) - 
                 (SUM(CASE 
-                    WHEN accounts.base_type = 'FixedCost' THEN ledger.debit 
+                    WHEN accounts.type = 'FixedCost' THEN ledger.debit 
                     ELSE 0 
                 END) + SUM(CASE 
-                    WHEN accounts.base_type = 'VariableCost' THEN ledger.debit 
+                    WHEN accounts.type = 'VariableCost' THEN ledger.debit 
                     ELSE 0 
                 END)) AS net_profit_loss,
                 ledger.txdate  -- Including txdate for optional filtering
@@ -955,11 +994,11 @@ class Report {
             JOIN 
                 accounts ON accounts.name = ledger.account_name
             WHERE 
-                accounts.base_type IN ('FixedCost', 'VariableCost', 'Revenue')  -- Only include relevant accounts
+                accounts.type IN ('FixedCost', 'VariableCost', 'Revenue')  -- Only include relevant accounts
             GROUP BY 
                 ledger.txdate
             ORDER BY 
-                ledger.txdate;
+                ledger.txdate
         `;
         await this.model.insertSync(sql);
     }

@@ -23,16 +23,17 @@ class ChartOfAccounts {
         this.createTable();
     }
 
-    async add(name,type,company_id=0) {
+    async add(name,type,base="") {
         try {
             this.accounts[name] = type;
             this.count = this.accounts.length;
 
-            var account = this.getAccountTypeCode(type);
-            var new_code = `SELECT count(id)+${account[1]} AS code FROM accounts WHERE base_type='${account[0]}'`;
-            var sql = `INSERT OR IGNORE INTO accounts (company_id,code,name,type,base_type) VALUES (${company_id},(${new_code}),'${name}','${type}','${account[0]}');`;
-            info(`chartofaccounts.add: ${sql}`);
-            const result = await this.model.insertSync(sql);
+            var account = this.getAccountTypeCode((base.length == 0 ? type: base ));
+            var base_type = (base.length == 0 ? account[0]: base );
+            var new_code = `SELECT count(id)+${account[1]} AS code FROM accounts WHERE base_type='${base_type}'`;
+            var sql = `INSERT OR IGNORE INTO accounts (code,name,type,base_type) VALUES ((${new_code}),?,?,?);`;
+            const params = [name,type,base_type];
+            const result = await this.model.insertSync(sql,params);
             if (!result) {
                 return true;
             }

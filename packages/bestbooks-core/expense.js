@@ -69,8 +69,8 @@ class Expense extends Ledger {
 	debit = 0;
 	credit = 0;
 
-    constructor(name) {
-        super(name,AccountTypes.Expense);
+    constructor(name,type=AccountTypes.Expense) {
+        super(name,type,AccountTypes.Expense);
         this.group = 400;
     }
 

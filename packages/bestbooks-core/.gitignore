@@ -6,3 +6,4 @@ cli/
 .DS_Store
 dotnet/
 package-lock.json
+bad/

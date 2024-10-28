@@ -17,18 +17,20 @@ const {
 class Ledger extends TAccount {
 	name = null;
 	type = null;
+    baseType = null;
 
-    constructor(name, type) {
+    constructor(name, type, base="") {
         super();
         // initialize instance variables
         this.name = name;
         this.type = type;
+        this.baseType = (base.length == 0 ? type : base);
         // create and open database
         this.model = new Model();
         this.init();
         //this.getBalance();
         this.coa = new ChartOfAccounts();
-        this.coa.add(name,type);
+        this.coa.add(name,type,base);
     }
 
     async init() {
@@ -114,22 +116,25 @@ class Ledger extends TAccount {
     async createTable() {
         try {
             const sql = `CREATE TABLE IF NOT EXISTS "ledger" (
-                "id" INTEGER,
-                "company_id" INTEGER,
+                "id"	INTEGER,
+                "company_id"	INTEGER,
                 "office_id"	INTEGER,
-                "account_code" TEXT,
-                "account_name" TEXT,
-                "txdate" TIMESTAMP,
-                "note" TEXT,
-                "ref" INTEGER DEFAULT 0,
+                "account_code"	TEXT,
+                "account_name"	TEXT,
+                "txdate"	TIMESTAMP,
+                "note"	TEXT,
+                "ref"	INTEGER DEFAULT 0,
                 "debit"	REAL DEFAULT 0,
-                "credit" REAL DEFAULT 0,
-                "balance" REAL DEFAULT 0,
-                "action" TEXT DEFAULT 'Record',          -- e.g., 'Authorize', 'Custody', 'Record'
-                "performed_by" INTEGER DEFAULT 0,          -- User ID
+                "credit"	REAL DEFAULT 0,
+                "balance"	REAL DEFAULT 0,
+                "action"	TEXT DEFAULT 'Record',
+                "performed_by"	INTEGER DEFAULT 0,
+                "location"	INTEGER DEFAULT 0,
+                "due_date"	TIMESTAMP DEFAULT 0,
+                "transaction_type"	TEXT DEFAULT 'Operating',
                 PRIMARY KEY("id" AUTOINCREMENT),
-                FOREIGN KEY ("performed_by") REFERENCES users("id")
-            );`;
+                FOREIGN KEY("performed_by") REFERENCES "users"("id")
+            )`;
             await this.model.insertSync(sql);
         } catch(err) {
             error(JSON.stringify(err));

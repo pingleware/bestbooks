@@ -60,18 +60,30 @@ class Asset extends Ledger {
 	debit = 0;
 	credit = 0;
 
-    constructor(name,type=AccountTypes.Asset) {
-        super(name,type);
+    constructor(name,type=AccountTypes.Asset,base=AccountTypes.Asset) {
+        super(name,type,base);
         this.group = 100;
     }
 
-    async addDebit(date,desc,amount,company_id=0,office_id=0){
+    async addDebit(date,desc,amount,company_id=0,office_id=0,transaction_type="Operating"){
         try {
             // SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+100,100) FROM ledger WHERE account_name='Cash'
             // SELECT SUM(debit)-SUM(credit) AS balance FROM ledger WHERE account_name='Cash'
             this.debit = amount;
-            var sql = `INSERT OR IGNORE INTO ledger (company_id,office_id,account_name,account_code,txdate,note,debit,balance) VALUES (?,?,?,(SELECT code FROM accounts WHERE name=?),?,?,?,(SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+?,?) FROM ledger WHERE account_name=?));`;
-            const params = [company_id,office_id,super.getName(),super.getName(),date,desc,amount,amount,amount,super.getName()];
+            var sql = `INSERT OR IGNORE INTO ledger (company_id,office_id,account_name,account_code,txdate,note,debit,balance,transaction_type) VALUES (?,?,?,(SELECT code FROM accounts WHERE name=?),?,?,?,(SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+?,?) FROM ledger WHERE account_name=?),?);`;
+            const params = [
+                company_id,
+                office_id,
+                super.getName(),
+                super.getName(),
+                date,
+                desc,
+                amount,
+                amount,
+                amount,
+                super.getName(),
+                transaction_type
+            ];
             const ledger_insert_id = await this.model.insertSync(sql,params);
             info(`addDebit.ledger.id: ${ledger_insert_id}`);
             let journal_insert_id = 0;
@@ -89,7 +101,7 @@ class Asset extends Ledger {
             console.error(err);
         }
     }
-    async addCredit(date,desc,amount,company_id=0,office_id=0){
+    async addCredit(date,desc,amount,company_id=0,office_id=0,transaction_type="Operating"){
         try {
             this.credit = amount;
             var sql = `INSERT OR IGNORE INTO ledger (
@@ -100,12 +112,14 @@ class Asset extends Ledger {
                         txdate,
                         note,
                         credit,
-                        balance
+                        balance,
+                        transaction_type
                     ) VALUES (
                         ?,?,?,
                         (SELECT code FROM accounts WHERE name=?),
                         ?,?,?,
-                        (SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)-?,?) FROM ledger WHERE account_name=?)
+                        (SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)-?,?) FROM ledger WHERE account_name=?),
+                        ?
                     );`;
             const params = [
                 company_id,
@@ -117,7 +131,8 @@ class Asset extends Ledger {
                 Math.abs(amount),
                 amount,
                 amount,
-                super.getName()
+                super.getName(),
+                transaction_type
             ];
 
             const ledger_insert_id = await this.model.insertSync(sql,params);

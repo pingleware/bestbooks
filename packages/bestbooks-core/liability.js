@@ -49,8 +49,8 @@ class Liability extends Ledger {
 	debit = 0;
 	credit = 0;
 
-    constructor(name,type=AccountTypes.Liability) {
-        super(name,type);
+    constructor(name,type=AccountTypes.Liability,base=AccountTypes.Liability) {
+        super(name,type,base);
         this.group = 200;
     }
 
