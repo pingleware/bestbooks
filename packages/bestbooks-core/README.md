@@ -508,6 +508,6 @@ Financial Indicators:
  ```
 # End of Life Doctrine
 
-When a piece of software is useful there should never be an end-of-life doctrine. The goal of this software is to achieve immortality ;). When this software has reached that stage, this project may appear abandon but the opposit is true. This software has achieve that state where maintenance is no longer required.
+When a piece of software is useful there should never be an end-of-life doctrine. The goal of this software is to achieve immortality ;). When this software has reached that stage, this project may appear abandon but the opposit is true. This software (in release not alpha, beta or gamma) has achieve that state where maintenance is no longer required.
 
 Patrick O. Ingle
