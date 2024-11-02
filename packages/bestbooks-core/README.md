@@ -37,6 +37,9 @@ income statement shows the percentage of total revenu by location as defined in 
 ![Income Statement](assets/income-statement.png)
 ![Income Statement Geographic](assets/income-statement-geographic.png)
 
+## Balance Sheet
+![Balance Sheet](assets/balance-sheet.png)
+
 ## Accounts Receivable Aging
 ![Accounts Receivable Aging](assets/accounts-receivable-aging.png)
 
