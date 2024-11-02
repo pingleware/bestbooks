@@ -54,7 +54,17 @@ income statement shows the percentage of total revenu by location as defined in 
 
 # Test Driven Development
 
-TDD will be utilized during the development and maintenance, using the mocha test framework.
+TDD will be utilized during the development and maintenance, using the mocha test framework. A good example of use cases can be found in each test. Execution delays have been added in the tests to compensate for latency in the database updates and response.
+
+You can run the entire test suite using the command,
+```
+npm test
+```
+
+or an individual test script by using the command,
+```
+npm test test/TEST_SCRIPT_FILENAME.test.js
+```
 
 ```
 mocha [spec..]
