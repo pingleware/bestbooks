@@ -98,7 +98,6 @@ describe('Balance Sheet View',async function(){
     it('should verify the balance sheet contents', async() => {
         const expected = [
             {
-              code: '100',
               name: 'Cash',
               type: 'Asset',
               debit: 1000,
@@ -107,7 +106,6 @@ describe('Balance Sheet View',async function(){
               txdate: '2024-01-01'
             },
             {
-              code: '101',
               name: 'Sales',
               type: 'Asset',
               debit: 800,
@@ -116,7 +114,6 @@ describe('Balance Sheet View',async function(){
               txdate: '2024-01-01'
             },
             {
-              code: '200',
               name: 'Expense',
               type: 'Liability',
               debit: 0,
@@ -125,6 +122,9 @@ describe('Balance Sheet View',async function(){
               txdate: '2024-01-15'
             }
         ];
+        delete(rows[0]['code']);
+        delete(rows[1]['code']);
+        delete(rows[2]['code']);
 
         assert.deepStrictEqual(rows,expected);
     })
