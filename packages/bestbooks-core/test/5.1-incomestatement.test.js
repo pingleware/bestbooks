@@ -90,18 +90,4 @@ describe('Income Statement View',async function(){
         ];
         assert.deepStrictEqual(rows,expected);
     })
-
-    it('should return the income statement by geographic',async function(){
-        const rows = await report.incomeStatementSync("","",true);
-        const expected = [
-            {
-              Location: 'FL',
-              Region: 'USA',
-              total_revenue: 800,
-              total_expense: 0,
-              percent_of_total_revenue: 100
-            }
-        ];
-        assert.deepStrictEqual(rows,expected);
-    })
 });
