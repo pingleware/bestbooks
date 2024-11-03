@@ -3,7 +3,7 @@ const {
     VariableCost
 } = require('../index');
 
-describe("FixedCost Class", async function(){
+describe("VariableCost Class", async function(){
     let account;
 
     before(function(){
@@ -25,6 +25,6 @@ describe("FixedCost Class", async function(){
 
     it('should have a type of VariableCost and base type of Expense',async function(){
         assert.strictEqual(account.type,"VariableCost");
-        assert.strictEqual(account.baseType,"Expense");
+        assert.strictEqual(account.baseType,"Liability");
     })
 });

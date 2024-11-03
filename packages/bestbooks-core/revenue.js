@@ -66,8 +66,8 @@ class Revenue extends Ledger {
 	debit = 0;
 	credit = 0;
 
-    constructor(name) {
-        super(name,AccountTypes.Revenue);
+    constructor(name,type=AccountTypes.Revenue,base=AccountTypes.Revenue) {
+        super(name,type,base);
         this.group = 500;
     }
 

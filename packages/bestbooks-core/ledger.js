@@ -45,6 +45,18 @@ class Ledger extends TAccount {
         return this.type;
     }
 
+    async addBudget(name, month,amount) {
+        var sql = `UPDATE accounts SET Bud${month}=? WHERE name=?;`;
+        const params = [amount,name];
+        return await this.model.updateSync(sql,params);
+    }
+
+    async addBalance(name,month,amount) {
+        var sql = `UPDATE accounts SET Bal${month}=? WHERE name=?;`;
+        const params = [amount,name];
+        return await this.model.updateSync(sql,params);
+    }
+
     async findType(name) {
         let sql = `SELECT type FROM accounts WHERE name=?;`;
         const params = [name];

@@ -70,7 +70,15 @@ class Asset extends Ledger {
             // SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+100,100) FROM ledger WHERE account_name='Cash'
             // SELECT SUM(debit)-SUM(credit) AS balance FROM ledger WHERE account_name='Cash'
             this.debit = amount;
-            var sql = `INSERT OR IGNORE INTO ledger (company_id,office_id,account_name,account_code,txdate,note,debit,balance,transaction_type) VALUES (?,?,?,(SELECT code FROM accounts WHERE name=?),?,?,?,(SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+?,?) FROM ledger WHERE account_name=?),?);`;
+            var sql = `INSERT OR IGNORE INTO ledger 
+                (company_id,office_id,account_name,account_code,txdate,note,debit,balance,transaction_type) 
+            VALUES 
+                (?,?,?,
+                (SELECT code FROM accounts WHERE name=?),
+                ?,?,?,
+                (SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+?,
+                ?) 
+            FROM ledger WHERE account_name=?),?);`;
             const params = [
                 company_id,
                 office_id,

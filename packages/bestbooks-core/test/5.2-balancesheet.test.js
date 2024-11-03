@@ -7,6 +7,8 @@ const {
     User,
 } = require('../index');
 
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 describe('Balance Sheet View',async function(){
     let report, sales, expense, cash, rows;
 
@@ -28,6 +30,10 @@ describe('Balance Sheet View',async function(){
         await createSales();
         await createExpense();
     })
+
+    beforeEach(async function() {
+        await delay(1000); // Delay of 1 second before each test
+    });
 
     after(async() => {
         await report.model.insertSync(`DELETE FROM ledger;`);

@@ -25,6 +25,6 @@ describe("FixedCost Class", async function(){
 
     it('should have a type of FixedCost and base type of Expense',async function(){
         assert.strictEqual(account.type,"FixedCost");
-        assert.strictEqual(account.baseType,"Expense");
+        assert.strictEqual(account.baseType,"Liability");
     })
 });
