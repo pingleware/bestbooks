@@ -1,6 +1,6 @@
 {
   "name": "@pingleware/bestbooks-reports",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Reports module for BestBooks Accounting Application Framework",
   "main": "index.js",
   "files": [
@@ -19,7 +19,7 @@
     "README.md"
   ],
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --sort --timeouts 3000",
     "test:balancesheet": "mocha test/balancesheet.test",
     "test:customerestimate": "mocha test/customerestimate.test",
     "test:incomestatement": "mocha test/incomestatement.test",
@@ -49,10 +49,11 @@
   "engineStrict": true,
   "devDependencies": {
     "chai": "^4.3.7",
+    "exceljs": "^4.4.0",
     "mocha": "^10.1.0"
   },
   "dependencies": {
-    "@pingleware/bestbooks-core": "^1.2.0",
+    "@pingleware/bestbooks-core": "^1.2.1",
     "js2xmlparser": "^5.0.0",
     "xml2js": "^0.6.2",
     "xslt-processor": "^0.11.7"
