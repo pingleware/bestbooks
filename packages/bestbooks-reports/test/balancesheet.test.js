@@ -8,7 +8,6 @@ const {
     Revenue,
     Expense,
 } = require('@pingleware/bestbooks-core');
-const fs = require('fs');
 const path = require('path');
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
