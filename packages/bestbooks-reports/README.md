@@ -44,7 +44,7 @@ retained-earnings.xslt
 
 ### Balance Sheet
 
-![1712592400396](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712592400396.png)
+![balance-sheet.png](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/balance-sheet.png)
 
 ### Income Statement
 
