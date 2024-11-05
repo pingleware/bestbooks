@@ -48,15 +48,11 @@ retained-earnings.xslt
 
 ### Income Statement
 
-![1712586856327](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712586856327.png)
+![income-statement.png](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/income-statement.png)
 
 ### Income Statement by Geography
 
-aka Segment Reporting per [FASB](https://www.fasb.org/segmentreporting_2017). See also [https://www.fasb.org/revenue_2020.](https://www.fasb.org/revenue_2020)
-
-![1729949969875](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1729949969875.png "Courtesy of FASB")
-
-(Courtesy of FASB)
+![income-statement-geographic.png](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/income-statement-geographic.png)
 
 ### Customer Estimate
 
