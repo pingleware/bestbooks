@@ -34,6 +34,7 @@ You can customize the style of the reports by modifying the XSLT file located in
 account-payables-aging.xslt
 account-receivables-aging.xslt
 balance-sheet.xslt
+breakeven-analysis.xslt
 budget-vs-actual.xslt
 customer-estimate.xslt
 income-statement.xslt
