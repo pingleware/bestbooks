@@ -99,7 +99,7 @@ describe("Create formatted Balance Sheet Report", function(){
         const notes = `In our opinion, the balance sheet presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 210, Balance Sheet.`;
 
         formattedData = await report.formatArray(data,notes);
-        const expected = `{"date":"Mon Nov 04 2024","lineItems":{"assets":[{"code":"100","name":"Cash","balance":"1000.00","type":"Asset"}],"liabilities":[{"code":"200","name":"COGS","balance":"350.00","type":"Liability"}],"expenses":[],"income":[],"equity":[]},"totalAsset":"1000.00","totalLiability":"350.00","totalIncome":"0.00","totalExpense":"0.00","totalEquity":"0.00","totalLiabilitiesShareholdersEquity":"350.00","notes":"In our opinion, the balance sheet presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 210, Balance Sheet."}`;
+        const expected = `{"date":"${new Date().toDateString()}","lineItems":{"assets":[{"code":"100","name":"Cash","balance":"1000.00","type":"Asset"}],"liabilities":[{"code":"200","name":"COGS","balance":"350.00","type":"Liability"}],"expenses":[],"income":[],"equity":[]},"totalAsset":"1000.00","totalLiability":"350.00","totalIncome":"0.00","totalExpense":"0.00","totalEquity":"0.00","totalLiabilitiesShareholdersEquity":"350.00","notes":"In our opinion, the balance sheet presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 210, Balance Sheet."}`;
         assert.strictEqual(JSON.stringify(formattedData).trim(),expected.trim())
     })
 
@@ -107,7 +107,7 @@ describe("Create formatted Balance Sheet Report", function(){
         xml = await report.formatXml(formattedData);
         const expected = `<?xml version='1.0'?>
 <balanceSheet>
-    <date>Mon Nov 04 2024</date>
+    <date>${new Date().toDateString()}</date>
     <lineItems>
         <assets>
             <code>100</code>

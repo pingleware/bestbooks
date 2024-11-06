@@ -20,17 +20,15 @@
                                 <th style="text-align: center;">ACCOUNT</th>
                                 <th style="text-align: center;">BALANCE</th>
                                 <th style="text-align: center;">TYPE</th>
-                                <th style="text-align: center;">PERCENT</th>
                             </tr>
                             <xsl:for-each select="//lineItems/lineitem">
                                 <tr>
-                                <td style="text-align: center;"><xsl:value-of select="region"/></td>
-                                <td style="text-align: center;"><xsl:value-of select="location"/></td>
-                                <td style="text-align: center;"><xsl:value-of select="code"/></td>
-                                <td style="text-align: center;"><xsl:value-of select="name"/></td>
-                                <td style="text-align: center;"><xsl:value-of select="balance"/></td>
-                                <td style="text-align: center;"><xsl:value-of select="type"/></td>
-                                <td style="text-align: center;"><xsl:value-of select="percent"/></td>
+                                    <td style="text-align: center;"><xsl:value-of select="region"/></td>
+                                    <td style="text-align: center;"><xsl:value-of select="location"/></td>
+                                    <td style="text-align: center;"><xsl:value-of select="code"/></td>
+                                    <td style="text-align: center;"><xsl:value-of select="name"/></td>
+                                    <td style="text-align: center;"><xsl:value-of select="balance"/></td>
+                                    <td style="text-align: center;"><xsl:value-of select="type"/></td>
                                 </tr>
                             </xsl:for-each>
                         </table>

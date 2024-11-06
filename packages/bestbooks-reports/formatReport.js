@@ -11,9 +11,14 @@ const {
 } = require('@pingleware/bestbooks-core');
 
 const report_list = {
+    accountPayablesAging: "account-payables-aging.xslt",
+    accountReceivablesAging: "account-receivables-aging.xslt",
     balanceSheet: "balance-sheet.xslt",
+    breakevenAnalysis: "breakeven-analysis.xslt",
+    budgetVsActual: "budget-vs-actual.xslt",
     customerEstimate: "customer-estimate.xslt",
     incomeStatement: "income-statement.xslt",
+    incomeStatementGeographic: "income-statement-geographic.xslt",
     purchaseOrder: "purchase-order.xslt",
     statementChangeInEquity: "statement-in-change-in-equity.xslt",
     statementCashFlows: "statement-of-cash-flows.xslt",

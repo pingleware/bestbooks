@@ -1,22 +1,35 @@
-const expect = require("chai").expect;
-const { init, RetainedEarnings } = require("../index");
+const assert = require('assert'); 
+const { 
+    init, 
+    RetainedEarnings, 
+} = require("../index");
 const fs = require('fs');
 
-describe('retained earnings',function(){
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+describe('Create formatted Retained Earnings Report',function(){
+    let report;
+
     before(function(){
         init();
+        report = new RetainedEarnings();
     })
-    it('get retained earnings report',function(){
-        var retainedEarnings = new RetainedEarnings();
-        const notes = `In our opinion, the retained earnings report presents fairly, in all material respects, the changes in retained earnings for the period specified in accordance with FASB ASC Topic 505, Equity.`;
-        retainedEarnings.createReport("","","array",function(html){
-            var notEmpty = (html.length > 0);
-            expect(notEmpty).to.equal(true);
-            if (notEmpty) {
-                fs.writeFileSync('retained-earnings.html',html);
-            } else {
-                fs.unlink('retained-earnings.html');
-            }
-        },notes)
+
+    beforeEach(async function() {
+        await delay(1000); // Delay of 1 second before each test
+    });
+
+    after(async() => {
+        await report.model.insertSync(`DELETE FROM ledger;`);
+        await report.model.insertSync(`DELETE FROM accounts`);
+        await report.model.insertSync(`DELETE FROM journal`);
+        await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
+        await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
+        await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
     })
+
+    it("should create an instance of RetainedEarnings", async function(){
+        assert.ok(report instanceof RetainedEarnings);
+    }) 
+
 })

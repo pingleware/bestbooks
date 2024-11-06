@@ -19,7 +19,11 @@ function init() {
     )`)
     
     const xslt_list = [
+        "account-payables-aging.xslt",
+        "account-receivables-aging.xslt",    
         "balance-sheet.xslt",
+        "breakeven-analysis.xslt",
+        "budget-vs-actual.xslt",
         "customer-estimate.xslt",
         "income-statement.xslt",
         "income-statement-geographic.xslt",
@@ -49,7 +53,11 @@ function copy(src,dest) {
     fs.copyFileSync(path.join('xslt',src),path.join(os.homedir(),`.bestbooks/${dest}`));
 }
 
+const AccountPayablesAging = require('./account-payables-aging');
+const AccountsReceivablesAging = require('./account-receivables-aging');
 const BalanceSheet = require('./balance-sheet');
+const BreakevenAnalysis = require('./breakeven-analysis');
+const BudgetVsActual = require('./budget-vs-actual');
 const IncomeStatement = require('./income-statement');
 const NoteToFinancialStatements = require('./noteToFinancialStatements');
 const StatementCashFlows = require('./statementCashFlows');
@@ -73,7 +81,11 @@ const {
 module.exports = {
     init,
     copy,
+    AccountPayablesAging,
+    AccountsReceivablesAging,
     BalanceSheet,
+    BreakevenAnalysis,
+    BudgetVsActual,
     IncomeStatement,
     TrialBalance,
     NoteToFinancialStatements,

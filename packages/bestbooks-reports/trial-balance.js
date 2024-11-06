@@ -10,33 +10,89 @@ const path = require('path');
 class TrialBalance extends BaseReport {
     constructor() {
         super();
-        this.report = new Report();
     }
 
+    saveReport(name, contents, type="xml",callback=null){
+        const filePath = path.join(os.homedir(),`.bestbooks/${name}.${type}`);
+        // the xslt-processor does not support the XSLT syntax xsl:for-each-group, 
+        // so the XML generated is returned,
+        // using a free tool like https://xslttest.appspot.com/, 
+        // to copy the .bestbooks/balance-sheet.xslt and .bestbooks/balance-sheet.xml
+        // to render a HTML
+        // TODO: implement xsl:for-each-group. callback(format("balanceSheet",formattedData));
+
+        fs.writeFileSync(filePath, contents);
+        callback(filePath)
+    }
+
+    async saveReportSync(name, html, type) {
+        return new Promise((resolve,reject) => {
+            try {
+                this.saveReport(name, html, type, function(filePath){
+                    resolve(filePath);
+                })    
+            } catch(error) {
+                reject(error);
+            }
+        })
+    }
+
+    async formatHtml(formattedData) {
+        return format('trialBalance',formattedData);
+    }
+
+    async formatXml(contents) {
+        return array2xml('trialBalance',contents);
+    }
+
+    async formatArray(data, notes) {
+        let total_debit = 0;
+        let total_credit = 0;
+    
+        data.forEach(function (totalItem) {
+            total_debit += Number(totalItem.total_debit);
+            total_credit += Number(totalItem.total_credit);
+        });
+    
+        // Format total values to two decimal places
+        const total = {
+            debit: total_debit.toFixed(2),
+            credit: total_credit.toFixed(2)
+        };
+    
+        // Create line items array
+        const lineItems = data.map(function (lineItem) {
+            return {
+                code: lineItem.code,
+                name: lineItem.name,
+                debit: Number(lineItem.total_debit).toFixed(2),
+                credit: Number(lineItem.total_credit).toFixed(2)
+            };
+        });
+    
+        // Structure the final data object
+        const _data = {
+            date: new Date().toDateString(),
+            lineItems: lineItems,
+            total: total
+        };
+    
+        return _data;
+    }
+    
+
+    retrieveReportData(startDate,endDate,callback) {
+        callback(this.retrieveReportDataSync(startDate,endDate));
+    }
+
+    async retrieveReportDataSync(startDate, endDate) {
+        return await this.trialBalanceSync(startDate, endDate);
+    }
+
+    /*
     createReport(startDate,endDate,_format,callback) {
         this.retrieveReportData(startDate, endDate, function(data){
             if (_format == "array") {
-                var totalItems = [];
-                data[1].forEach(function(totalItem){
-                    totalItems.push({
-                        debit: Number(totalItem.debit).toFixed(2),
-                        credit: Number(totalItem.credit).toFixed(2)
-                    })
-                })
-                var lineItems = [];
-                data[0].forEach(function(lineItem){
-                    lineItems.push({
-                        code: lineItem.code,
-                        name: lineItem.name,
-                        debit: lineItem.debit.toFixed(2),
-                        credit: lineItem.credit.toFixed(2)
-                    })
-                })
-                var _data = {
-                    date: new Date().toDateString(),
-                    lineItems: lineItems,
-                    total: totalItems
-                };
                 var formattedData = array2xml('trialBalance',_data);
                 fs.writeFileSync(path.join(os.homedir(),'.bestbooks/trialBalance.xml'), formattedData);
                 if (callback) {
@@ -49,40 +105,7 @@ class TrialBalance extends BaseReport {
             }                    
         });
     }
-
-    retrieveReportData(startDate,endDate,callback) {
-        var sql = '';
-        if (startDate.length == 0 && endDate.length == 0) {
-            sql = 'SELECT * FROM trial_balance;';
-        } else {
-            sql = `SELECT account_name AS category, SUM(balance) AS total FROM ledger 
-                    WHERE ledger.txdate BETWEEN ${startDate} AND ${endDate} 
-                    GROUP BY account_name`;
-        }
-        // TODO: move this INSERT in the Core.Report class per CODING STANDARDS
-        const model = new Model();
-        model.query(sql, function(data){
-            callback(data);
-        });            
-
-        //this.report.trialBalance(startDate, endDate, function(lineItems){
-        //    const model = new Model();
-        //    model.query('SELECT SUM(debit) AS debit,SUM(credit) AS credit FROM trial_balance;',function(totals){
-        //        callback([lineItems,totals]);
-        //    });
-        //});
-    }
-
-    async retrieveReportDataSync(startDate,endDate) {
-        return new Promise((resolve, reject) => {
-            this.retrieveReportData(startDate, endDate, function(err, results) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(results);
-                }
-            });
-        });
-    }}
+    */
+}
 
 module.exports = TrialBalance;
