@@ -87,4 +87,4 @@ trial-balance.xslt
 
 ### Trial Balance
 
-![1712501317103](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712501317103.png)
+![trial-balance](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/trial-balance.png)
