@@ -69,6 +69,7 @@ class Report {
 
     async init() {
         await this.createTable();
+        await this.createLocationTable();
         await this.createViews();
     }
 
@@ -516,7 +517,7 @@ class Report {
         });
     }
 
-    async createTable() {
+    async createLocationTable() {
         var sql = `CREATE TABLE IF NOT EXISTS locations (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             location TEXT,  -- e.g., country or region
