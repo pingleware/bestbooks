@@ -710,47 +710,47 @@ class Report {
         }
         var sql = `${dropSQL} CREATE VIEW IF NOT EXISTS StatementOfRetainedEarnings AS
             SELECT 
-                (SELECT SUM(credit - debit) 
+                COALESCE((SELECT SUM(credit - debit) 
                     FROM ledger 
                     JOIN accounts ON accounts.name = ledger.account_name
-                    WHERE accounts.name = 'Retained Earnings'
-                ) AS beginning_retained_earnings,
+                    WHERE accounts.name = 'RetainedEarnings'
+                ), 0) AS beginning_retained_earnings,
                 
-                (SELECT SUM(credit - debit) 
+                COALESCE((SELECT SUM(credit - debit) 
                     FROM ledger 
                     JOIN accounts ON accounts.name = ledger.account_name
                     WHERE accounts.base_type = 'Revenue'
-                ) - 
-                (SELECT SUM(debit - credit) 
+                ), 0) - 
+                COALESCE((SELECT SUM(debit - credit) 
                     FROM ledger 
                     JOIN accounts ON accounts.name = ledger.account_name
                     WHERE accounts.base_type = 'Expense'
-                ) AS net_income,
+                ), 0) AS net_income,
 
-                (SELECT SUM(debit - credit) 
+                COALESCE((SELECT SUM(debit - credit) 
                     FROM ledger 
                     JOIN accounts ON accounts.name = ledger.account_name
                     WHERE accounts.name = 'Dividends'
-                ) AS dividends_paid,
+                ), 0) AS dividends_paid,
 
-                (SELECT SUM(credit - debit) 
+                COALESCE((SELECT SUM(credit - debit) 
                     FROM ledger 
                     JOIN accounts ON accounts.name = ledger.account_name
-                    WHERE accounts.name = 'Retained Earnings'
-                ) + 
-                ((SELECT SUM(credit - debit) 
+                    WHERE accounts.name = 'RetainedEarnings'
+                ), 0) + 
+                (COALESCE((SELECT SUM(credit - debit) 
                     FROM ledger 
                     JOIN accounts ON accounts.name = ledger.account_name
-                    WHERE accounts.base_type = 'Revenue') - 
-                (SELECT SUM(debit - credit) 
+                    WHERE accounts.base_type = 'Revenue'), 0) - 
+                COALESCE((SELECT SUM(debit - credit) 
                     FROM ledger 
                     JOIN accounts ON accounts.name = ledger.account_name
-                    WHERE accounts.base_type = 'Expense')) - 
-                (SELECT SUM(debit - credit) 
+                    WHERE accounts.base_type = 'Expense'), 0)) - 
+                COALESCE((SELECT SUM(debit - credit) 
                     FROM ledger 
                     JOIN accounts ON accounts.name = ledger.account_name
                     WHERE accounts.name = 'Dividends'
-                ) AS ending_retained_earnings;
+                ), 0) AS ending_retained_earnings;
         `;
         await this.model.insertSync(sql);
     }
@@ -1001,6 +1001,30 @@ class Report {
                 ledger.txdate
         `;
         await this.model.insertSync(sql);
+    }
+
+    async createTable() {
+        try {
+            const sql = `CREATE TABLE IF NOT EXISTS "report" 
+                "id" INTEGER,
+                "txdate" TIMESTAMP,
+                "name"	TEXT,
+                "contents"	TEXT,
+                PRIMARY KEY("id" AUTOINCREMENT)
+            );`;
+        } catch(err) {
+            error(JSON.stringify(err));
+        }
+    }
+
+    async purgeTable(where='') {
+        try {
+            let sql = `DELETE FROM report ?;`;
+            const params = [where];
+            await this.model.deleteSync(sql, params);
+        } catch(err) {
+            error(JSON.stringify(err));
+        }
     }
 }
 
