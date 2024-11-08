@@ -65,20 +65,20 @@ class Asset extends Ledger {
         this.group = 100;
     }
 
-    async addDebit(date,desc,amount,company_id=0,office_id=0,transaction_type="Operating"){
+    async addDebit(date,desc,amount,company_id=0,office_id=0,location=0,transaction_type="Operating"){
         try {
             // SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+100,100) FROM ledger WHERE account_name='Cash'
             // SELECT SUM(debit)-SUM(credit) AS balance FROM ledger WHERE account_name='Cash'
             this.debit = amount;
             var sql = `INSERT OR IGNORE INTO ledger 
-                (company_id,office_id,account_name,account_code,txdate,note,debit,balance,transaction_type) 
+                (company_id,office_id,account_name,account_code,txdate,note,debit,balance,location,transaction_type) 
             VALUES 
                 (?,?,?,
                 (SELECT code FROM accounts WHERE name=?),
                 ?,?,?,
                 (SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+?,
                 ?) 
-            FROM ledger WHERE account_name=?),?);`;
+            FROM ledger WHERE account_name=?),?,?);`;
             const params = [
                 company_id,
                 office_id,
@@ -90,6 +90,7 @@ class Asset extends Ledger {
                 amount,
                 amount,
                 super.getName(),
+                location,
                 transaction_type
             ];
             const ledger_insert_id = await this.model.insertSync(sql,params);
@@ -109,7 +110,7 @@ class Asset extends Ledger {
             console.error(err);
         }
     }
-    async addCredit(date,desc,amount,company_id=0,office_id=0,transaction_type="Operating"){
+    async addCredit(date,desc,amount,company_id=0,office_id=0,location=0,transaction_type="Operating"){
         try {
             this.credit = amount;
             var sql = `INSERT OR IGNORE INTO ledger (
@@ -121,13 +122,14 @@ class Asset extends Ledger {
                         note,
                         credit,
                         balance,
+                        location,
                         transaction_type
                     ) VALUES (
                         ?,?,?,
                         (SELECT code FROM accounts WHERE name=?),
                         ?,?,?,
                         (SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)-?,?) FROM ledger WHERE account_name=?),
-                        ?
+                        ?,?
                     );`;
             const params = [
                 company_id,
@@ -140,6 +142,7 @@ class Asset extends Ledger {
                 amount,
                 amount,
                 super.getName(),
+                location,
                 transaction_type
             ];
 

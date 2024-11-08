@@ -41,27 +41,106 @@ describe('Cash Flow Statement View',async function(){
     }) 
 
     it('should add the investment debit entry',async() => {
-        const [ledger_id,journal_id] = await investment.addDebit("2024-10-01","Investments",1000,0,0,"Investing")
+        const [ledger_id,journal_id] = await investment.addDebit("2024-10-01","Investments",1000,0,0,0,"Investing")
         assert.equal(ledger_id,1);
         assert.equal(journal_id,1);
     })
 
     it('should add the investment credit entry',async() => {
-        const [ledger_id,journal_id] = await investment.addCredit("2024-10-01","Investments",500,0,0,"Investing")
+        const [ledger_id,journal_id] = await investment.addCredit("2024-10-01","Investments",500,0,0,0,"Investing")
         assert.equal(ledger_id,2);
         assert.equal(journal_id,2);
     })
 
     it('should add the operating account debit entry',async() => {
-        const [ledger_id,journal_id] = await operatingAccount.addDebit("2024-10-03","Operating Account",500,0,0,"Financing");
+        const [ledger_id,journal_id] = await operatingAccount.addDebit("2024-10-03","Operating Account",500,0,0,0,"Financing");
         assert.equal(ledger_id,3);
         assert.equal(journal_id,3);
     })
 
     it('should add the operating account credit entry',async() => {
-        const [ledger_id,journal_id] = await operatingAccount.addCredit("2024-10-04","Operating Account",700,0,0,"Financing");
+        const [ledger_id,journal_id] = await operatingAccount.addCredit("2024-10-04","Operating Account",700,0,0,0,"Financing");
         assert.equal(ledger_id,4);
         assert.equal(journal_id,4);
+    })
+
+    it('should return the contents of the ledger',async function(){
+        const expected = [
+            {
+              id: 1,
+              company_id: 0,
+              office_id: 0,
+              account_code: '100',
+              account_name: 'Investments',
+              txdate: '2024-10-01',
+              note: 'Investments',
+              ref: 1,
+              debit: 1000,
+              credit: 0,
+              balance: 1000,
+              action: 'Record',
+              performed_by: 0,
+              location: 0,
+              due_date: 0,
+              transaction_type: 'Investing'
+            },
+            {
+              id: 2,
+              company_id: 0,
+              office_id: 0,
+              account_code: '100',
+              account_name: 'Investments',
+              txdate: '2024-10-01',
+              note: 'Investments',
+              ref: 2,
+              debit: 0,
+              credit: 500,
+              balance: 500,
+              action: 'Record',
+              performed_by: 0,
+              location: 0,
+              due_date: 0,
+              transaction_type: 'Investing'
+            },
+            {
+              id: 3,
+              company_id: 0,
+              office_id: 0,
+              account_code: '101',
+              account_name: 'Operating Account',
+              txdate: '2024-10-03',
+              note: 'Operating Account',
+              ref: 3,
+              debit: 500,
+              credit: 0,
+              balance: 500,
+              action: 'Record',
+              performed_by: 0,
+              location: 0,
+              due_date: 0,
+              transaction_type: 'Financing'
+            },
+            {
+              id: 4,
+              company_id: 0,
+              office_id: 0,
+              account_code: '101',
+              account_name: 'Operating Account',
+              txdate: '2024-10-04',
+              note: 'Operating Account',
+              ref: 4,
+              debit: 0,
+              credit: 700,
+              balance: -200,
+              action: 'Record',
+              performed_by: 0,
+              location: 0,
+              due_date: 0,
+              transaction_type: 'Financing'
+            }
+        ];
+        const ledger = await report.model.querySync(`SELECT * FROM ledger;`);
+        assert.deepStrictEqual(ledger,expected);
     })
 
     it('should return the cash flow statement',async function(){
@@ -83,7 +162,7 @@ describe('Cash Flow Statement View',async function(){
               txdate: '2024-10-03'
             },
             {
-              transaction_type: 'Investing',
+              transaction_type: 'Investing', 
               code: '100',
               name: 'Investments',
               type: 'Non-Current Asset',

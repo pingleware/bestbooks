@@ -27,7 +27,7 @@ class DebtShares extends Equity {
         return this.addCredit(date, desc, amount, company_id, office_id);
     }
 
-    repay(date, desc, amount, company_id = 0, office_id = 0) {
+    repay(date, desc, amount, company_id = 0, office_id = 0, location = 0) {
         // Repaying debt (debit to debt)
         return this.addDebit(date, desc, amount, company_id, office_id);
     }

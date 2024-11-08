@@ -36,19 +36,19 @@ describe('Statement of Change in Equity View',async function(){
     })
 
     it('should add opening balance to equity',async () => {
-        equity.addCredit('2023-01-01','Opening Balance',1000.0);
+        equity.addCredit('2023-01-01','Opening Balance',1000.0,0,0,0,'Opening Balance');
     })
 
     it('should add owner contribution to equity',async () => {
-        equity.addCredit('2023-02-01','Owner Contribution',500.0);
+        equity.addCredit('2023-02-01','Owner Contribution',500.0,0,0,0,'Owner Contribution');
     })
 
     it('should add dividends to equity',async () => {
-        equity.addDebit('2023-03-01','Dividends',200.0);
+        equity.addDebit('2023-03-01','Dividends',200.0,0,0,0,'Dividends');
     })
 
     it('should add other adjustments to equity',async () => {
-        equity.addCredit('2023-04-01','Other Adjustment',300.0)
+        equity.addCredit('2023-04-01','Other Adjustment',300.0,0,0,0,'Other Adjustment')
     })
 
     it('should add credit entry to revenue',async () => {
@@ -61,7 +61,7 @@ describe('Statement of Change in Equity View',async function(){
 
     it('should return the statement of changes in equity',async function(){
         rows = await report.statementOfChangesInEquitySync();
-        assert.equal(rows.length,1);
+        assert.equal(rows.length,1); 
     })
 
     it('should verify the statement of changes in equity',async () => {
@@ -69,12 +69,12 @@ describe('Statement of Change in Equity View',async function(){
             {
               equity_component: 'Equity',
               type: 'Equity',
-              beginning_balance: 0,
-              net_income: null,
-              owner_contributions: 0,
-              dividends: 0,
-              other_adjustments: 0,
-              ending_balance: null,
+              beginning_balance: 1000,
+              net_income: 500,
+              owner_contributions: 500,
+              dividends: 200,
+              other_adjustments: 300,
+              ending_balance: 2100,
               txdate: '2023-01-01'
             }
         ];

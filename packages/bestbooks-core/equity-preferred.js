@@ -27,7 +27,7 @@ class PreferredShares extends Equity {
         return this.addDebit(date, desc, amount, company_id, office_id);
     }
 
-    issueShares(date, desc, amount, company_id = 0, office_id = 0) {
+    issueShares(date, desc, amount, company_id = 0, office_id = 0, location = 0) {
         // Issuing new shares increases the account (credit)
         return this.addCredit(date, desc, amount, company_id, office_id);
     }

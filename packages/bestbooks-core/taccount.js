@@ -18,10 +18,10 @@ class TAccount {
         throw new Error("Abstract Method has no implementation");
     }
     
-    addDebit(date,desc,amount){
+    addDebit(date,desc,amount,company_id=0,office_id=0,location=0,transaction_type="Operating"){
         throw new Error("Abstract Method has no implementation");
     }
-    addCredit(data,desc,amount){
+    addCredit(data,desc,amount,company_id=0,office_id=0,location=0,transaction_type="Operating"){
         throw new Error("Abstract Method has no implementation");
     }
     

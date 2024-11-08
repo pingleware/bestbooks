@@ -27,7 +27,7 @@ class MergerAcquisitionShares extends Equity {
         return this.addCredit(date, desc, amount, company_id, office_id);
     }
 
-    acquireEquity(date, desc, amount, company_id = 0, office_id = 0) {
+    acquireEquity(date, desc, amount, company_id = 0, office_id = 0, location = 0) {
         // Acquiring equity decreases the account (debit)
         return this.addDebit(date, desc, amount, company_id, office_id);
     }

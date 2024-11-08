@@ -88,7 +88,7 @@ class ContraEquity extends Equity {
         this.group = 300; // Equity accounts typically belong to the 300 group.
     }
 
-    async addDebit(date, desc, amount, company_id = 0, office_id = 0) {
+    async addDebit(date, desc, amount, company_id = 0, office_id = 0, location = 0) {
         try {
             this.debit = amount;
             const sql = `INSERT OR IGNORE INTO ledger (company_id, office_id, account_name, account_code, txdate, note, debit, balance) 

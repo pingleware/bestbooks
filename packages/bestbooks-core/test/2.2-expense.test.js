@@ -6,7 +6,7 @@ const {
 
 describe("Expense Class", async function(){
     let expense;
-
+ 
     before(function(){
         expense = new Expense('TestExpense');
     })

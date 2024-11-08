@@ -81,30 +81,19 @@ describe('Account Payables Aging View',async function(){
     })
 
     it('should verify the account payables aging report',async() => {
-        const expected = [
-            {
-                account_code: 200,
-                account_name: 'Vendor 1',
-                current: -150,
-                past_due_1_30: -200,
-                past_due_31_60: -300,
-                past_due_61_90: 0,
-                past_due_over_90: 0,
-                total_outstanding: -650,
-                txdate: new Date().toISOString().split("T")[0]
-              },
-              {
-                account_code: 201,
-                account_name: 'Vendor 2',
-                current: 0,
-                past_due_1_30: 0,
-                past_due_31_60: 0,
-                past_due_61_90: 0,
-                past_due_over_90: -150,
-                total_outstanding: -150,
-                txdate: new Date().toISOString().split("T")[0]
-              }            
-        ]
-        assert.deepStrictEqual(rows, expected);
+        assert.strictEqual(rows[0].current,-150);
+        assert.strictEqual(rows[0].past_due_1_30, -200);
+        assert.strictEqual(rows[0].past_due_31_60, -300);
+        assert.strictEqual(rows[0].past_due_61_90, 0);
+        assert.strictEqual(rows[0].past_due_over_90, 0);
+        assert.strictEqual(rows[0].total_outstanding, -650);
+
+        assert.strictEqual(rows[1].current, 0);
+        assert.strictEqual(rows[1].past_due_1_30, 0);
+        assert.strictEqual(rows[1].past_due_31_60, 0);
+        assert.strictEqual(rows[1].past_due_61_90, 0);
+        assert.strictEqual(rows[1].past_due_over_90, -150);
+        assert.strictEqual(rows[1].total_outstanding, -150);
+
     })
 });

@@ -10,10 +10,6 @@ class FixedCost extends Expense {
     constructor(name) {
         super(name,"FixedCost");
     }
-
-    getAccountBaseType() {
-        return "FixedCost";
-    }
 }
 
 module.exports = FixedCost;

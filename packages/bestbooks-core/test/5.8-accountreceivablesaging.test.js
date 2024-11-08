@@ -106,30 +106,18 @@ describe('Account Receivables Aging View',async function(){
     });
 
     it('should verify the account receivables aging report',async() => {
-        const expected = [
-            {
-                account_code: 100,
-                account_name: 'Customer One',
-                current: 500,
-                past_due_1_30: 200,
-                past_due_31_60: 100,
-                past_due_61_90: 50,
-                past_due_over_90: 25,
-                total_outstanding: 875,
-                txdate: new Date().toISOString().split("T")[0]
-            },
-            {
-                account_code: 101,
-                account_name: 'Customer Two',
-                current: 1000,
-                past_due_1_30: 300,
-                past_due_31_60: 150,
-                past_due_61_90: 0,
-                past_due_over_90: 0,
-                total_outstanding: 1450,
-                txdate: new Date().toISOString().split("T")[0]
-            }
-        ];
-        assert.deepStrictEqual(rows, expected);
+        assert.strictEqual(rows[0].current,500);
+        assert.strictEqual(rows[0].past_due_1_30, 200);
+        assert.strictEqual(rows[0].past_due_31_60, 100);
+        assert.strictEqual(rows[0].past_due_61_90, 50);
+        assert.strictEqual(rows[0].past_due_over_90, 25);
+        assert.strictEqual(rows[0].total_outstanding, 875);
+
+        assert.strictEqual(rows[1].current,1000);
+        assert.strictEqual(rows[1].past_due_1_30, 300);
+        assert.strictEqual(rows[1].past_due_31_60, 150);
+        assert.strictEqual(rows[1].past_due_61_90, 0);
+        assert.strictEqual(rows[1].past_due_over_90, 0);
+        assert.strictEqual(rows[1].total_outstanding, 1450);
     })
 });

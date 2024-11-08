@@ -57,7 +57,7 @@ class ContraRevenue extends Revenue {
         this.group = 400;  // Usually revenue accounts fall under 400 (Adjust as per your accounting group numbers)
     }
 
-    async addDebit(date, desc, amount, company_id = 0, office_id = 0) {
+    async addDebit(date, desc, amount, company_id = 0, office_id = 0, location = 0) {
         try {
             this.debit = amount;
             var sql = `INSERT OR IGNORE INTO ledger (

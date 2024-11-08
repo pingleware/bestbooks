@@ -9,7 +9,7 @@ const {
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 describe('Trial Balance View',async function(){
-    let report, cash, expense, revenue, rows;
+    let report, cash, expense, revenue, rows, trialBalance;
 
     before(async() => {
         report = new Report();
@@ -45,7 +45,7 @@ describe('Trial Balance View',async function(){
         const [ledger_id,journal_id] = await revenue.addCredit("2024-01-01", "Sales", 500.0);
         assert.equal(ledger_id,2);
         assert.equal(journal_id,2);
-    })
+    }) 
 
     it('should add an expense credit entry', async() => {
         const [ledger_id,journal_id] = await expense.addCredit("2024-01-01", "COGS", 500.0);
@@ -53,9 +53,60 @@ describe('Trial Balance View',async function(){
         assert.equal(journal_id,3);
     })
 
+    it('should get trial balance directly via query',async function(){
+        const expected = [
+            {
+              code: 100,
+              name: 'Cash',
+              type: 'Asset',
+              base_type: 'Asset',
+              total_debit: 1000,
+              total_credit: 0,
+              txdate: '2024-01-01'
+            },
+            {
+              code: 400,
+              name: 'COGS',
+              type: 'Expense',
+              base_type: 'Expense',
+              total_debit: 0,
+              total_credit: 500,
+              txdate: '2024-01-01'
+            },
+            {
+              code: 500,
+              name: 'Sales',
+              type: 'Revenue',
+              base_type: 'Revenue',
+              total_debit: 0,
+              total_credit: 500,
+              txdate: '2024-01-01'
+            }
+        ];
+        var sql = `SELECT 
+                code, 
+                name,
+                type,
+                base_type,
+                SUM(debit) AS total_debit,
+                SUM(credit) AS total_credit,
+                ledger.txdate  -- Including txdate for filtering in the query
+            FROM 
+                ledger
+            JOIN 
+                accounts ON accounts.name = ledger.account_name
+            GROUP BY 
+                accounts.code, accounts.name, accounts.base_type
+            ORDER BY 
+                accounts.base_type, accounts.name;`;
+
+        trialBalance = await report.model.querySync(sql);
+        assert.deepStrictEqual(trialBalance,expected);
+    })
+
     it('should return correct debit and credit totals for each account', async function() {    
         rows = await report.trialBalanceSync();
-        assert.strictEqual(rows.length, 3);    
+        assert.deepStrictEqual(rows,trialBalance);    
     });  
     
     it('should verify the trial balance',async() => {
@@ -67,7 +118,7 @@ describe('Trial Balance View',async function(){
         assert.strictEqual(rows[0].total_credit, 0);
     
         // Check the third row (Expense - Expense)
-        assert.strictEqual(Number(rows[1].code), 200);
+        assert.strictEqual(Number(rows[1].code), 400);
         assert.strictEqual(rows[1].name, 'COGS'); // Fix: name should be 'Expense'
         assert.strictEqual(rows[1].type, 'Expense'); // Fix: type should be 'Expense'
         assert.strictEqual(rows[1].total_debit, 0);

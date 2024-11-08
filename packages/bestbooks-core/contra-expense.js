@@ -64,7 +64,7 @@ class ContraExpense extends Expense {
         this.group = 600; // Assuming expense accounts are grouped in the 600 series
     }
 
-    async addDebit(date, desc, amount, company_id = 0, office_id = 0) {
+    async addDebit(date, desc, amount, company_id = 0, office_id = 0, location = 0) {
         try {
             this.debit = amount;
             var sql = `INSERT OR IGNORE INTO ledger (company_id, office_id, account_name, account_code, txdate, note, debit, balance) 

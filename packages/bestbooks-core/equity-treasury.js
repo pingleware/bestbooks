@@ -48,7 +48,7 @@ class Treasury extends ContraEquity {
     }
 
     // Buyback shares (debit operation, reducing equity)
-    buybackShares(date, desc, amount, company_id = 0, office_id = 0) {
+    buybackShares(date, desc, amount, company_id = 0, office_id = 0, location = 0) {
         return this.addDebit(date, desc, amount, company_id, office_id);
     }
 

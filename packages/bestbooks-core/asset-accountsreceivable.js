@@ -18,7 +18,7 @@ class AccountsReceivable extends Asset {
         super(name,"Accounts Receivable");
     }
 
-    async addDebit(date,desc,amount,due_date,company_id=0,office_id=0,transaction_type="Operating"){
+    async addDebit(date,desc,amount,due_date,company_id=0,office_id=0,location=0,transaction_type="Operating"){
         try {
             // SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+100,100) FROM ledger WHERE account_name='Cash'
             // SELECT SUM(debit)-SUM(credit) AS balance FROM ledger WHERE account_name='Cash'

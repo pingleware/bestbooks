@@ -5,7 +5,7 @@ const {Withdrawals} = require('../index');
 describe("Withdrawals Class", async function(){
     let account;
 
-    before(function(){
+    before(function(){ 
         account = new Withdrawals("TestExpense");
     })
 

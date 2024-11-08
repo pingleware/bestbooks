@@ -10,12 +10,12 @@ const {
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 describe('Statement of Retained Earnings View',async function(){
-    let report, retainedEarnings, commonStock, revenue, expense, rows;
+    let report, retainedEarnings, dividends, revenue, expense, rows, total_revenue, total_expense;
 
     before(async() => {
         report = new Report();
-        retainedEarnings = new RetainedEarnings("Retained Earnings");
-        commonStock = new Equity("Common Stock");
+        retainedEarnings = new RetainedEarnings();
+        dividends = new Equity("Dividends");
         revenue = new Revenue("Revenue");
         expense = new Expense("Expense");
     })
@@ -23,7 +23,7 @@ describe('Statement of Retained Earnings View',async function(){
     beforeEach(async function() {
         await delay(1000); // Delay of 1 second before each test
     });
-
+    
     after(async() => {
         await report.model.insertSync(`DELETE FROM ledger;`);
         await report.model.insertSync(`DELETE FROM accounts`);
@@ -38,75 +38,90 @@ describe('Statement of Retained Earnings View',async function(){
     })
 
     it('should add opening balance entry to retained earnings',async() => {
-        const [ledger_id,journal_id] = await retainedEarnings.addCredit("2024-10-01","Opening Balance",1000);
+        const [ledger_id,journal_id] = await retainedEarnings.addCredit("2024-10-01","Retained Earnings",50000);
         assert.equal(ledger_id,1);
         assert.equal(journal_id,1);
     })
 
-    it('should add owner contributions entry to retained earnings',async() => {
-        const [ledger_id,journal_id] = await retainedEarnings.addCredit("2024-10-02","Owner Contribution",200);
+    it('should add dividends entry',async() => {
+        const [ledger_id,journal_id] = await dividends.addDebit("2024-10-03","Dividends",5000);
         assert.equal(ledger_id,2);
         assert.equal(journal_id,2);
     })
 
-    it('should add dividends entry to retained earnings',async() => {
-        const [ledger_id,journal_id] = await retainedEarnings.addDebit("2024-10-03","Dividends",300);
+    it('should add revenue credit entry',async() => {
+        const [ledger_id,journal_id] = await revenue.addCredit("2024-10-05","Revenue Account",30000);
         assert.equal(ledger_id,3);
         assert.equal(journal_id,3);
     })
 
-    it('should add other adjustment entry to retained earnings',async() => {
-        const [ledger_id,journal_id] = await retainedEarnings.addCredit("2024-10-04","Other Adjustment",100);
+    it('should add expense debit entry',async() => {
+        const [ledger_id,journal_id] = await expense.addDebit("2024-10-05","Expense Account",10000);
         assert.equal(ledger_id,4);
         assert.equal(journal_id,4);
     })
 
-    it('should add revenue credit entry',async() => {
-        const [ledger_id,journal_id] = await revenue.addCredit("2024-10-05","Revenue",500);
-        assert.equal(ledger_id,5);
-        assert.equal(journal_id,5);
+    it('should get beginning_retained_earnings',async function(){
+        const expected = [ { beginning_retained_earnings: 50000 } ];
+        var sql = `SELECT COALESCE((SELECT SUM(credit - debit) 
+                    FROM ledger 
+                    JOIN accounts ON accounts.name = ledger.account_name
+                    WHERE accounts.name = 'RetainedEarnings'
+                ), 0) AS beginning_retained_earnings`;
+        const results = await report.model.querySync(sql);
+        assert.deepStrictEqual(results,expected);
     })
 
-    it('should add expense debit entry',async() => {
-        const [ledger_id,journal_id] = await expense.addDebit("2024-10-05","Expense",100);
-        assert.equal(ledger_id,6);
-        assert.equal(journal_id,6);
+    it('should get total revenue',async function(){
+        var sql = `SELECT SUM(credit - debit) AS total_revenue
+                        FROM ledger 
+                        JOIN accounts ON accounts.name = ledger.account_name
+                        WHERE accounts.base_type = 'Revenue'`;
+        const results = await report.model.querySync(sql);
+        total_revenue = results[0].total_revenue;
+        assert.strictEqual(total_revenue,30000);
     })
 
-    it('should add common stock entry for owner contributions',async() => {
-        const [ledger_id,journal_id] = await commonStock.addDebit("2024-10-02","Owner Contribution",200);
-        assert.equal(ledger_id,7);
-        assert.equal(journal_id,7);
+    it('should get total expense',async function(){
+        var sql = `SELECT SUM(debit - credit) AS total_expense
+                        FROM ledger 
+                        JOIN accounts ON accounts.name = ledger.account_name
+                        WHERE accounts.base_type = 'Expense'`;
+        const results = await report.model.querySync(sql);
+        total_expense = results[0].total_expense;
+        assert.strictEqual(total_expense,10000);
     })
 
-    it('should return the statement of changes in equity',async function(){
-        rows = await report.statementOfChangesInEquitySync();
-        assert.equal(rows.length,2);
+    it('should get net_income',async function(){
+        const expected = [ { net_income: 20000 } ];
+        var sql = `SELECT 
+            (COALESCE((SELECT SUM(credit - debit) 
+                        FROM ledger 
+                        JOIN accounts ON accounts.name = ledger.account_name
+                        WHERE accounts.base_type = 'Revenue'), 0) 
+            - 
+            COALESCE((SELECT SUM(debit - credit) 
+                        FROM ledger 
+                        JOIN accounts ON accounts.name = ledger.account_name
+                        WHERE accounts.base_type = 'Expense'), 0)) AS net_income
+        `;
+        const results = await report.model.querySync(sql);
+        const net_income = results[0].net_income;
+        assert.deepStrictEqual(results,expected);
+        assert.strictEqual(net_income,total_revenue - total_expense);
     })
 
-    it('should verify the statement of changes in equity',async () => {
+    it('should return the statement of retained earnings',async function(){
+        rows = await report.statementOfRetainedEarningsSync();
+    })
+
+    it('should verify the statement of retained earnings',async () => {
         const expected = [
             {
-              equity_component: 'Common Stock',
-              type: 'Equity',
-              beginning_balance: 0,
-              net_income: null,
-              owner_contributions: 0,
-              dividends: 0,
-              other_adjustments: 0,
-              ending_balance: null,
-              txdate: '2024-10-02'
-            },
-            {
-              equity_component: 'RetainedEarnings',
-              type: 'Equity',
-              beginning_balance: 0,
-              net_income: null,
-              owner_contributions: 0,
-              dividends: 0,
-              other_adjustments: 0,
-              ending_balance: null,
-              txdate: '2024-10-01'
+              beginning_retained_earnings: 50000,
+              net_income: 20000,        // Revenue (30000) - Expense (10000)
+              dividends_paid: 5000,
+              ending_retained_earnings: 65000   // Beginning + Net Income - Dividends Paid
             }
         ];
         assert.deepStrictEqual(rows,expected);

@@ -24,7 +24,7 @@ describe("VariableCost Class", async function(){
     })
 
     it('should have a type of VariableCost and base type of Expense',async function(){
-        assert.strictEqual(account.type,"VariableCost");
-        assert.strictEqual(account.baseType,"Liability");
+        assert.strictEqual(account.type,"VariableCost"); 
+        assert.strictEqual(account.baseType,"Expense");
     })
 });

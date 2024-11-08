@@ -27,9 +27,9 @@ class CommodityShares extends Equity {
         return this.addCredit(date, desc, amount, company_id, office_id);
     }
 
-    liquidate(date, desc, amount, company_id = 0, office_id = 0) {
+    liquidate(date, desc, amount, company_id = 0, office_id = 0, location = 0) {
         // Liquidating commodity shares (debit to equity)
-        return this.addDebit(date, desc, amount, company_id, office_id);
+        return this.addDebit(date, desc, amount, company_id, office_id, location);
     }
 }
 

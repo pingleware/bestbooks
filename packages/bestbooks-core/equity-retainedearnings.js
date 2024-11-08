@@ -16,7 +16,7 @@ class RetainedEarnings extends Equity {
         return this.addDebit(date, desc, amount, company_id, office_id);
     }
 
-    retainEarnings(date, desc, amount, company_id = 0, office_id = 0) {
+    retainEarnings(date, desc, amount, company_id = 0, office_id = 0, location = 0) {
         // Retain earnings by crediting the account
         return this.addCredit(date, desc, amount, company_id, office_id);
     }

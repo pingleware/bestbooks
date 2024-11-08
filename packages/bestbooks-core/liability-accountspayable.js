@@ -19,7 +19,7 @@ class AccountsPayable extends Liability {
         super(name,"Accounts Payable");
     }
 
-    async addDebit(date,desc,amount,due_date=0,company_id=0,office_id=0){
+    async addDebit(date,desc,amount,due_date=0,company_id=0,office_id=0,location=0){
         try {
             // SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+100,100) FROM ledger WHERE account_name='Cash'
             // SELECT SUM(debit)-SUM(credit) AS balance FROM ledger WHERE account_name='Cash'

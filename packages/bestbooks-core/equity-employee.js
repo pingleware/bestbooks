@@ -27,7 +27,7 @@ class EmployeeShares extends Equity {
         return this.addCredit(date, desc, amount, company_id, office_id);
     }
 
-    redeemShares(date, desc, amount, company_id = 0, office_id = 0) {
+    redeemShares(date, desc, amount, company_id = 0, office_id = 0, location = 0) {
         // Redeeming shares decreases equity (debit to Employee Equity)
         return this.addDebit(date, desc, amount, company_id, office_id);
     }

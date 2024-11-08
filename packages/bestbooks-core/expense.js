@@ -69,18 +69,31 @@ class Expense extends Ledger {
 	debit = 0;
 	credit = 0;
 
-    constructor(name,type=AccountTypes.Expense,base=AccountTypes.Liability) {
+    constructor(name,type=AccountTypes.Expense,base=AccountTypes.Expense) {
         super(name,type,base);
         this.group = 400;
     }
 
-    async addDebit(date,desc,amount,company_id=0,office_id=0){
+    async addDebit(date,desc,amount,company_id=0,office_id=0,location=0,transaction_type="Operating"){
         try {
             // SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+100,100) FROM ledger WHERE account_name='Cash'
             // SELECT SUM(debit)-SUM(credit) AS balance FROM ledger WHERE account_name='Cash'
             this.debit = amount;
-            var sql = `INSERT OR IGNORE INTO ledger (company_id,office_id,account_name,account_code,txdate,note,debit,balance) VALUES (?,?,?,(SELECT code FROM accounts WHERE name=?),?,?,?,(SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+?,?) FROM ledger WHERE account_name=?));`;
-            const params = [company_id,office_id,super.getName(),super.getName(),date,desc,amount,amount,amount,super.getName()];
+            var sql = `INSERT OR IGNORE INTO ledger (company_id,office_id,account_name,account_code,txdate,note,debit,balance,location,transaction_type) VALUES (?,?,?,(SELECT code FROM accounts WHERE name=?),?,?,?,(SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)+?,?) FROM ledger WHERE account_name=?),?,?);`;
+            const params = [
+                company_id,
+                office_id,
+                super.getName(),
+                super.getName(),
+                date,
+                desc,
+                amount,
+                amount,
+                amount,
+                super.getName(),
+                location,
+                transaction_type
+            ];
             const ledger_insert_id = await this.model.insertSync(sql,params);
             info(`addDebit.ledger.id: ${ledger_insert_id}`);
             let journal_insert_id = 0;
@@ -98,7 +111,7 @@ class Expense extends Ledger {
             console.error(err);
         }
     }
-    async addCredit(date,desc,amount,company_id=0,office_id=0){
+    async addCredit(date,desc,amount,company_id=0,office_id=0,location=0,transaction_type="Operating"){
         try {
             this.credit = amount;
             var sql = `INSERT OR IGNORE INTO ledger (
@@ -109,12 +122,15 @@ class Expense extends Ledger {
                         txdate,
                         note,
                         credit,
-                        balance
+                        balance,
+                        location,
+                        transaction_type
                     ) VALUES (
                         ?,?,?,
                         (SELECT code FROM accounts WHERE name=?),
                         ?,?,?,
-                        (SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)-?,?) FROM ledger WHERE account_name=?)
+                        (SELECT IIF(SUM(debit)-SUM(credit),SUM(debit)-SUM(credit)-?,?) FROM ledger WHERE account_name=?),
+                        ?,?
                     );`;
             const params = [
                 company_id,
@@ -126,7 +142,9 @@ class Expense extends Ledger {
                 Math.abs(amount),
                 amount,
                 amount,
-                super.getName()
+                super.getName(),
+                location,
+                transaction_type
             ];
 
             const ledger_insert_id = await this.model.insertSync(sql,params);
