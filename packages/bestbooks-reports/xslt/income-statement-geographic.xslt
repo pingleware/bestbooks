@@ -1,57 +1,42 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foo="http://www.foo.org/" xmlns:bar="http://www.bar.org">
-<xsl:template match="/">
-    <html>
-        <body>
-            <table class="w3-table" border="1">
-                <tr>
-                    <td colspan="2" style="text-align:center;"><h1>Income Statement by Geography</h1>[USD $ millions]</td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="text-align: right; width:50%;">Date: <xsl:value-of select="//date" /></td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="text-align: right; width:100%;">
-                        <table class="w3-table" style="table-layout: fixed; width:100%;" border="1">
-                            <tr>
-                                <th style="text-align: center;">REGION</th>
-                                <th style="text-align: center;">LOCATION</th>
-                                <th style="text-align: center;">CODE</th>
-                                <th style="text-align: center;">ACCOUNT</th>
-                                <th style="text-align: center;">BALANCE</th>
-                                <th style="text-align: center;">TYPE</th>
-                            </tr>
-                            <xsl:for-each select="//lineItems/lineitem">
-                                <tr>
-                                    <td style="text-align: center;"><xsl:value-of select="region"/></td>
-                                    <td style="text-align: center;"><xsl:value-of select="location"/></td>
-                                    <td style="text-align: center;"><xsl:value-of select="code"/></td>
-                                    <td style="text-align: center;"><xsl:value-of select="name"/></td>
-                                    <td style="text-align: center;"><xsl:value-of select="balance"/></td>
-                                    <td style="text-align: center;"><xsl:value-of select="type"/></td>
-                                </tr>
-                            </xsl:for-each>
-                        </table>
-                    </td>
-                <tr>
-                <tr>
-                    <th>Total Income:</th>
-                    <th><xsl:value-of select="//totalIncome"/></th>
-                </tr>
-                <tr>
-                    <th>Total Expense:</th>
-                    <th><xsl:value-of select="//totalExpense"/></th>
-                </tr>
-                <tr>
-                    <th>Net Income:</th>
-                    <th><xsl:value-of select="//netIncome"/></th>
-                </tr>
-                <tr>
-                    <th>Management|Accountant|Auditor Note(s)</th>
-                    <td><xsl:value-of select="//notes" /></td>
-                </tr>
-            </table> 
-        </body>
-    </html>
-</xsl:template>
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+    <xsl:output method="html" indent="yes"/>
+    
+    <!-- Root template to structure HTML output -->
+    <xsl:template match="/">
+        <html>
+            <head>
+                <title>Revenue and Expense Report by Location</title>
+                <style>
+                    table { width: 100%; border-collapse: collapse; }
+                    th, td { padding: 8px; text-align: right; border: 1px solid #ddd; }
+                    th { background-color: #f2f2f2; text-align: left; }
+                </style>
+            </head>
+            <body>
+                <h2>Revenue and Expense Report by Location</h2>
+                
+                <table>
+                    <tr>
+                        <th>Location</th>
+                        <th>Region</th>
+                        <th>Total Revenue</th>
+                        <th>Total Expense</th>
+                        <th>Percent of Total Revenue</th>
+                    </tr>
+                    
+                    <!-- Loop through each row to populate table -->
+                    <xsl:for-each select="result/row">
+                        <tr>
+                            <td><xsl:value-of select="Location"/></td>
+                            <td><xsl:value-of select="Region"/></td>
+                            <td><xsl:value-of select="total_revenue"/></td>
+                            <td><xsl:value-of select="total_expense"/></td>
+                            <td><xsl:value-of select="percent_of_total_revenue"/>%</td>
+                        </tr>
+                    </xsl:for-each>
+                </table>
+            </body>
+        </html>
+    </xsl:template>
 </xsl:stylesheet>
