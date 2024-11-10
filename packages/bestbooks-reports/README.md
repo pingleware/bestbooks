@@ -26,7 +26,7 @@ Also to ensure GAAP compliance, standard labels as defined by FASB should be use
 
 An exempt offering under Section 3(a)(11) which is an intrastate public offering issuing unrestricted securities to a single state bonafide residents. To ensure compliance of this exempt offering, segment reporting is required if the securities become traded on a NMS Exchange.
 
-## Sample Reports
+## Reports included
 
 You can customize the style of the reports by modifying the XSLT file located in the **.bestbooks** system directory of the current user home directory. The package XSLT files are ONLY copied to this directory if they do not exist. The available report XSLT files include,
 
