@@ -14,10 +14,12 @@
                 </style>
             </head>
             <body>
-                <h2>Budget-vs-Actual Report</h2>
-                
                 <table>
                     <tr>
+                        <td colspan="10" style="text-align:center;"><h1>Budget-vs-Actual Report</h1>[USD $ millions]</td>
+                    </tr>
+                    <tr>
+                        <th>Transaction Date</th>
                         <th>Account Code</th>
                         <th>Account Name</th>
                         <th>Account Type</th>
@@ -27,49 +29,42 @@
                         <th>Actual Year 2</th>
                         <th>Budget Year 2</th>
                         <th>Variance Year 2</th>
-                        <th>Transaction Date</th>
                     </tr>
                     
                     <!-- Loop through each row and output the data in table cells -->
-                    <xsl:for-each select="result/row">
+                    <xsl:for-each select="//lineItems">
                         <tr>
-                            <td><xsl:value-of select="code"/></td>
-                            <td><xsl:value-of select="name"/></td>
-                            <td><xsl:value-of select="type"/></td>
+                            <td><xsl:value-of select="//txdate"/></td>
+
+                            <td><xsl:value-of select="//account_code"/></td>
+                            <td><xsl:value-of select="//account_name"/></td>
+                            <td><xsl:value-of select="//account_type"/></td>
                             
                             <td>
-                                <xsl:value-of select="(Bal01 + Bal02 + Bal03 + Bal04 + Bal05 + Bal06 + 
-                                                      Bal07 + Bal08 + Bal09 + Bal10 + Bal11 + Bal12)"/>
+                                <xsl:value-of select="//actual_year_1"/>
                             </td>
                             <td>
-                                <xsl:value-of select="(Bud01 + Bud02 + Bud03 + Bud04 + Bud05 + Bud06 + 
-                                                      Bud07 + Bud08 + Bud09 + Bud10 + Bud11 + Bud12)"/>
+                                <xsl:value-of select="//budget_year_1"/>
                             </td>
                             <td>
-                                <xsl:value-of select="((Bal01 + Bal02 + Bal03 + Bal04 + Bal05 + Bal06 + 
-                                                       Bal07 + Bal08 + Bal09 + Bal10 + Bal11 + Bal12) - 
-                                                      (Bud01 + Bud02 + Bud03 + Bud04 + Bud05 + Bud06 + 
-                                                       Bud07 + Bud08 + Bud09 + Bud10 + Bud11 + Bud12))"/>
+                                <xsl:value-of select="//variance_year_1"/>
                             </td>
                             
                             <td>
-                                <xsl:value-of select="(Bal13 + Bal14 + Bal15 + Bal16 + Bal17 + Bal18 + 
-                                                      Bal19 + Bal20 + Bal21 + Bal22 + Bal23 + Bal24)"/>
+                                <xsl:value-of select="//actual_year_2"/>
                             </td>
                             <td>
-                                <xsl:value-of select="(Bud13 + Bud14 + Bud15 + Bud16 + Bud17 + Bud18 + 
-                                                      Bud19 + Bud20 + Bud21 + Bud22 + Bud23 + Bud24)"/>
+                                <xsl:value-of select="//budget_year_2"/>
                             </td>
                             <td>
-                                <xsl:value-of select="((Bal13 + Bal14 + Bal15 + Bal16 + Bal17 + Bal18 + 
-                                                       Bal19 + Bal20 + Bal21 + Bal22 + Bal23 + Bal24) - 
-                                                      (Bud13 + Bud14 + Bud15 + Bud16 + Bud17 + Bud18 + 
-                                                       Bud19 + Bud20 + Bud21 + Bud22 + Bud23 + Bud24))"/>
-                            </td>
-                            
-                            <td><xsl:value-of select="created"/></td>
+                                <xsl:value-of select="//variance_year_2"/>
+                            </td>                            
                         </tr>
                     </xsl:for-each>
+                    <tr>
+                        <th colspan="2">Management|Accountant|Auditor Note(s)</th>
+                        <td colspan="8"><xsl:value-of select="//notes" /></td>
+                    </tr>
                 </table>
             </body>
         </html>
