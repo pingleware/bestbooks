@@ -47,7 +47,16 @@ class AccountsReceivablesAging extends BaseReport {
     }
 
     async formatArray(data,notes) {
+        var _data = {
+            lineItems: [],
+            notes: notes
+        };
 
+        data.forEach(function(lineItem){
+            _data.lineItems.push(lineItem);
+        })
+
+        return _data;
     }
 
     retrieveReportData(startDate,endDate,callback) {

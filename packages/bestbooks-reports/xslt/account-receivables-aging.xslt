@@ -14,10 +14,12 @@
                 </style>
             </head>
             <body>
-                <h2>Accounts Receivable Aging Report</h2>
-                
                 <table>
                     <tr>
+                        <td colspan="9" style="text-align:center;"><h1>Accounts Receivable Aging Report</h1>[USD $ millions]</td>
+                    </tr>
+                    <tr>
+                        <th>Transaction Date</th>
                         <th>Account Code</th>
                         <th>Account Name</th>
                         <th>Current</th>
@@ -26,23 +28,26 @@
                         <th>Past Due 61-90 Days</th>
                         <th>Past Due Over 90 Days</th>
                         <th>Total Outstanding</th>
-                        <th>Transaction Date</th>
                     </tr>
                     
                     <!-- Loop through each row and output data in table cells -->
-                    <xsl:for-each select="result/row">
+                    <xsl:for-each select="//lineItems">
                         <tr>
-                            <td><xsl:value-of select="account_code"/></td>
-                            <td><xsl:value-of select="account_name"/></td>
-                            <td><xsl:value-of select="current"/></td>
-                            <td><xsl:value-of select="past_due_1_30"/></td>
-                            <td><xsl:value-of select="past_due_31_60"/></td>
-                            <td><xsl:value-of select="past_due_61_90"/></td>
-                            <td><xsl:value-of select="past_due_over_90"/></td>
-                            <td><xsl:value-of select="total_outstanding"/></td>
-                            <td><xsl:value-of select="txdate"/></td>
+                            <td><xsl:value-of select="//txdate"/></td>
+                            <td><xsl:value-of select="//account_code"/></td>
+                            <td><xsl:value-of select="//account_name"/></td>
+                            <td><xsl:value-of select="//current"/></td>
+                            <td><xsl:value-of select="//past_due_1_30"/></td>
+                            <td><xsl:value-of select="//past_due_31_60"/></td>
+                            <td><xsl:value-of select="//past_due_61_90"/></td>
+                            <td><xsl:value-of select="//past_due_over_90"/></td>
+                            <td><xsl:value-of select="//total_outstanding"/></td>
                         </tr>
                     </xsl:for-each>
+                    <tr>
+                        <th colspan="2">Management|Accountant|Auditor Note(s)</th>
+                        <td colspan="7"><xsl:value-of select="//notes" /></td>
+                    </tr>
                 </table>
             </body>
         </html>
