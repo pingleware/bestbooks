@@ -11,7 +11,7 @@ const path = require('path');
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 describe("Create formatted Account Payables Aging Report", function(){
-    let report, vendorOne, vendorTwo, data, formattedData, xml;
+    let report, vendorOne, vendorTwo, data, formattedData, xml, html;
     let due15DaysAgo, due45DaysAgo, due75DaysAgo, due95DaysAgo, due135DaysAgo;
 
     before(async() => {
@@ -112,7 +112,7 @@ describe("Create formatted Account Payables Aging Report", function(){
     })
 
     it("should format data into array",async() => {
-        const notes = `In our opinion, the balance sheet presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 310, Receivables.`;
+        const notes = `In our opinion, the account payables aging report presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 310, Receivables.`;
 
         formattedData = await report.formatArray(data,notes);
         const expected = {
@@ -140,7 +140,7 @@ describe("Create formatted Account Payables Aging Report", function(){
                 txdate: '2024-11-10'
               }
             ],
-            notes: 'In our opinion, the balance sheet presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 310, Receivables.'
+            notes: 'In our opinion, the account payables aging report presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 310, Receivables.'
         };
         assert.deepStrictEqual(formattedData,expected);
     })
@@ -171,7 +171,7 @@ describe("Create formatted Account Payables Aging Report", function(){
         <total_outstanding>-150</total_outstanding>
         <txdate>2024-11-10</txdate>
     </lineItems>
-    <notes>In our opinion, the balance sheet presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 310, Receivables.</notes>
+    <notes>In our opinion, the account payables aging report presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 310, Receivables.</notes>
 </accountPayablesAging>`;
         assert.deepStrictEqual(xml,expected);
     })
