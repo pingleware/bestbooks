@@ -64,6 +64,8 @@ trial-balance.xslt
 
 ### Budget vs. Actual
 
+![budget-vs-actual.png](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/budget-vs-actual.png)
+
 ### Income Statement
 
 ![income-statement.png](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/income-statement.png)
