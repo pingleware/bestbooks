@@ -19,6 +19,10 @@
                     <td><xsl:value-of select="//net_income" /></td>
                 </tr>
                 <tr>
+                    <th>Dividends Paid</th>
+                    <td><xsl:value-of select="//dividends_paid" /></td>
+                </tr>
+                <tr>
                     <th>Retained Earnings</th>
                     <td><xsl:value-of select="//retained_earnings" /></td>
                 </tr>
