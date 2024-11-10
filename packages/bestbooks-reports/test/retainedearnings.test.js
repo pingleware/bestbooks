@@ -87,22 +87,44 @@ describe('Create formatted Retained Earnings Report',function(){
     })
 
     it('should return the retained earnings',async function(){
+        const expected = [
+            {
+              beginning_retained_earnings: 1000,
+              net_income: 400,
+              dividends_paid: 0,
+              ending_retained_earnings: 1400
+            }
+        ];
         data = await report.retrieveReportDataSync(); 
-        //assert.equal(rows.length,2);
-        console.log(data)
+        assert.deepStrictEqual(data,expected);
     })
 
     it("should format data into array",async() => {
-        const notes = `In our opinion, the balance sheet presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 505 - Equity.`;
-
+        const notes = `In our opinion, the retained earnings report presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 505 - Equity.`;
+        const expected = {
+            date: 'Sun Nov 10 2024',
+            previous_retained_earnings: '1000.00',
+            net_income: '400.00',
+            dividends_paid: '0.00',
+            retained_earnings: '1400.00',
+            notes: 'In our opinion, the retained earnings report presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 505 - Equity.'
+        };
         formattedData = await report.formatArray(data,notes);
-        //const expected = `{"date":"${new Date().toDateString()}","lineItems":{"assets":[{"code":"100","name":"Cash","balance":"1000.00","type":"Asset"}],"liabilities":[{"code":"200","name":"COGS","balance":"350.00","type":"Liability"}],"expenses":[],"income":[],"equity":[]},"totalAsset":"1000.00","totalLiability":"350.00","totalIncome":"0.00","totalExpense":"0.00","totalEquity":"0.00","totalLiabilitiesShareholdersEquity":"350.00","notes":"In our opinion, the balance sheet presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 210, Balance Sheet."}`;
-        //assert.strictEqual(JSON.stringify(formattedData).trim(),expected.trim())
-        console.log(formattedData)
+        assert.deepStrictEqual(formattedData,expected);
     })
 
     it("should format array into xml",async () => {
+        const expected = `<?xml version='1.0'?>
+<retainedEarnings>
+    <date>Sun Nov 10 2024</date>
+    <previous_retained_earnings>1000.00</previous_retained_earnings>
+    <net_income>400.00</net_income>
+    <dividends_paid>0.00</dividends_paid>
+    <retained_earnings>1400.00</retained_earnings>
+    <notes>In our opinion, the retained earnings report presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 505 - Equity.</notes>
+</retainedEarnings>`;
         xml = await report.formatXml(formattedData);
+        assert.deepStrictEqual(xml,expected);
     });
 
     it("should save the xml to a file",async() => {
