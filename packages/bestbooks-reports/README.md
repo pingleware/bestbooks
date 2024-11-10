@@ -52,6 +52,8 @@ trial-balance.xslt
 
 ### Account Receivables Aging
 
+![account-receivables-aging.png](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/account-receivables-aging.png)
+
 ### Balance Sheet
 
 ![balance-sheet.png](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/balance-sheet.png)
