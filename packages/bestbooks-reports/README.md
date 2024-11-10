@@ -76,7 +76,7 @@ trial-balance.xslt
 
 ### Retained Earnings
 
-![1712504010713](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712504010713.png)
+![retained-earnings.png](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/retained-earnings.png)
 
 
 ### Statement in Change in Equity
