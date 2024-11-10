@@ -3,15 +3,23 @@ const {
     init, 
     BreakevenAnalysis,
 } = require("../index");
+const {
+    FixedCost,
+    VariableCost,
+    Revenue,
+} = require('@pingleware/bestbooks-core');
 const path = require('path');
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 describe("Create formatted Breakeven Analysis Report", function(){
-    let report;
+    let report, rent, supplies, sales, data, formattedData, xml, html;
 
     before(async() => {
         report = new BreakevenAnalysis();
+        rent = new FixedCost("Rent");
+        supplies = new VariableCost("Supplies");
+        sales = new Revenue("Sales");
         init();
     })
 
@@ -32,4 +40,83 @@ describe("Create formatted Breakeven Analysis Report", function(){
         assert.ok(report instanceof BreakevenAnalysis);
     }) 
 
+    it('should add a rent entry',async() => {
+        const [ledger_id,journal_id] = await rent.addDebit(new Date().toISOString().split("T")[0],"Rent",1000);
+        assert.equal(ledger_id,1);
+        assert.equal(journal_id,1);
+    })
+
+    it('should add a supplies entry',async() => {
+        const [ledger_id,journal_id] = await supplies.addDebit(new Date().toISOString().split("T")[0],"Supplies",500);
+        assert.equal(ledger_id,2);
+        assert.equal(journal_id,2);
+    })
+
+    it('should add a sales entry',async() => {
+        const [ledger_id,journal_id] = await sales.addCredit(new Date().toISOString().split("T")[0],"Sales",2000);
+        assert.equal(ledger_id,3);
+        assert.equal(journal_id,3);
+    })
+
+    it('should return correct break-even analysis report',async function() {
+        data = await report.retrieveReportDataSync();
+        const expected = [
+            {
+              total_fixed_costs: 1000,
+              total_variable_costs: 500,
+              total_revenue: 2000,
+              net_profit_loss: 500,
+              txdate: '2024-11-10'
+            }
+        ];
+        assert.deepStrictEqual(data,expected);
+    });
+
+    it("should format data into array",async() => {
+        const notes = `In our opinion, the break-even anaysis presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic Cost-Benefit.`;
+        const expected = {
+            lineItems: [
+              {
+                total_fixed_costs: 1000,
+                total_variable_costs: 500,
+                total_revenue: 2000,
+                net_profit_loss: 500,
+                txdate: '2024-11-10'
+              }
+            ],
+            notes: 'In our opinion, the break-even anaysis presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic Cost-Benefit.'
+        };
+        formattedData = await report.formatArray(data,notes);
+        assert.deepStrictEqual(formattedData,expected)
+    });
+
+    it("should format array into xml",async () => {
+        xml = await report.formatXml(formattedData);
+        const expected = `<?xml version='1.0'?>
+<breakevenAnalysis>
+    <lineItems>
+        <total_fixed_costs>1000</total_fixed_costs>
+        <total_variable_costs>500</total_variable_costs>
+        <total_revenue>2000</total_revenue>
+        <net_profit_loss>500</net_profit_loss>
+        <txdate>2024-11-10</txdate>
+    </lineItems>
+    <notes>In our opinion, the break-even anaysis presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic Cost-Benefit.</notes>
+</breakevenAnalysis>`;
+        assert.deepStrictEqual(xml,expected);
+    });
+
+    it("should save the xml to a file",async() => {
+        const filePath = await report.saveReportSync("breakevenAnalysis",xml,"xml");
+        assert.strictEqual(path.basename(filePath),"breakevenAnalysis.xml");
+    })
+
+    it("should format the balance sheet report",async() => {
+        html = await report.formatHtml(xml);
+    })
+
+    it("should save the html to a file",async function(){
+        const filePath = await report.saveReportSync("breakevenAnalysis",html,"html");
+        assert.strictEqual(path.basename(filePath),"breakevenAnalysis.html");
+    })
 })

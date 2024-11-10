@@ -14,9 +14,10 @@
                 </style>
             </head>
             <body>
-                <h2>Breakeven Report</h2>
-                
                 <table>
+                    <tr>
+                        <td colspan="5" style="text-align:center;"><h1>Breakeven Report</h1>[USD $ millions]</td>
+                    </tr>
                     <tr>
                         <th>Date</th>
                         <th>Total Fixed Costs</th>
@@ -26,25 +27,27 @@
                     </tr>
                     
                     <!-- Loop through each row and output data in table cells -->
-                    <xsl:for-each select="result/row">
+                    <xsl:for-each select="//lineItems">
                         <tr>
-                            <td><xsl:value-of select="txdate"/></td>
+                            <td><xsl:value-of select="//txdate"/></td>
                             <td>
-                                <xsl:value-of select="SUM(CASE WHEN accounts.type = 'FixedCost' THEN ledger.debit ELSE 0 END)"/>
+                                <xsl:value-of select="//total_fixed_costs"/>
                             </td>
                             <td>
-                                <xsl:value-of select="SUM(CASE WHEN accounts.type = 'VariableCost' THEN ledger.debit ELSE 0 END)"/>
+                                <xsl:value-of select="//total_variable_costs"/>
                             </td>
                             <td>
-                                <xsl:value-of select="SUM(CASE WHEN accounts.type = 'Revenue' THEN ledger.credit ELSE 0 END)"/>
+                                <xsl:value-of select="//total_revenue"/>
                             </td>
                             <td>
-                                <xsl:value-of select="SUM(CASE WHEN accounts.type = 'Revenue' THEN ledger.credit ELSE 0 END) - 
-                                                    (SUM(CASE WHEN accounts.type = 'FixedCost' THEN ledger.debit ELSE 0 END) + 
-                                                     SUM(CASE WHEN accounts.type = 'VariableCost' THEN ledger.debit ELSE 0 END))"/>
+                                <xsl:value-of select="//net_profit_loss"/>
                             </td>
                         </tr>
                     </xsl:for-each>
+                    <tr>
+                        <th colspan="2">Management|Accountant|Auditor Note(s)</th>
+                        <td colspan="3"><xsl:value-of select="//notes" /></td>
+                    </tr>
                 </table>
             </body>
         </html>
