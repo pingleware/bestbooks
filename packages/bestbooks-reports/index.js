@@ -7,16 +7,8 @@ const ExcelJS = require('exceljs');
 
 
 function init() {
-    // TODO: move this INSERT in the Core.Report class per CODING STANDARDS
-    const { Model } = require('@pingleware/bestbooks-core');
-    const model = new Model();
-    model.insertSync(`CREATE TABLE IF NOT EXISTS "report" (
-        "id"	INTEGER,
-        "txdate"	TIMESTAMP,
-        "name"	TEXT,
-        "contents"	TEXT,
-        PRIMARY KEY("id" AUTOINCREMENT)
-    )`)
+    const { Report } = require('@pingleware/bestbooks-core');
+    new Report(); // will create table, if needed?
     
     const xslt_list = [
         "account-payables-aging.xslt",
@@ -36,16 +28,35 @@ function init() {
     ];
     let copied = 0;
 
-    xslt_list.forEach(function(file){
-        if (!fs.existsSync(path.join(os.homedir(),`.bestbooks/${file}`))) {
+    xslt_list.forEach(function(file) {
+        const sourcePath = path.join('xslt', file);
+        const destPath = path.join(os.homedir(), `.bestbooks/${file}`);
+        
+        // Check if destination file exists
+        if (!fs.existsSync(destPath)) {
+            // If it doesn't exist, copy the file
             try {
-                fs.copyFileSync(path.join('xslt',file),path.join(os.homedir(),`.bestbooks/${file}`));
-                copied++;    
-            } catch(error) {
+                fs.copyFileSync(sourcePath, destPath);
+                copied++;
+            } catch (error) {
                 console.error(error);
             }
-        }    
-    });  
+        } else {
+            // If the destination file exists, compare modification times
+            try {
+                const sourceStat = fs.statSync(sourcePath);
+                const destStat = fs.statSync(destPath);
+                
+                // Check if source file is newer than destination file
+                if (sourceStat.mtime > destStat.mtime) {
+                    fs.copyFileSync(sourcePath, destPath);
+                    copied++;
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    });
     
     return copied;
 }
@@ -63,7 +74,7 @@ const NoteToFinancialStatements = require('./noteToFinancialStatements');
 const StatementCashFlows = require('./statementCashFlows');
 const StatementChangeInEquity = require('./statementChangeOfEquity');
 const TrialBalance = require('./trial-balance');
-const RetainedEarnings = require('./retained-earnings');
+const RetainedEarningsReport = require('./retained-earnings');
 const PurchaseOrder = require('./purchase-order');
 const CustomerEstimate = require('./customer-estimate');
 
@@ -91,7 +102,7 @@ module.exports = {
     NoteToFinancialStatements,
     StatementCashFlows,
     StatementChangeInEquity,
-    RetainedEarnings,
+    RetainedEarningsReport,
     PurchaseOrder,
     CustomerEstimate,
     parseString,

@@ -78,7 +78,7 @@ describe('Statement of Change in Equity Report',function(){
               txdate: '2023-01-01'
             }
         ];
-        data = await report.retrieveEquityMovementDataSync();
+        data = await report.retrieveReportDataSync();
         assert.deepStrictEqual(data,expected)
     })
 

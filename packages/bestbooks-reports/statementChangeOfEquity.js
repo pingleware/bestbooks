@@ -25,7 +25,6 @@
  *     - Effects of changes in fair value for certain assets
  */
 
-const { Model } = require('@pingleware/bestbooks-core');
 const BaseReport = require('./report');
 const {format, array2xml} = require('./formatReport');
 const os = require('os');
@@ -78,113 +77,15 @@ class StatementChangeInEquity extends BaseReport {
         })
 
         _data["notes"] = notes;
-        
+
         return _data;
     }
 
-    createReport(startDate,endDate,_format,callback,notes="") {
-        this.retrieveReportData(startDate, endDate, function(data){
-            if (_format == "array") {
-                let ending_equity_total = Number(data[0].beginning_equity_total) + Number(data[0].net_income_total) - Number(data[0].dividends_payable_total) + Number(data[0].paidin_capital_total) + Number(data[0].treasury_shares_total).toFixed(2);
-                var _data = {
-                    date: new Date().toDateString(),
-                    beginning_equity: Number(data[0].beginning_equity_total).toFixed(2),
-                    net_income: Number(data[0].net_income_total).toFixed(2),
-                    dividends: Number(data[0].dividends_payable_total).toFixed(2),
-                    other_change: Number(data[0].paidin_capital_total).toFixed(2) + Number(data[0].treasury_shares_total).toFixed(2),
-                    ending_equity: ending_equity_total,
-                    notes: notes
-                };
-                var formattedData = array2xml('statementChangeInEquity',_data);
-                fs.writeFileSync(path.join(os.homedir(),'.bestbooks/statement-of-change-in-equity.xml'), formattedData);
-                // Save report XML data to report table
-                var txdate = new Date().getTime();
-                var buffer = require('buffer').Buffer;
-                // TODO: move this INSERT in the Core.Report class per CODING STANDARDS
-                var sql = `INSERT INTO report (txdate,name,contents) VALUES ('${txdate}','statement-of-change-in-equity','${buffer.from(formattedData).toString('base64')}')`;
-                const model = new Model();
-                if (callback) {
-                    model.insert(sql,function(result){
-                        callback(format('statementChangeInEquity',formattedData));
-                    });
-                } else {
-                    model.insertSync(sql);
-                    return format('statementChangeInEquity',formattedData);
-                }
-            } else {
-                // process other formats
-            }    
-        });
-    }
-
     retrieveReportData(startDate,endDate,callback) {
-        var _startDate = startDate;
-        var lastYear, lastStartDate, lastEndDate;
-        if (_startDate.length == 0) {
-            lastYear = Number(new Date().getFullYear() - 1);
-        } else {
-            lastYear = Number(new Date(startDate).getFullYear() - 1);
-        }
-        lastStartDate = new Date(`01-01-${lastYear}`).toISOString().split('T')[0];
-        lastEndDate = new Date(`12-31-${lastYear}`).toISOString().split('T')[0];
-
-        const netIncomeData = `SELECT SUM(balance) AS total FROM ledger WHERE account_name LIKE '%income%'`;
-        const dividendsData =  `SELECT SUM(amount) AS total FROM equity_movements WHERE type = 'dividend'`;
-
-        /**
-         * SELECT * FROM equity_movements
-         * SELECT SUM(balance) AS total FROM ledger WHERE account_name LIKE '%income%'
-         * SELECT SUM(amount) AS total FROM equity_movements WHERE type = 'dividend'
-         * 
-         * SELECT (SELECT * FROM equity_movements),(SELECT SUM(balance) AS total FROM ledger WHERE account_name LIKE '%income%'),(SELECT SUM(amount) AS total FROM equity_movements WHERE type = 'dividend')
-         */
-
-        var sql = `SELECT 
-                        (${netIncomeData}),
-                        (${dividendsData})
-                    `;
-    
-
-        //var equity_code = `SELECT code FROM accounts WHERE type="Equity" AND NOT name LIKE '%retained%' AND NOT name LIKE '%Paid-in Capital%'`;
-        //var dividends_payable_code = `SELECT code FROM accounts WHERE name='Dividends Payable'`;
-        //var paid_in_capital_code = `SELECT code FROM accounts WHERE name LIKE '%Paid-in Capital%'`;
-        //var treasury_shares_code = `SELECT code FROM accounts WHERE name LIKE '%Treasury%'`;
-
-        //var beginning_equity_total = `SELECT IFNULL(ROUND(SUM(debit)-SUM(credit),2),0.0) FROM ledger WHERE (DATE(txdate) BETWEEN '${lastStartDate}' AND '${lastEndDate}') AND account_code IN (${equity_code})`;
-        //var net_income_total = `SELECT IFNULL(ROUND(SUM(debit)+SUM(credit),2),0.0) FROM ledger WHERE (DATE(txdate) BETWEEN '${startDate}' AND '${endDate}') AND account_code LIKE '5%'`;
-        //var dividends_payable_total = `SELECT IFNULL(ROUND(SUM(debit)-SUM(credit),2),0.0) FROM ledger WHERE (DATE(txdate) BETWEEN '${startDate}' AND '${endDate}') AND account_code IN (${dividends_payable_code})`;
-        //var paidin_capital_total = `SELECT IFNULL(ROUND(SUM(debit)-SUM(credit),2),0.0) FROM ledger WHERE (DATE(txdate) BETWEEN '${startDate}' AND '${endDate}') AND account_code IN (${paid_in_capital_code})`;
-        //var treasury_shares_total = `SELECT IFNULL(ROUND(SUM(debit)-SUM(credit),2),0.0) FROM ledger WHERE (DATE(txdate) BETWEEN '${startDate}' AND '${endDate}') AND account_code IN (${treasury_shares_code})`;
-
-        //var sql = `SELECT (${beginning_equity_total}) AS beginning_equity_total,(${net_income_total}) AS net_income_total,(${dividends_payable_total}) AS dividends_payable_total,(${paidin_capital_total}) AS paidin_capital_total,(${treasury_shares_total}) AS treasury_shares_total`;
-        console.log(sql)
-        // TODO: move this INSERT in the Core.Report class per CODING STANDARDS
-        const model = new Model();
-        model.query(sql,callback);
-    }
-
-    retrieveEquityMovementData(startDate,endDate,callback) {
-        var equityMovements = 'SELECT * FROM equity_movements';
-
-        if (startDate.length > 0 && endDate.length > 0) {
-            equityMovements = `SELECT * FROM equity_movements WHERE date BETWEEN ${startDate} AND ${endDate};`;
-        } else if (startDate.length > 0 && endDate.length == 0) {
-            equityMovements = `SELECT * FROM equity_movements WHERE date >= ${startDate};`;
-        } else if (startDate.length == 0 && endDate.length > 0) {
-            equityMovements = `SELECT * FROM equity_movements WHERE date < ${endDate};`;
-        }
-
-        console.log(sql)
-        // TODO: move this INSERT in the Core.Report class per CODING STANDARDS
-        const model = new Model();
-        model.query(sql,callback);
+        callback(this.retrieveReportDataSync(startDate,endDate));
     }
 
     async retrieveReportDataSync(startDate,endDate) {
-        
-    }
-
-    async retrieveEquityMovementDataSync(startDate,endDate) {
         return this.statementOfChangesInEquitySync(startDate,endDate);
     }
 }

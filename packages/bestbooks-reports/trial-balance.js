@@ -1,7 +1,7 @@
 "use strict"
 
-const { Report, Model } = require('@pingleware/bestbooks-core');
 const BaseReport = require('./report');
+
 const {format, array2xml} = require('./formatReport');
 const os = require('os');
 const fs = require('fs');
@@ -88,24 +88,6 @@ class TrialBalance extends BaseReport {
     async retrieveReportDataSync(startDate, endDate) {
         return await this.trialBalanceSync(startDate, endDate);
     }
-
-    /*
-    createReport(startDate,endDate,_format,callback) {
-        this.retrieveReportData(startDate, endDate, function(data){
-            if (_format == "array") {
-                var formattedData = array2xml('trialBalance',_data);
-                fs.writeFileSync(path.join(os.homedir(),'.bestbooks/trialBalance.xml'), formattedData);
-                if (callback) {
-                    callback(format("trialBalance",formattedData));
-                } else {
-                    return format("trialBalance",formattedData);
-                }
-            } else {
-                // process other formats
-            }                    
-        });
-    }
-    */
 }
 
 module.exports = TrialBalance;

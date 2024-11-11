@@ -39,11 +39,11 @@ function transform_xml_xslt(xml_content, xslt_content) {
     return xsltProcess(xmlParse(xml_content),xmlParse(xslt_content.toString()));
 }
 
-function format(reportName,formattedData) {
+function format(reportName,xml_content) {
     try {
         if (report_list[reportName]) {
             var xsltString = fs.readFileSync(path.join(os.homedir(),`.bestbooks/${report_list[reportName]}`));
-            return transform_xml_xslt(formattedData,xsltString);
+            return transform_xml_xslt(xml_content,xsltString);
         } else {
             // report does not exist?
         }    
@@ -51,6 +51,7 @@ function format(reportName,formattedData) {
         //console.error(formattedData)
         console.error(err);
     }
+    return "";
 }
 
 function array2xml(topLevel, obj) {
