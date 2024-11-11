@@ -89,7 +89,7 @@ trial-balance.xslt
 
 ### Statement in Change in Equity
 
-![1712503491502](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712503491502.png)
+![statement-of-change-in-equity.png](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/statement-of-change-in-equity.png)
 
 ### Statement of Cash Flows
 

@@ -5,15 +5,16 @@
         <body>
             <table>
                 <tr>
-                    <td colspan="2" style="text-align:center;"><h1>Change in Equity Statement</h1></td>
+                    <td colspan="2" style="text-align:center;"><h1>Change in Equity Statement</h1>[USD $ millions]</td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align: right; width:50%;">Date: <xsl:value-of select="//date" /></td>
+                    <td colspan="2" style="text-align: right; width:50%;">Date: <xsl:value-of select="//txdate" /></td>
                 </tr>
                 <tr>
                     <th>Beginning Equity</th>
-                    <td><xsl:value-of select="//beginning_equity" /></td>
+                    <td><xsl:value-of select="//beginning_balance" /></td>
                 </tr>
+                <tr><td colspan="2"><hr/></td></tr>
                 <tr>
                     <th>(+) Net Income</th>
                     <td><xsl:value-of select="//net_income" /></td>
@@ -23,13 +24,17 @@
                     <td><xsl:value-of select="//dividends" /></td>
                 </tr>
                 <tr>
+                    <th>(+) Owner Contributions</th>
+                    <td><xsl:value-of select="//owner_contributions" /></td>
+                </tr>
+                <tr>
                     <th>(+/-) Other Changes</th>
-                    <td><xsl:value-of select="//other_change" /></td>
+                    <td><xsl:value-of select="//other_adjustments" /></td>
                 </tr>
                 <tr><td colspan="2"><hr/></td></tr>
                 <tr>
                     <th>Ending Equity</th>
-                    <td><xsl:value-of select="//ending_equity" /></td>
+                    <td><xsl:value-of select="//ending_balance" /></td>
                 </tr>
                 <tr>
                     <th>Management|Accountant|Auditor Note(s)</th>
