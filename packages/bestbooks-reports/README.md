@@ -1,5 +1,7 @@
 # BestBooks Accounting Application Framework - Reports
 
+[![npm test](https://github.com/pingleware/bestbooks-reports/actions/workflows/npm-test.yml/badge.svg)](https://github.com/pingleware/bestbooks-reports/actions/workflows/npm-test.yml)
+
 There are no free options for creating reports from content received from a database. jsreports, jasperreports have limited free options.
 
 Hence the report design will go back to basics,
@@ -80,7 +82,7 @@ trial-balance.xslt
 
 ### Purchase Order
 
-![1712501796886](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/1712501796886.png)
+![purchase-order.png](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/purchase-order.png)
 
 ### Retained Earnings
 
