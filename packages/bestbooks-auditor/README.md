@@ -1,5 +1,7 @@
 # BestBooks Accounting Application Framework - AUDITOR
 
+[![npm test](https://github.com/pingleware/bestbooks-auditor/actions/workflows/npm-test.yml/badge.svg)](https://github.com/pingleware/bestbooks-auditor/actions/workflows/npm-test.yml)
+
 Using the R-language and examples from https://github.com/ameypophali/Auditing-financial-data-using-R.git and https://github.com/PieInOblivion/ABRA repositories.
 
 BestBooks Auditor will provide automatic financial audits with a notation added to the financial report using the noteToFinancialStatement component of bestbooks-reports.
