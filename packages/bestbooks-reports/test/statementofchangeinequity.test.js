@@ -83,7 +83,7 @@ describe('Statement of Change in Equity Report',function(){
     })
 
     it("should format data into array",async() => {
-        const notes = `In our opinion, the statement of cash flows presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 230 Statement of Cash Flows.`;
+        const notes = `In our opinion, the statement of change in equity report presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic.`;
         const expected = {
             equity_component: 'Equity',
             type: 'Equity',
@@ -94,7 +94,7 @@ describe('Statement of Change in Equity Report',function(){
             other_adjustments: 300,
             ending_balance: 2100,
             txdate: '2023-01-01',
-            notes: 'In our opinion, the statement of cash flows presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 230 Statement of Cash Flows.'
+            notes: 'In our opinion, the statement of change in equity report presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic.'
         };
         formattedData = await report.formatArray(data[0],notes);
         assert.deepStrictEqual(formattedData,expected)
@@ -112,7 +112,7 @@ describe('Statement of Change in Equity Report',function(){
     <other_adjustments>300</other_adjustments>
     <ending_balance>2100</ending_balance>
     <txdate>2023-01-01</txdate>
-    <notes>In our opinion, the statement of cash flows presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 230 Statement of Cash Flows.</notes>
+    <notes>In our opinion, the statement of change in equity report presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic.</notes>
 </statementChangeInEquity>`;
         xml = await report.formatXml(formattedData);
         assert.deepStrictEqual(xml,expected);
@@ -123,7 +123,7 @@ describe('Statement of Change in Equity Report',function(){
         assert.strictEqual(path.basename(filePath),"statementChangeInEquity.xml");
     })
 
-    it("should format the statement of cash flows report",async() => {
+    it("should format the statement of change in equity report",async() => {
         html = await report.formatHtml(xml);
     })
 

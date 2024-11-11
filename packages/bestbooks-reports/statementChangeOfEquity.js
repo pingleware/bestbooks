@@ -37,6 +37,51 @@ class StatementChangeInEquity extends BaseReport {
         super();
     }
 
+    saveReport(name, contents, type="xml",callback=null){
+        const filePath = path.join(os.homedir(),`.bestbooks/${name}.${type}`);
+        // the xslt-processor does not support the XSLT syntax xsl:for-each-group, 
+        // so the XML generated is returned,
+        // using a free tool like https://xslttest.appspot.com/, 
+        // to copy the .bestbooks/balance-sheet.xslt and .bestbooks/balance-sheet.xml
+        // to render a HTML
+        // TODO: implement xsl:for-each-group. callback(format("balanceSheet",formattedData));
+
+        fs.writeFileSync(filePath, contents);
+        callback(filePath)
+    }
+
+    async saveReportSync(name, html, type) {
+        return new Promise((resolve,reject) => {
+            try {
+                this.saveReport(name, html, type, function(filePath){
+                    resolve(filePath);
+                })    
+            } catch(error) {
+                reject(error);
+            }
+        })
+    }
+
+    async formatHtml(formattedData) {
+        return format('statementChangeInEquity',formattedData);
+    }
+
+    async formatXml(contents) {
+        return array2xml('statementChangeInEquity',contents);
+    }
+
+    async formatArray(data,notes) {
+        var _data = {};
+
+        Object.keys(data).forEach(function(key){
+            _data[key] = data[key];
+        })
+
+        _data["notes"] = notes;
+        
+        return _data;
+    }
+
     createReport(startDate,endDate,_format,callback,notes="") {
         this.retrieveReportData(startDate, endDate, function(data){
             if (_format == "array") {
@@ -136,27 +181,11 @@ class StatementChangeInEquity extends BaseReport {
     }
 
     async retrieveReportDataSync(startDate,endDate) {
-        return new Promise((resolve, reject) => {
-            this.retrieveReportData(startDate, endDate, function(err, results) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(results);
-                }
-            });
-        });
+        
     }
 
     async retrieveEquityMovementDataSync(startDate,endDate) {
-        return new Promise((resolve, reject) => {
-            this.retrieveEquityMovementData(startDate, endDate, function(err, results) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(results);
-                }
-            });
-        });
+        return this.statementOfChangesInEquitySync(startDate,endDate);
     }
 }
 
