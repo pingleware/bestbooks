@@ -93,6 +93,8 @@ trial-balance.xslt
 
 ### Statement of Cash Flows
 
+![statement-of-cashflows.png](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/statement-of-cashflows.png)
+
 ### Trial Balance
 
 ![trial-balance](https://github.com/pingleware/bestbooks-reports/blob/master/image/README/trial-balance.png)

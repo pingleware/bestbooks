@@ -13,7 +13,6 @@
  * 
  */
 
-const { Model } = require('@pingleware/bestbooks-core');
 const BaseReport = require('./report');
 const {format, array2xml} = require('./formatReport');
 const os = require('os');
@@ -25,75 +24,72 @@ class StatementCashFlows extends BaseReport {
         super();
     }
 
-    createReport(startDate,endDate,_format,callback) {
+    saveReport(name, contents, type="xml",callback=null){
+        const filePath = path.join(os.homedir(),`.bestbooks/${name}.${type}`);
+        // the xslt-processor does not support the XSLT syntax xsl:for-each-group, 
+        // so the XML generated is returned,
+        // using a free tool like https://xslttest.appspot.com/, 
+        // to copy the .bestbooks/balance-sheet.xslt and .bestbooks/balance-sheet.xml
+        // to render a HTML
+        // TODO: implement xsl:for-each-group. callback(format("balanceSheet",formattedData));
 
-        this.retrieveReportData(startDate, endDate, function(data){
-            if (_format == "array") {
-                let ending_balance = Number(data[0].starting_balance) + Number(data[0].operations_cashflow_total) + Number(data[0].investment_cashflow_total) + Number(data[0].financing_cashflow_total);
-                var _data = {
-                    date: new Date().toDateString(),
-                    starting_balance: data[0].starting_balance,
-                    operating_total: data[0].operations_cashflow_total,
-                    investment_total: data[0].investment_cashflow_total,
-                    financing_total: data[0].financing_cashflow_total,
-                    ending_balance: ending_balance
-                };
-                var formattedData = array2xml('statementCashFlows',_data);
-                fs.writeFileSync(path.join(os.homedir(),'.bestbooks/statement-of-cash-flows.xml'), formattedData);
-                // Save report XML data to report table
-                var txdate = new Date().getTime();
-                var buffer = require('buffer').Buffer;
-                // TODO: move this INSERT in the Core.Report class per CODING STANDARDS
-                var sql = `INSERT INTO report (txdate,name,contents) VALUES ('${txdate}','statement-of-cash-flows','${buffer.from(formattedData).toString('base64')}')`;
-                const model = new Model();
-                if (callback) {
-                    model.insert(sql,function(result){
-                        callback(formattedData);
-                    });
-                } else {
-                    model.insertSync(sql);
-                    return formattedData;
-                }
-            } else {
-                // process other formats
-            }    
-        });
+        fs.writeFileSync(filePath, contents);
+        callback(filePath)
+    }
+
+    async saveReportSync(name, html, type) {
+        return new Promise((resolve,reject) => {
+            try {
+                this.saveReport(name, html, type, function(filePath){
+                    resolve(filePath);
+                })    
+            } catch(error) {
+                reject(error);
+            }
+        })
+    }
+
+    async formatHtml(formattedData) {
+        return format('statementCashFlows',formattedData);
+    }
+
+    async formatXml(contents) {
+        return array2xml('statementCashFlows',contents);
+    }
+
+    async formatArray(data, notes, starting_balance=0) {
+        let operations_cashflow_total = 0;
+        let investment_cashflow_total = 0;
+        let financing_cashflow_total = 0;
+
+        data.forEach(function(item){
+            if (item.transaction_type == 'Operating') {
+                operations_cashflow_total += item.net_cash_flow;
+            } else if (item.transaction_type == 'Investing') {
+                investment_cashflow_total += item.net_cash_flow;
+            } else if (item.transaction_type == 'Financing') {
+                financing_cashflow_total += item.net_cash_flow;
+            }
+        })
+        let ending_balance = Number(starting_balance) + Number(operations_cashflow_total) + Number(investment_cashflow_total) + Number(financing_cashflow_total);
+        var _data = {
+            date: new Date().toDateString(),
+            starting_balance: starting_balance,
+            operating_total: operations_cashflow_total,
+            investment_total: investment_cashflow_total,
+            financing_total: financing_cashflow_total,
+            ending_balance: ending_balance,
+            notes: notes,
+        };
+
+        return _data;
     }
 
     retrieveReportData(startDate,endDate,callback) {
-        var lastYear, lastStartDate, lastEndDate;
-        if (startDate.length == 0) {
-            lastYear = Number(new Date().getFullYear() - 1);
-        } else {
-            lastYear = Number(new Date(startDate).getFullYear() - 1);
-        }
-        lastStartDate = new Date(`01-01-${lastYear}`).toISOString().split('T')[0];
-        lastEndDate = new Date(`12-31-${lastYear}`).toISOString().split('T')[0];
-
-        var starting_balance = `SELECT (SELECT IFNULL(ROUND(SUM(debit)+SUM(credit),2),0.00) FROM ledger WHERE DATE(txdate) BETWEEN '${lastStartDate}' AND '${lastEndDate}' AND account_code LIKE '5%') AS starting_balance`;
-        var operations_codes = `SELECT code FROM accounts WHERE (type='Income' OR type='Revenue') AND (NOT name LIKE '%interest%' OR NOT name LIKE '%financing%')`;
-        var investment_codes = `SELECT code FROM accounts WHERE type='Investment'`;
-        var financing_codes = `SELECT code FROM accounts WHERE (type='Income' OR type='Revenue') AND (name LIKE '%interest%' OR name LIKE '%financing%')`;
-
-        var operations_cashflow_total = `SELECT IFNULL(ROUND(SUM(debit)-SUM(credit),2),0.00) FROM ledger WHERE account_code IN (${operations_codes}) AND (DATE(txdate) BETWEEN '${startDate}' AND '${endDate}')`;
-        var investment_cashflow_total = `SELECT IFNULL(ROUND(SUM(debit)-SUM(credit),2),0.00) FROM ledger WHERE account_code IN (${investment_codes}) AND (DATE(txdate) BETWEEN '${startDate}' AND '${endDate}')`;
-        var financing_cashflow_total = `SELECT IFNULL(ROUND(SUM(debit)-SUM(credit),2),0.00) FROM ledger WHERE account_code IN (${financing_codes}) AND (DATE(txdate) BETWEEN '${startDate}' AND '${endDate}')`;
-
-        // TODO: move this INSERT in the Core.Report class per CODING STANDARDS
-        var sql = `SELECT (${starting_balance}) AS starting_balance,(${operations_cashflow_total}) AS operations_cashflow_total,(${investment_cashflow_total}) AS investment_cashflow_total, (${financing_cashflow_total}) AS financing_cashflow_total;`;
-        const model = new Model();
-        model.query(sql,callback);
+        callback(this.retrieveReportDataSync(startDate,endDate));
     }
-    async retrieveReportDataSync(startDate,endDate) {
-        return new Promise((resolve, reject) => {
-            this.retrieveReportData(startDate, endDate, function(err, results) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(results);
-                }
-            });
-        });
+    async retrieveReportDataSync(startDate,endDate) { 
+        return this.cashFlowStatementSync(startDate,endDate);
     }
 }
 

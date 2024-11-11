@@ -5,7 +5,7 @@
         <body>
             <table>
                 <tr>
-                    <td colspan="2" style="text-align:center;"><h1>Statement of Cash Flows</h1></td>
+                    <td colspan="2" style="text-align:center;"><h1>Statement of Cash Flows</h1>[USD $ millions]</td>
                 </tr>
                 <tr>
                     <td colspan="2" style="text-align: right; width:50%;">Date: <xsl:value-of select="//date" /></td>
@@ -29,11 +29,11 @@
                 <tr><td colspan="2"><hr/></td></tr>
                 <tr>
                     <th>Ending Balance</th>
-                    <td><xsl:value-of select-of="//ending_balance" /></td>
+                    <td><xsl:value-of select="//ending_balance" /></td>
                 </tr>
                 <tr>
                     <th>Management|Accountant|Auditor Note(s)</th>
-                    <td><xsl:value-of select="//statementCashFlows/notes" /></td>
+                    <td><xsl:value-of select="//notes" /></td>
                 </tr>
             </table>
         </body>
