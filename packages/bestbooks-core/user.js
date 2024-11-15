@@ -58,7 +58,7 @@ class User {
                 mobile,
                 role
             ) VALUES (?,?,?,?,?,?,?,?,?,?,?);`;
-            const fullname = `${usermeta.firstname} ${usermeta.lastname}}`;
+            const fullname = `${usermeta.firstname} ${usermeta.lastname}`;
             const params = [
                 usermeta.company_id,
                 usermeta.office_id,

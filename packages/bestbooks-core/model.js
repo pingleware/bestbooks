@@ -107,7 +107,8 @@
                 info(JSON.stringify(this)); // Log the current state of the database
         
                 // Call the callback function with the correct lastID and changes
-                callback(this.lastID, this.changes);
+                if (callback) callback(this.lastID, this.changes);
+                else error(`callback is null`);
             });    
         });
     }
