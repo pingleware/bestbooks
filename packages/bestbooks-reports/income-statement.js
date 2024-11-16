@@ -138,34 +138,6 @@ class IncomeStatement extends BaseReport {
         return _data;
     }
 
-    /*
-    createReport(startDate,endDate,_format,callback,notes="",geographic=false) {
-        this.retrieveReportData(startDate, endDate, function(data){
-            if (_format == "array") {
-
-                var formattedData = array2xml('incomeStatement',_data);
-                fs.writeFileSync(path.join(os.homedir(),'.bestbooks/income-statement.xml'), formattedData);
-
-                var txdate = new Date().getTime();
-                var buffer = require('buffer').Buffer;
-                // TODO: move this INSERT in the Core.Report class per CODING STANDARDS
-                var sql = `INSERT INTO report (txdate,name,contents) VALUES ('${txdate}','income-statement','${buffer.from(formattedData).toString('base64')}')`;
-                const model = new Model();
-                if (callback) {
-                    model.insert(sql,function(result){
-                        callback(format('incomeStatement', formattedData));
-                    });
-                } else {
-                    model.insertSync(sql);
-                    return format('incomeStatement',formattedData);
-                }
-            } else {
-                // process other formats
-            }    
-        });
-    }
-    */
-
     retrieveReportData(startDate,endDate,callback,geographic=false) {
         callback(this.retrieveReportDataSync(startDate,endDate,geographic));
     }

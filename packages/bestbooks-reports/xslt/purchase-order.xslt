@@ -79,7 +79,7 @@
                         <th style="text-align: center; width:25%;">UNIT PRICE</th>
                         <th style="text-align: center; width:25%;">AMOUNT</th>
                     </tr>
-                    <xsl:for-each select="//lineitems/lineitem">
+                    <xsl:for-each select="//lineItems/lineitem">
                     <tr><td colspan="5"><hr/></td></tr>
                         <tr>
                             <td style="text-align: center;"><xsl:value-of select="quantity" /></td>
