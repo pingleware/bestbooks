@@ -9,6 +9,7 @@ const {
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const glob = require('glob');
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -38,6 +39,19 @@ describe("Create a Customer Estimate", function(){
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
+
+        const basePath = path.join(os.homedir(), `.bestbooks`);
+        const pattern = `${basePath}/customerEstimate.*`;
+        
+        // Find files matching the pattern
+        const files = glob.sync(pattern);
+
+        // Remove each file
+        files.forEach(file => {
+            if (fs.existsSync(file)) {
+                fs.rmSync(file, { force: true });
+            }
+        });
     })
 
     it("should create an instance of CustomerEstimate", async function(){

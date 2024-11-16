@@ -6,7 +6,10 @@ const {
 const {
     AccountsPayable
 } = require('@pingleware/bestbooks-core');
+const fs = require('fs');
 const path = require('path');
+const os = require('os');
+const glob = require('glob');
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -18,9 +21,6 @@ describe("Create formatted Account Payables Aging Report", function(){
         date = new Date().toISOString().split('T')[0];
 
         report = new AccountPayablesAging();
-
-        vendorOne = new AccountsPayable("Vendor 1");
-        vendorTwo = new AccountsPayable("Vendor 2");
 
         due15DaysAgo = new Date();
         due45DaysAgo = new Date();
@@ -38,7 +38,7 @@ describe("Create formatted Account Payables Aging Report", function(){
     })
 
     beforeEach(async function() {
-        await delay(1000); // Delay of 1 second before each test
+        await delay(2000); // Delay of 2 seconds before each test
     });
 
     after(async() => {
@@ -52,11 +52,32 @@ describe("Create formatted Account Payables Aging Report", function(){
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
+
+        const basePath = path.join(os.homedir(), `.bestbooks`);
+        const pattern = `${basePath}/accountPayablesAging.*`;
+        
+        // Find files matching the pattern
+        const files = glob.sync(pattern);
+
+        // Remove each file
+        files.forEach(file => {
+            if (fs.existsSync(file)) {
+                fs.rmSync(file, { force: true });
+            }
+        });
     })
 
     it("should create an instance of AccountPayablesAging", async function(){
         assert.ok(report instanceof AccountPayablesAging);
     }) 
+
+    it("should create vendor one",async function(){
+        vendorOne = new AccountsPayable("Vendor 1");
+    })
+
+    it("should create vendor two",async function(){
+        vendorTwo = new AccountsPayable("Vendor 2");
+    })
 
     it('should add an aged debit 100 days ago for vendor one',async() => {
         const [ledger_id,journal_id] = await vendorOne.addDebit(date,"",100,due15DaysAgo.toISOString().split("T")[0]);

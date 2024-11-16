@@ -3,10 +3,13 @@ const {
     init, 
     AccountsReceivablesAging,
 } = require("../index");
-const path = require('path');
 const {
     AccountsReceivable
 } = require('@pingleware/bestbooks-core');
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+const glob = require('glob');
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -36,13 +39,11 @@ describe("Create formatted Account Receivables Aging Report", function(){
         due95DaysAgo.setDate(due95DaysAgo.getDate() - 95);
         due135DaysAgo.setDate(due135DaysAgo.getDate() - 135);
         
-        customerOne = new AccountsReceivable("Customer One");
-        customerTwo = new AccountsReceivable("Customer Two");
         init();
     })
 
     beforeEach(async function() {
-        await delay(1000); // Delay of 1 second before each test
+        await delay(2000); // Delay of 2 seconds before each test
     });
 
     after(async() => {
@@ -56,11 +57,32 @@ describe("Create formatted Account Receivables Aging Report", function(){
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
+
+        const basePath = path.join(os.homedir(), `.bestbooks`);
+        const pattern = `${basePath}/accountReceivablesAging.*`;
+        
+        // Find files matching the pattern
+        const files = glob.sync(pattern);
+
+        // Remove each file
+        files.forEach(file => {
+            if (fs.existsSync(file)) {
+                fs.rmSync(file, { force: true });
+            }
+        });
     })
 
     it("should create an instance of AccountsReceivablesAging", async function(){
         assert.ok(report instanceof AccountsReceivablesAging);
     }) 
+
+    it("shouold create customer one",async function(){
+        customerOne = new AccountsReceivable("Customer One");
+    })
+
+    it("shouold create customer two",async function(){
+        customerTwo = new AccountsReceivable("Customer Two");
+    })
 
     it('add an aged debit 500 days ago for customer one',async() => {
         const [ledger_id,journal_id] = await customerOne.addDebit(date, "", 500, due15DaysAgo.toISOString().split("T")[0]);

@@ -11,6 +11,8 @@ const {
 } = require('@pingleware/bestbooks-core');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
+const glob = require('glob');
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -37,9 +39,26 @@ describe('Create formatted Retained Earnings Report',function(){
         await report.model.insertSync(`DELETE FROM ledger;`);
         await report.model.insertSync(`DELETE FROM accounts`);
         await report.model.insertSync(`DELETE FROM journal`);
+        await report.model.insertSync(`DELETE FROM company`);
+        await report.model.insertSync(`DELETE FROM users`);
+        await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='users';`);
+        await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='company';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
+
+        const basePath = path.join(os.homedir(), `.bestbooks`);
+        const pattern = `${basePath}/retainedEarnings.*`;
+        
+        // Find files matching the pattern
+        const files = glob.sync(pattern);
+
+        // Remove each file
+        files.forEach(file => {
+            if (fs.existsSync(file)) {
+                fs.rmSync(file, { force: true });
+            }
+        });
     })
 
     it("should create an instance of RetainedEarningsReport", async function(){

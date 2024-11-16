@@ -9,6 +9,7 @@ const {
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const glob = require('glob');
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -19,27 +20,50 @@ describe('Statement of Cash Flows Report',function(){
         date = new Date().toISOString().split("T")[0];
         dateString = new Date().toDateString();
         report = new StatementCashFlows();
-        investment = new Asset("Investments","Non-Current Asset","Asset");
-        operatingAccount = new Asset("Operating Account","Current Asset","Asset");
         init();
     })
 
     beforeEach(async function() {
-        await delay(1000); // Delay of 1 second before each test
+        await delay(2000); // Delay of 2 seconds before each test
     });
 
     after(async() => {
         await report.model.insertSync(`DELETE FROM ledger;`);
         await report.model.insertSync(`DELETE FROM accounts`);
         await report.model.insertSync(`DELETE FROM journal`);
+        await report.model.insertSync(`DELETE FROM company`);
+        await report.model.insertSync(`DELETE FROM users`);
+        await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='users';`);
+        await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='company';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
+
+        const basePath = path.join(os.homedir(), `.bestbooks`);
+        const pattern = `${basePath}/statementCashFlows.*`;
+        
+        // Find files matching the pattern
+        const files = glob.sync(pattern);
+
+        // Remove each file
+        files.forEach(file => {
+            if (fs.existsSync(file)) {
+                fs.rmSync(file, { force: true });
+            }
+        });
     })
 
     it("should create an instance of StatementCashFlows", async function(){
         assert.ok(report instanceof StatementCashFlows);
     }) 
+
+    it("should create the investment account",async function(){
+        investment = new Asset("Investments","Non-Current Asset","Asset");
+    })
+
+    it("should create the operating account",async function(){
+        operatingAccount = new Asset("Operating Account","Current Asset","Asset");
+    })
 
     it('should add the investment debit entry',async() => {
         const [ledger_id,journal_id] = await investment.addDebit(date,"Investments",1000,0,0,0,"Investing")

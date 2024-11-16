@@ -30,13 +30,11 @@ describe("initialization", function(){
         })
     });
     after(function(){
-        // remove files after test
-        //xslt_list.forEach(function(file){
-        //    var fullpath = path.join(os.homedir(),`.bestbooks/${file}`);
-        //    if (fs.existsSync(fullpath)) {
-        //        fs.unlinkSync(fullpath);
-        //    }
-        //})
+        // Remove files and the directory after test
+        const fullpath = path.join(os.homedir(), `.bestbooks`);
+        if (fs.existsSync(fullpath)) {
+            fs.rmSync(fullpath, { recursive: true, force: true });
+        }
     })
     it("check if report templates were initially copied",function(){
         let copied = init();
