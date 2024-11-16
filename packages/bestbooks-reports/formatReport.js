@@ -34,9 +34,14 @@ function getReportRootFileName(reportName) {
     return report_list[reportName].split(".")[0];
 }
 
-function transform_xml_xslt(xml_content, xslt_content) {
-    const {xsltProcess, xmlParse} = require('xslt-processor');
-    return xsltProcess(xmlParse(xml_content),xmlParse(xslt_content.toString()));
+async function transform_xml_xslt(xml_content, xslt_content) {
+    const {Xslt, XmlParser} = require('xslt-processor');
+    const xslt = new Xslt();
+    const xmlParser = new XmlParser();
+    return await xslt.xsltProcess(
+        xmlParser.xmlParse(xml_content),
+        xmlParser.xmlParse(xslt_content.toString())
+    );
 }
 
 function format(reportName,xml_content) {
