@@ -70,7 +70,6 @@ const BalanceSheet = require('./balance-sheet');
 const BreakevenAnalysis = require('./breakeven-analysis');
 const BudgetVsActual = require('./budget-vs-actual');
 const IncomeStatement = require('./income-statement');
-const NoteToFinancialStatements = require('./noteToFinancialStatements');
 const StatementCashFlows = require('./statementCashFlows');
 const StatementChangeInEquity = require('./statementChangeOfEquity');
 const TrialBalance = require('./trial-balance');
