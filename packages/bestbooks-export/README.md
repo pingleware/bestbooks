@@ -1,4 +1,6 @@
-# BestBooks Accounting Application Framework - Export
+# BestBooks Accounting Application Framework - EXPORT
+
+[![npm test](https://github.com/pingleware/bestbooks-export/actions/workflows/npm-test.yml/badge.svg)](https://github.com/pingleware/bestbooks-export/actions/workflows/npm-test.yml)
 
 The export function(s) for export framework data to other formats
 
