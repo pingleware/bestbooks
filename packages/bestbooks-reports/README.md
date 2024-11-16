@@ -1,7 +1,5 @@
 # BestBooks Accounting Application Framework - Reports
 
-[![npm test](https://github.com/pingleware/bestbooks-reports/actions/workflows/npm-test.yml/badge.svg)](https://github.com/pingleware/bestbooks-reports/actions/workflows/npm-test.yml)
-
 There are no free options for creating reports from content received from a database. jsreports, jasperreports have limited free options.
 
 Hence the report design will go back to basics,
@@ -15,6 +13,9 @@ During initialization (invoking the init() function)), will copy the xslt templa
 The js2xmlparser package is used to convert an object to xml, while the xslt-processor package will transform the XML data and XSLT template to HTML format.
 
 HTML can be converted to other forms like PDF.
+
+## Test Driven Development
+When testing, run on a local system, as github workflows have issues with permissions and other problems that result in failure of the tests.
 
 ## Reporting in Accounting
 
