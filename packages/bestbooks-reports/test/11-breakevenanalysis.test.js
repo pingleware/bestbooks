@@ -13,9 +13,10 @@ const path = require('path');
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 describe("Create formatted Breakeven Analysis Report", function(){
-    let report, rent, supplies, sales, data, formattedData, xml, html;
+    let report, rent, supplies, sales, data, formattedData, xml, html, date;
 
     before(async() => {
+        date = new Date().toISOString().split("T")[0];
         report = new BreakevenAnalysis();
         rent = new FixedCost("Rent");
         supplies = new VariableCost("Supplies");
@@ -41,19 +42,19 @@ describe("Create formatted Breakeven Analysis Report", function(){
     }) 
 
     it('should add a rent entry',async() => {
-        const [ledger_id,journal_id] = await rent.addDebit(new Date().toISOString().split("T")[0],"Rent",1000);
+        const [ledger_id,journal_id] = await rent.addDebit(date,"Rent",1000);
         assert.equal(ledger_id,1);
         assert.equal(journal_id,1);
     })
 
     it('should add a supplies entry',async() => {
-        const [ledger_id,journal_id] = await supplies.addDebit(new Date().toISOString().split("T")[0],"Supplies",500);
+        const [ledger_id,journal_id] = await supplies.addDebit(date,"Supplies",500);
         assert.equal(ledger_id,2);
         assert.equal(journal_id,2);
     })
 
     it('should add a sales entry',async() => {
-        const [ledger_id,journal_id] = await sales.addCredit(new Date().toISOString().split("T")[0],"Sales",2000);
+        const [ledger_id,journal_id] = await sales.addCredit(date,"Sales",2000);
         assert.equal(ledger_id,3);
         assert.equal(journal_id,3);
     })
@@ -66,7 +67,7 @@ describe("Create formatted Breakeven Analysis Report", function(){
               total_variable_costs: 500,
               total_revenue: 2000,
               net_profit_loss: 500,
-              txdate: '2024-11-10'
+              txdate: date
             }
         ];
         assert.deepStrictEqual(data,expected);
@@ -81,7 +82,7 @@ describe("Create formatted Breakeven Analysis Report", function(){
                 total_variable_costs: 500,
                 total_revenue: 2000,
                 net_profit_loss: 500,
-                txdate: '2024-11-10'
+                txdate: date
               }
             ],
             notes: 'In our opinion, the break-even anaysis presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic Cost-Benefit.'
@@ -99,7 +100,7 @@ describe("Create formatted Breakeven Analysis Report", function(){
         <total_variable_costs>500</total_variable_costs>
         <total_revenue>2000</total_revenue>
         <net_profit_loss>500</net_profit_loss>
-        <txdate>2024-11-10</txdate>
+        <txdate>${date}</txdate>
     </lineItems>
     <notes>In our opinion, the break-even anaysis presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic Cost-Benefit.</notes>
 </breakevenAnalysis>`;

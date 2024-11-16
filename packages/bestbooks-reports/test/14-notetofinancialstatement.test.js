@@ -1,4 +1,4 @@
-const expect = require("chai").expect;
+const assert = require('assert');
 const { init, NoteToFinancialStatements } = require("../index");
 const fs = require('fs');
 

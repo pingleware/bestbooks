@@ -15,9 +15,11 @@ const path = require('path');
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 describe('Create formatted Retained Earnings Report',function(){
-    let report, retainedEarnings, commonStock, revenue, expense, data, formattedData, xml;
+    let report, retainedEarnings, commonStock, revenue, expense, data, formattedData, xml, date, dateString;
 
     before(function(done){
+        date = new Date().toISOString().split("T")[0];
+        dateString = new Date().toDateString();
         report = new RetainedEarningsReport();
         retainedEarnings = new RetainedEarnings();
         commonStock = new Equity("Common Stock");
@@ -45,43 +47,43 @@ describe('Create formatted Retained Earnings Report',function(){
     }) 
 
     it('should add opening balance entry to retained earnings',async() => {
-        const [ledger_id,journal_id] = await retainedEarnings.addCredit("2024-10-01","Opening Balance",1000);
+        const [ledger_id,journal_id] = await retainedEarnings.addCredit(date,"Opening Balance",1000);
         assert.equal(ledger_id,1);
         assert.equal(journal_id,1);
     })
 
     it('should add owner contributions entry to retained earnings',async() => {
-        const [ledger_id,journal_id] = await retainedEarnings.addCredit("2024-10-02","Owner Contribution",200);
+        const [ledger_id,journal_id] = await retainedEarnings.addCredit(date,"Owner Contribution",200);
         assert.equal(ledger_id,2);
         assert.equal(journal_id,2);
     })
 
     it('should add dividends entry to retained earnings',async() => {
-        const [ledger_id,journal_id] = await retainedEarnings.addDebit("2024-10-03","Dividends",300);
+        const [ledger_id,journal_id] = await retainedEarnings.addDebit(date,"Dividends",300);
         assert.equal(ledger_id,3);
         assert.equal(journal_id,3);
     })
 
     it('should add other adjustment entry to retained earnings',async() => {
-        const [ledger_id,journal_id] = await retainedEarnings.addCredit("2024-10-04","Other Adjustment",100);
+        const [ledger_id,journal_id] = await retainedEarnings.addCredit(date,"Other Adjustment",100);
         assert.equal(ledger_id,4);
         assert.equal(journal_id,4);
     })
 
     it('should add revenue credit entry',async() => {
-        const [ledger_id,journal_id] = await revenue.addCredit("2024-10-05","Revenue",500);
+        const [ledger_id,journal_id] = await revenue.addCredit(date,"Revenue",500);
         assert.equal(ledger_id,5);
         assert.equal(journal_id,5);
     })
 
     it('should add expense debit entry',async() => {
-        const [ledger_id,journal_id] = await expense.addDebit("2024-10-05","Expense",100);
+        const [ledger_id,journal_id] = await expense.addDebit(date,"Expense",100);
         assert.equal(ledger_id,6);
         assert.equal(journal_id,6);
     })
 
     it('should add common stock entry for owner contributions',async() => {
-        const [ledger_id,journal_id] = await commonStock.addDebit("2024-10-02","Owner Contribution",200);
+        const [ledger_id,journal_id] = await commonStock.addDebit(date,"Owner Contribution",200);
         assert.equal(ledger_id,7);
         assert.equal(journal_id,7);
     })
@@ -102,7 +104,7 @@ describe('Create formatted Retained Earnings Report',function(){
     it("should format data into array",async() => {
         const notes = `In our opinion, the retained earnings report presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 505 - Equity.`;
         const expected = {
-            date: 'Sun Nov 10 2024',
+            date: dateString,
             previous_retained_earnings: '1000.00',
             net_income: '400.00',
             dividends_paid: '0.00',
@@ -116,7 +118,7 @@ describe('Create formatted Retained Earnings Report',function(){
     it("should format array into xml",async () => {
         const expected = `<?xml version='1.0'?>
 <retainedEarnings>
-    <date>Sun Nov 10 2024</date>
+    <date>${dateString}</date>
     <previous_retained_earnings>1000.00</previous_retained_earnings>
     <net_income>400.00</net_income>
     <dividends_paid>0.00</dividends_paid>

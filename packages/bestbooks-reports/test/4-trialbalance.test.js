@@ -1,5 +1,6 @@
 const assert = require('assert');
 const { 
+    init,
     TrialBalance, 
 } = require("../index");
 const {
@@ -16,13 +17,17 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 
 describe("Create formatted Trial Balance Report", function(){
-    let report, cash, expense, revenue, data, formattedData, xml, html;
+    let report, cash, expense, revenue, data, formattedData, xml, html, date, dateString;
 
     before(function(){
+        date = new Date().toISOString().split('T')[0];
+        dateString = new Date().toDateString();
+
         report = new TrialBalance();
         cash = new Cash('Cash');
         revenue = new Revenue('Sales');
         expense = new Expense('COGS');
+        init();
     });
 
     beforeEach(async function() {
@@ -43,19 +48,19 @@ describe("Create formatted Trial Balance Report", function(){
     }) 
 
     it('should add a cash opening deposit entry',async () => {
-        const [ledger_id,journal_id] = await cash.increase("2024-01-01", "Opening Deposit", 1000.0);
+        const [ledger_id,journal_id] = await cash.increase(date, "Opening Deposit", 1000.0);
         assert.equal(ledger_id,1);
         assert.equal(journal_id,1);
     })
 
     it('should add a revenue credit entry',async () => {
-        const [ledger_id,journal_id] = await revenue.addCredit("2024-01-01", "Sales", 500.0);
+        const [ledger_id,journal_id] = await revenue.addCredit(date, "Sales", 500.0);
         assert.equal(ledger_id,2);
         assert.equal(journal_id,2);
     })
 
     it('should add an expense credit entry', async() => {
-        const [ledger_id,journal_id] = await expense.addCredit("2024-01-01", "COGS", 500.0);
+        const [ledger_id,journal_id] = await expense.addCredit(date, "COGS", 500.0);
         assert.equal(ledger_id,3);
         assert.equal(journal_id,3);
     })
@@ -70,16 +75,16 @@ describe("Create formatted Trial Balance Report", function(){
                 base_type: 'Asset',
                 total_debit: 1000,
                 total_credit: 0,
-                txdate: '2024-01-01'
+                txdate: date
             },
             {
-                code: 200,
+                code: 400,
                 name: 'COGS',
                 type: 'Expense',
-                base_type: 'Liability',
+                base_type: 'Expense',
                 total_debit: 0,
                 total_credit: 500,
-                txdate: '2024-01-01'
+                txdate: date
             },
             {
                 code: 500,
@@ -88,7 +93,7 @@ describe("Create formatted Trial Balance Report", function(){
                 base_type: 'Revenue',
                 total_debit: 0,
                 total_credit: 500,
-                txdate: '2024-01-01'
+                txdate: date
             }
         ];
         assert.deepStrictEqual(data,expected);
@@ -98,15 +103,23 @@ describe("Create formatted Trial Balance Report", function(){
         const notes = `In our opinion, the trial balance presents fairly, in all material respects, the financial position as of the date specified.`;
 
         formattedData = await report.formatArray(data,notes);
-        const expected = `{"date":"Tue Nov 05 2024","lineItems":[{"code":100,"name":"Cash","debit":"1000.00","credit":"0.00"},{"code":200,"name":"COGS","debit":"0.00","credit":"500.00"},{"code":500,"name":"Sales","debit":"0.00","credit":"500.00"}],"total":{"debit":"1000.00","credit":"1000.00"}}`;
-        assert.strictEqual(JSON.stringify(formattedData).trim(),expected.trim())
+        const expected = {
+            date: dateString,
+            lineItems: [
+              { code: 100, name: 'Cash', debit: '1000.00', credit: '0.00' },
+              { code: 400, name: 'COGS', debit: '0.00', credit: '500.00' },
+              { code: 500, name: 'Sales', debit: '0.00', credit: '500.00' }
+            ],
+            total: { debit: '1000.00', credit: '1000.00' }
+        };
+        assert.deepStrictEqual(formattedData,expected);
     })
 
     it("should format array into xml",async () => {
         xml = await report.formatXml(formattedData);
         const expected = `<?xml version='1.0'?>
 <trialBalance>
-    <date>${new Date().toDateString()}</date>
+    <date>${dateString}</date>
     <lineItems>
         <code>100</code>
         <name>Cash</name>
@@ -114,7 +127,7 @@ describe("Create formatted Trial Balance Report", function(){
         <credit>0.00</credit>
     </lineItems>
     <lineItems>
-        <code>200</code>
+        <code>400</code>
         <name>COGS</name>
         <debit>0.00</debit>
         <credit>500.00</credit>

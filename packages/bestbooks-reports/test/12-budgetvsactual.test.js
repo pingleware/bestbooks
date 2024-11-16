@@ -11,7 +11,7 @@ const path = require('path');
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 describe("Create formatted Budget vs Actual Report", function(){
-    let report, asset, data, formattedData, xml, txdate;
+    let report, asset, data, formattedData, xml, date;
 
     before(async() => {
         report = new BudgetVsActual();
@@ -86,7 +86,7 @@ describe("Create formatted Budget vs Actual Report", function(){
 
     it('should return correct budget-vs-actual report',async function() {
         data = await report.retrieveReportDataSync();
-        txdate = data[0].txdate;
+        date = data[0].txdate;
         const expected = [
             {
               account_code: 100,
@@ -98,7 +98,7 @@ describe("Create formatted Budget vs Actual Report", function(){
               actual_year_2: 3300,
               budget_year_2: 3180,
               variance_year_2: 120,
-              txdate: txdate
+              txdate: date
             }
         ];
         assert.deepStrictEqual(data,expected);
@@ -118,7 +118,7 @@ describe("Create formatted Budget vs Actual Report", function(){
                 actual_year_2: 3300,
                 budget_year_2: 3180,
                 variance_year_2: 120,
-                txdate: txdate
+                txdate: date
               }
             ],
             notes: 'In our opinion, the break-even anaysis presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 842 Adoption.'
@@ -141,7 +141,7 @@ describe("Create formatted Budget vs Actual Report", function(){
         <actual_year_2>3300</actual_year_2>
         <budget_year_2>3180</budget_year_2>
         <variance_year_2>120</variance_year_2>
-        <txdate>${txdate}</txdate>
+        <txdate>${date}</txdate>
     </lineItems>
     <notes>In our opinion, the break-even anaysis presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 842 Adoption.</notes>
 </budgetVsActual>`;

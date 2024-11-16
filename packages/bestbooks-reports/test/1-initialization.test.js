@@ -1,6 +1,10 @@
-var expect    = require("chai").expect;
-
-const { init } = require("../index");
+const assert = require('assert');
+const { 
+    init, 
+} = require("../index");
+const {
+    Model,
+} = require("@pingleware/bestbooks-core");
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -36,16 +40,16 @@ describe("initialization", function(){
     })
     it("check if report templates were initially copied",function(){
         let copied = init();
-        expect(copied).to.equal(xslt_list.length);
+        assert.strictEqual(copied,xslt_list.length);
     })
     it("verify report templates were copied",function(){
         xslt_list.forEach(function(file){
             var fullpath = path.join(os.homedir(),`.bestbooks/${file}`);
-            expect(fs.existsSync(`${fullpath}`)).to.equal(true);
+            assert.strictEqual(fs.existsSync(`${fullpath}`),true);
         })
     });
     it("verify reprot templates cannot be copied if already exist",function(){
         let copied = init();
-        expect(copied).to.equal(0);
+        assert.strictEqual(copied,0);
     })
 });

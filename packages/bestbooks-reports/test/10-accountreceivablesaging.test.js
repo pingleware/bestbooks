@@ -11,10 +11,12 @@ const {
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 describe("Create formatted Account Receivables Aging Report", function(){
-    let report, customerOne, customerTwo, data, formattedData, xml;
+    let report, customerOne, customerTwo, data, formattedData, xml, date;
     let due15DaysAgo, due20DaysAgo, due45DaysAgo, due50DaysAgo, due75DaysAgo, due80DaysAgo, due95DaysAgo, due135DaysAgo; 
 
     before(async() => {
+        date = new Date().toISOString().split('T')[0];
+
         report = new AccountsReceivablesAging();
         due15DaysAgo = new Date();
         due20DaysAgo = new Date();
@@ -47,6 +49,10 @@ describe("Create formatted Account Receivables Aging Report", function(){
         await report.model.insertSync(`DELETE FROM ledger;`);
         await report.model.insertSync(`DELETE FROM accounts`);
         await report.model.insertSync(`DELETE FROM journal`);
+        await report.model.insertSync(`DELETE FROM company`);
+        await report.model.insertSync(`DELETE FROM users`);
+        await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='users';`);
+        await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='company';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
@@ -57,49 +63,49 @@ describe("Create formatted Account Receivables Aging Report", function(){
     }) 
 
     it('add an aged debit 500 days ago for customer one',async() => {
-        const [ledger_id,journal_id] = await customerOne.addDebit(new Date().toISOString().split("T")[0], "", 500, due15DaysAgo.toISOString().split("T")[0]);
+        const [ledger_id,journal_id] = await customerOne.addDebit(date, "", 500, due15DaysAgo.toISOString().split("T")[0]);
         assert.equal(ledger_id,1);
         assert.equal(journal_id,1);
     })
 
     it('add an aged debit 200 days ago for customer one',async() => {
-        const [ledger_id,journal_id] = await customerOne.addDebit(new Date().toISOString().split("T")[0], "", 200, due45DaysAgo.toISOString().split("T")[0]);
+        const [ledger_id,journal_id] = await customerOne.addDebit(date, "", 200, due45DaysAgo.toISOString().split("T")[0]);
         assert.equal(ledger_id,2);
         assert.equal(journal_id,2);
     });
 
     it('add an aged debit 100 days ago for customer one',async() => {
-        const [ledger_id,journal_id] = await customerOne.addDebit(new Date().toISOString().split("T")[0], "", 100, due75DaysAgo.toISOString().split("T")[0]);
+        const [ledger_id,journal_id] = await customerOne.addDebit(date, "", 100, due75DaysAgo.toISOString().split("T")[0]);
         assert.equal(ledger_id,3);
         assert.equal(journal_id,3);
     });
 
     it('add an aged debit 50 days ago for customer one',async() => {
-        const [ledger_id,journal_id] = await customerOne.addDebit(new Date().toISOString().split("T")[0], "", 50, due95DaysAgo.toISOString().split("T")[0]);
+        const [ledger_id,journal_id] = await customerOne.addDebit(date, "", 50, due95DaysAgo.toISOString().split("T")[0]);
         assert.equal(ledger_id,4);
         assert.equal(journal_id,4);
     });
 
     it('add an aged debit 25 days ago for customer one',async() => {
-        const [ledger_id,journal_id] = await customerOne.addDebit(new Date().toISOString().split("T")[0], "", 25, due135DaysAgo.toISOString().split("T")[0]);
+        const [ledger_id,journal_id] = await customerOne.addDebit(date, "", 25, due135DaysAgo.toISOString().split("T")[0]);
         assert.equal(ledger_id,5);
         assert.equal(journal_id,5);
     });
 
     it('add an aged debit 1000 days ago for customer two',async() => {
-        const [ledger_id,journal_id] = await customerTwo.addDebit(new Date().toISOString().split("T")[0], "", 1000, due20DaysAgo.toISOString().split("T")[0]);
+        const [ledger_id,journal_id] = await customerTwo.addDebit(date, "", 1000, due20DaysAgo.toISOString().split("T")[0]);
         assert.equal(ledger_id,6);
         assert.equal(journal_id,6);
     });
 
     it('add an aged debit 300 days ago for customer two',async() => {
-        const [ledger_id,journal_id] = await customerTwo.addDebit(new Date().toISOString().split("T")[0], "", 300, due50DaysAgo.toISOString().split("T")[0]);
+        const [ledger_id,journal_id] = await customerTwo.addDebit(date, "", 300, due50DaysAgo.toISOString().split("T")[0]);
         assert.equal(ledger_id,7);
         assert.equal(journal_id,7);
     });
 
     it('add an aged debit 150 days ago for customer two',async() => {
-        const [ledger_id,journal_id] = await customerTwo.addDebit(new Date().toISOString().split("T")[0], "", 150, due80DaysAgo.toISOString().split("T")[0]);
+        const [ledger_id,journal_id] = await customerTwo.addDebit(date, "", 150, due80DaysAgo.toISOString().split("T")[0]);
         assert.equal(ledger_id,8);
         assert.equal(journal_id,8);
     });
@@ -116,7 +122,7 @@ describe("Create formatted Account Receivables Aging Report", function(){
               past_due_61_90: 50,
               past_due_over_90: 25,
               total_outstanding: 875,
-              txdate: '2024-11-10'
+              txdate: date
             },
             {
               account_code: 101,
@@ -127,14 +133,14 @@ describe("Create formatted Account Receivables Aging Report", function(){
               past_due_61_90: 0,
               past_due_over_90: 0,
               total_outstanding: 1450,
-              txdate: '2024-11-10'
+              txdate: date
             }
         ];
         assert.deepStrictEqual(data,expected)
     });
 
     it("should format data into array",async() => {
-        const notes = `In our opinion, the balance sheet presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 310, Receivables.`;
+        const notes = `In our opinion, the account receivables aging presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 310, Receivables.`;
 
         formattedData = await report.formatArray(data,notes);
         const expected = {
@@ -148,7 +154,7 @@ describe("Create formatted Account Receivables Aging Report", function(){
                 past_due_61_90: 50,
                 past_due_over_90: 25,
                 total_outstanding: 875,
-                txdate: '2024-11-10'
+                txdate: date
               },
               {
                 account_code: 101,
@@ -159,10 +165,10 @@ describe("Create formatted Account Receivables Aging Report", function(){
                 past_due_61_90: 0,
                 past_due_over_90: 0,
                 total_outstanding: 1450,
-                txdate: '2024-11-10'
+                txdate: date
               }
             ],
-            notes: 'In our opinion, the balance sheet presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 310, Receivables.'
+            notes: 'In our opinion, the account receivables aging presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 310, Receivables.'
         };
         assert.deepStrictEqual(formattedData,expected)
     })
@@ -180,7 +186,7 @@ describe("Create formatted Account Receivables Aging Report", function(){
         <past_due_61_90>50</past_due_61_90>
         <past_due_over_90>25</past_due_over_90>
         <total_outstanding>875</total_outstanding>
-        <txdate>2024-11-10</txdate>
+        <txdate>${date}</txdate>
     </lineItems>
     <lineItems>
         <account_code>101</account_code>
@@ -191,9 +197,9 @@ describe("Create formatted Account Receivables Aging Report", function(){
         <past_due_61_90>0</past_due_61_90>
         <past_due_over_90>0</past_due_over_90>
         <total_outstanding>1450</total_outstanding>
-        <txdate>2024-11-10</txdate>
+        <txdate>${date}</txdate>
     </lineItems>
-    <notes>In our opinion, the balance sheet presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 310, Receivables.</notes>
+    <notes>In our opinion, the account receivables aging presents fairly, in all material respects, the financial position as of the date specified in accordance with FASB ASC Topic 310, Receivables.</notes>
 </accountReceivablesAging>`;
         assert.deepStrictEqual(xml,expected);
     });
@@ -203,7 +209,7 @@ describe("Create formatted Account Receivables Aging Report", function(){
         assert.strictEqual(path.basename(filePath),"accountReceivablesAging.xml");
     })
 
-    it("should format the balance sheet report",async() => {
+    it("should format the account receivables aging report",async() => {
         html = await report.formatHtml(xml);
     })
 
