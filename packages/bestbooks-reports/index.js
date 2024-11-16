@@ -98,7 +98,6 @@ module.exports = {
     BudgetVsActual,
     IncomeStatement,
     TrialBalance,
-    NoteToFinancialStatements,
     StatementCashFlows,
     StatementChangeInEquity,
     RetainedEarningsReport,
