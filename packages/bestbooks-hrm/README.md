@@ -1,5 +1,7 @@
 # bestbooks-hrm
 
+[![npm test](https://github.com/pingleware/bestbooks-hrm/actions/workflows/npm-test.yml/badge.svg)](https://github.com/pingleware/bestbooks-hrm/actions/workflows/npm-test.yml)
+
 Human Resource Management for BestBooks Accounting Application Framework
 
 # Important Links

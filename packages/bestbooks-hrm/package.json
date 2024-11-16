@@ -25,7 +25,6 @@
   },
   "engineStrict": true,
   "dependencies": {
-    "@pingleware/bestbooks-helpers": "^1.1.16",
-    "@pingleware/bestbooks-reports": "^1.0.11"
+    "@pingleware/bestbooks-api": "^1.4.0"
   }
 }
