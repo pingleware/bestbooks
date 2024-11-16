@@ -1,4 +1,6 @@
-# BestBooks Accounting Application Framework - API Module
+# BestBooks Accounting Application Framework - API
+
+[![npm test](https://github.com/pingleware/bestbooks-api/actions/workflows/npm-test.yml/badge.svg)](https://github.com/pingleware/bestbooks-api/actions/workflows/npm-test.yml)
 
 The API module for interfacing with the BestBooks Accounting Application Framework - HELPERS which also imports the CORE module
 
