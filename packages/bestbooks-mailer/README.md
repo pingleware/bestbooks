@@ -1,4 +1,6 @@
-# BestBooks Accounting Application Framework - Mailer
+# BestBooks Accounting Application Framework - MAILER
+
+[![npm test](https://github.com/pingleware/bestbooks-mailer/actions/workflows/npm-test.yml/badge.svg)](https://github.com/pingleware/bestbooks-mailer/actions/workflows/npm-test.yml)
 
 This component provides the mailer functionality for sending and receiving email from within the BestBooks Accounting Application Framework.
 
