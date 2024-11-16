@@ -8,7 +8,7 @@ NodeJS was chosen for the code base of the architecture because of one-code-base
 
 The core module is a migration of the PHP classes from the WordPress plugin.
 
-[Overview](assets/overview.png)
+![Overview](assets/overview.png)
 
 ## Overview of the components
 | Module | Description                                                                  |
