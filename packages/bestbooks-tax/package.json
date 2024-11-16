@@ -1,10 +1,10 @@
 {
-  "name": "bestbooks-tax",
+  "name": "@pingleware/bestbooks-tax",
   "version": "1.0.0",
-  "description": "The new `bestbooks-tax` module will be an extension of the BestBooks accounting system, designed to handle various tax obligations including federal, state, and local taxes. It will support income tax calculations, sales tax management, and other specialized taxes, ensuring compliance and ease of use for businesses and individuals. Below is a detailed breakdown of the features:",
+  "description": "The new `@pingleware/bestbooks-tax` module will be an extension of the BestBooks accounting system, designed to handle various tax obligations including federal, state, and local taxes. It will support income tax calculations, sales tax management, and other specialized taxes, ensuring compliance and ease of use for businesses and individuals. Below is a detailed breakdown of the features:",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --sort --timeouts 3000"
   },
   "keywords": [
     "BestBooks Accounting Application Framework",
@@ -25,8 +25,9 @@
   },
   "engineStrict": true,
   "dependencies": {
-    "@pingleware/bestbooks-helpers": "^1.1.18",
-    "@pingleware/bestbooks-mailer": "^1.1.1",
-    "@pingleware/bestbooks-reports": "^1.0.20"
+    "@pingleware/bestbooks-api": "^1.1.2"
+  },
+  "devDependencies": {
+    "mocha": "^10.7.3"
   }
 }

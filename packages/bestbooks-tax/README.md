@@ -1,5 +1,22 @@
 # BestBooks Accounting Application Framework - TAX
-The new `bestbooks-tax` module will be an extension of the BestBooks accounting system, designed to handle various tax obligations including federal, state, and local taxes. It will support income tax calculations, sales tax management, and other specialized taxes, ensuring compliance and ease of use for businesses and individuals. Below is a detailed breakdown of the features:
+
+[![npm test](https://github.com/pingleware/bestbooks-tax/actions/workflows/npm-test.yml/badge.svg)](https://github.com/pingleware/bestbooks-tax/actions/workflows/npm-test.yml)
+
+A comprehensive library to manage federal, state, and local tax obligations for businesses and individuals.
+
+## Features
+
+- Federal income tax calculation based on tax brackets.
+- State income tax and sales tax management.
+- Local income and sales tax calculations.
+
+## Installation
+
+```bash
+npm install @pingleware/bestbooks-tax
+```
+
+The new `@pingleware/bestbooks-tax` module will be an extension of the BestBooks accounting system, designed to handle various tax obligations including federal, state, and local taxes. It will support income tax calculations, sales tax management, and other specialized taxes, ensuring compliance and ease of use for businesses and individuals. Below is a detailed breakdown of the features:
 
 ### 1. **Federal Taxes**
    - **Income Tax:** Automatically calculate federal income taxes for both individuals and businesses based on current IRS tax brackets.
