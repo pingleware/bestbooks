@@ -2,7 +2,7 @@
 
 [![npm test](https://github.com/pingleware/bestbooks-tax/actions/workflows/npm-test.yml/badge.svg)](https://github.com/pingleware/bestbooks-tax/actions/workflows/npm-test.yml)
 
-A comprehensive library to manage federal, state, and local tax obligations for businesses and individuals.
+A comprehensive library to manage federal, state, and local tax obligations for businesses and individuals. Due to the nature of taxes with changes occuring annually, this component is architecture using plugins with the first plugin example for tax brackets.
 
 ## Features
 

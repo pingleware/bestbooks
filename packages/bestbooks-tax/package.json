@@ -25,7 +25,10 @@
   },
   "engineStrict": true,
   "dependencies": {
-    "@pingleware/bestbooks-api": "^1.1.2"
+    "@pingleware/bestbooks-api": "^1.1.2",
+    "ncp": "^2.0.0",
+    "unzipper": "^0.12.3",
+    "util": "^0.12.5"
   },
   "devDependencies": {
     "mocha": "^10.7.3"

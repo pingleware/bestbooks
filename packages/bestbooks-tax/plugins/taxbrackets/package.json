@@ -1,0 +1,7 @@
+{
+    "name": "taxbrackets",
+    "version": "1.0.0",
+    "description": "A plugin for federal, state and local tax brackets",
+    "main": "index.js",
+    "dependencies": {}
+}

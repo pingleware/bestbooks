@@ -1,30 +1,31 @@
 "use strict"
 
+const PluginManager = require('./pluginManager.js');
+
 class StateTaxes {
     constructor(state) {
         this.state = state;
-        this.stateTaxRates = {
-            "CA": 0.13,
-            "NY": 0.10,
-            "TX": 0.00,
-            "FL": 0.00,
-        };
+        this.init();
     }
 
-    calculateIncomeTax(income) {
-        const rate = this.stateTaxRates[this.state] || 0.05;
+    async init() {
+        this.pluginManager = new PluginManager();
+        await this.pluginManager.loadPlugins();
+    }
+
+
+    async calculateIncomeTax(income) {
+        this.taxBracketsPlugin = await this.pluginManager.plugins.find(p => p.name === 'taxbrackets');
+        this.stateTaxRate = await this.taxBracketsPlugin.plugin.getStateTaxRates({ state: this.state });
+        const rate = this.stateTaxRate || 0.05;
         return Number(income) * Number(rate);
     }
 
-    calculateSalesTax(amount) {
-        const salesTaxRates = {
-            "CA": 0.0725,
-            "NY": 0.04,
-            "TX": 0.0625,
-            "FL": 0.06,
-        };
-
-        const rate = salesTaxRates[this.state] || 0.05;
+    async calculateSalesTax(amount) {
+        this.taxBracketsPlugin = await this.pluginManager.plugins.find(p => p.name === 'taxbrackets');
+        this.stateSalesTaxRate = await this.taxBracketsPlugin.plugin.getStateSalesTaxRates({ state: this.state });
+        
+        const rate = Number(this.stateSalesTaxRate) || 0.05;
         return Number(amount) * Number(rate);
     }
 }
