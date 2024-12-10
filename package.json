@@ -1,6 +1,6 @@
 {
-  "name": "root",
-  "private": true,
+  "name": "@pingleware/bestbooks",
+  "private": false,
   "workspaces": [
     "packages/*"
   ],
