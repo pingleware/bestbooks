@@ -1,0 +1,18 @@
+name: npm test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:  # Adds manual trigger option
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Change to package
+        uses: cd packages/bestbooks-core
