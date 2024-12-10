@@ -1,6 +1,70 @@
-# BestBooks Accounting Application Framework - CORE
+# BestBooks Accounting Application Framework - CORE (@pingleware/bestbooks-core)
 
 [![npm test @pinlgeware/bestbooks-core](https://github.com/pingleware/bestbooks/actions/workflows/npm-test-core.yml/badge.svg)](https://github.com/pingleware/bestbooks/actions/workflows/npm-test-core.yml)
+
+**Description for @pingleware/bestbooks-core**:  
+
+`@pingleware/bestbooks-core` is the foundation of the **BestBooks Accounting Framework**, providing essential tools and utilities to build robust, extensible accounting applications. Designed with developers in mind, this core library simplifies the creation of accounting features such as general ledger management, transaction tracking, and financial reporting.  
+
+Key Features:  
+- **Modular Design**: Integrate seamlessly with your existing apps or extend it with custom modules.  
+- **Multi-Ledger Support**: Handle multiple ledgers, accounts, and journals effortlessly.  
+- **Real-Time Calculations**: Ensure financial data consistency with real-time balance updates.  
+- **Built-in Accounting Standards**: Adheres to common accounting principles, making compliance easier.  
+- **Customizable Framework**: Adaptable for both small businesses and large enterprise solutions.  
+- **Developer Friendly**: Includes comprehensive documentation, example code, and APIs for rapid development.  
+
+Perfect for developers looking to create modern accounting solutions, `@pingleware/bestbooks-core` empowers you to build scalable and customizable financial software with ease.
+
+## Installation
+
+To install `@pingleware/bestbooks-core`, use npm:
+
+```bash
+npm install @pingleware/bestbooks-core
+```
+
+## Usage
+
+Here's a quick example to get you started:
+
+```js
+const { Ledger } = require('@pingleware/bestbooks-core');
+
+// Create a new ledger
+const ledger = new Ledger();
+
+// Add accounts
+ledger.addAccount('Cash', 'Asset');
+ledger.addAccount('Revenue', 'Income');
+
+// Record a transaction
+ledger.recordTransaction({
+  date: '2024-12-10',
+  description: 'Service Revenue',
+  debit: { account: 'Cash', amount: 1000 },
+  credit: { account: 'Revenue', amount: 1000 },
+});
+
+// Display the ledger
+console.log(ledger.getAccounts());
+```
+
+## Documentation
+
+For detailed documentation, visit the [BestBooks Documentation](https://www.amazon.com/dp/B07H1GQZYC).
+
+## Contributing
+
+We welcome contributions! Please read our Contributing Guide for details on how to get involved.
+
+## License
+
+This project is licensed under the CC-BY-4.0 License. See the LICENSE file for details.
+
+## Support
+
+If you have any questions or need assistance, visit [support](https://pingleware.support)
 
 
 # Test Driven Development
