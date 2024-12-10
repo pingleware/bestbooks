@@ -59,3 +59,123 @@ income statement shows the percentage of total revenu by location as defined in 
 
 ## Trial Balance
 ![Trial Balance](https://raw.githubusercontent.com/pingleware/bestbooks/main/images/README/trial-balance.png)
+
+# Testing with YARN
+If your project is structured as a monorepo with multiple packages, and each package has its own tests, you can set up Yarn to run tests for each package individually. Here's how to set it up:
+
+## 1. **Organize Your Project Structure**
+
+Assuming you're using a monorepo structure, you might have something like this:
+
+```
+/project-root
+  /packages
+    /package-1
+      /test
+      package.json
+    /package-2
+      /test
+      package.json
+  package.json
+```
+
+Each package has its own `package.json` with dependencies, including Mocha, and a `test` folder.
+
+## 2. **Add `test` Scripts in Each Package**
+In each `package.json` within the packages, add a `test` script:
+
+For example, in `packages/package-1/package.json`:
+
+```json
+{
+  "name": "package-1",
+  "scripts": {
+    "test": "mocha"
+  }
+}
+```
+
+And in `packages/package-2/package.json`:
+
+```json
+{
+  "name": "package-2",
+  "scripts": {
+    "test": "mocha"
+  }
+}
+```
+
+Each package now has a `yarn test` command that runs Mocha for that specific package.
+
+## 3. **Use Yarn Workspaces (Optional but Recommended)**
+If you're using Yarn Workspaces to manage your monorepo, make sure you have the following configuration in your root `package.json`:
+
+```json
+{
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}
+```
+
+This tells Yarn to treat the `packages/*` directory as workspaces, so it can manage dependencies across multiple packages.
+
+## 4. **Add a `test` Script in the Root `package.json`**
+In your root `package.json`, you can create a `test` script that will run the `test` script for each package. This can be done using a tool like `lerna` or `yarn workspaces run`. Here's how to set it up with Yarn Workspaces:
+
+In your root `package.json`, add the following `test` script:
+
+```json
+"scripts": {
+  "test": "yarn workspaces run test"
+}
+```
+
+This will run `yarn test` in each workspace (i.e., each package).
+
+## 5. **Run Tests for All Packages**
+Now, you can run tests for all packages by simply running:
+
+```bash
+yarn test
+```
+
+This command will invoke the `yarn test` script in each package (defined in each package's `package.json`), running the Mocha tests for each package.
+
+## 6. **Example Directory Structure**
+
+Here's an example of how it might look:
+
+```
+/project-root
+  /packages
+    /package-1
+      /test
+        example.test.js
+      package.json
+    /package-2
+      /test
+        example.test.js
+      package.json
+  package.json
+```
+
+The `yarn test` command in the root will automatically execute the tests in both `package-1` and `package-2`.
+
+## 7. **Additional Configurations**
+You can also customize the command to only run tests for specific packages if needed. For instance, using a pattern in the `test` script like:
+
+```json
+"scripts": {
+  "test": "yarn workspaces run test --scope package-1"
+}
+```
+
+This will only run the tests for `package-1`.
+
+## Summary:
+- Each package has its own `test` script in `package.json`.
+- Use Yarn Workspaces to manage your monorepo structure.
+- In the root `package.json`, use `yarn workspaces run test` to run tests for all packages.
