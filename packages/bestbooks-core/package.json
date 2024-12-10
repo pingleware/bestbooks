@@ -1,8 +1,8 @@
 {
   "name": "@pingleware/bestbooks-core",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "The core component for BestBooks Accounting Application Framework",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "mocha --sort --timeouts 3000",
     "test:help": "mocha --help"
