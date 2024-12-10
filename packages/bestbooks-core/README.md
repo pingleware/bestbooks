@@ -1,6 +1,6 @@
 # BestBooks Accounting Application Framework - CORE
 
-[![npm test](https://github.com/pingleware/bestbooks-core/actions/workflows/npm-test.yml/badge.svg)](https://github.com/pingleware/bestbooks-core/actions/workflows/npm-test.yml)
+[![npm test @pinlgeware/bestbooks-core](https://github.com/pingleware/bestbooks/actions/workflows/npm-test-core.yml/badge.svg)](https://github.com/pingleware/bestbooks/actions/workflows/npm-test-core.yml)
 
 
 # Test Driven Development
