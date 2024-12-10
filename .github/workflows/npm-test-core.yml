@@ -1,4 +1,4 @@
-name: npm test
+name: npm test @pinlgeware/bestbooks-core
 
 on:
   push:
@@ -14,5 +14,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Change to package
-        uses: cd packages/bestbooks-core
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16' # Specify the Node.js version you want to use
+
+      # Step 3: Install dependencies for the specific package
+      - name: Install dependencies
+        working-directory: packages/bestbooks-core
+        run: npm install
+
+      # Step 4: Run tests for the specific package
+      - name: Run tests
+        working-directory: packages/bestbooks-core
+        run: npm test
