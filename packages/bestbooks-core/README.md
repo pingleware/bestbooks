@@ -1,4 +1,4 @@
-# BestBooks Accounting Application Framework - CORE (@pingleware/bestbooks-core)
+# BestBooks Accounting Application Framework - CORE
 
 [![npm test @pinlgeware/bestbooks-core](https://github.com/pingleware/bestbooks/actions/workflows/npm-test-core.yml/badge.svg)](https://github.com/pingleware/bestbooks/actions/workflows/npm-test-core.yml)
 
