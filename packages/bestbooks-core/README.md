@@ -56,11 +56,11 @@ For detailed documentation, visit the [BestBooks Documentation](https://www.amaz
 
 ## Contributing
 
-We welcome contributions! Please read our Contributing Guide for details on how to get involved.
+We welcome contributions! Please read our [Contributing Guide](https://github.com/pingleware/bestbooks/blob/main/docs/CONTRIBUTING.md) for details on how to get involved.
 
 ## License
 
-This project is licensed under the CC-BY-4.0 License. See the LICENSE file for details.
+This project is licensed under the CC-BY-4.0 License. See the [LICENSE](https://raw.githubusercontent.com/pingleware/bestbooks/refs/heads/main/LICENSE) file for details.
 
 ## Support
 
