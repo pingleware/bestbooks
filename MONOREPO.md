@@ -48,9 +48,9 @@ Monorepos are ideal for tightly-coupled projects but may not suit every situatio
 1. git clone <repository_url> /<repository_name>, e.g. git clone git@github.com:pingleware/bestbooks.git ../
 2. yarn lerna import <path_of_repository>, e.g. yarn lerna import ../bestbooks-core
 
-[lerna import](images/README/lerna-import.png)
+![lerna import](images/README/lerna-import.png)
 
-[lerna import finish](images/README/lerna-import-finshed.png)
+![lerna import finish](images/README/lerna-import-finshed.png)
 
 What’s great about Lerna is that it brings in all of the git commits along with it, such that for the new repo, the history looks like development has always been happening in this monorepo. This is crucial because you are going to need the git history when someone discovers a bug after moving to the monorepo.
 
