@@ -40,7 +40,7 @@
  * account balance.
  */
 
-const AccountTypes = require('./src/accountTypes');
+const AccountTypes = require('./accountTypes');
 const Revenue = require('./revenue');
 const Journal = require('./journal');
 

@@ -1,7 +1,7 @@
 const assert = require('assert');
-const Cash = require('../cash');
-const CashReceiptsJournal = require('../journal-cashreceipts');
-const CashPaymentsJournal = require('../journal-cashpayments');
+const Cash = require('../src/cash');
+const CashReceiptsJournal = require('../src/journal-cashreceipts');
+const CashPaymentsJournal = require('../src/journal-cashpayments');
 
 describe("Cash Class", async function(){
     let cash, cashReceipts, cashPayments;

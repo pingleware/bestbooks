@@ -1,5 +1,5 @@
 const assert = require('assert');
-const Bank = require('../bank');
+const Bank = require('../src/bank');
 
 describe("Bank Class", async function(){
     let bank;

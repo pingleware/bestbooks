@@ -1,6 +1,6 @@
 const assert = require('assert');
-var ChartOfAccounts = require("../chartOfAccounts");
-var AccountTypes = require("../accountTypes");
+var ChartOfAccounts = require("../src/chartOfAccounts");
+var AccountTypes = require("../src/accountTypes");
 
 describe("DigitialCurrency Class",function(){
     let coa;

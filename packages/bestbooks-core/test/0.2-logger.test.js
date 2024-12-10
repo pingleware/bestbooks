@@ -6,7 +6,7 @@ const {
     info,
     warn,
     error
-} = require('../logger.js'); // Adjust the path to your logger module
+} = require('../src/logger.js'); // Adjust the path to your logger module
 
 describe('Logger Module', function () {
     const logDir = path.join(os.homedir(), '.bestbooks');

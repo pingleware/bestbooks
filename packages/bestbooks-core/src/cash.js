@@ -15,7 +15,7 @@
 
  "use strict"
 
- const AccountTypes = require('./src/accountTypes');
+ const AccountTypes = require('./accountTypes');
  const Asset = require('./asset');
 
 class Cash extends Asset {

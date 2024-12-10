@@ -1,6 +1,6 @@
 {
   "name": "@pingleware/bestbooks-core",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "The core component for BestBooks Accounting Application Framework",
   "main": "src/index.js",
   "scripts": {
@@ -28,7 +28,7 @@
   "bugs": {
     "url": "https://pingleware.support"
   },
-  "homepage": "https://github.com/pingleware/bestbooks-core",
+  "homepage": "https://github.com/pingleware/bestbooks/tree/main/packages/bestbooks-core",
   "funding": "https://github.com/sponsors/pingleware",
   "private": false,
   "engines": {
@@ -43,7 +43,6 @@
   "devDependencies": {
     "assert": "^2.1.0",
     "chai": "^5.1.1",
-    "mocha": "^10.7.3",
-    "sinon": "^19.0.2"
+    "mocha": "^10.7.3"
   }
 }

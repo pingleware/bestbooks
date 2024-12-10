@@ -4,7 +4,7 @@
 
  "use strict"
 
-const AccountTypes = require('./src/accountTypes');
+const AccountTypes = require('./accountTypes');
 const Revenue = require('./revenue');
 
 class Income extends Revenue {

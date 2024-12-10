@@ -52,7 +52,7 @@
  * - **Credit to increase**: Liabilities, Equity, Revenue
  * 
  */
-const AccountTypes = require('./src/accountTypes');
+const AccountTypes = require('./accountTypes');
 const Ledger = require('./ledger');
 const Journal = require('./journal');
 

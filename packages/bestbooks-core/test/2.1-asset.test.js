@@ -1,6 +1,6 @@
 const assert = require('assert');
-const Asset = require('../asset'); // Adjust the path as necessary
-const Journal = require('../journal');
+const Asset = require('../src/asset'); // Adjust the path as necessary
+const Journal = require('../src/journal');
 
 describe('Asset Class', function () {
     let asset, journal;

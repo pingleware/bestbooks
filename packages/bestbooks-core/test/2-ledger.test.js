@@ -1,8 +1,8 @@
 "use strict";
 
 const assert = require('assert');
-const Ledger = require('../ledger');
-const ChartOfAccounts = require('../chartOfAccounts');
+const Ledger = require('../src/ledger');
+const ChartOfAccounts = require('../src/chartOfAccounts');
 
 describe('Ledger Class', function() {
     let ledger, coa;

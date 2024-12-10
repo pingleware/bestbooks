@@ -72,7 +72,7 @@
  *   - Credit: If the shares are later reissued or sold back into the market.
  */
 
-const AccountTypes = require('./src/accountTypes');
+const AccountTypes = require('./accountTypes');
 const Equity = require('./equity');
 const Journal = require('./journal');
 
