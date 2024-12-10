@@ -17,6 +17,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Change to bestbooks-core package
+        run: cd packages/bestbooks-core
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -24,9 +27,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
-
-      - name: Change to bestbooks-core package
-        run: cd packages/bestbooks-core
 
       - name: Install dependencies
         run: npm install --force
