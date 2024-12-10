@@ -42,20 +42,20 @@ The reports module returns the report data in object-row format generate by SQL 
 ## Income Statement
 There are two income statement reports, a regular and a geographic income statement. The Geographic
 income statement shows the percentage of total revenu by location as defined in the location table. Here is a sample view,
-![Income Statement](https://github.com/pingleware/bestbooks/raw/master/images/README/income-statement.png)
-![Income Statement Geographic](https://github.com/pingleware/bestbooks/raw/master/images/README/income-statement-geographic.png)
+![Income Statement](https://raw.githubusercontent.com/pingleware/bestbooks/main/images/README/income-statement.png)
+![Income Statement Geographic](https://raw.githubusercontent.com/pingleware/bestbooks/main/images/README/income-statement-geographic.png)
 
 ## Balance Sheet
-![Balance Sheet](https://github.com/pingleware/bestbooks/raw/master/images/README/balance-sheet.png)
+![Balance Sheet](https://raw.githubusercontent.com/pingleware/bestbooks/main/images/README/balance-sheet.png)
 
 ## Accounts Receivable Aging
-![Accounts Receivable Aging](https://github.com/pingleware/bestbooks/raw/master/images/README/accounts-receivable-aging.png)
+![Accounts Receivable Aging](https://raw.githubusercontent.com/pingleware/bestbooks/main/images/README/accounts-receivable-aging.png)
 
 ## Accounts Payable Aging
-![Accounts Payable Aging](https://github.com/pingleware/bestbooks/raw/master/images/README/accounts-payable-aging.png)
+![Accounts Payable Aging](https://raw.githubusercontent.com/pingleware/bestbooks/main/images/README/accounts-payable-aging.png)
 
 ## Statement of Change in Equity
-![Statement of Change in Equity](https://github.com/pingleware/bestbooks/raw/master/images/README/statement-of-chnges-in-equity.png)
+![Statement of Change in Equity](https://raw.githubusercontent.com/pingleware/bestbooks/main/images/README/statement-of-chnges-in-equity.png)
 
 ## Trial Balance
-![Trial Balance](https://github.com/pingleware/bestbooks/raw/master/images/README/trial-balance.png)
+![Trial Balance](https://raw.githubusercontent.com/pingleware/bestbooks/main/images/README/trial-balance.png)
