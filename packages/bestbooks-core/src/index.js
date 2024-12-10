@@ -5,7 +5,7 @@
 "use strict"
 
 const Model = require('./model');
-const AccountTypes = require('./accountTypes');
+const AccountTypes = require('./src/accountTypes.js');
 const ChartOfAccounts = require('./chartOfAccounts');
 const Ledger = require('./ledger');
 // journals

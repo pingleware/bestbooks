@@ -5,6 +5,23 @@
  "use strict"
 
 /**
+ * See: http://www.keynotesupport.com/accounting/accounting-basics-debits-credits.shtml
+ * 
+ * Liabilities, Equity, and Revenue
+ * --------------------------------
+ * Liability, Equity, and Revenue accounts usually receive credits, 
+ * so they maintain negative balances. They are called credit accounts. 
+ * Accounting books will say “Accounts that normally maintain a negative balance 
+ * are increased with a Credit and decreased with a Debit.” 
+ * Again, look at the number line. 
+ * If you add a negative number (credit) to a negative number, 
+ * you get a larger negative number! (moving left on the number line). 
+ * But if you start with a negative number and add a positive number to it (debit), 
+ * you get a smaller negative number because you move to the right on the number line.
+ * 
+ */
+
+/**
  * Here's a summary of how increases and decreases are recorded in terms of debit and credit 
  * balances for the five main account types:
  * 
@@ -33,7 +50,7 @@
  * - **Credit to increase**: Liabilities, Equity, Revenue
  * 
  */
-const AccountTypes = require('./accountTypes');
+const AccountTypes = require('./src/accountTypes');
 const Ledger = require('./ledger');
 const Journal = require('./journal');
 
@@ -43,15 +60,15 @@ const {
     error
 } = require('./logger');
 
-class Liability extends Ledger {
+class Revenue extends Ledger {
     group = 0;
     balance = 0;
 	debit = 0;
 	credit = 0;
 
-    constructor(name,type=AccountTypes.Liability,base=AccountTypes.Liability) {
+    constructor(name,type=AccountTypes.Revenue,base=AccountTypes.Revenue) {
         super(name,type,base);
-        this.group = 200;
+        this.group = 500;
     }
 
     async addDebit(date,desc,amount,company_id=0,office_id=0,location=0,transaction_type="Operating"){
@@ -175,8 +192,8 @@ class Liability extends Ledger {
     }
 
     getAccountBaseType() {
-        return AccountTypes.Liability;
+        return AccountTypes.Revenue;
     }
 }
 
-module.exports = Liability;
+module.exports = Revenue;

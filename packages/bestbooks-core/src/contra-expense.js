@@ -48,7 +48,7 @@
  * allowances, or reimbursements. These accounts reduce the total expenses on the income statement.
  */
 
-const AccountTypes = require('./accountTypes'); // Adjust path if needed
+const AccountTypes = require('./src/accountTypes'); // Adjust path if needed
 const Expense = require('./expense'); // Assuming there's an Expense class as a base class
 const Journal = require('./journal');
 const {
