@@ -53,3 +53,5 @@ Monorepos are ideal for tightly-coupled projects but may not suit every situatio
 [lerna import finish](images/README/lerna-import-finshed.png)
 
 What’s great about Lerna is that it brings in all of the git commits along with it, such that for the new repo, the history looks like development has always been happening in this monorepo. This is crucial because you are going to need the git history when someone discovers a bug after moving to the monorepo.
+
+3. git push, to commit changes to the reposiotry
