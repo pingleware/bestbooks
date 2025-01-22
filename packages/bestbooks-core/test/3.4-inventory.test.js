@@ -11,9 +11,11 @@ describe("InventoryJournal Class", async function(){
     after(async function(){
         await journal.model.insertSync(`DELETE FROM accounts;`);
         await journal.model.insertSync(`DELETE FROM ledger;`);
+        await journal.model.insertSync(`DELETE FROM ledger_audit;`);
         await journal.model.insertSync(`DELETE FROM journal`);
         await journal.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
         await journal.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
+        await journal.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger_audit';`);
         await journal.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
     })
 
@@ -57,5 +59,18 @@ describe("InventoryJournal Class", async function(){
         await journal.removeTransaction(3);
         const transactions = await journal.getTransactions();
         assert.strictEqual(transactions.length, 2, 'Transaction should be removed');
+    });
+
+    it("should retrieve the audit log",async() => {
+        const rows = await journal.model.querySync(`SELECT l.txdate, l.account_code, l.account_name, l.debit, l.credit, l.balance, 
+                a.old_account_code, a.old_debit, a.old_credit, a.old_balance, 
+                a.new_account_code, a.new_debit, a.new_credit, a.new_balance, 
+                a.change_date, a.changed_by, a.action
+            FROM ledger_audit a
+            JOIN ledger l ON a.ledger_id = l.id
+            ORDER BY a.change_date DESC;`);
+
+        const expected = [];
+        assert.deepStrictEqual(rows, expected);
     });
 })

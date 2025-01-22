@@ -41,10 +41,12 @@ describe('Account Receivables Aging View',async function(){
 
     after(async() => {
         await report.model.insertSync(`DELETE FROM ledger;`);
+        await report.model.insertSync(`DELETE FROM ledger_audit;`);
         await report.model.insertSync(`DELETE FROM accounts`);
         await report.model.insertSync(`DELETE FROM journal`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
+        await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger_audit';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
     })
 
@@ -120,4 +122,169 @@ describe('Account Receivables Aging View',async function(){
         assert.strictEqual(rows[1].past_due_over_90, 0);
         assert.strictEqual(rows[1].total_outstanding, 1450);
     })
+
+    it("should retrieve the audit log",async() => {
+        const rows = await report.model.querySync(`SELECT l.txdate, l.account_code, l.account_name, l.debit, l.credit, l.balance, 
+                a.old_account_code, a.old_debit, a.old_credit, a.old_balance, 
+                a.new_account_code, a.new_debit, a.new_credit, a.new_balance, 
+                a.change_date, a.changed_by, a.action
+            FROM ledger_audit a
+            JOIN ledger l ON a.ledger_id = l.id
+            ORDER BY a.change_date DESC;`);
+        const expected = [
+            {
+                txdate: '2025-01-22',
+                account_code: '101',
+                account_name: 'Customer Two',
+                debit: 150,
+                credit: 0,
+                balance: 1450,
+                old_account_code: '101',
+                old_debit: 150,
+                old_credit: 0,
+                old_balance: 1450,
+                new_account_code: '101',
+                new_debit: 150,
+                new_credit: 0,
+                new_balance: 1450,
+                change_date: rows[0].change_date,
+                changed_by: 0,
+                action: 'Update'
+            },
+            {
+                txdate: '2025-01-22',
+                account_code: '101',
+                account_name: 'Customer Two',
+                debit: 300,
+                credit: 0,
+                balance: 1300,
+                old_account_code: '101',
+                old_debit: 300,
+                old_credit: 0,
+                old_balance: 1300,
+                new_account_code: '101',
+                new_debit: 300,
+                new_credit: 0,
+                new_balance: 1300,
+                change_date: rows[1].change_date,
+                changed_by: 0,
+                action: 'Update'
+            },
+            {
+                txdate: '2025-01-22',
+                account_code: '101',
+                account_name: 'Customer Two',
+                debit: 1000,
+                credit: 0,
+                balance: 1000,
+                old_account_code: '101',
+                old_debit: 1000,
+                old_credit: 0,
+                old_balance: 1000,
+                new_account_code: '101',
+                new_debit: 1000,
+                new_credit: 0,
+                new_balance: 1000,
+                change_date: rows[2].change_date,
+                changed_by: 0,
+                action: 'Update'
+            },
+            {
+                txdate: '2025-01-22',
+                account_code: '100',
+                account_name: 'Customer One',
+                debit: 25,
+                credit: 0,
+                balance: 875,
+                old_account_code: '100',
+                old_debit: 25,
+                old_credit: 0,
+                old_balance: 875,
+                new_account_code: '100',
+                new_debit: 25,
+                new_credit: 0,
+                new_balance: 875,
+                change_date: rows[3].change_date,
+                changed_by: 0,
+                action: 'Update'
+            },
+            {
+                txdate: '2025-01-22',
+                account_code: '100',
+                account_name: 'Customer One',
+                debit: 50,
+                credit: 0,
+                balance: 850,
+                old_account_code: '100',
+                old_debit: 50,
+                old_credit: 0,
+                old_balance: 850,
+                new_account_code: '100',
+                new_debit: 50,
+                new_credit: 0,
+                new_balance: 850,
+                change_date: rows[4].change_date,
+                changed_by: 0,
+                action: 'Update'
+            },
+            {
+                txdate: '2025-01-22',
+                account_code: '100',
+                account_name: 'Customer One',
+                debit: 100,
+                credit: 0,
+                balance: 800,
+                old_account_code: '100',
+                old_debit: 100,
+                old_credit: 0,
+                old_balance: 800,
+                new_account_code: '100',
+                new_debit: 100,
+                new_credit: 0,
+                new_balance: 800,
+                change_date: rows[5].change_date,
+                changed_by: 0,
+                action: 'Update'
+            },
+            {
+                txdate: '2025-01-22',
+                account_code: '100',
+                account_name: 'Customer One',
+                debit: 200,
+                credit: 0,
+                balance: 700,
+                old_account_code: '100',
+                old_debit: 200,
+                old_credit: 0,
+                old_balance: 700,
+                new_account_code: '100',
+                new_debit: 200,
+                new_credit: 0,
+                new_balance: 700,
+                change_date: rows[6].change_date,
+                changed_by: 0,
+                action: 'Update'
+            },
+            {
+                txdate: '2025-01-22',
+                account_code: '100',
+                account_name: 'Customer One',
+                debit: 500,
+                credit: 0,
+                balance: 500,
+                old_account_code: '100',
+                old_debit: 500,
+                old_credit: 0,
+                old_balance: 500,
+                new_account_code: '100',
+                new_debit: 500,
+                new_credit: 0,
+                new_balance: 500,
+                change_date: rows[7].change_date,
+                changed_by: 0,
+                action: 'Update'
+            }
+        ];
+        assert.deepStrictEqual(rows,expected);
+    });    
 });

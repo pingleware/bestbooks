@@ -13,9 +13,11 @@ describe("ContraAsset Class", async function(){
     after(async function(){
         await asset.model.insertSync(`DELETE FROM accounts;`);
         await asset.model.insertSync(`DELETE FROM ledger;`);
+        await asset.model.insertSync(`DELETE FROM ledger_audit;`);
         await asset.model.insertSync(`DELETE FROM journal`);
         await asset.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
         await asset.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
+        await asset.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger_audit';`);
         await asset.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
     })
 
@@ -80,4 +82,5 @@ describe("ContraAsset Class", async function(){
     it('should return the correct account base type',async () => {
         assert.strictEqual(await asset.getAccountBaseType(), "Asset");
     });
+
 })

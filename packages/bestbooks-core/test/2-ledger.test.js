@@ -17,8 +17,10 @@ describe('Ledger Class', function() {
     after(async function() {
         await ledger.model.insertSync(`DELETE FROM accounts;`);
         await ledger.model.insertSync(`DELETE FROM ledger;`);
+        await ledger.model.insertSync(`DELETE FROM ledger_audit;`);
         await ledger.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
         await ledger.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
+        await ledger.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger_audit';`);
     });
 
     it('should create an instance of Ledger', function() {
@@ -48,4 +50,16 @@ describe('Ledger Class', function() {
         assert.strictEqual(result.length > 0, true);
     });
 
+    it("should retrieve the audit log",async() => {
+        const rows = await ledger.model.querySync(`SELECT l.txdate, l.account_code, l.account_name, l.debit, l.credit, l.balance, 
+                a.old_account_code, a.old_debit, a.old_credit, a.old_balance, 
+                a.new_account_code, a.new_debit, a.new_credit, a.new_balance, 
+                a.change_date, a.changed_by, a.action
+            FROM ledger_audit a
+            JOIN ledger l ON a.ledger_id = l.id
+            ORDER BY a.change_date DESC;`);
+    
+        const expected = [];
+        assert.deepStrictEqual(rows, expected);
+    });
 });

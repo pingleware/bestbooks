@@ -15,9 +15,11 @@ describe("Cash Class", async function(){
     after(async function(){
         await cash.model.insertSync(`DELETE FROM accounts;`);
         await cash.model.insertSync(`DELETE FROM ledger;`);
+        await cash.model.insertSync(`DELETE FROM ledger_audit;`);
         await cash.model.insertSync(`DELETE FROM journal`);
         await cash.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
         await cash.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
+        await cash.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger_audit';`);
         await cash.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
     })
     

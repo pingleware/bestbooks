@@ -26,10 +26,12 @@ describe('Statement of Retained Earnings View',async function(){
     
     after(async() => {
         await report.model.insertSync(`DELETE FROM ledger;`);
+        await report.model.insertSync(`DELETE FROM ledger_audit;`);
         await report.model.insertSync(`DELETE FROM accounts`);
         await report.model.insertSync(`DELETE FROM journal`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
+        await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger_audit';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
     })
 
@@ -127,4 +129,93 @@ describe('Statement of Retained Earnings View',async function(){
         assert.deepStrictEqual(rows,expected);
     })
 
+    it("should retrieve the audit log",async() => {
+        const rows = await report.model.querySync(`SELECT l.txdate, l.account_code, l.account_name, l.debit, l.credit, l.balance, 
+                a.old_account_code, a.old_debit, a.old_credit, a.old_balance, 
+                a.new_account_code, a.new_debit, a.new_credit, a.new_balance, 
+                a.change_date, a.changed_by, a.action
+            FROM ledger_audit a
+            JOIN ledger l ON a.ledger_id = l.id
+            ORDER BY a.change_date DESC;`);
+
+        const expected = [
+            {
+              txdate: '2024-10-05',
+              account_code: '400',
+              account_name: 'Expense',
+              debit: 10000,
+              credit: 0,
+              balance: 10000,
+              old_account_code: '400',
+              old_debit: 10000,
+              old_credit: 0,
+              old_balance: 10000,
+              new_account_code: '400',
+              new_debit: 10000,
+              new_credit: 0,
+              new_balance: 10000,
+              change_date: rows[0].change_date,
+              changed_by: 0,
+              action: 'Update'
+            },
+            {
+              txdate: '2024-10-05',
+              account_code: '500',
+              account_name: 'Revenue',
+              debit: 0,
+              credit: 30000,
+              balance: 30000,
+              old_account_code: '500',
+              old_debit: 0,
+              old_credit: 30000,
+              old_balance: 30000,
+              new_account_code: '500',
+              new_debit: 0,
+              new_credit: 30000,
+              new_balance: 30000,
+              change_date: rows[1].change_date,
+              changed_by: 0,
+              action: 'Update'
+            },
+            {
+              txdate: '2024-10-03',
+              account_code: '301',
+              account_name: 'Dividends',
+              debit: 5000,
+              credit: 0,
+              balance: 5000,
+              old_account_code: '301',
+              old_debit: 5000,
+              old_credit: 0,
+              old_balance: 5000,
+              new_account_code: '301',
+              new_debit: 5000,
+              new_credit: 0,
+              new_balance: 5000,
+              change_date: rows[2].change_date,
+              changed_by: 0,
+              action: 'Update'
+            },
+            {
+              txdate: '2024-10-01',
+              account_code: '300',
+              account_name: 'RetainedEarnings',
+              debit: 0,
+              credit: 50000,
+              balance: 50000,
+              old_account_code: '300',
+              old_debit: 0,
+              old_credit: 50000,
+              old_balance: 50000,
+              new_account_code: '300',
+              new_debit: 0,
+              new_credit: 50000,
+              new_balance: 50000,
+              change_date: rows[3].change_date,
+              changed_by: 0,
+              action: 'Update'
+            }
+        ];
+        assert.deepStrictEqual(rows,expected);
+    });
 });

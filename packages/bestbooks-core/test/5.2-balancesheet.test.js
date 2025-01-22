@@ -37,10 +37,12 @@ describe('Balance Sheet View',async function(){
 
     after(async() => {
         await report.model.insertSync(`DELETE FROM ledger;`);
+        await report.model.insertSync(`DELETE FROM ledger_audit;`);
         await report.model.insertSync(`DELETE FROM accounts`);
         await report.model.insertSync(`DELETE FROM journal`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
+        await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger_audit';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
     })
 
@@ -128,4 +130,113 @@ describe('Balance Sheet View',async function(){
 
         assert.deepStrictEqual(rows,expected);
     })
+
+    it("should retrieve the audit log",async() => {
+        const rows = await report.model.querySync(`SELECT l.txdate, l.account_code, l.account_name, l.debit, l.credit, l.balance, 
+                a.old_account_code, a.old_debit, a.old_credit, a.old_balance, 
+                a.new_account_code, a.new_debit, a.new_credit, a.new_balance, 
+                a.change_date, a.changed_by, a.action
+            FROM ledger_audit a
+            JOIN ledger l ON a.ledger_id = l.id
+            ORDER BY a.change_date DESC;`);
+
+        const expected = [
+            {
+                txdate: '2024-02-10',
+                account_code: '200',
+                account_name: 'Expense',
+                debit: 0,
+                credit: 150,
+                balance: -350,
+                old_account_code: '200',
+                old_debit: 0,
+                old_credit: 150,
+                old_balance: -350,
+                new_account_code: '200',
+                new_debit: 0,
+                new_credit: 150,
+                new_balance: -350,
+                change_date: rows[0].change_date,
+                changed_by: 0,
+                action: 'Update'
+            },
+            {
+                txdate: '2024-01-15',
+                account_code: '200',
+                account_name: 'Expense',
+                debit: 0,
+                credit: 200,
+                balance: 200,
+                old_account_code: '200',
+                old_debit: 0,
+                old_credit: 200,
+                old_balance: 200,
+                new_account_code: '200',
+                new_debit: 0,
+                new_credit: 200,
+                new_balance: 200,
+                change_date: rows[1].change_date,
+                changed_by: 0,
+                action: 'Update'
+            },
+            {
+                txdate: '2024-02-01',
+                account_code: rows[2].account_code,
+                account_name: 'Sales',
+                debit: 300,
+                credit: 0,
+                balance: -800,
+                old_account_code: rows[2].old_account_code,
+                old_debit: 300,
+                old_credit: 0,
+                old_balance: -800,
+                new_account_code: rows[2].new_account_code,
+                new_debit: 300,
+                new_credit: 0,
+                new_balance: -800,
+                change_date: rows[2].change_date,
+                changed_by: 0,
+                action: 'Update'
+            },
+            {
+                txdate: '2024-01-01',
+                account_code: rows[3].account_code,
+                account_name: 'Sales',
+                debit: 500,
+                credit: 0,
+                balance: 500,
+                old_account_code: rows[3].old_account_code,
+                old_debit: 500,
+                old_credit: 0,
+                old_balance: 500,
+                new_account_code: rows[3].new_account_code,
+                new_debit: 500,
+                new_credit: 0,
+                new_balance: 500,
+                change_date: rows[3].change_date,
+                changed_by: 0,
+                action: 'Update'
+            },
+            {
+                txdate: '2024-01-01',
+                account_code: rows[4].account_code,
+                account_name: 'Cash',
+                debit: 1000,
+                credit: 0,
+                balance: 1000,
+                old_account_code: rows[4].old_account_code,
+                old_debit: 1000,
+                old_credit: 0,
+                old_balance: 1000,
+                new_account_code: rows[4].new_account_code,
+                new_debit: 1000,
+                new_credit: 0,
+                new_balance: 1000,
+                change_date: rows[4].change_date,
+                changed_by: 0,
+                action: 'Update'
+            }
+        ];
+        assert.deepStrictEqual(rows,expected);
+    });
 }); 

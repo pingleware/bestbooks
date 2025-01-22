@@ -34,10 +34,13 @@ describe('Account Payables Aging View',async function(){
 
     after(async() => {
         await report.model.insertSync(`DELETE FROM ledger;`);
+        await report.model.insertSync(`DELETE FROM ledger_audit;`);
         await report.model.insertSync(`DELETE FROM accounts`);
         await report.model.insertSync(`DELETE FROM journal`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='journal';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger';`);
+        await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger_audit';`);
+        await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='ledger_audit';`);
         await report.model.insertSync(`UPDATE sqlite_sequence SET seq=0 WHERE name='accounts';`);
     })
 
@@ -81,10 +84,10 @@ describe('Account Payables Aging View',async function(){
     })
 
     it('should verify the account payables aging report',async() => {
-        assert.strictEqual(rows[0].current,-150);
-        assert.strictEqual(rows[0].past_due_1_30, -200);
-        assert.strictEqual(rows[0].past_due_31_60, -300);
-        assert.strictEqual(rows[0].past_due_61_90, 0);
+        assert.strictEqual(rows[0].current,-100);
+        assert.strictEqual(rows[0].past_due_1_30, -50);
+        assert.strictEqual(rows[0].past_due_31_60, -200);
+        assert.strictEqual(rows[0].past_due_61_90, -300);
         assert.strictEqual(rows[0].past_due_over_90, 0);
         assert.strictEqual(rows[0].total_outstanding, -650);
 
@@ -96,4 +99,112 @@ describe('Account Payables Aging View',async function(){
         assert.strictEqual(rows[1].total_outstanding, -150);
 
     })
+
+    it("should retrieve the audit log",async() => {
+        const rows = await report.model.querySync(`SELECT l.txdate, l.account_code, l.account_name, l.debit, l.credit, l.balance, 
+                a.old_account_code, a.old_debit, a.old_credit, a.old_balance, 
+                a.new_account_code, a.new_debit, a.new_credit, a.new_balance, 
+                a.change_date, a.changed_by, a.action
+            FROM ledger_audit a
+            JOIN ledger l ON a.ledger_id = l.id
+            ORDER BY a.change_date DESC;`);
+        const expected = [
+            {
+                txdate: '2025-01-22',
+                account_code: '201',
+                account_name: 'Vendor 2',
+                debit: 150,
+                credit: 0,
+                balance: 150,
+                old_account_code: '201',
+                old_debit: 150,
+                old_credit: 0,
+                old_balance: 150,
+                new_account_code: '201',
+                new_debit: 150,
+                new_credit: 0,
+                new_balance: 150,
+                change_date: rows[0].change_date,
+                changed_by: 0,
+                action: 'Update'
+            },
+            {
+                txdate: '2025-01-22',
+                account_code: '200',
+                account_name: 'Vendor 1',
+                debit: 300,
+                credit: 0,
+                balance: -650,
+                old_account_code: '200',
+                old_debit: 300,
+                old_credit: 0,
+                old_balance: -650,
+                new_account_code: '200',
+                new_debit: 300,
+                new_credit: 0,
+                new_balance: -650,
+                change_date: rows[1].change_date,
+                changed_by: 0,
+                action: 'Update'
+            },
+            {
+                txdate: '2025-01-22',
+                account_code: '200',
+                account_name: 'Vendor 1',
+                debit: 200,
+                credit: 0,
+                balance: -350,
+                old_account_code: '200',
+                old_debit: 200,
+                old_credit: 0,
+                old_balance: -350,
+                new_account_code: '200',
+                new_debit: 200,
+                new_credit: 0,
+                new_balance: -350,
+                change_date: rows[2].change_date,
+                changed_by: 0,
+                action: 'Update'
+            },
+            {
+                txdate: '2025-01-22',
+                account_code: '200',
+                account_name: 'Vendor 1',
+                debit: 50,
+                credit: 0,
+                balance: -150,
+                old_account_code: '200',
+                old_debit: 50,
+                old_credit: 0,
+                old_balance: -150,
+                new_account_code: '200',
+                new_debit: 50,
+                new_credit: 0,
+                new_balance: -150,
+                change_date: rows[3].change_date,
+                changed_by: 0,
+                action: 'Update'
+            },
+            {
+                txdate: '2025-01-22',
+                account_code: '200',
+                account_name: 'Vendor 1',
+                debit: 100,
+                credit: 0,
+                balance: 100,
+                old_account_code: '200',
+                old_debit: 100,
+                old_credit: 0,
+                old_balance: 100,
+                new_account_code: '200',
+                new_debit: 100,
+                new_credit: 0,
+                new_balance: 100,
+                change_date: rows[4].change_date,
+                changed_by: 0,
+                action: 'Update'
+            }
+        ];
+        assert.deepStrictEqual(rows,expected);
+    });
 });

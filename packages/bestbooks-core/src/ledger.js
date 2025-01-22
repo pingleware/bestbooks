@@ -127,7 +127,7 @@ class Ledger extends TAccount {
 
     async createTable() {
         try {
-            const sql = `CREATE TABLE IF NOT EXISTS "ledger" (
+            let sql = `CREATE TABLE IF NOT EXISTS "ledger" (
                 "id"	INTEGER,
                 "company_id"	INTEGER,
                 "office_id"	INTEGER,
@@ -147,6 +147,38 @@ class Ledger extends TAccount {
                 PRIMARY KEY("id" AUTOINCREMENT),
                 FOREIGN KEY("performed_by") REFERENCES "users"("id")
             )`;
+            await this.model.insertSync(sql);
+
+            // creates a separate audit trable
+            sql = `CREATE TABLE IF NOT EXISTS ledger_audit (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ledger_id INTEGER,
+                old_account_code TEXT,
+                old_debit REAL,
+                old_credit REAL,
+                old_balance REAL,
+                new_account_code TEXT,
+                new_debit REAL,
+                new_credit REAL,
+                new_balance REAL,
+                change_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                changed_by INTEGER,
+                action TEXT
+            );`;
+            await this.model.insertSync(sql);
+
+            // log ledger transaction changes. Whenever a transaction is updated, insert the old and new values into ledger_audit.
+            sql = `CREATE TRIGGER IF NOT EXISTS log_ledger_update
+                    AFTER UPDATE ON ledger
+                    FOR EACH ROW
+                    BEGIN
+                        INSERT INTO ledger_audit (ledger_id, old_account_code, old_debit, old_credit, old_balance, 
+                                                new_account_code, new_debit, new_credit, new_balance, 
+                                                change_date, changed_by, action)
+                        VALUES (OLD.id, OLD.account_code, OLD.debit, OLD.credit, OLD.balance, 
+                                NEW.account_code, NEW.debit, NEW.credit, NEW.balance, 
+                                CURRENT_TIMESTAMP, NEW.performed_by, 'Update');
+                    END;`;
             await this.model.insertSync(sql);
         } catch(err) {
             error(JSON.stringify(err));
