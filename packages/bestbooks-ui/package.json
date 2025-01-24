@@ -4,7 +4,7 @@
   "description": "User aaplication for BestBooks Accounting Application Framework",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron ."
   },
   "keywords": [
     "BestBooks Accounting Application Framework",
@@ -21,5 +21,11 @@
   "engines": {
     "node": ">=6.0.0"
   },
-  "engineStrict": true
+  "engineStrict": true,
+  "devDependencies": {
+    "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "@pingleware/bestbooks-core": "^1.3.0"
+  }
 }

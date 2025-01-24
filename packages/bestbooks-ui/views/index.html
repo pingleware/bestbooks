@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BestBooks Accounting Application Framework</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/w3.css"> 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://www.w3schools.com/lib/w3.js"></script>
+        <style>
+            .header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+            }
+
+            .footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+            }            
+        </style>
+    </head>
+    <body>
+        <!-- HEADER -->
+        <h2 class="w3-container w3-blue header">BestBooks Accounting Application Framework<sup>&trade;</sup></h2>
+        <!-- MAIN -->
+        <!-- FOOTER -->
+        <h5 class="w3-container w3-blue footer">
+            &copy; 2020<span id="year"></span> by <a href="https://presspage-entertainment.biz" target="_system" style="text-decoration: none">PRESSPAGE ENTERTINMENT INC.</a> dba <a href="https://pingleware.work" target="_system" style="text-decoration: none">PINGLEWARE</a>. All rights reserved.
+            &nbsp;<span id="version" class="w3-tiny"></span>
+        </h5>   
+        <!-- JAVASCRIPT -->
+        <script type="text/javascript">
+            window.onload = function() {
+                document.getElementById("version").innerHTML = 'Version ' + localStorage.getItem('version');
+
+                const year = new Date().getFullYear();
+                if (year > 2018) {
+                    document.getElementById("year").innerHTML = '-' + year;
+                }
+            }
+        </script>
+    </body>
+</html>
