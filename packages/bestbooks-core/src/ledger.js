@@ -144,6 +144,7 @@ class Ledger extends TAccount {
                 "location"	INTEGER DEFAULT 0,
                 "due_date"	TIMESTAMP DEFAULT 0,
                 "transaction_type"	TEXT DEFAULT 'Operating',
+                "is_conservative"	TEXT DEFAULT 'non-conservative',
                 PRIMARY KEY("id" AUTOINCREMENT),
                 FOREIGN KEY("performed_by") REFERENCES "users"("id")
             )`;
@@ -179,6 +180,33 @@ class Ledger extends TAccount {
                                 NEW.account_code, NEW.debit, NEW.credit, NEW.balance, 
                                 CURRENT_TIMESTAMP, NEW.performed_by, 'Update');
                     END;`;
+            await this.model.insertSync(sql);
+
+            // create apply_conservatism_principle trigger
+            sql = `CREATE TRIGGER IF NOT EXISTS apply_conservatism_principle
+                    AFTER INSERT ON ledger
+                    FOR EACH ROW
+                    BEGIN
+                        UPDATE ledger
+                        SET is_conservative = 
+                            CASE 
+                                -- Expenses (4xxx) or Liabilities (2xxx) are always conservative
+                                WHEN NEW.account_code LIKE '4%' OR NEW.account_code LIKE '2%' THEN 'conservative'
+                                
+                                -- Revenues (5xxx) or Assets (1xxx) 
+                                WHEN NEW.account_code LIKE '5%' OR NEW.account_code LIKE '1%' THEN 
+                                    CASE 
+                                        -- If note contains 'certain', mark as non-conservative
+                                        WHEN NEW.note LIKE '%certain%' THEN 'non-conservative'
+                                        -- Otherwise, assume conservative
+                                        ELSE 'conservative'
+                                    END
+                                
+                                -- Default: For other cases, mark as non-conservative
+                                ELSE 'non-conservative'
+                            END
+                        WHERE id = NEW.id;
+                    END`;
             await this.model.insertSync(sql);
         } catch(err) {
             error(JSON.stringify(err));
