@@ -1,0 +1,271 @@
+<!-- Inventory Products -->
+<div id="inventory-products" class="w3-container" style="display:none;">
+    <br/><br/><br/>
+    <h2 class="w3-yellow">Inventory: PRODUCTS</h2>
+    <button class="w3-button w3-block w3-orange" id="inventory-products-back">Back</button>
+    <br/>
+    <fieldset>
+        <legend>Products for Resale</legend>
+        <input type="button" id="add_resale_inventory_product" onclick="document.getElementById('add-resale-product-dialog').style.display='block';" value="Add New Inventory Product for Resale" class="w3-button w3-block w3-green" />
+        <table class="w3-table w3-striped" id="inventory-resale-product-list-table">
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit Type</th>
+                <th>Cost</th>
+                <th>Price</th>
+                <th>Vendor</th>
+                <th>Action</th>
+            </tr>            
+        </table>
+    </fieldset>
+    <fieldset>
+        <legend>Products for Consumption</legend>
+        <input type="button" id="add_consumption_inventory_product" onclick="document.getElementById('add-consumption-product-dialog').style.display='block';" value="Add New Inventory Product for Consumption" class="w3-button w3-block w3-green" />
+        <table class="w3-table w3-striped" id="inventory-consumption-product-list-table">
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Cost</th>
+                <th>Vendor</th>
+                <th>Action</th>
+            </tr>
+        </table>
+    </fieldset>
+    <!-- ADD NEW PURCHASE SERVICE DIALOG -->
+	<div id="add-resale-product-dialog" class="w3-modal">
+        <div class="w3-modal-content">
+            <div class="w3-container w3-white">
+                <h2 class="w3-yellow">Add New Product for Resale</h2>
+                <label for="product_name">Name</label>
+                <input type="text" id="product_name" name="product_name" class="w3-input" value="" required />
+                <label for="product_desc">Description</label>
+                <input type="text" id="product_desc" name="product_desc" class="w3-input" value="" required />
+                <label for="product_quantity">Unit Quantity</label>
+                <input type="number" class="w3-input w3-block" name="product_quantity" id="product_quantity" value="" required />
+                <label for="product_unit_type">Unit Type</label>
+                <input type="text" class="w3-input w3-block" name="product_unit_type" id="product_unit_type" value="" required />
+                <label for="product_cost">Cost</label>
+                <input type="number" class="w3-input w3-block" name="product_cost" id="product_cost" value="" required />
+                <label for="product_price">Price</label>
+                <input type="number" class="w3-input w3-block" name="product_price" id="product_price" value="" required />
+                <br/>
+                <input type="submit" id="add_product_action" name="add_product_action" class="w3-button w3-black w3-block" value="Add" />
+                <br/>
+                <button class="w3-button w3-block w3-orange" onclick="document.getElementById('add-resale-product-dialog').style.display='none';">Cancel</button>
+                <br/>
+            </div>
+        </div>
+	</div>
+    <!-- ADD NEW PURCHASE PRODUCT DIALOG -->
+	<div id="add-consumption-product-dialog" class="w3-modal">
+        <div class="w3-modal-content">
+            <div class="w3-container w3-white">
+                <h2 class="w3-yellow">Add New Product for Consumption</h2>
+                <label for="prodserv_vendor">Vendor</label>
+                <select class="w3-input" name="product_vendor" id="product_vendor">
+                    <option value="">Select</option>
+                </select>
+                <input type="hidden" name="product_choice" id="product_choice" value="product" />
+                <label for="prodserv_name">Name</label>
+                <input type="text" id="product_name" name="product_name" class="w3-input" value="" required />
+                <label for="prodserv_desc">Description</label>
+                <input type="text" id="product_desc" name="product_desc" class="w3-input" value="" required />
+                <label for="product_quantity">Quantity</label>
+                <input type="number" class="w3-input w3-block" name="product_quantity" id="product_quantity" value="" required />
+                <label for="product_purchase_date">Purchase Date</label>
+                <input type="date" class="w3-input w3-block" name="product_purchase_date" id="product_purchase_date" value="" required />
+                <label for="product_cost">Cost</label>
+                <input type="number" class="w3-input w3-block" name="product_cost" id="product_cost" value="" required />
+                <br/>
+                <input type="submit" id="add_product_action" name="add_product_action" class="w3-button w3-black w3-block" value="Add" />
+                <br/>
+                <button class="w3-button w3-block w3-orange" onclick="document.getElementById('add-consumption-product-dialog').style.display='none';">Cancel</button>
+                <br/>
+            </div>
+        </div>
+	</div>
+</div>
+<!-- Inventory Services -->
+<div id="inventory-services" class="w3-container" style="display:none;">
+    <br/><br/><br/>
+    <h2 class="w3-yellow">Inventory: SERVICES</h2>
+    <button class="w3-button w3-block w3-orange" id="inventory-services-back">Back</button>
+    <br/>
+    <fieldset>
+        <legend>Services for Resale</legend>
+        <input type="button" id="add_inventory_service" onclick="document.getElementById('add-resale-service-dialog').style.display='block';" value="Add New Services for Resale" class="w3-button w3-block w3-green" />
+        <table class="w3-table w3-striped" id="inventory-resale-service-list-table">
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit Type</th>
+                <th>Cost</th>
+                <th>Price</th>
+                <th>Vendor</th>
+                <th>Action</th>
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset>
+        <legend>Services for Consumption</legend>
+        <input type="button" id="add_inventory_service" onclick="document.getElementById('add-consumption-service-dialog').style.display='block';" value="Add New Services for Consumption" class="w3-button w3-block w3-green" />
+        <table class="w3-table w3-striped" id="inventory-consumption-service-list-table">
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Cost</th>
+                <th>Vendor</th>
+                <th>Action</th>
+            </tr>
+        </table>
+    </fieldset>
+    <!-- ADD NEW RESALE SERVICE SERVICE DIALOG -->
+	<div id="add-resale-service-dialog" class="w3-modal">
+        <div class="w3-modal-content">
+            <div class="w3-container w3-white">
+                <h2 class="w3-green">Add New Service for Resale</h2>
+                <label for="service_name">Name</label>
+                <input type="text" id="service_name" name="service_name" class="w3-input" value="" required />
+                <label for="service_desc">Description</label>
+                <input type="text" id="service_desc" name="service_desc" class="w3-input" value="" required />
+                <label for="service_quantity">Quantity</label>
+                <input type="number" class="w3-input w3-block" name="service_quantity" id="service_quantity" value="" required />
+                <label for="service_unit_type">Unit Type</label>
+                <input type="text" class="w3-input w3-block" name="service_unit_type" id="service_unit_type" value="" required />
+                <label for="service_cost">Cost</label>
+                <input type="number" class="w3-input w3-block" name="service_cost" id="service_cost" value="" required />
+                <label for="service_price">Price</label>
+                <input type="number" class="w3-input w3-block" name="service_price" id="service_price" value="" required />
+                <br/>
+                <input type="submit" id="add_service_action" name="add_service_action" class="w3-button w3-black w3-block" value="Add" />
+                <br/>        
+                <button class="w3-button w3-block w3-orange" onclick="document.getElementById('add-resale-service-dialog').style.display='none';">Cancel</button>
+                <br/>
+            </div>
+        </div>
+	</div>
+    <!-- ADD NEW PURCHASE SERVICE DIALOG -->
+	<div id="add-consumption-service-dialog" class="w3-modal" title="Add New Service for Consumption">
+        <div class="w3-modal-content">
+            <div class="w3-container w3-white">
+                <label for="service_vendor">Vendor</label>
+                <select class="w3-input" name="service_vendor" id="service_vendor">
+                    <option value="">Select</option>
+                </select>
+                <input type="hidden" name="product_choice" id="product_choice" value="product" />
+                <label for="service_name">Name</label>
+                <input type="text" id="service_name" name="service_name" class="w3-input" value="" required />
+                <label for="service_desc">Description</label>
+                <input type="text" id="service_desc" name="service_desc" class="w3-input" value="" required />
+                <label for="product_quantity">Quantity</label>
+                <input type="number" class="w3-input w3-block" name="service_quantity" id="service_quantity" value="" required />
+                <label for="product_purchase_date">Purchase Date</label>
+                <input type="date" class="w3-input w3-block" name="service_purchase_date" id="service_purchase_date" value="" required />
+                <label for="product_cost">Cost</label>
+                <input type="number" class="w3-input w3-block" name="service_cost" id="service_cost" value="" required />
+                <br/>
+                <button id="add_service_action" name="add_service_action" class="w3-button w3-black w3-block">Add</button>
+                <br/>
+                <button class="w3-button w3-block w3-orange" onclick="document.getElementById('add-consumption-service-dialog').style.display='none';">Cancel</button>
+                <br/>
+            </div>
+        </div>
+	</div>
+</div>
+<!-- Capital Assets -->
+<div id="inventory-capital-assets" class="w3-container" style="display:none;">
+    <br/><br/><br/>
+    <h2 class="w3-yellow">Inventory: CAPITAL ASSETS</h2>
+    <button class="w3-button w3-block w3-orange" id="inventory-capital-assets-back">Back</button>
+    <br/>
+    <button class="w3-button w3-block w3-blue" id="inventory-add-capital-asset">Add Capital Asset</button>
+    <br/>
+    <button class="w3-button w3-block w3-green w3-hide" id="inventory-new-allotment">New Allotment</button>
+    <br/>
+    <table class="w3-table w3-striped" id="capital-assets-list-table">
+        <tr>
+            <th>Purchase Date</th>
+            <th>Acquisition Date</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Cost</th>
+            <th>Value</th>
+            <th>Vendor</th>
+            <th>Action</th>
+        </tr>
+    </table>
+    <!-- ADD CAPITAL ASSET DIALOG -->
+	<div id="add-capitalasset-dialog" class="w3-modal">
+        <div class="w3-modal-content">
+            <div class="w3-container w3-white">
+                <h2 class="w3-blue">Add New Capital Asset</h2>
+                <input type="hidden" name="add-capitalasset-dialog-post-id" id="add-capitalasset-dialog-post-id" value="0" />
+                <label for="add-capitalasset-dialog-vendor">Vendor</label>
+                <select class="w3-input" name="add-capitalasset-dialog-vendor" id="add-capitalasset-dialog-vendor">
+                    <option value="">Select</option>
+                </select>
+                <label for="add-capitalasset-dialog-name">Name</label>
+                <input type="text" class="w3-input w3-block" name="add-capitalasset-dialog-name" id="add-capitalasset-dialog-name" value="" required />
+                <label for="add-capitalasset-dialog-description">Description</label>
+                <textarea class="w3-input w3-block" rows="5" name="add-capitalasset-dialog-description" id="add-capitalasset-dialog-description" required></textarea>
+                <label for="add-capitalasset-dialog-quantity">Quantity</label>
+                <input type="number" class="w3-input w3-block" name="add-capitalasset-dialog-quantity" id="add-capitalasset-dialog-quantity" value="" required />
+                <label for="add-capitalasset-dialog-purchasedate">Purchase Date</label>
+                <input type="date" class="w3-input w3-block" name="add-capitalasset-dialog-purchasedate" id="add-capitalasset-dialog-purchasedate" value="" required />
+                <label for="add-capitalasset-dialog-acquisitiondate">Acquisition Date</label>
+                <input type="date" class="w3-input w3-block" name="add-capitalasset-dialog-acquisitiondate" id="add-capitalasset-dialog-acquisitiondate" value="" required />
+                <label for="add-capitalasset-dialog-disposaldate">Disposal Date</label>
+                <input type="date" class="w3-input w3-block" name="add-capitalasset-dialog-disposaldate" id="add-capitalasset-dialog-disposaldate" value="" required />
+                <label for="add-capitalasset-dialog-cost">Cost</label>
+                <input type="number" class="w3-input w3-block" name="add-capitalasset-dialog-cost" id="add-capitalasset-dialog-cost" value="" required />
+                <label for="add-capitalasset-dialog-value">Value</label>
+                <input type="number" class="w3-input w3-block" name="add-capitalasset-dialog-value" id="add-capitalasset-dialog-value" value="" required />
+                <br/>
+                <input type="button" id="add_capitalasset_action" name="add_capitalasset_action" class="w3-button w3-black w3-block" value="Add" />
+                <br/>
+                <button class="w3-button w3-block w3-orange" onclick="document.getElementById('add-capitalasset-dialog').style.display='none';">Cancel</button>
+                <br/>
+            </div>
+        </div>
+    </div>
+    <!-- NEW ALLOTMENT DIALOG -->
+	<div id="add-allotment-dialog" class="w3-modal">
+        <div class="w3-modal-content">
+            <div class="w3-container w3-white">
+                <h2 class="w3-green">Add New Allotment</h2>
+                <label for="add-allotment-category">Category</label>
+                <select class="w3-input w3-block" name="add-allotment-category" id="add-allotment-category">
+                    <option value="">-</option>
+                </select>
+                <label for="add-allotment-item-name">Item Name</label>
+                <select class="w3-input w3-block" name="add-allotment-item-name" id="add-allotment-item-name">
+                    <option value="">-</option>
+                </select>
+                <label for="add-allotment-item">Item</label>
+                <select class="w3-input w3-block" name="add-allotment-item" id="add-allotment-item">
+                    <option value="">-</option>
+                </select>
+                <label for="add-allotment-allot-to">Allot To</label>
+                <select class="w3-input w3-block" name="add-allotment-allot-to" id="add-allotment-allot-to">
+                    <option value="">-</option>
+                </select>
+                <label for="add-allotment-given-date">Given Date</label>
+                <input type="date" class="w3-input w3-block" name="add-allotment-given-date" id="add-allotment-given-date" value="" placeholder="" />
+                <label for="add-allotment-returnable">Returnable</label>
+                <input type="checkbox" class="w3-input" name="add-allotment-returnable" id="add-allotment-returnable" value="yes">&nbsp;Is this item returnable?<br/>
+                <label for="add-allotment-return-date">Return Date</label>
+                <input type="date" class="w3-input w3-block" name="add-allotment-return-date" id="add-allotment-return-date" value="" placeholder="" />
+                <br/>
+                <input type="button" id="allot_not" name="allot_not" class="w3-button w3-black w3-block" value="Allot" />
+                <br/>
+                <button class="w3-button w3-block w3-orange" onclick="document.getElementById('add-allotment-dialog').style.display='none';">Cancel</button>
+                <br/>
+            </div>
+        </div>
+    </div>
+</div>

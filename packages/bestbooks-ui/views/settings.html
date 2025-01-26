@@ -1,0 +1,16 @@
+<!-- Settings Panel -->
+<div id="settings" class="w3-container" style="display:none;">
+    <br/><br/><br/>
+    <h2 class="w3-yellow">Settings:</h2>
+    <button id="settings-back" class="w3-button w3-block w3-orange">Back</button>
+    <br/>
+    <label for="settings-pagination-limit">Pagination Limit</label>
+    <input type="number" class="w3-input w3-block" id="settings-pagination-limit" steps="any" value="" />
+    <label for="settings-corporatebook-url">Corporate Book Server URL&nbsp;(<a href="#" onclick="openBrowser('https://snapcraft.io/corporate-book')" class="w3-button w3-black">Get Corporate Book Application</a>)</label>
+    <input type="url" class="w3-input w3-block" id="settings-corporatebook-url" value="" />
+    <label for="settings-company-sender">Company Sender EMail</label>
+    <input type="email" class="w3-input w3-block" id="settings-company-sender" value="" placeholder="The email for BestBooks Mailer?" />
+    <br/>
+    <button id="settings-save" class="w3-button w3-block w3-black">Save</button>
+    <br/><br/><br/>
+</div>

@@ -9,7 +9,7 @@ function createWindow () {
     mainWindow = new BrowserWindow({
       width: 1200,
       height: 900,
-      icon: path.join(__dirname, "assets/logo.png"),
+      icon: path.join(__dirname, "assets/bestbooks.png"),
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: true,
@@ -34,3 +34,7 @@ app.on("window-all-closed", function () {
 app.on("activate", function () {
   if (mainWindow === null) createWindow();
 });
+
+// Load IPC routines
+var ipc = require('./ipc.js');
+ipc._mainWindow = mainWindow;

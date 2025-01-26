@@ -1,0 +1,109 @@
+<!-- shareholder list -->
+<div id="shareholder-list" class="w3-container" style="display:none;">
+    <br/><br/><br/>
+    <h2 class="w3-yellow">Shareholder: LIST</h2>
+    <button class="w3-button w3-block w3-orange" id="shareholder-list-back">Back</button>
+    <br/>
+    <button class="w3-button w3-block w3-blue" id="shareholder-add-new">Add Shareholder</button>
+    <table class="w3-table w3-striped" id="shareholder-list-table">
+        <tr>
+            <th>Name</th>
+            <th>Place of Residence</th>
+            <th>Total Invested</th>
+            <th>Action</th>
+        </tr>
+    </table>
+    <!-- SHAREHOLDER ADD DIALOG -->
+    <div class="w3-modal" id="shareholder-add-dialog">
+        <div class="w3-modal-content">
+            <div class="w3-container w3-white">
+                <h2 class="w3-yellow">Add a Shareholder</h2>
+                <label for="shareholder-add-dialog-name">Name</label>
+                <input type="text" id="shareholder-add-dialog-name" class="w3-input w3-block" value="" />
+                <label for="shareholder-place-of-residence">Place of Residence</label>
+                <input type="number" steps="any" id="shareholder-total-invested" class="w3-input w3-block" value="" />
+                <label for="shareholder-clasification">Classification</label>
+                <select class="w3-inptu w3-block" id="shareholder-clasification">
+                    <option value="">Select</option>
+                    <option value="non-accredited">Non-accredited</option>
+                    <option value="accredited">Accredtied</option>
+                    <option value="sophisticated">Sophisticated</option>
+                    <option value="affiliate">Affiliate</option>
+                </select>
+                <br/>
+                <button class="w3-button w3-block w3-black" id="shareholder-add-dialog-save">Save</button>
+                <br/>
+                <button class="w3-button w3-block w3-orange" onclick="document.getElementById('shareholder-add-dialog').style.display='none'">Cancel</button>
+                <br/>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- shareholder issuance shares -->
+<div id="shareholder-issuance" class="w3-container" style="display:none;">
+    <br/><br/><br/>
+    <h2 class="w3-yellow">Shareholder: ISSUE</h2>
+    <button class="w3-button w3-block w3-orange" id="shareholder-issuance-back">Back</button>
+    <br/>
+    <label for="shareholder-issuance-name">Shareholder Name</label>
+    <select class="w3-input w3-block" id="shareholder-issuance-name">
+        <option value="">Select</option>
+    </select>
+    <label for="shareholder-issuance-certificateno">Shareholder Certificate Number</label>
+    <input type="text" id="shareholder-issuance-certificateno" class="w3-input w3-block" value="" />
+    <label for="shareholder-issuance-shares">Shareholder Number of Shares Issued</label>
+    <input type="number" id="shareholder-issuance-shares" steps="any" class="w3-input w3-block" value="" />
+    <label for="shareholder-issuance-date">Shareholder Certificate Issue Date</label>
+    <input type="date" id="shareholder-issuance-date" class="w3-input w3-block" value="" />
+    <label for="shareholder-issuance-amountpaid">Shareholder Amount Paid</label>
+    <input type="number" id="shareholder-issuance-amountpaid" steps="any" class="w3-input w3-block" value="" />
+    <label for="shareholder-issuance-parvalue">Shares Par Value</label>
+    <input type="number" id="shareholder-issuance-parvalue" steps="any" class="w3-input w3-block" value="5" />
+    <label for="shareholder-issuance-certificate-image">Shareholder Certificate Image</label>
+    <input type="file" id="shareholder-issuance-certificate-image" class="w3-input w3-block" />
+    <button class="w3-button w3-block w3-black" id="shareholder-issuance-save">Save</button>
+</div>
+<!-- shareholder trasnfer shares -->
+<div id="shareholder-transfer" class="w3-container" style="display:none;">
+    <br/><br/><br/>
+    <h2 class="w3-yellow">Shareholder: TRANSFER</h2>
+    <button class="w3-button w3-block w3-orange" id="shareholder-transfer-back">Back</button>
+    <br/>
+    <label for="shareholder-transfer-name-from">Shareholder Name</label>
+    <select class="w3-input w3-block" id="shareholder-transfer-name-from">
+        <option value="">Select</option>
+    </select>
+    <label for="shareholder-transfer-certificate">Shareholder Certificate(s)</label>
+    <select class="w3-input w3-block" id="shareholder-transfer-certificate" disabled>
+        <option value="">Select</option>
+    </select>
+    <label for="shareholder-transfer-name-to">Receiving Shareholder Name</label>
+    <select class="w3-input w3-block" id="shareholder-transfer-name-to">
+        <option value="">Select</option>
+    </select>
+    <label for="shareholder-transfer-amountpaid">Amount Paid by Receiving Shareholder</label>
+    <input type="number" id="shareholder-transfer-amountpaid" steps="any" class="w3-input w3-block" value="" />
+    <label for="shareholder-transfer-parvalue">Shares Par Value</label>
+    <input type="number" id="shareholder-transfer-parvalue" steps="any" class="w3-input w3-block" value="5" />
+    <label for="shareholder-transfer-date">Shareholder Certificate Transfer Date</label>
+    <input type="date" id="shareholder-transfer-date" class="w3-input w3-block" value="" />
+    <button class="w3-button w3-block w3-black" id="shareholder-transfer-save">Save</button>
+</div>
+<!-- shareholder redeem shares -->
+<div id="shareholder-redeem" class="w3-container" style="display:none;">
+    <br/><br/><br/>
+    <h2 class="w3-yellow">Shareholder: REDEEM</h2>
+    <button class="w3-button w3-block w3-orange" id="shareholder-redeem-back">Back</button>
+    <br/>
+    <label for="shareholder-redeem-name">Shareholder Name</label>
+    <select class="w3-input w3-block" id="shareholder-redeem-name">
+        <option value="">Select</option>
+    </select>
+    <label for="shareholder-redeem-certificate">Shareholder Certificate(s)</label>
+    <select class="w3-input w3-block" id="shareholder-redeem-certificate" disabled>
+        <option value="">Select</option>
+    </select>
+    <label for="shareholder-redeem-shares">Number of Shares to Redeem</label>
+    <input type="number" id="shareholder-redeem-shares" class="w3-input w3-block" steps="any" value="" />
+    <button class="w3-button w3-block w3-black" id="shareholder-redeem-save">Save</button>
+</div>

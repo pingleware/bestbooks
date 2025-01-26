@@ -1,0 +1,103 @@
+<!-- Payroll Activities -->
+<div id="payroll-activities" class="w3-container" style="display:none;">
+    <br/><br/><br/>
+    <h2 class="w3-yellow">Payroll: ONBOARDING</h2>
+    <button class="w3-button w3-block w3-orange" id="payroll-activities-back">Back</button>
+    <br/>
+    <button class="w3-button w3-block w3-green" onclick="document.getElementById('staff-video-dialog').style.display='block';"  id="payroll-staff-videos">Staff Videos</button>
+    <fieldset>
+        <legend>Employee</legend>
+        <label for="employee-name">Name</label>
+        <input type="text" id="employee-name" class="w3-input w3-block" value="" />
+        <fieldset>
+            <legend>State</legend>
+            <label for="payroll-state">State</label>
+            <select id="payroll-state" class="w3-input w3-block">
+                <option value="">Select</option>
+                <option data-state="Florida" value="https://www.mybenefits.myflorida.com/new_career/new_hires_getting_started/new_employee_on_boarding_checklist">Florida</option>
+                <option data-state="New York" value="">New York</option>
+            </select>    
+        </fieldset>
+        <fieldset>
+            <legend>Federal</legend>
+            <label for="federal-employee-classification">Classification</label>
+            <select id="federal-employee-classification" class="w3-input w3-block">
+                <option value="">Select</option>
+                <option value="w2">W-2</option>
+                <option value="1099">1099</option>
+                <option value="volunteer">Volunteer</option>
+                <option value="intern">Unpaid Intern</optoin>
+            </select>
+        </fieldset>
+        <fieldset>
+            <legend>Immigration: I-9</legend>
+        </fieldset>    
+    </fieldset>
+    <!-- STAFF VIDEO DIALOG -->
+    <div id="staff-video-dialog" class="w3-modal">
+        <div class="w3-modal-content">
+            <div class="w3-container w3-white">
+                <h2 class="w3-yellow">Staff Video's</h2>
+                <fieldset>
+                    <legend>Add New</legend>
+                    <label for="staff-video-title">Title</label>
+                    <input type="text" class="w3-input w3-block" id="staff-video-title" value="" />
+                    <label for="staff-video-url">URL</label>
+                    <input type="url" class="w3-input w3-block" id="staff-video-url" value="" />
+                    <button class="w3-button w3-block w3-black" id="add-staff-video">Add</button>
+                </fieldset>
+                <table class="w3-table w3-block">
+                    <tr>
+                        <th>Title</th>
+                        <th>URL</th>
+                        <th>Action</th>
+                    </tr>
+                </table>
+                <button onclick="document.getElementById('staff-video-dialog').style.display='none';" class="w3-button w3-block w3-orange">Cancel</button>
+                <br/>
+            </div>
+        </div>
+    </div>
+    <!-- W-2 Dialog -->
+    <div id="federal-w2-dialog" class="w3-modal">
+        <div class="w3-modal-content">
+            <div class="w3-container w3-white">
+                <h2 class="w3-yellow">Federal Employment Reporting: W-2</h2>
+                <p>Copy from W-2 completed by employee.</p>
+                <button onclick="document.getElementById('federal-w2-dialog').style.display='none';" class="w3-button w3-block w3-orange">Cancel</button>
+                <br/>
+            </div>
+        </div>
+    </div>
+    <!-- 1099 dialog -->
+    <div id="federal-1099-dialog" class="w3-modal">
+        <div class="w3-modal-content">
+            <div class="w3-container w3-white">
+                <h2 class="w3-yellow">Federal Employment Reporting: 1099</h2>
+                <button onclick="document.getElementById('federal-1099-dialog').style.display='none';" class="w3-button w3-block w3-orange">Cancel</button>
+                <br/>
+            </div>
+        </div>
+    </div>
+    <!-- volunteer dialog -->
+    <div id="federal-volunteer-dialog" class="w3-modal">
+        <div class="w3-modal-content">
+            <div class="w3-container w3-white">
+                <h2 class="w3-yellow">Federal Employment Reporting: Volunteer</h2>
+                <button onclick="document.getElementById('federal-volunteer-dialog').style.display='none';" class="w3-button w3-block w3-orange">Cancel</button>
+                <br/>
+            </div>
+        </div>
+    </div>
+    <!-- intern dialog -->
+    <div id="federal-intern-dialog" class="w3-modal">
+        <div class="w3-modal-content">
+            <div class="w3-container w3-white">
+                <h2 class="w3-yellow">Federal Employment Reporting: Intern</h2>
+                <button onclick="document.getElementById('federal-intern-dialog').style.display='none';" class="w3-button w3-block w3-orange">Cancel</button>
+                <br/>
+            </div>
+        </div>
+    </div>
+    <br/><br/><br/>
+</div>
