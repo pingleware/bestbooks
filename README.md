@@ -16,6 +16,7 @@ The core module is a migration of the PHP classes from the WordPress plugin.
 | [auditor](packages/bestbooks-auditor)  | algorithmic auditing |  1.0.7  |
 | [helpers](packages/bestbooks-helpers) | common methods used in accounting |  1.1.19 |
 | [api](packages/bestbooks-api) | an API server interface |  1.4.0  |
+| [receipts](packages/bestbooks-receipts) | Cordova application for receipy handling | 1.0.0 |
 | [reports](packages/bestbooks-reports) | an XML based report generation without any third-party reporting frameworks |  1.2.1  |
 | [export](packages/bestbooks-export) | permit exporting the records to other formats |  1.0.6  |
 | [import](packages/bestbooks-import)  | permit importing financial information from other formats |  1.0.7  |
@@ -179,3 +180,110 @@ This will only run the tests for `package-1`.
 - Each package has its own `test` script in `package.json`.
 - Use Yarn Workspaces to manage your monorepo structure.
 - In the root `package.json`, use `yarn workspaces run test` to run tests for all packages.
+
+# Creating New Packages
+If you're working with an existing monorepo and want to add a new package using **Yarn, npm, or Lerna**, here’s how you can do it:  
+
+---
+
+### **Using Yarn Workspaces**
+1. Navigate to the root of your monorepo:
+   ```sh
+   cd /path/to/monorepo
+   ```
+2. Create a new package inside the workspace directory (e.g., `packages`):
+   ```sh
+   mkdir packages/new-package
+   cd packages/new-package
+   yarn init -y
+   ```
+3. Add dependencies if needed:
+   ```sh
+   yarn add some-dependency
+   ```
+4. Ensure the `package.json` contains:
+   ```json
+   {
+     "name": "@your-scope/new-package",
+     "version": "1.0.0",
+     "main": "index.js"
+   }
+   ```
+5. Add the new package to your workspace (if not automatically included) by updating `package.json` in the root:
+   ```json
+   {
+     "workspaces": ["packages/*"]
+   }
+   ```
+6. Run:
+   ```sh
+   yarn install
+   ```
+
+---
+
+### **Using npm Workspaces**
+1. Navigate to the monorepo root:
+   ```sh
+   cd /path/to/monorepo
+   ```
+2. Create the package directory:
+   ```sh
+   mkdir packages/new-package
+   cd packages/new-package
+   npm init -y
+   ```
+3. Add dependencies:
+   ```sh
+   npm install some-dependency
+   ```
+4. Ensure `package.json` contains:
+   ```json
+   {
+     "name": "@your-scope/new-package",
+     "version": "1.0.0",
+     "main": "index.js"
+   }
+   ```
+5. Ensure your root `package.json` has workspaces enabled:
+   ```json
+   {
+     "workspaces": ["packages/*"]
+   }
+   ```
+6. Install dependencies:
+   ```sh
+   npm install
+   ```
+
+---
+
+### **Using Lerna**
+If you’re using Lerna (with or without workspaces), follow these steps:
+
+1. Navigate to the monorepo root:
+   ```sh
+   cd /path/to/monorepo
+   ```
+2. Run:
+   ```sh
+   npx lerna create new-package packages/new-package
+   ```
+   Or, if using global Lerna:
+   ```sh
+   lerna create new-package packages/new-package
+   ```
+3. This initializes a new package, and you can now add dependencies:
+   ```sh
+   lerna add some-dependency --scope=@your-scope/new-package
+   ```
+4. Bootstrap everything:
+   ```sh
+   lerna bootstrap
+   ```
+
+---
+
+### **Final Check**
+- Ensure the new package is properly referenced in your workspace setup.
+- Run `yarn install`, `npm install`, or `lerna bootstrap` again if necessary.
