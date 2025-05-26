@@ -76,7 +76,7 @@ const TrialBalance = require('./trial-balance');
 const RetainedEarningsReport = require('./retained-earnings');
 const PurchaseOrder = require('./purchase-order');
 const CustomerEstimate = require('./customer-estimate');
-
+const NoteToFinancialStatements = require('./noteToFinancialStatements');
 
 
 const parseString = require('xml2js').parseString;
@@ -103,6 +103,7 @@ module.exports = {
     RetainedEarningsReport,
     PurchaseOrder,
     CustomerEstimate,
+    NoteToFinancialStatements,
     parseString,
     getReportFileName,
     getReportRootFileName,
