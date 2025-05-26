@@ -3,15 +3,6 @@
     "version": "1.2.4",
     "description": "The core component for BestBooks Accounting Application Framework",
     "main": "lib/index.js",
-    "files": [
-        "package.json",
-        "lib",
-        "assets",
-        "test",
-        "README.md",
-        "CHANGELOG.md",
-        "LICENSE"
-    ],
     "scripts": {
         "build": "echo 'Building core package'",
         "start": "node .",
