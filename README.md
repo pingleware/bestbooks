@@ -12,7 +12,7 @@ The core module is a migration of the PHP classes from the WordPress plugin.
 ## Package list
 | Module | Description                                                                   | Version |
 |--------|------------------------------------------------------------------------------ | ------- |
-| [core](packages/bestbooks-core)   | The core which provides database connectivity and logging |  1.2.3  |
+| [core](packages/bestbooks-core)   | The core which provides database connectivity and logging |  1.3.3  |
 | [auditor](packages/bestbooks-auditor)  | algorithmic auditing |  1.0.7  |
 | [helpers](packages/bestbooks-helpers) | common methods used in accounting |  1.1.19 |
 | [api](packages/bestbooks-api) | an API server interface |  1.4.0  |
