@@ -1,10 +1,12 @@
 {
   "name": "@pingleware/bestbooks-reports",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Reports module for BestBooks Accounting Application Framework",
   "main": "index.js",
   "files": [
     "xslt/**",
+    "account-payables-aging.js",
+    "account-receivables-aging.js",
     "balance-sheet.js",
     "customer-estimate.js",
     "formatReport.js",
@@ -17,7 +19,8 @@
     "statementChangeOfEquity.js",
     "trial-balance.js",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "test": "mocha --sort --timeouts 5000"
