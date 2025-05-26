@@ -13,7 +13,7 @@ The core module is a migration of the PHP classes from the WordPress plugin.
 ## Overview of the components
 | Module | Description                                                                   | Version |
 |--------|------------------------------------------------------------------------------ | ------- |
-| [core](https://github.com/pingleware/bestbooks-core)   | The core which provides database connectivity and logging |  1.3.3  |
+| [core](https://github.com/pingleware/bestbooks-core)   | The core which provides database connectivity and logging |  1.3.4  |
 | [auditor](https://github.com/pingleware/bestbooks-auditor)  | algorithmic auditing |  1.0.7  |
 | [helpers](https://github.com/pingleware/bestbooks-helpers) | common methods used in accounting |  1.1.19 |
 | [api](https://github.com/pingleware/bestbooks-api) | an API server interface |  1.4.0  |
