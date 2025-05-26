@@ -1,15 +1,8 @@
 {
   "name": "@pingleware/bestbooks",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
-    "test": "yarn workspaces run test"
+    "test:core": "mocha packages/bestbooks-core/test --sort --timeout 3000"
   },
-  "license": "CC-BY-4.0",
-  "dependencies": {},
-  "devDependencies": {
-    "lerna": "^8.1.9"
-  }
+  "license": "CC-BY-4.0"
 }

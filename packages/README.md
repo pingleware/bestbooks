@@ -14,14 +14,19 @@
 | [ui](bestbooks-ui)      | user application | 1.0.0 |
 
 ## Create a Package
+Using NPM as yarn, lerna and bit have compatibility issues.
+
 ```sh
-cd /path/to/bestbooks # Navigate to the root of your monorepo
-npx lerna create @pingleware/bestbooks-core # Create a new package from the root
-# adding dependencies
-cd packages/bestbooks-core # change to package path
-yarn add sqlite3 localStorage # add sqlite3 localStorage dependency
-yarn add --dev acorn # add acorn as a dev dependency to the package-only
-# add dev dependency for all packages to use
-cd ..
-yarn add --dev mocha # add mocha as a dev dependecy for all packages
+mkdir -p packages/bestbooks-core
+cd packages/bestbooks-core
+npm init -y
+# edit package.json as necessary
+npm i <dependencies>
+```
+
+to publish,
+```sh
+cd packages/bestbooks-core
+npm login
+npm publish --access public
 ```
