@@ -1,0 +1,52 @@
+{
+  "name": "@pingleware/bestbooks-reports",
+  "version": "1.2.2",
+  "description": "Reports module for BestBooks Accounting Application Framework",
+  "main": "index.js",
+  "files": [
+    "xslt/**",
+    "balance-sheet.js",
+    "customer-estimate.js",
+    "formatReport.js",
+    "income-statement.js",
+    "noteToFinancialStatements.js",
+    "purchase-order.js",
+    "report.js",
+    "retained-earnings.js",
+    "statementCashFlows.js",
+    "statementChangeOfEquity.js",
+    "trial-balance.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "mocha --sort --timeouts 5000"
+  },
+  "keywords": [
+    "BestBooks Accounting Application Framework",
+    "pingleware"
+  ],
+  "author": "PressPage Entertainment Inc <presspage.entertainment@gmail.com>",
+  "license": "CC-BY-4.0",
+  "bugs": {
+    "url": "https://pingleware.support"
+  },
+  "homepage": "https://github.com/pingleware/bestbooks",
+  "funding": "https://github.com/sponsors/pingleware",
+  "private": false,
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "engineStrict": true,
+  "devDependencies": {
+    "exceljs": "^4.4.0",
+    "glob": "^11.0.0",
+    "mocha": "^10.8.2"
+  },
+  "dependencies": {
+    "@pingleware/bestbooks-core": "^1.3.4",
+    "js2xmlparser": "^5.0.0",
+    "xml2js": "^0.6.2",
+    "xslt-processor": "^3.3.1"
+  }
+}
