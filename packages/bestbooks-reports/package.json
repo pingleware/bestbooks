@@ -1,6 +1,6 @@
 {
   "name": "@pingleware/bestbooks-reports",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Reports module for BestBooks Accounting Application Framework",
   "main": "index.js",
   "files": [
@@ -8,6 +8,8 @@
     "account-payables-aging.js",
     "account-receivables-aging.js",
     "balance-sheet.js",
+    "breakeven-analysis.js",
+    "budget-vs-actual.js",
     "customer-estimate.js",
     "formatReport.js",
     "income-statement.js",
