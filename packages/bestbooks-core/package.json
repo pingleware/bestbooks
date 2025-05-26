@@ -1,0 +1,59 @@
+{
+    "name": "@pingleware/bestbooks-core",
+    "version": "1.2.4",
+    "description": "The core component for BestBooks Accounting Application Framework",
+    "main": "lib/index.js",
+    "files": [
+        "package.json",
+        "lib",
+        "assets",
+        "test",
+        "README.md",
+        "CHANGELOG.md",
+        "LICENSE"
+    ],
+    "scripts": {
+        "build": "echo 'Building core package'",
+        "start": "node .",
+        "test": "mocha --sort --timeouts 3000",
+        "test:help": "mocha --help"
+    },
+    "keywords": [
+        "bestbooks",
+        "bookkeeping",
+        "accounting"
+    ],
+    "author": {
+        "name": "PressPage Entertainment Inc",
+        "email": "presspage.entertainement@gmail.com",
+        "url": "https://presspage-entertainment.biz"
+    },
+    "maintainers": [
+        {
+            "name": "PressPage Entertainment Inc DBA PINGLEWARE",
+            "email": "maintainers@pingleware.work",
+            "url": "https://pingleware.support"
+        }
+    ],
+    "license": "CC-BY-4.0",
+    "bugs": {
+        "url": "https://pingleware.support"
+    },
+    "homepage": "https://github.com/pingleware/bestbooks-core",
+    "funding": "https://github.com/sponsors/pingleware",
+    "private": false,
+    "engines": {
+        "node": ">=6.0.0"
+    },
+    "engineStrict": true,
+    "dependencies": {
+        "localStorage": "^1.0.4",
+        "sqlite3": "^5.1.7"
+    },
+    "devDependencies": {
+        "assert": "^2.1.0",
+        "chai": "^5.1.1",
+        "mocha": "^10.7.3",
+        "sinon": "^20.0.0"
+    }
+}
