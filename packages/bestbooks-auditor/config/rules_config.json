@@ -1,0 +1,24 @@
+{
+    "rules": [
+      {
+        "id": "GAAP-105-01",
+        "description": "All financial statements must be prepared using accrual accounting.",
+        "condition": "accountingMethod === 'accrual'",
+        "severity": "high"
+      },
+      {
+        "id": "GAAP-105-02",
+        "description": "Assets should be recorded at historical cost.",
+        "condition": "assetValue === historicalCost",
+        "severity": "medium"
+      },
+      {
+        "id": "GAAP-105-03",
+        "description": "Revenue should be recognized when earned, not received.",
+        "condition": "revenueRecognized === true",
+        "severity": "high"
+      }
+    ],
+    "manual_policies": []
+  }
+  

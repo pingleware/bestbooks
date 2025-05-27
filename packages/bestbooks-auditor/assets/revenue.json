@@ -1,0 +1,23 @@
+[
+    {
+        "question": "What is a contract?",
+        "answer": "A contract is an agreement between two or more parties that creates enforceable rights and obligations."
+    },
+    {
+        "question": "Identify the Contract with a Customer",
+        "answer":  [
+            "Approval and commitment of the parties",
+            "Identification of the rights of the parties",
+            "Identification of the payment terms",
+            "The contract has commercial substance", 
+            "It is probable that the entity will collect the consideration to which it will be entitled in exchange for the goods or services that will be transferred to the customer. "
+        ]
+    },
+    {
+        "question": "Identify the Performance Obligations in the Contract",
+        "answer": [
+            "The customer can benefit from the good or service either on its own or together with other resources that are readily available to the customer.",
+            "The promise to transfer the good or service is separately identifiable from other promises in the contract"
+        ]
+    }        
+]
