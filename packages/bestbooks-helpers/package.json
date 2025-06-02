@@ -1,0 +1,34 @@
+{
+  "name": "@pingleware/bestbooks-helpers",
+  "version": "1.1.19",
+  "description": "Helper routines for BestBooks Accounting Application Framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --sort --timeouts 3000",
+    "create:tests": "node generateTest.js"
+  },
+  "keywords": [
+    "bestbooks",
+    "accounting",
+    "bookkeeping"
+  ],
+  "author": "PressPage Entertainment Inc <presspage.entertainment@gmail.com>",
+  "license": "CC-BY-4.0",
+  "bugs": {
+    "url": "https://pingleware.support"
+  },
+  "homepage": "https://github.com/pingleware/bestbooks",
+  "funding": "https://github.com/sponsors/pingleware",
+  "private": false,
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "engineStrict": true,
+  "devDependencies": {
+    "acorn": "^8.14.0",
+    "mocha": "^10.1.0"
+  },
+  "dependencies": {
+    "@pingleware/bestbooks-core": "^1.3.4"
+  }
+}
