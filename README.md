@@ -29,6 +29,9 @@ The core module is a migration of the PHP classes from the WordPress plugin.
 ## Official User Guide
 Avalable on [amazon](https://www.amazon.com/dp/B07H1GQZYC)
 
+## How to use
+The BestBooks Accounting Application Framework&trade; is a framework that can be integrated into other NodeJS applications to provide a seamless accounting and bookkeeping experience. Since the framework uses a shared database, multiple applications using this framework can update the same database, eliminating double posting. See the [Official User Guide](https://www.amazon.com/dp/B07H1GQZYC) for more information.
+
 # Reporting
 The reports module returns the report data in object-row format generate by SQL views.
 
