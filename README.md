@@ -23,6 +23,7 @@ The core module is a migration of the PHP classes from the WordPress plugin.
 | [mailer](packages/bestbooks-mailer)  | a built SMTP mail server |  1.1.2  |
 | [hrm](packages/bestbooks-hrm)     | a human resource management integration |  1.0.0  |
 | [tax](packages/bestbooks-tax)     | tax integration for federal, state and local taxes |  1.0.0  |
+| [capas](packages/bestbooks-capas) | a cost accounting and productivity analysis system | 1.0.0 |
 | [ui](packages/bestbooks-ui)      | user application | 1.0.0 |
 
 
@@ -55,3 +56,6 @@ income statement shows the percentage of total revenu by location as defined in 
 
 ## Trial Balance
 ![Trial Balance](https://raw.githubusercontent.com/pingleware/bestbooks/main/images/README/trial-balance.png)
+
+# Future Addition
+- Cost Accounting and Profitability Analysis System (CAPAS)
