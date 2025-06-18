@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - moved to a monorepo
 - change homepage to monorepo
 - archived the original repository
-- change API.md to JSDoc generation [docs](https://github.com/pingleware/bestbooks-helpers/docs/index.html)
+- change API.md to JSDoc generation [docs](./docs/index.html)
 
 ### Fixed
 - test scripts and corresponding functions, as needed

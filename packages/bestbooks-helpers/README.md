@@ -102,4 +102,4 @@ The helper functions (aka hooks under WordPress) provide simpler interaction wit
 - locationDeleteByName
 
 ## Documentation
-[Documentation](https://github.com/pingleware/bestbooks-helpers/docs/index.html)
+[Documentation](./docs/index.html)
