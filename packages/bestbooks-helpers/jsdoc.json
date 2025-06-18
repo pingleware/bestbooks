@@ -1,0 +1,10 @@
+{
+  "source": {
+    "include": ["index.js","pricing.js","generateTest.js"],
+    "excludePattern": "(node_modules/|docs|test)"
+  },
+  "opts": {
+    "destination": "./docs",
+    "readme": "./README.md"
+  }
+}

@@ -1,0 +1,3555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: index.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: index.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * @module bestbooks-helpers
+ * 
+ * Helper functions for accounting operations using the BestBooks core library.
+ * 
+ * Provides utilities for:
+ * - Creating and managing accounts and users
+ * - Recording various types of accounting transactions (assets, liabilities, equity, revenue, expenses, etc.)
+ * - Handling payroll, inventory, bonds, dividends, and cryptocurrency transactions
+ * - Supporting double-entry bookkeeping for a wide range of business scenarios
+ * - Specialized helpers for Google AdSense, postage, funding allocation, and more
+ * 
+ * @requires @pingleware/bestbooks-core
+ * 
+ * @typedef {Object} accountClassMap
+ * @property {Class} Asset - Represents an asset account.
+ * @property {Class} ContraAsset - Represents a contra asset account (mapped to Asset).
+ * @property {Class} Liability - Represents a liability account.
+ * @property {Class} ContraLiability - Represents a contra liability account (mapped to Liability).
+ * @property {Class} Equity - Represents an equity account.
+ * @property {Class} ContraEquity - Represents a contra equity account (mapped to Equity).
+ * @property {Class} OwnersEquity - Represents owner's equity (mapped to Equity).
+ * @property {Class} Revenue - Represents a revenue account.
+ * @property {Class} ContraRevenue - Represents a contra revenue account (same as Revenue).
+ * @property {Class} Expense - Represents an expense account.
+ * @property {Class} ContraExpense - Represents a contra expense account (mapped to Expense).
+ * @property {Class} Withdrawals - Represents a withdrawals account.
+ * @property {Class} Journal - Represents a journal account.
+ * @property {Class} Bank - Represents a bank account (same as Cash).
+ * @property {Class} Cash - Represents a cash account.
+ * @property {Class} DigitalCurrency - Represents a digital currency account (same as Cash).
+ * @property {Class} Credit - Represents a credit account.
+ * @property {Class} Investment - Represents an investment account.
+ * @property {Class} Inventory - Represents an inventory account (mapped to Asset).
+ * 
+ * @exports
+ * @function createAccountInstance
+ * @function createAccount
+ * @function getUsersByType
+ * @function addCredit
+ * @function addDebit
+ * @function addJournalTransaction
+ * @function editJournalTransaction
+ * @function asset
+ * @function expense
+ * @function liability
+ * @function equity
+ * @function revenue
+ * @function isJournalInbalance
+ * @function investment
+ * @function encumber
+ * @function bankfee
+ * @function loanPayment
+ * @function payAssetsByCheck
+ * @function payAssetsByCredit
+ * @function payExpenseByCheck
+ * @function payExpenseByCard
+ * @function cardPayment
+ * @function cashPayment
+ * @function salesCash
+ * @function salesCard
+ * @function salesViaPaypal
+ * @function accountsReceivablePayment
+ * @function distribution
+ * @function COGS
+ * @function unearnedRevenue
+ * @function badDebt
+ * @function accruedIncome
+ * @function accruedIncomePayment
+ * @function accruedExpense
+ * @function dividendDeclared
+ * @function dividendPaid
+ * @function securityDepositReceived
+ * @function securityDepositPaid
+ * @function deferredRevenue
+ * @function recognizeDeferredRevenue
+ * @function deferredExpense
+ * @function recognizeDeferredExpense
+ * @function prepaidSubscriptions
+ * @function recognizePrepaidSubscription
+ * @function paidInCapitalStock
+ * @function stockDividend
+ * @function cashDividendDeclared
+ * @function cashDividendPayable
+ * @function stocksIssuedOtherThanCash
+ * @function workingHours
+ * @function payrollPayable
+ * @function accruedInterest
+ * @function interestExpense
+ * @function bondsIssuedWOAccruedInterest
+ * @function bondsIssuedWithAccruedInterest
+ * @function bondPremium
+ * @function bondPremiumInterestPayment
+ * @function bondDiscount
+ * @function initializeEquity
+ * @function commissionPayable
+ * @function commissionPaid
+ * @function allocateFundingAccount
+ * @function spendFundingAccount
+ * @function softwareLicense
+ * @function exchangeCryptocurrencyToUSD
+ * @function exchangeUSDToCryptocurrency
+ * @function googleAdsenseEarning
+ * @function googleAdsensePayout
+ * @function googleAdsenseReceivePayout
+ * @function addFundsToPostageDebitAccount
+ * @function postageExpense
+ * @function pendingPurchase
+ * @function pendingPurchaseCleared
+ * @function pendingPurchaseSettled
+ * @function apic
+ * @function uccLienNew
+ * @function uccLienAccruedInterest
+ * @function uccLienPaid
+ * @function uccLienWriteOff
+ * @function mrr
+ * @function mrrEarned
+ * @function mrrReceived
+ * @function cmrr
+ * @function locationAdd
+ * @function locationUpdate
+ * @function locationDelete
+ * @function locationDeleteByName
+ * @property {Object} DynamicPricing - Dynamic pricing helper module
+ */
+
+"use strict"
+
+const { 
+    AccountTypes,
+    ChartOfAccounts, 
+    Ledger, 
+    Journal, 
+    Asset, 
+    Cash,
+    Equity, 
+    Income,
+    Expense, 
+    Revenue,
+    Liability, 
+    ContraAsset,
+    ContraLiability, 
+    User,
+    Customer,
+    Vendor, 
+    Inventory,
+    Model,
+    Bank,
+    ShareholderEquity,
+    info,
+    warn,
+    error
+} = require("@pingleware/bestbooks-core");
+
+/**
+ * A mapping of account type names to their corresponding class constructors.
+ * 
+ * The map supports both direct class references and inline class definitions for specific account types.
+ * Some account types (e.g., ContraAsset, ContraLiability) are mapped to their base class.
+ * 
+ * @typedef {Object} accountClassMap
+ * @typedef {Object} Asset - Represents an asset account.
+ * @typedef {Object} ContraAsset - Represents a contra asset account (mapped to Asset).
+ * @typedef {Object} Liability - Represents a liability account.
+ * @typedef {Object} ContraLiability - Represents a contra liability account (mapped to Liability).
+ * @typedef {Object} Equity - Represents an equity account.
+ * @typedef {Object} ContraEquity - Represents a contra equity account (mapped to Equity).
+ * @typedef {Object} OwnersEquity - Represents owner's equity (mapped to Equity).
+ * @property {Class} Revenue - Represents a revenue account.
+ * @property {Class} ContraRevenue - Represents a contra revenue account (same as Revenue).
+ * @typedef {Object} Expense - Represents an expense account.
+ * @typedef {Object} ContraExpense - Represents a contra expense account (mapped to Expense).
+ * @property {Class} Withdrawals - Represents a withdrawals account.
+ * @property {Class} Journal - Represents a journal account.
+ * @property {Class} Bank - Represents a bank account (same as Cash).
+ * @property {Class} Cash - Represents a cash account.
+ * @property {Class} DigitalCurrency - Represents a digital currency account (same as Cash).
+ * @property {Class} Credit - Represents a credit account.
+ * @property {Class} Investment - Represents an investment account.
+ * @typedef {Object} Inventory - Represents an inventory account (mapped to Asset).
+ */
+const accountClassMap = {
+    Asset,
+    ContraAsset: Asset,
+    Liability,
+    ContraLiability: Liability,
+    Equity,
+    ContraEquity: Equity,
+    OwnersEquity: Equity,
+    Revenue: class Revenue { constructor(name) { this.name = name; this.type = "Revenue"; } },
+    ContraRevenue: class Revenue { constructor(name) { this.name = name; this.type = "Revenue"; } },
+    Expense,
+    ContraExpense: Expense,
+    Withdrawals: class Withdrawals { constructor(name) { this.name = name; this.type = "Withdrawals"; } },
+    Journal: class Journal { constructor(name) { this.name = name; this.type = "Journal"; } },
+    Bank: class Cash { constructor(name) { this.name = name; this.type = "Cash"; } },
+    Cash: class Cash { constructor(name) { this.name = name; this.type = "Cash"; } },
+    DigitalCurrency: class Cash { constructor(name) { this.name = name; this.type = "Cash"; } },
+    Credit: class Credit { constructor(name) { this.name = name; this.type = "Credit"; } },
+    Investment: class Investment { constructor(name) { this.name = name; this.type = "Investment"; } },
+    Inventory: Asset
+};
+
+/**
+ * Creates an instance of an account class based on the provided name and type.
+ *
+ * @async
+ * @function
+ * @param {string} name - The name of the account.
+ * @param {string} type - The type of the account (should match a key in AccountTypes).
+ * @returns {object} An instance of the corresponding account class.
+ * @throws {Error} If the account type is unsupported.
+ */
+async function createAccountInstance(name, type) {
+    const normalizedType = AccountTypes[type] || "Unknown";
+    const AccountClass = accountClassMap[normalizedType];
+
+    if (!AccountClass) {
+        throw new Error(`Unsupported account type: ${type}`);
+    }
+
+    return new AccountClass(name);
+}
+
+/**
+ * Asynchronously creates a new account in the Chart of Accounts.
+ *
+ * @async
+ * @function
+ * @param {string} name - The name of the account to create.
+ * @param {string} type - The type of the account (e.g., 'asset', 'liability', etc.).
+ * @returns {Promise&lt;any>} A promise that resolves with the status of the account creation.
+ */
+async function createAccount(name,type) {
+    try {
+        const coa = new ChartOfAccounts();
+        await coa.add(name,type).then(async function(status){
+            return status;
+        });
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Retrieves users from the database based on the specified user type.
+ *
+ * @async
+ * @function
+ * @param {string} userType - The type of users to retrieve. Valid values are 'internal', 'vendor', or 'customer'.
+ * @returns {Promise&lt;Array&lt;Object>>} A promise that resolves to an array of user objects from the corresponding table.
+ * @throws Will log an error if the database query fails.
+ */
+async function getUsersByType(userType) {
+    try {
+        const model = new Model();
+
+        switch(userType) {
+            case 'internal':
+                {
+                    return await model.querySync(`SELECT * FROM users;`);
+                }
+            case 'vendor':
+                {
+                    return await model.querySync(`SELECT * FROM vendor ORDER BY name ASC;`);
+                }
+            case 'customer':
+                {
+                    return await model.querySync(`SELECT * FROM customer ORDER BY name ASC;`);
+                }
+        }
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Adds a credit transaction to the specified account.
+ *
+ * @async
+ * @function
+ * @param {Object} account - The account object with an addCredit method.
+ * @param {string|Date} txdate - The transaction date.
+ * @param {string} description - The description of the credit transaction.
+ * @param {number} amount - The amount to credit.
+ * @param {number} [company_id=0] - The ID of the company (optional).
+ * @param {number} [office_id=0] - The ID of the office (optional).
+ * @returns {Promise&lt;*>} A promise that resolves to the status of the credit addition.
+ */
+async function addCredit(account, txdate, description, amount, company_id=0, office_id=0) {
+    return await account.addCredit(txdate,description,amount,company_id,office_id);
+}
+
+/**
+ * Adds a debit entry to the specified account.
+ *
+ * @async
+ * @function
+ * @param {Object} account - The account object with an addDebit method.
+ * @param {string|Date} txdate - The transaction date.
+ * @param {string} description - The description of the debit transaction.
+ * @param {number} amount - The amount to debit.
+ * @param {number} [company_id=0] - The company ID associated with the transaction.
+ * @param {number} [office_id=0] - The office ID associated with the transaction.
+ * @returns {Promise&lt;*>} The status returned by the account's addDebit method.
+ */
+async function addDebit(account, txdate, description, amount, company_id=0, office_id=0) {
+    return await account.addDebit(txdate,description,amount,company_id,office_id);
+}
+
+
+/**
+ * Adds a journal transaction for a given account.
+ *
+ * @async
+ * @function
+ * @param {string|number} account - The account identifier for the transaction.
+ * @param {string|Date} txdate - The date of the transaction.
+ * @param {string} reference - A reference or description for the transaction.
+ * @param {number} debit - The debit amount for the transaction.
+ * @param {number} credit - The credit amount for the transaction.
+ * @param {number} [company_id=0] - The company ID associated with the transaction (optional).
+ * @param {number} [office_id=0] - The office ID associated with the transaction (optional).
+ * @returns {Promise&lt;void>} Resolves when the transaction is added.
+ */
+async function addJournalTransaction(account, txdate, reference, debit, credit, company_id=0, office_id=0) {
+    try {
+        var journal = new  Journal(account);
+        await journal.add(txdate,reference,account,debit,credit,company_id,office_id);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Edits a journal transaction with the specified details.
+ *
+ * @async
+ * @function
+ * @param {string|number} id - The unique identifier of the journal transaction to edit.
+ * @param {string} account - The account associated with the transaction.
+ * @param {string|Date} txdate - The date of the transaction.
+ * @param {string} reference - A reference or description for the transaction.
+ * @param {number} debit - The debit amount for the transaction.
+ * @param {number} credit - The credit amount for the transaction.
+ * @returns {Promise&lt;void>} Resolves when the transaction is updated.
+ */
+async function editJournalTransaction(id, account, txdate, reference, debit, credit) {
+    try {
+        var journal = new Journal(account);
+        await journal.update(id,txdate,account,debit,credit,reference);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records an asset transaction by adding the account to the Chart of Accounts (COA) and then
+ * creating either a debit or credit entry for the asset, depending on the amount.
+ *
+ * @async
+ * @function asset
+ * @param {string} account - The name or identifier of the asset account.
+ * @param {string|Date} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The transaction amount. Positive for debit, negative for credit.
+ * @param {number} [company_id=0] - Optional company identifier.
+ * @param {number} [office_id=0] - Optional office identifier.
+ * @param {number} [location_id=0] - Optional location identifier.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ */
+async function asset(account, txdate, description, amount, company_id=0, office_id=0, location_id=0) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add(account,'Asset');
+
+        var asset = new Asset(account);
+        if (amount &lt; 0) {
+            await asset.addCredit(txdate,description,amount,company_id,office_id,location_id);
+        } else {
+            await asset.addDebit(txdate,description,amount,company_id,office_id,location_id);
+        }
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records an expense transaction for a given account.
+ *
+ * @async
+ * @function
+ * @param {string} account - The name or identifier of the expense account.
+ * @param {string|Date} txdate - The date of the transaction.
+ * @param {string} description - A description of the expense.
+ * @param {number} amount - The amount of the expense. If negative, the expense is decreased.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ */
+async function expense(account, txdate, description, amount) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add(account,'Expense');
+
+        var expense = new Expense(account);
+        if (amount &lt; 0) {
+            await expense.decrease(txdate,description,Math.abs(amount));
+        } else {
+            await expense.increase(txdate,description,amount);
+        }
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a liability transaction for a given account.
+ *
+ * Adds the account to the Chart of Accounts as a Liability if it doesn't exist,
+ * then records either a debit or credit transaction based on the sign of the amount.
+ *
+ * @async
+ * @param {string} account - The name or identifier of the liability account.
+ * @param {string|Date} txdate - The date of the transaction.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The transaction amount. Negative for debit, positive for credit.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Credit Accounts: Liabilities, Equity, &amp; Revenue
+ * From: https://www.keynotesupport.com/accounting/accounting-basics-debits-credits.shtml
+ *
+ * Liability, Equity, and Revenue accounts usually receive credits, so they maintain negative 
+ * balances. They are called credit accounts. Accounting books will say “Accounts that 
+ * normally maintain a negative balance are increased with a Credit and decreased with a 
+ * Debit.” Again, look at the number line. If you add a negative number (credit) to a 
+ * negative number, you get a larger negative number! (moving left on the number line). But 
+ * if you start with a negative number and add a positive number to it (debit), you get a 
+ * smaller negative number because you move to the right on the number line.
+ * 
+ * We have not discussed crossing zero on the number line. If we have $100 in our checking
+ * account and write a check for $150, the check will bounce and Cash will have a negative 
+ * value - an undesirable event. A negative account might reach zero - such as a loan account 
+ * when the final payment is posted. And many accounts, such as Expense accounts, are reset 
+ * to zero at the beginning of the new fiscal year. But credit accounts rarely have a 
+ * positive balance and debit accounts rarely have a negative balance at any time.
+ * 
+ * [Remember: A debit adds a positive number and a credit adds a negative number. But you 
+ * NEVER put a minus sign on a number you enter into the accounting software.] 
+ * 
+ */
+async function liability(account, txdate, description, amount) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add(account,'Liability');
+
+        var liability = new Liability(account);
+        if (amount &lt; 0) {
+            await liability.addDebit(txdate,description,Math.abs(amount));
+        } else {
+            await liability.addCredit(txdate,description,amount);
+        }
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Handles equity transactions by adding the account to the Chart of Accounts (COA) as "Equity"
+ * and then increasing or decreasing the equity based on the amount.
+ *
+ * @async
+ * @function
+ * @param {string} account - The name or identifier of the equity account.
+ * @param {string|Date} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount to increase (if positive) or decrease (if negative) the equity.
+ * @returns {Promise&lt;void>} Resolves when the transaction is processed.
+ */
+async function equity(account, txdate, description, amount) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add(account, "Equity");
+    
+        var equity = new Equity(account);
+        if (amount &lt; 0) {
+            await equity.decrease(txdate, description, Math.abs(amount));
+        } else {
+            await equity.increase(txdate, description, Math.abs(amount));
+        }
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Handles a revenue transaction by updating the Chart of Accounts and the Revenue account.
+ *
+ * @async
+ * @function
+ * @param {string} account - The account identifier for the revenue transaction.
+ * @param {string|Date} txdate - The date of the transaction.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount of the transaction. Negative values increase revenue, positive values decrease revenue.
+ * @returns {Promise&lt;void>} Resolves when the transaction is processed.
+ */
+async function revenue(account, txdate, description, amount) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add(account, "Revenue");
+    
+        var revenue = new Revenue(account);
+        if (Number(amount) &lt; 0) {
+            await revenue.increase(txdate, description, Math.abs(amount));
+        } else {
+            await revenue.decrease(txdate, description, Math.abs(amount));
+        }
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Checks if the journal is in balance.
+ * 
+ * @async
+ * @function
+ * @param {string} name - The name of the journal (default is 'General').
+ * @returns {Promise&lt;boolean>} Promise resolving to true if in balance, false otherwise.
+ */
+async function isJournalInbalance(name='General') {
+    try {
+        var journal = new Journal(name);
+		return await journal.inBalance();
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records an investment transaction by increasing both the Cash and Equity accounts.
+ *
+ * @async
+ * @function investment
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - A description of the investment transaction.
+ * @param {number} amount - The amount of the investment.
+ * @param {string} [equity='Owners Equity'] - The name of the equity account to increase.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Example 1: Owner Invests Capital in the Company
+ * From: https://www.keynotesupport.com/accounting/accounting-transactions.shtml
+ *
+ * Owner invests $5,000.   Analysis: Since money is deposited into the checking account, Cash 
+ * is debited (the balance increased by $5,000). What account receives a credit? An Equity 
+ * account called Owner’s Equity or Capital Contribution. Since Equity accounts are 
+ * ‘negative’ accounts, crediting this Equity account increases its balance by $5,000.
+ *
+ * Debit Cash (increase its balance)
+ * Credit Owner’s Equity|Capital (increases its balance)
+ * 
+ */
+async function investment(txdate, description, amount, equity='Owners Equity') {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add('Cash', 'Cash');
+		await coa.add(equity, 'Equity');
+
+		var cash = new Cash('Cash');
+		await cash.increase(txdate, description, amount);
+
+		var equity = new Equity(equity);
+		await equity.increase(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records an encumbrance transaction by increasing both the Cash and Loans Payable accounts.
+ *
+ * @async
+ * @function
+ * @param {string|Date} txdate - The date of the transaction.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount to be encumbered.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Example 2: Company Takes Out a Loan
+ * From: https://www.keynotesupport.com/accounting/accounting-transactions.shtml
+ *
+ * The company borrows $8,000 from a bank.   
+ * Analysis: Since the money will be deposited into the checking account, 
+ *      Cash is debited (the balance increased by $8,000.) 
+ * 
+ * The account to receive the credit is a Liability account called Loans Payable 
+ * (you may create a separate account or sub-account for each loan). 
+ * 
+ * Liability accounts are credit accounts, so crediting the Liability account increases 
+ * its negative balance by $8,000 (moves to the left on the number line).
+ *
+ *      Debit Cash (increases its balance)
+ *      Credit Loans Payable (increases its balance)
+ * 
+ */
+async function encumber(txdate, description, amount) {
+    var coa = new ChartOfAccounts();
+    await coa.add('Cash', 'Cash');
+    await coa.add('Loans Payable', 'Liability');
+
+    var cash = new Cash('Cash');
+    await cash.increase(txdate, description, amount);
+
+    var liability = new Liability('Loans Payable');
+    await liability.increase(txdate, description, amount);
+}
+
+/**
+ * Records a bank fee transaction by updating the Chart of Accounts,
+ * decreasing the Cash account, and increasing the Bank Service Charges expense.
+ *
+ * @async
+ * @function bankfee
+ * @param {string|Date} txdate - The transaction date.
+ * @param {string} description - A description of the bank fee.
+ * @param {number} amount - The amount of the bank fee.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Example 3: Monthly Statement Fee from Bank
+ * From: https://www.keynotesupport.com/accounting/accounting-transactions.shtml
+ *
+ * Your bank charges a monthly statement fee of $14.   Analysis: This transaction is entered via a journal 
+ * entry each month when the checking account is balanced. Since money was removed from the checking 
+ * account, Cash is credited (the balance decreased by $14). The Expense account called Bank Service 
+ * Charges receives the debit.
+ *
+ * Debit Bank Fees (increases its balance)
+ * Credit Cash (decreases its balance)
+ * 
+ */
+async function bankfee(txdate, description, amount) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add('Cash', 'Cash');
+		await coa.add('Bank Service Charges', 'Expense');
+
+		var cash = new Cash('Cash');
+		await cash.decrease(txdate, description, amount);
+
+		var expense = new Expense('Bank Service Charges');
+		await expense.increase(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a loan payment transaction, updating the chart of accounts by decreasing cash and loan liability,
+ * and increasing interest expense.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The principal amount of the loan payment.
+ * @param {number} interest - The interest portion of the loan payment.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Example 4: Making a Loan Payment
+ * From: https://www.keynotesupport.com/accounting/accounting-transactions.shtml
+ *
+ * You pay $540, via check, on the $8,000 loan acquired in Example 2. Of this amount, $500 is applied to 
+ * the principal, and $40 is applied to the loan interest.   Analysis: Since a check is being written, 
+ * BestBooks will automatically credit Cash. In this case the debit is split between two accounts. To 
+ * reflect the $500 that has been applied to the loan balance, debit the loan account. (Since it is a 
+ * liability account, a debit will reduce its balance, which is what you want.) The $40 interest paid is 
+ * an expense, so debit the expense account called Loan Interest. Remember that even though the debit is 
+ * split between two accounts, the total debit must always equal the total credit.
+ *
+ * Debit Loans Payable $500 (decreases its balance)
+ * Debit Interest Expense $40 (increases its balance)
+ * Credit Cash $540 (decreases its balance)
+ * 
+ */
+async function loanPayment(txdate, description, amount, interest) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add('Cash', 'Cash');
+		await coa.add('Loans Payable', 'Liability');
+		await coa.add('Interest Expense', 'Expense');
+
+		var cash = new Cash('Cash');
+		await cash.decrease(txdate, description, Number(amount + interest));
+
+		var liability = new Liability('Loans Payable');
+		await liability.decrease(txdate, description, amount);
+
+		var expense = new Expense('Interest Expense');
+		await expense.increase(txdate, description, interest);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Processes the payment of an asset by check.
+ *
+ * This function adds the specified asset account to the chart of accounts,
+ * decreases the cash balance, and increases the specified asset account by the given amount.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount to be paid.
+ * @param {string} account - The name of the asset account to increase.
+ * @returns {Promise&lt;void>} Resolves when the transaction is complete.
+ * @example
+ * Example 5: Company Writes a Check to Pay for an Asset
+ * From: https://www.keynotesupport.com/accounting/accounting-transactions.shtml
+ *
+ * The Company writes a check for $8,500 of equipment.   Analysis: Since a check was written, BestBooks 
+ * will automatically credit Cash. The item is too costly to be considered an expense, so it must be 
+ * entered into the accounting system as an asset. So we will debit an Asset account called Equipment or 
+ * something similar. In addition, assets must be depreciated over time, with journal entries entered each 
+ * year for a proscribed number of years. Depreciation is complicated, so be sure to see your accountant 
+ * when purchasing company assets.
+ *
+ * Debit Equipment (increases its balance)
+ *
+ * Credit Cash (decreases its balance)
+ *
+ * [Remember: A debit adds a positive number and a credit adds a negative number. But you NEVER put a 
+ * minus sign on a number you enter into the accounting software.] 
+ * 
+ */
+async function payAssetsByCheck(txdate, description, amount, account) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add('Cash', 'Cash');
+		await coa.add(account, 'Asset');
+
+		var cash = new Cash('Cash');
+		await cash.decrease(txdate, description, amount);
+
+		var asset = new Asset(account);
+		await asset.increase(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a transaction where an asset is acquired and paid for by increasing accounts payable (credit).
+ *
+ * @async
+ * @function payAssetsByCredit
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount of the transaction.
+ * @param {string} account - The asset account to be increased.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ */
+async function payAssetsByCredit(txdate, description, amount, account) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add(account, 'Asset');
+		await coa.add('Accounts Payable', 'Liability');
+
+		var expense = new Asset(account);
+		await expense.increase(txdate, description, amount);
+
+		var liability = new Liability('Accounts Payable');
+		await liability.increase(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records the payment of an expense by check.
+ *
+ * This function adds the necessary accounts to the chart of accounts (COA),
+ * decreases the cash balance, and increases the specified expense account.
+ *
+ * @async
+ * @function payExpenseByCheck
+ * @param {string} txdate - The transaction date in a string format.
+ * @param {string} description - A description of the expense.
+ * @param {number} amount - The amount to be paid.
+ * @param {string} account - The name of the expense account.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * 
+ * @example
+ * Example 6: Company Writes Check to Pay for Expenses
+ * From: https://www.keynotesupport.com/accounting/accounting-transactions.shtml
+ *
+ * The Company writes a check to pay for $318 of office supplies.   Analysis: Since a check was written, 
+ * BestBooks will automatically credit Cash. We debit the Expense account called Office.
+ *
+ * - Debit Office (increases its balance)
+ * - Credit Cash (decreases its balance)
+ * 
+ * async function processPurchase() {
+ *   await payExpenseByCheck('2025-06-15', 'Office Supplies', 318.00, 'Operations Expense', 101, 5);
+ *   console.log('Transaction recorded.');
+ * }
+ * 
+ */
+async function payExpenseByCheck(txdate, description, amount, account) {
+    try {
+	    var coa = new ChartOfAccounts();
+		await coa.add('Cash', 'Cash');
+		await coa.add(account, 'Expense');
+
+		var cash = new Cash('Cash');
+		await cash.decrease(txdate, description, amount);
+
+		var expense = new Expense(account);
+		await expense.increase(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records the payment of an expense using a card by updating the chart of accounts,
+ * increasing the specified expense account, and increasing the Accounts Payable liability.
+ *
+ * @async
+ * @function payExpenseByCard
+ * @param {string} txdate - The transaction date in a suitable string format.
+ * @param {string} description - A description of the expense transaction.
+ * @param {number} amount - The amount of the expense to be recorded.
+ * @param {string} account - The name of the expense account to be affected.
+ * @returns {Promise&lt;void>} Resolves when the transaction is successfully recorded.
+ * 
+ * @example
+ * Example 7: Company Uses Credit Card to Pay for Expenses
+ * From: https://www.keynotesupport.com/accounting/accounting-transactions.shtml
+ *
+ * The Company purchases $318 of office supplies and pays with a company credit card. Back in the office, 
+ * the bill is entered into the accounting software.   Analysis: When you enter a bill, BestBooks will 
+ * automatically credit the Liability account called Accounts Payable. And since you purchased office 
+ * supplies, an expense account called Office (or similar) should receive the debit.
+ *
+ * Debit Office (increase its balance)
+ * Credit Accounts Payable (increases its balance)
+ * 
+ * async function process() {
+ *    await payExpenseByCard("2025-06-15","office supplies",318.00,"Office Supplies");
+ * }
+ */
+async function payExpenseByCard(txdate, description, amount, account) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add(account, 'Expense');
+		await coa.add('Accounts Payable', 'Liability');
+
+		var liability = new Liability('Accounts Payable');
+		await liability.increase(txdate, description, amount);
+
+		var expense = new Expense(account);
+		await expense.increase(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Processes a card payment transaction by updating the Chart of Accounts,
+ * decreasing the Cash and Accounts Payable balances accordingly.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount of the card payment.
+ * @returns {Promise&lt;void>} Resolves when the transaction is processed.
+ * @example
+ * Example 8: Company Pays the Credit Card Bill
+ * From: https://www.keynotesupport.com/accounting/accounting-transactions.shtml
+ *
+ * You pay the bill for the $318 of office supplies purchased in Example 7.   
+ * 
+ * Analysis: When the bill was entered, an expense account called Office (or similar) 
+ * was debited and Accounts Payable was credited. 
+ * Now as we write a check to pay the bill, BestBooks will automatically credit Cash, 
+ * and will debit Accounts Payable - in effect, reversing the earlier credit.
+ *
+ * Debit Accounts Payable (decreases its balance)
+ *
+ * Credit Cash (decrease its balance)
+ * 
+ */
+async function cardPayment(txdate, description, amount) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add('Cash', 'Cash');
+		await coa.add('Accounts Payable', 'Liability');
+
+		var cash = new Cash('Cash');
+		await cash.decrease(txdate, description, amount);
+
+		var liability = new Liability('Accounts Payable');
+		await liability.decrease(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a cash payment transaction by updating the Chart of Accounts and creating corresponding journal entries.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date in a string format.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount of the cash payment.
+ * @param {string} [COGS='Cost of Goods Sold'] - The name of the expense account to use (defaults to 'Cost of Goods Sold').
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Example 9: Company Pays Cash for a Cost of Good Sold (COGS)
+ * From: https://www.keynotesupport.com/accounting/accounting-transactions.shtml
+ *
+ * The Company pays $450 cash for Product A - a COGS part.   Analysis: When you write the check, 
+ * BestBooks will automatically credit Cash. In the check window, choose the COGS account from the 
+ * Expenses tab, or choose an Item from the Items tab that is associated with the COGS account. Either 
+ * way, the COGS account receives the debit.
+ *
+ * Debit COGS (increase its balance)
+ *
+ * Credit Cash (decrease its balance)
+ * 
+ */
+async function cashPayment(txdate, description, amount, COGS='Cost of Goods Sold') {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add('Cash', 'Cash');
+		await coa.add(COGS, 'Expense');
+
+		var cash = new Cash('Cash');
+		var cogs = new Expense(COGS);
+
+        await cash.addCredit(txdate, description, amount);
+		await cogs.addDebit(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a sales transaction by increasing both the Sales (Revenue) and Cash accounts.
+ *
+ * @async
+ * @function salesCash
+ * @param {string} txdate - The transaction date in a string format.
+ * @param {string} description - A description of the sales transaction.
+ * @param {number} amount - The amount of the sales transaction.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Example 10: Company Receives Cash Payment for a Sale
+ * From: https://www.keynotesupport.com/accounting/accounting-transactions.shtml
+ *
+ * The Company sells Product A for $650 cash.   
+ * Analysis: When you enter the cash sale, BestBooks will automatically debit Cash. 
+ * You will have to choose an Item for the sale … it might be “Prod A income” and 
+ * associated with the Sales account.
+ *
+ * Debit Cash (increases its balance)
+ * Credit Sales (increases its balance)
+ * 
+ */
+async function salesCash(txdate, description, amount) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add("Sales", "Revenue");
+		await coa.add("Cash", "Cash");
+
+		var sales = new Revenue("Sales");
+		await sales.increase(txdate, description, amount);
+
+		var cash = new Cash("Cash");
+		await cash.increase(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a sales transaction by updating the Chart of Accounts,
+ * increasing the Sales (Revenue) and Accounts Receivable (Asset) accounts.
+ *
+ * @async
+ * @function salesCard
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount of the sale.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Example 11: Company Makes a Credit Card Sale
+ * From: https://www.keynotesupport.com/accounting/accounting-transactions.shtml
+ *
+ * The Company sells Product A for $650 on credit.   Analysis: When you create an invoice, 
+ * you must specify an Item for each separate charge on the invoice. BestBooks will 
+ * automatically credit the revenue account(s) associated with these Items. And BestBooks 
+ * will automatically debit the invoice amount to Accounts Receivable.
+ *
+ * Debit Accounts Receivable (increases the balance)
+ * Credit Sales (increases the balance)
+ * 
+ */
+async function salesCard(txdate, description, amount) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add("Sales", "Revenue");
+		await coa.add("Account Receivable", "Asset");
+
+		var sales = new Revenue("Sales");
+		await sales.increase(txdate, description, amount);
+
+		var ar = new Asset("Account Receivable");
+		await ar.increase(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a payment received for accounts receivable.
+ *
+ * This function adds the necessary accounts to the chart of accounts if they do not exist,
+ * increases the cash account by the payment amount, and decreases the accounts receivable asset.
+ *
+ * @async
+ * @param {string} txdate - The transaction date in a string format.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount received for the accounts receivable payment.
+ * @returns {Promise&lt;void>} Resolves when the payment has been recorded.
+ * @example
+ * Example 12: Company Receives Payment on an Invoice
+ * From: https://www.keynotesupport.com/accounting/accounting-transactions.shtml
+ *
+ * The Company receives a payment for the $650 invoice above.   Analysis: When you created the invoice, 
+ * BestBooks debited the Accounts Receivable account. When you post the invoice payment, BestBooks will 
+ * credit A/R - in effect reversing the earlier debit. The accounting software will also debit Cash - 
+ * increasing its balance.
+ *
+ * Debit Cash (increases the balance)
+ * Credit A/R (decreases the balance)
+ * 
+ */
+async function accountsReceivablePayment(txdate, description, amount) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add('Cash', 'Cash');
+		await coa.add("Account Receivable", "Asset");
+
+		var cash = new Cash('Cash');
+		await cash.increase(txdate, description, amount);
+
+		var ar = new Asset("Account Receivable");
+		await ar.decrease(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a distribution transaction by updating the Chart of Accounts,
+ * decreasing the Cash account, and increasing the Distribution (Equity) account.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount to distribute.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Example 13: Owner Takes Money Out of the Company - a Distribution
+ * From: https://www.keynotesupport.com/accounting/accounting-transactions.shtml
+ *
+ * The owner’s writes himself a check for $1,000.   Analysis: Since a check was written, BestBooks will 
+ * automatically credit Cash. The account you chose for the debit is an Equity account called Draw (Sole 
+ * Proprietor) or Distribution (Corporation). Note: These are the only non-contra Equity accounts that are 
+ * positive accounts and receive debits.
+ *
+ * Debit Owner’s Draw (increases its balance)
+ *
+ * Credit Cash (decrease its balance)
+ * 
+ */
+async function distribution(txdate, description, amount) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add('Cash', 'Cash');
+		await coa.add('Distribution', 'Equity');
+
+		var cash = new Cash('Cash');
+		await cash.decrease(txdate, description, amount);
+
+		var equity = new Equity('Distribution');
+		await equity.increase(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records the Cost of Goods Sold (COGS) transaction by updating the Chart of Accounts and adjusting related accounts.
+ *
+ * @async
+ * @function
+ * @param {string|Date} txdate - The transaction date.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - The amount for the transaction.
+ * @param {string} [cogs='COGS'] - The name of the COGS account (Expense).
+ * @param {string} [purchase='Purchases'] - The name of the Purchases account (Liability).
+ * @param {string} [inventory='Inventory'] - The name of the Inventory account (Asset).
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Costs of Goods Sold
+ * 
+ * There are the following COGS categories in accordance with the GAAP.
+ * 		
+ * Debit COGS is an Expense (increases it's balance)
+ * Credit Purchases is a Liability (decrease it's balance)
+ * Credit Inventory is an Asset (increase or decrease based on the amount)
+ * 
+ */
+async function COGS(txdate,description,amount, cogs='COGS',purchase='Purchases',inventory='Inventory') {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add(cogs, 'Expense');
+		await coa.add(purchase, 'Liability');
+		await coa.add(inventory, 'Asset');
+		
+		var expense = new Expense(cogs);
+		await expense.increase(txdate, description, amount);
+		
+		var account_payable = new Liability(purchase);
+		await account_payable.decrease(txdate, description, amount);
+		
+		var asset = new Asset(inventory);
+		if (amount &lt; 0) {
+			await asset.decrease(txdate, description, Math.abs(amount));
+		} else {
+			await asset.increase(txdate, description, Math.abs(amount));
+		}
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records an unearned revenue transaction by updating the Chart of Accounts,
+ * decreasing the Cash account, and increasing the Unearned Revenue account.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount of the transaction.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Example 17: Unearned Revenue
+ * Is income received but not yet earned, e.g. deposits taken on a job not yet performed.
+ * Unearned income is applicable for Service Income, while Product Income is regular income
+ * 
+ * https://www.wallstreetmojo.com/unearned-revenue-journal-entries/
+ * 
+ * https://www.accountingverse.com/accounting-basics/unearned-revenue.html 
+ * 
+ * Cash asset account is debited for amount (balance is decreasing)
+ * Unearned Revenue liability account is credited for amount (balance is increasing)
+ * 
+ */
+async function unearnedRevenue(txdate, description, amount) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add('Cash','Asset');
+		await coa.add('Unearned Revenue','Revenue');
+
+		var cash = new Cash('Cash');
+		await cash.decrease(txdate, description, amount);
+
+		var unearned_revenue = new Revenue('Unearned Revenue');
+		await unearned_revenue.increase(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a bad debt transaction by increasing the Bad Debt expense and decreasing the Account Receivable asset.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount of the bad debt.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Example 18: Accounting for Bad Debt
+ * If a company sells on credit, customers will occasionally be unable to pay, 
+ * in which case the seller should charge the account receivable to expense as a bad debt
+ * 
+ * https://www.accountingtools.com/articles/2017/5/17/accounts-receivable-accounting
+ * 
+ * Bad Debt expense account debited 
+ * Account Receivable is credited
+ * 
+ */
+async function badDebt(txdate, description, amount) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add('Bad Debt','Expense');
+		await coa.add('Account Receivable','Asset');
+
+		var bad_debt = new Expense('Bad Debt');
+		await bad_debt.increase(txdate, description, amount);
+
+		var account_receivable = new Asset('Account Receivable');
+		await account_receivable.decrease(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records an accrued income transaction by increasing both the income account and the receivable asset.
+ *
+ * @async
+ * @function accruedIncome
+ * @param {string} [account="Income"] - The name of the income account to credit.
+ * @param {string} [receivable="Income Receivable"] - The name of the receivable asset account to debit.
+ * @param {string|Date} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount of income to accrue.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Example 19: Accrued Income
+ * When a company has earned income but has not received the monies, that are NOT from Sales
+ * 
+ * https://accounting-simplified.com/financial/accrual-accounting/accrued-income
+ * 
+ * Income Receivable is debited (increases the balance)
+ * Income account is credited (increases the balance)
+ * 
+ */
+async function accruedIncome(account="Income",receivable="Income Receivable",txdate, description, amount) {
+    try {
+		const coa = new ChartOfAccounts();
+		await coa.add(receivable, "Asset");
+		await coa.add(account, "Revenue");
+
+		const income = new Income(account);
+		await income.increase(txdate, description, amount);
+
+		const ir = new Asset(receivable);
+		await ir.increase(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records the payment of accrued income by decreasing the "Income Receivable" asset
+ * and increasing the specified account (default "Cash").
+ *
+ * @async
+ * @function accruedIncomePayment
+ * @param {string} [account="Cash"] - The account to increase (typically "Cash").
+ * @param {string} [receivable="Income Receivable"] - The receivable asset account to decrease.
+ * @param {string|Date} txdate - The transaction date.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - The amount to transfer from receivable to account.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Example 19.1: Receipt of Payment on Accrued Income
+ * When payment is due, and the customer makes the payment, an accountant for that company would record an adjustment to accrued revenue. 
+ * The accountant would make an adjusting journal entry in which the amount of cash received by the customer 
+ * would be debited to the cash account on the balance sheet, 
+ * and the same amount of cash received would be credited to the accrued revenue account or accounts receivable account, reducing that account.
+ * 
+ * Cash Account is debited (increases the balance)
+ * Income Receivable is credited (decreases the balamce)
+ * 
+ */
+async function accruedIncomePayment(account="Cash",receivable="Income Receivable",txdate, description, amount) {
+    try {
+		const coa = new ChartOfAccounts();
+		await coa.add(receivable, "Asset");
+		await coa.add(account,"Asset");
+
+		const ir = new Asset(receivable);
+		await ir.decrease(txdate, description, amount);
+
+		const cash = new Asset(account);
+		await cash.increase(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records an accrued expense by increasing the specified expense (asset) and payable (liability) accounts.
+ *
+ * @async
+ * @function
+ * @param {string} expense - The name or identifier of the expense account.
+ * @param {string} payable - The name or identifier of the payable (liability) account.
+ * @param {string|Date} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount to record for the accrued expense.
+ * @returns {Promise&lt;void>} Resolves when the operation is complete.
+ * @example
+ * Example 20: Accrued Expense
+ * When a company has an expense but has not paid, and recorded as an adjusting entry
+ * 
+ * https://www.accountingtools.com/articles/what-are-accrued-expenses.html
+ * 
+ * Expense account is debited (balance is increasing)
+ * Payable account is credited (balance is increasing)
+ * 
+ */
+async function accruedExpense(expense,payable,txdate,description,amount) {
+    try {
+		const coa = new ChartOfAccounts();
+		await coa.add(expense, "Asset");
+		await coa.add(payable, "Liability");
+
+		const expense_account = new Asset(expense);
+		await expense_account.increase(txdate, description, amount);
+
+		const payable_account = new Liability(payable);
+		await payable_account.increase(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records the declaration of a dividend by updating the chart of accounts.
+ * Decreases the "Retained Earnings" equity account and increases the "Dividends Payable" liability account.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date of the dividend declaration.
+ * @param {string} description - A description of the dividend transaction.
+ * @param {number} amount - The amount of the dividend declared.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Dividends Payable
+ * 
+ * See https://www.wallstreetprep.com/knowledge/dividends-payable/
+ * Cash Dividend Declared: 
+ *      Debit (decrease) -> Retained Earnings (Equity)
+ *      Credit (increase) => Dividends Payable (Liability)
+ * 
+ * Cash Dividend Paid: Debit -> Dividends Payable (liability), Credit -> Cash (Asset)
+ * 
+ */
+async function dividendDeclared(txdate,description,amount) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add("Retained Earnings", "Equity");
+		await coa.add("Dividends Payable", "Liability");
+
+		var equity_account = new Equity("Retained Earnings");
+		await equity_account.decrease(txdate, description, amount);
+
+		var payable_account = new Liability("Dividends Payable");
+		await payable_account.increase(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a dividend payment transaction by updating the Chart of Accounts.
+ * Decreases the "Cash" asset and the "Dividends Payable" liability accounts.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount of the dividend paid.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Cash Dividend Paid: 
+ *      Debit*= (decrease) -> Dividends Payable (liability)
+ *      Credit (decrease) -> Cash (Asset)
+ * 
+ */
+async function dividendPaid(txdate,description,amount) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add("Cash", "Asset");
+		await coa.add("Dividends Payable", "Liability");
+
+		var asset_account = new Asset("Cash");
+		await asset_account.decrease(txdate, description, amount);
+
+		var payable_account = new Liability("Dividends Payable");
+		await payable_account.decrease(txdate, description, amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+
+/**
+ * Records the receipt of a security deposit by increasing the "Cash" asset and the "Refundable Security Deposit" liability.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount of the security deposit received.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Cost to Estimate Technological Feasability
+ * FASB ASC Topic: 985-20-25-1
+ * 
+ * All costs incurred to establish the technological feasibility of a computer software product 
+ * to be sold, leased, or otherwise marketed are research and development costs. 
+ * Those costs shall be charged to expense when incurred as required by Subtopic
+ * 
+ * For purposes of this Subtopic, the technological feasibility of a computer software product is established when the entity has completed all planning, 
+ * designing, activities that are necessary to establish that the product can be produced to meet its design specifications including async functions, features, 
+ * and technical performance requirements. At a minimum, the entity shall have performed the activities in either (a) or (b) as evidence that
+ * technological feasibility has been established: 
+ * 
+ * Security Deposit
+ * 
+ * Receive: Cash (Asset) -> Debit (increase)
+ *          Refundable Security Deposit (Liability) -> Credit (Increase)
+ * 
+ */
+async function securityDepositReceived(txdate,description,amount) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add("Cash","Asset");
+        await coa.add("Refundable Security Deposit","Liability");
+        var cash = new Asset("Cash");
+        await cash.increase(txdate,description,amount);
+
+        var refundableSecurityDeposit = new Liability("Refundable Security Deposit");
+        await refundableSecurityDeposit.increase(txdate,description,amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a security deposit payment transaction by updating the chart of accounts.
+ * Decreases the Cash asset and increases the Security Deposit liability.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount of the security deposit paid.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Paid:    Cash (Asset) -> Credit (decrease)
+ *          Security Deposit (Asset) -> Debit (increase) 
+ * 
+ */
+async function securityDepositPaid(txdate,description,amount) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add("Cash","Asset");
+        await coa.add("Security Deposit","Asset");
+        var cash = new Asset("Cash");
+        await cash.decrease(txdate,description,amount);
+
+        var securityDeposit = new Liability("Security Deposit");
+        await securityDeposit.increase(txdate,description,amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a deferred revenue transaction by increasing both the Cash (Asset) and Unearned Revenue (Liability) accounts.
+ *
+ * @async
+ * @function deferredRevenue
+ * @param {string|Date} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount of the deferred revenue.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Deferred Revenue
+ * 
+ * Since deferred revenues are not considered revenue until they are earned, 
+ * they are not reported on the income statement.  Instead they are reported on the balance sheet 
+ * as a liability. As the income is earned, the liability is decreased and recognized as income.
+ * 
+ * the Cash (Asset account) and the Unearned Revenue (Liability account) are increasing.
+ * 
+ */
+async function deferredRevenue(txdate,description,amount) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add("Cash","Asset");
+        await coa.add("Unearned Revenue","Liability");
+
+        var cash = new Asset("Cash");
+        await cash.increase(txdate,description,amount);
+
+        var unernedRevenue = new Liability("Unearned Revenue");
+        await unernedRevenue.increase(txdate,description,amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Recognizes deferred revenue by transferring the specified amount from the "Unearned Revenue" liability account
+ * to the "Revenue" account on the given transaction date with a description.
+ *
+ * @async
+ * @function
+ * @param {string|Date} txdate - The date of the transaction.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount to recognize as revenue.
+ * @returns {Promise&lt;void>} Resolves when the revenue recognition is complete.
+ * @example
+ * Recognize Uneaarned Revenue
+ * 
+ * Once the services are performed, the income can be recognized with the following entry:  
+ * This entry is decreasing the liability account and increasing revenue.
+ * 
+ */
+async function recognizeDeferredRevenue(txdate,description,amount) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add("Unearned Revenue","Liability");
+        await coa.add("Revenue","Revenue");
+
+        var unernedRevenue = new Liability("Unearned Revenue");
+        var revenue = new Revenue("Revenue");
+
+        await unernedRevenue.decrease(txdate,description,amount);
+        await revenue.increase(txdate,description,amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a deferred expense transaction by increasing the specified asset account and decreasing the cash account.
+ *
+ * @async
+ * @function deferredExpense
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount of the deferred expense.
+ * @param {string} [asset_account="Deferred Expense"] - The asset account to increase (defaults to "Deferred Expense").
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Deferred Expense
+ * 
+ * Like deferred revenues, deferred expenses are not reported on the income statement. 
+ * Instead, they are recorded as an asset on the balance sheet until the expenses are incurred. 
+ * As the expenses are incurred the asset is decreased and the expense is recorded on the 
+ * income statement.
+ * 
+ * The (Asset account) is increasing, and Cash (Asset account) is decreasing.
+ * 
+ */
+async function deferredExpense(txdate,description,amount,asset_account="Deferred Expense") {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add(asset_account,"Asset");
+        await coa.add("Cash","Cash");
+
+        var asset = new Asset(asset_account);
+        var cash = new Asset("Cash");
+
+        await asset.increase(txdate,description,amount);
+        await cash.decrease(txdate,description,amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Recognizes a deferred expense by transferring an amount from an asset account to an expense account.
+ *
+ * @async
+ * @function recognizeDeferredExpense
+ * @param {string} asset_account - The name or identifier of the asset account to decrease.
+ * @param {string} expense_account - The name or identifier of the expense account to increase.
+ * @param {string|Date} txdate - The transaction date for the recognition.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount to transfer from the asset to the expense account.
+ * @returns {Promise&lt;void>} Resolves when the deferred expense has been recognized.
+ * @example
+ * Recognize Deferred Expense
+ * 
+ * Here we are decreasing our (Asset) and increasing our (Expense)
+ * 
+ */
+async function recognizeDeferredExpense(asset_account,expense_account,txdate,description,amount) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add(asset_account,"Asset");
+        await coa.add(expense_account,"Expense");
+
+        var asset = new Asset(asset_account);
+        var expense = new Expense(expense_account);
+
+        await asset.decrease(txdate,description,amount);
+        await expense.increase(txdate,description,amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Handles the accounting entry for prepaid subscriptions by recording a deferred expense.
+ *
+ * @async
+ * @function prepaidSubscriptions
+ * @param {string} txdate - The transaction date in a string format.
+ * @param {string} description - A description of the prepaid subscription.
+ * @param {number} amount - The monetary amount of the prepaid subscription.
+ * @returns {Promise&lt;void>} Resolves when the operation is complete.
+ */
+async function prepaidSubscriptions(txdate,description,amount) {
+    try {
+        deferredExpense(txdate,description,amount,"Prepaid Subscriptions");
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Recognizes a prepaid subscription as a deferred expense.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date of the prepaid subscription.
+ * @param {string} description - A description of the prepaid subscription.
+ * @param {number} amount - The amount of the prepaid subscription.
+ * @example
+ * Recognized Prepaid Subscription
+ * 
+ * is an adjusting entry when the prepaid subscription is recognized
+ * 
+ */
+async function recognizePrepaidSubscription(txdate,description,amount) {
+    try {
+        recognizeDeferredExpense("Prepaid Subscriptions","Subscriptions",txdate,description,amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Paid -in Capital Stock ior Contributed Capital
+ * 
+ * @param {string} txdate 
+ * @param {string} description 
+ * @param {number} amount total amount invested
+ * @param {number} shares are the number of share purchases
+ * @param {string} assetClass, default='Common Stock', other choices are 'Preferred Stock', Debt, Commodity, etc.
+ * @param {number} parValue, default=0
+ */
+async function paidInCapitalStock(txdate,description,amount,shares,assetClass="Common Stock",parValue=0) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add("Cash","Cash");
+        await coa.add(assetClass,"Equity");
+
+        var cash = new Cash("Cash");
+        await cash.increase(txdate,description,amount);
+
+        var equity = new Equity(assetClass);
+
+        if (Number(parValue) > 0) {
+            var excess = Number(amount) - Number(shares * parValue);
+            if (excess > 0) {
+                await coa.add(`Additional Paid-In Capital - ${assetClass}`,"Asset");
+                var paidInCapital = new Asset(`Additional Paid-In Capital - ${assetClass}`);
+                await paidInCapital.decrease(txdate,description,excess);
+
+                var sharesValue = Number(shares * parValue);
+                await equity.increase(txdate,description,sharesValue);
+            } else {
+                await equity.increase(txdate,description,amount);
+            }
+        } else {
+            await equity.increase(txdate,description,amount);    
+        }    
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a stock dividend transaction, updating the chart of accounts and equity balances.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - Total amount of the stock dividend.
+ * @param {number} shares - Number of shares issued as dividend.
+ * @param {string} [assetClass="Common Stock"] - The class of stock affected.
+ * @param {number} [parValue=0] - Par value per share.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Issuance of Stock Dividend
+ * See https://www.accountingtools.com/articles/stock-dividend-accounting
+ * A business typically issues a stock dividend when it does not have sufficient cash 
+ * to pay out a normal dividend, and so resorts to a "paper" distribution of additional shares 
+ * to shareholders. A stock dividend is never treated as a liability of the issuer, 
+ * since the issuance does not reduce assets. Consequently, this type of dividend cannot 
+ * realistically be considered a distribution of assets to shareholders.
+ * 
+ * Also used for Participating Preferred Stock divident, see https://www.accountingcoach.com/stockholders-equity/explanation/7
+ * 
+ */
+async function stockDividend(txdate,description,amount,shares,assetClass="Common Stock",parValue=0) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add("Retained Earnings","Equity");
+        await coa.add(assetClass,"Equity");
+
+        var retainedEarnings = new Equity("Retained Earnings");
+        // Use the 'amount' parameter for the decrease, as sharesOutstanding and fairMarketValue are undefined
+        await retainedEarnings.decrease(txdate, description, amount);
+
+        var equity = new Equity(assetClass);
+
+        if (Number(parValue) > 0) {
+            var sharesValue = Number(shares * parValue);
+            var excess = Number(amount) - sharesValue;
+            if (excess > 0) {
+                await coa.add(`Additional Paid-In Capital - ${assetClass}`,"Asset");
+                var paidInCapital = new Asset(`Additional Paid-In Capital - ${assetClass}`);
+                await paidInCapital.decrease(txdate,description,excess);
+
+                await equity.increase(txdate,description,sharesValue);
+            } else {
+                await equity.increase(txdate,description,amount);
+            }
+        } else {
+            await equity.increase(txdate,description,amount);
+        }
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/** 
+ * Cash Dividend Declared 
+ * See https://www.accountingtools.com/articles/how-do-i-account-for-cash-dividends.html
+ */
+async function cashDividendDeclared(txdate,description,amount) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add("Retained Earnings","Equity");
+        await coa.add("Dividends Payable","Liability");
+
+        var retainedEarnings = new Equity("Retained Earnings");
+        await retainedEarnings.decrease(txdate,description,amount);
+
+        var dividendsPayable = new Liability("Dividends Payable");
+        await dividendsPayable.increase(txdate,description,amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Cash Dividend Payable
+ * See https://www.accountingtools.com/articles/how-do-i-account-for-cash-dividends.html
+ */
+async function cashDividendPayable(txdate,description,amount) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add("Cash","Cash");
+        await coa.add("Dividends Payable","Liability");
+
+        var dividendsPayable = new Liability("Dividends Payable");
+        dividendsPayable.decrease(txdate,description,amount);
+
+        var cash = new Cash("Cash");
+        cash.decrease(txdate,description,amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Nonparticipating Preferred Stock Dividend
+ * See https://www.accountingcoach.com/stockholders-equity/explanation/7
+ * 
+ */
+
+/**
+ * Records the issuance of stocks for consideration other than cash.
+ *
+ * This function updates the chart of accounts, asset, and equity accounts to reflect
+ * the issuance of shares in exchange for non-cash assets. It handles par value and
+ * additional paid-in capital if applicable.
+ *
+ * @async
+ * @function stocksIssuedOtherThanCash
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - The total value of the asset received.
+ * @param {string} asset_account - The name of the asset account.
+ * @param {number} shares - The number of shares issued.
+ * @param {string} [assetClass="Common Stock"] - The class of stock issued.
+ * @param {number} [parValue=0] - The par value per share.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Stocks issued other than Cash
+ * See https://www.accountingcoach.com/stockholders-equity/explanation/9
+ * 
+ * An example, when an investors trades real estate for shares, 
+ * where the real estate is the asset account or
+ * an investor agrees to a UCC claim on real estate for shares, 
+ * now the UCC claim is the asset
+ * 
+ * asset_account can be "Real Estate", "UCC Claim", etc.
+ * 
+ * assetClass can be 
+ *      "Common Stock", 
+ *      "Preferred Stock", 
+ *      "Debt", 
+ *      "Commodity", 
+ *      "Merger &amp; Acquisitions", 
+ *      "Employee"
+ * 
+ */
+async function stocksIssuedOtherThanCash(txdate,description,amount,asset_account,shares,assetClass="Common Stock",parValue=0) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add(asset_account,"Asset");
+        await coa.add(assetClass,"Equity");
+
+        var asset = new Asset(asset_account);
+        await asset.increase(txdate,description,amount);
+
+        var equity = new Equity(assetClass);
+
+        if (Number(parValue) > 0) {
+            var stockValue = Number(shares * parValue);
+            var excess = Number(amount) - stockValue;
+            if (excess > 0) {
+                const apic = `Additional Paid-In Capital - ${assetClass}`;
+                await coa.add(apic,"Asset");
+                var paidInCapital = new Asset(apic);
+                await paidInCapital.decrease(txdate,description,excess);
+
+                await equity.increase(txdate,description,sharesValue);
+            } else {
+                await equity.increase(txdate,description,amount);
+            }
+        } else {
+            await equity.increase(txdate,description,amount);
+        }
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Calculates the total working hours in a year and per month based on weekly hours.
+ *
+ * @async
+ * @param {number|string} hoursPerWeek - The number of working hours per week.
+ * @returns {Promise&lt;{workHoursInYear: number, workHoursInMonth: number}>} 
+ *          An object containing the total work hours in a year and in a month.
+ * @example
+ * Working hours
+ * 
+ * This function is designed to calculate the total number of work hours in a year and an average month, based on a given number of hours worked per week. It takes a single argument, hoursPerWeek, which is expected to be a number (or a value that can be converted to a number).
+ * 
+ * Inside the function, hoursPerWeek is first converted to a number using Number(hoursPerWeek), then multiplied by 52 (the number of weeks in a year) to estimate the total annual work hours. The result is rounded to the nearest whole number using Math.round and stored in the variable hoursPerYear.
+ * 
+ * The function then returns an object with two properties:
+ * 
+ * workHoursInYear: the total number of work hours in a year.
+ * workHoursInMonth: the average number of work hours in a month, calculated by dividing the yearly hours by 12 and rounding the result.
+ * 
+ * Although the function is marked as async, it does not currently use any asynchronous operations (like await). This means it behaves synchronously, but could be updated in the future to include asynchronous logic if needed.
+ * 
+ */
+async function workingHours(hoursPerWeek) {
+    let hoursPerYear = Math.round(Number(hoursPerWeek) * 52);
+    return {
+        workHoursInYear: hoursPerYear,
+        workHoursInMonth: Math.round(Number(hoursPerYear) / 12)
+    }
+}
+
+/**
+ * Processes a payroll payable transaction by updating the chart of accounts,
+ * adding the necessary accounts if they do not exist, and recording the credit and debit entries.
+ *
+ * @async
+ * @function payrollPayable
+ * @param {string|Date} txdate - The transaction date.
+ * @param {string} description - Description of the payroll transaction.
+ * @param {number} amount - The amount for the payroll payable.
+ * @param {number} [company_id=0] - The ID of the company (optional).
+ * @param {number} [office_id=0] - The ID of the office (optional).
+ * @returns {Promise&lt;void>} Resolves when the transaction is processed.
+ */
+async function payrollPayable(txdate,description,amount,company_id=0,office_id=0) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add("Cash","Cash");
+        await coa.add("Net Payroll Payable","Liability");
+
+        var cash = new Cash("Cash");
+        var payroll = new Liability("Net Payroll Payable");
+
+        await addCredit(payroll,txdate,description,amount,company_id,office_id); //payroll.increase(txdate,description,amount);
+        await addDebit(cash,txdate,description,amount,company_id,office_id); //cash.decrease(txdate,description,amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records an accrued interest transaction by adding entries to the chart of accounts,
+ * and creating corresponding debit and credit entries for interest expense and interest payable.
+ *
+ * @async
+ * @function accruedInterest
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - The amount of interest to accrue.
+ * @param {number} [company_id=0] - Optional company identifier.
+ * @param {number} [office_id=0] - Optional office identifier.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Accrued Interest
+ * See https://www.accountingcoach.com/bonds-payable/explanation/2
+ * 
+ */
+async function accruedInterest(txdate,description,amount,company_id=0,office_id=0) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add("Interest Expense","Expense");
+        await coa.add("Interest Payable","Liability");
+
+        var expense = new Expense("Interest Expense");
+        var liability = new Liability("Interest Payable");
+
+        await addDebit(expense,txdate,description,amount,company_id,office_id); //expense.increase(txdate,description,amount);
+        await addCredit(liability,txdate,description,amount,company_id,office_id); //liability.increase(txdate,description,amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records an interest expense transaction by adding entries to the chart of accounts,
+ * and debiting both the Interest Expense and Cash accounts.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount of the interest expense.
+ * @param {number} [company_id=0] - The ID of the company (optional).
+ * @param {number} [office_id=0] - The ID of the office (optional).
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ */
+async function interestExpense(txdate,description,amount,company_id=0,office_id=0) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add("Interest Expense","Expense");
+        await coa.add("Cash","Cash");
+
+        var cash = new Cash("Cash");
+        var expense = new Expense("Interest Expense");
+
+        await addDebit(expense,txdate,description,amount,company_id,office_id); //expense.increase(txdate,description,amount);
+        await addDebit(cash,txdate,description,amount,company_id,office_id); //cash.decrease(txdate,description,amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records the issuance of bonds without accrued interest by updating the chart of accounts,
+ * increasing both the "Cash" and "Bonds Payable" accounts.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount of the bond issued.
+ * @param {number} [company_id=0] - The ID of the company (optional).
+ * @param {number} [office_id=0] - The ID of the office (optional).
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ */
+async function bondsIssuedWOAccruedInterest(txdate,description,amount,company_id=0,office_id=0) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add("Bonds Payable","Liability");
+        await coa.add("Cash","Cash");
+
+        var cash = new Cash("Cash");
+        var liability = new Liability("Bonds Payable");
+
+        await addDebit(cash,txdate,description,amount,company_id,office_id); // cash.increase(txdate,description,amount);
+        await addCredit(liability,txdate,description,amount,company_id,office_id); //liability.increase(txdate,description,amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records the issuance of bonds with accrued interest in the accounting system.
+ *
+ * This function adds the necessary accounts (Bonds Payable, Interest Payable, Cash)
+ * to the chart of accounts if they do not exist, calculates the accrued interest,
+ * and updates the balances for each account accordingly.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date in a recognized date format.
+ * @param {string} description - A description of the bond issuance transaction.
+ * @param {number} amount - The principal amount of the bonds issued.
+ * @param {number} interest - The annual interest rate (as a percentage).
+ * @param {number} [monthsPaidInterest=1] - The number of months for which interest has accrued.
+ * @param {number} [company_id=0] - The ID of the company (optional, default is 0).
+ * @param {number} [office_id=0] - The ID of the office (optional, default is 0).
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ */
+async function bondsIssuedWithAccruedInterest(txdate,description,amount,interest,monthsPaidInterest=1,company_id=0,office_id=0) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add("Bonds Payable","Liability");
+        await coa.add("Interest Payable","Liability");
+        await coa.add("Cash","Cash");
+
+        var cash = new Cash("Cash");
+        var bondsPayable = new Liability("Bonds Payable");
+        var interestPayable = new Liability("Interest Payable");
+
+        let accruedInterest = Number(amount) * (interest / 100) * (monthsPaidInterest / 12); // assuming interest is annual and txdate is monthly
+        await addDebit(cash,txdate,description,Number(amount + accruedInterest),company_id,office_id); // cash.increase(txdate,description,Number(amount + accruedInterest));
+        await addCredit(bondsPayable,txdate,description,amount,company_id,office_id); //bondsPayable.increase(txdate,description,amount);
+        await addCredit(interestPayable,txdate,description,accruedInterest,company_id,office_id); //interestPayable.increase(txdate,description,accruedInterest);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Calculates and records the issuance of a bond at a premium.
+ *
+ * Adds necessary accounts to the chart of accounts, computes the bond premium,
+ * and records the appropriate increases in Cash, Bonds Payable, and Bond Premium accounts.
+ *
+ * @async
+ * @function
+ * @param {string|Date} txdate - The transaction date of the bond issuance.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - The face value (principal) of the bond.
+ * @param {number} bondRate - The stated (coupon) interest rate of the bond (annual, in percent).
+ * @param {number} marketRate - The market interest rate at issuance (annual, in percent).
+ * @param {string|Date} maturityDate - The maturity date of the bond.
+ * @param {number} [paymentPeriod=6] - The number of months between interest payments (default is 6).
+ * @param {number} [company_id=0] - The company ID for which the bond is issued.
+ * @param {number} [office_id=0] - The office ID for which the bond is issued.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ */
+async function bondPremium(txdate,description,amount,bondRate,marketRate,maturityDate,paymentPeriod=6,company_id=0,office_id=0) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add("Bonds Payable","Liability");
+        await coa.add("Bond Premium","Liability");
+        await coa.add("Cash","Cash");
+
+        var cash  = new Cash("Cash");
+        var bondsPayable = new Liability("Bonds Payable");
+        var bondPremium = new Liability("Bond Premium");
+
+        const currentDate = new Date(txdate);
+        const msInMonth = 1000 * 60 * 60 * 24 * 30.44; // average month length
+        const totalMonths = Math.round((maturityDate - currentDate) / msInMonth);
+        const numPeriods = Math.floor(totalMonths / paymentPeriod);
+
+        const bondRatePerPeriod = bondRate / 100 * (paymentPeriod / 12);
+        const marketRatePerPeriod = marketRate / 100 * (paymentPeriod / 12);
+
+        const couponPayment = amount * bondRatePerPeriod;
+
+        // Present Value of Coupon Payments (Annuity)
+        const pvCoupons = couponPayment * ((1 - Math.pow(1 + marketRatePerPeriod, -numPeriods)) / marketRatePerPeriod);
+
+        // Present Value of Face Value (Lump Sum)
+        const pvFaceValue = amount / Math.pow(1 + marketRatePerPeriod, numPeriods);
+
+        const presentValue = Number(pvCoupons) + Number(pvFaceValue);
+        const premium = Number(presentValue) - Number(amount);
+        const receivedAmount = Number(amount) + Number(premium);
+
+        await addDebit(cash,txdate,description,receivedAmount.toFixed(0),company_id,office_id); // cash.increase(txdate,description,receivedAmount.toFixed(0));
+        await addCredit(bondsPayable,txdate,description,amount,company_id,office_id); // bondsPayable.increase(txdate,description,amount);
+        await addCredit(bondPremium,txdate,description,premium.toFixed(0),company_id,office_id); // bondPremium.increase(txdate,description,premium.toFixed(0));
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records the interest payment for a bond premium by increasing both the Interest Expense and Interest Payable accounts.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date of the interest payment.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount of the interest payment.
+ * @param {number} [company_id=0] - The ID of the company (optional).
+ * @param {number} [office_id=0] - The ID of the office (optional).
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ */
+async function bondPremiumInterestPayment(txdate,description,amount,company_id=0,office_id=0) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add("Interest Expense","Expense");
+        await coa.add("Interest Payable","Liability");
+
+        var interestPayable = new Liability("Interest Payable");
+        var expense = new Expense("Interest Expense");
+
+        await addDebit(expense,txdate,description,amount,company_id,office_id); // expense.increase(txdate,description,amount);
+        await addCredit(interestPayable,txdate,description,amount,company_id,office_id); // interestPayable.increase(txdate,description,amount);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Calculates and records the issuance of a bond at a discount, including present value calculations
+ * for coupon payments and face value, and updates relevant accounts.
+ *
+ * @async
+ * @function bondDiscount
+ * @param {string|Date} txdate - The transaction date of the bond issuance.
+ * @param {string} description - Description of the bond transaction.
+ * @param {number} amount - The face value (principal) of the bond.
+ * @param {number} bondRate - The stated (coupon) annual interest rate of the bond (as a percentage).
+ * @param {number} marketRate - The market annual interest rate at issuance (as a percentage).
+ * @param {string|Date} maturityDate - The maturity date of the bond.
+ * @param {number} [paymentPeriod=6] - Number of months between interest payments (e.g., 6 for semi-annual).
+ * @param {number} [company_id=0] - Optional company identifier.
+ * @param {number} [office_id=0] - Optional office identifier.
+ * @returns {Promise&lt;void>} Resolves when the bond issuance and related account updates are complete.
+ * @throws {Error} If an error occurs during the calculation or account updates.
+ */
+async function bondDiscount(txdate,description,amount,bondRate,marketRate,maturityDate,paymentPeriod=6,company_id=0,office_id=0) {
+    try {
+        var coa = new ChartOfAccounts();
+        await coa.add("Bonds Payable","Liability");
+        await coa.add("Bond Discount","ContraLiability");
+        await coa.add("Cash","Cash");
+
+        var cash  = new Cash("Cash");
+        var bondsPayable = new Liability("Bonds Payable");
+        var bondDiscount = new ContraLiability("Bond Discount");
+
+        /**
+         * paymentPeriod is the number of months between interest payments,
+         * e.g. 6 for semi-annual payments, 3 for quarterly payments, 12 for annual payments and 1 for monthly payments.
+         */
+        const currentDate = new Date(txdate);
+        const msInMonth = 1000 * 60 * 60 * 24 * 30.44; // average month length
+        const totalMonths = Math.round((maturityDate - currentDate) / msInMonth);
+        const numPeriods = Math.floor(totalMonths / paymentPeriod);
+
+        const bondRatePerPeriod = bondRate / 100 * (paymentPeriod / 12);
+        const marketRatePerPeriod = marketRate / 100 * (paymentPeriod / 12);
+
+        const couponPayment = amount * bondRatePerPeriod;
+
+        // Present Value of Coupon Payments (Annuity)
+        const pvCoupons = couponPayment * ((1 - Math.pow(1 + marketRatePerPeriod, -numPeriods)) / marketRatePerPeriod);
+
+        // Present Value of Face Value (Lump Sum)
+        const pvFaceValue = amount / Math.pow(1 + marketRatePerPeriod, numPeriods);
+
+        const presentValue = Number(pvCoupons) + Number(pvFaceValue);
+        const discount = Number(amount) - Number(presentValue);
+        const receivedAmount = Number(amount) - Number(discount);
+
+        await addDebit(cash,txdate,description,receivedAmount.toFixed(0),company_id,office_id); // cash.increase(txdate,description,receivedAmount.toFixed(0));
+        await addCredit(bondsPayable,txdate,description,amount,company_id,office_id); // bondsPayable.increase(txdate,description,amount);
+        await addDebit(bondDiscount,txdate,description,Math.abs(discount.toFixed(0)),company_id,office_id); // bondDiscount.increase(txdate,description,Math.abs(discount.toFixed(0)));
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Initializes the equity section of the Chart of Accounts by adding common equity accounts.
+ * 
+ * Accounts added:
+ * - Common Shares Par Value
+ * - Additional Paid-in Capital
+ * - Retained Earnings
+ * - Treasury Shares
+ * 
+ * @async
+ * @function
+ * @returns {Promise&lt;void>} Resolves when all equity accounts have been added.
+ */
+async function initializeEquity() {
+    var coa = new ChartOfAccounts();
+    await coa.add('Common Shares Par Value','Equity');
+    await coa.add('Additional Paid-in Capital','Equity');
+    await coa.add('Retained Earnings','Equity');
+    await coa.add('Treasury Shares','Equity');
+}
+
+/**
+ * Records a sales transaction made via PayPal, including revenue, PayPal asset increase, and bank fee expense.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - The sales amount received.
+ * @param {number} fee - The PayPal fee associated with the transaction.
+ * @param {string} [account="Sales"] - The revenue account name.
+ * @param {number} [company_id=0] - The company ID associated with the transaction.
+ * @param {number} [office_id=0] - The office ID associated with the transaction.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Receive sales using paypal, with optional specific account.
+ * 
+ * For example,
+ *      You made a sale from a specific website, like a cottage food website, and need to keep
+ *      track of the total sales does not exceed a maximum as defined by state laws. 
+ *      So sales are recorded in the separate revenue account
+ * 
+ */
+async function salesViaPaypal(txdate,description,amount,fee,account="Sales",company_id=0,office_id=0) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add(account, "Revenue");
+		await coa.add("Paypal", "Bank");
+        await coa.add("Bank Fee", "Expense");
+
+		var sales = new Revenue(account);
+		var ar = new Asset("Paypal");
+        var fees = new Expense("Bank Fee");
+
+		await addCredit(sales,txdate, description, Number(amount + fee),company_id,office_id); // sales.increase(txdate, description, Number(amount + fee));
+        await addDebit(ar,txdate,description,amount,company_id,office_id); // ar.increase(txdate, description, amount);
+        await addDebit(fees,txdate,`Paypal fee for: ${description}`,fee,company_id, office_id); // fees.increase(txdate,`Paypal fee for: ${description}`,fee);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a commission payable transaction by creating necessary accounts and posting debit and credit entries.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - The amount of the commission.
+ * @param {number} [company_id=0] - The ID of the company (optional).
+ * @param {number} [office_id=0] - The ID of the office (optional).
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ */
+async function commissionPayable(txdate,description,amount,company_id=0,office_id=0) {
+    try {
+		var coa = new ChartOfAccounts();
+        await coa.add("Commission Expense","Expense");
+        await coa.add("Commission Payable","Liability");
+
+        var commission_payable = new Liability("Commission Payable");
+        var commission_expense = new Expense("Commission Expense");
+
+        await commission_expense.addDebit(txdate,description,amount,company_id,office_id);
+        await commission_payable.addCredit(txdate,description,amount,company_id,office_id);
+    } catch(err) {
+        error(JSON.stringify(err))
+    }
+}
+
+/**
+ * Records a commission payment transaction by updating the relevant accounts:
+ * - Adds "Commission Expense" (Expense), "Commission Payable" (Liability), and the specified asset account.
+ * - Debits "Commission Payable" and "Commission Expense" accounts.
+ * - Credits the specified asset account.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - Description of the commission payment.
+ * @param {number} amount - The amount of the commission paid.
+ * @param {string} [asset="Cash"] - The asset account to credit (default is "Cash").
+ * @param {number} [company_id=0] - The company identifier.
+ * @param {number} [office_id=0] - The office identifier.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * See https://www.accountingtools.com/articles/commission-expense-accounting#:~:text=Under%20the%20cash%20basis%20of,commission%20paid%20to%20the%20employee.
+ * 
+ */
+async function commissionPaid(txdate,description,amount,asset="Cash",company_id=0,office_id=0) {
+    try {
+		var coa = new ChartOfAccounts();
+        await coa.add("Commission Expense","Expense");
+        await coa.add("Commission Payable","Liability");
+        await coa.add(asset,"Asset");
+
+        var commission_payable = new Liability("Commission Payable");
+        var commission_expense = new Expense("Commission Expense");
+        var asset_account = new Asset(asset);
+
+        await commission_payable.addDebit(txdate,description,amount,company_id,office_id);
+        await commission_expense.addDebit(txdate,description,amount,company_id,office_id);
+        await asset_account.addCredit(txdate,description,amount,company_id,office_id);
+
+    } catch(err) {
+        error(JSON.stringify(err))
+    }
+}
+
+/**
+ * Allocates funding by creating and updating asset, equity, and expense accounts.
+ *
+ * @async
+ * @function allocateFundingAccount
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - Amount to allocate.
+ * @param {string} [asset="Cash"] - Name of the asset account.
+ * @param {string} [equity="FundingAllocation"] - Name of the equity account.
+ * @param {string} [expense="ApprovalRequest"] - Name of the expense account.
+ * @param {number} [company_id=0] - ID of the company (optional, not used in function).
+ * @param {number} [office_id=0] - ID of the office (optional, not used in function).
+ * @returns {Promise&lt;void>} Resolves when allocation is complete.
+ * @example
+ * In a double-entry accounting system, when allocating funds for a new approval request, 
+ * you typically use the following ledger accounts:
+ * 
+ * 1. Cash/Bank Account: This account tracks the cash or bank balance available in your 
+ *      organization. When funds are allocated for the new approval request, 
+ *      you'll debit this account to record the increase in the available funds.
+ * 2. Funding Allocation Account: This account is used to record the allocation of funds 
+ *      for specific purposes, projects, or approval requests. 
+ *      You'll credit this account to indicate that funds have been allocated for the 
+ *      new request.
+ * 3. Expense/Approval Request Account: This account tracks the expenses or costs associated 
+ *      with the approval requests. 
+ *      When the approval request is approved and the allocated funds are spent, 
+ *      you'll debit this account to record the expense.
+ * 
+ * Let's illustrate the double-entry accounting entries for allocating funds for a 
+ * new approval request:
+ * 
+ * 1. Initial Balance:
+ *    - Cash/Bank Account: $10,000 (Debit)
+ *    - Funding Allocation Account: $0 (Credit)
+ *    - Approval Request Account: $0 (Credit)
+ *    - Payment Account: $0 (Credit)
+ * 
+ * 2. Funding Allocation for New Approval Request:
+ *    - Cash/Bank Account: $10,000 (Debit)
+ *    - Funding Allocation Account: $1,000 (Credit)
+ *    - Approval Request Account: $0 (Credit)
+ *    - Payment Account: $0 (Credit)
+ * 
+ * 3. When the Approval Request is Approved and Funds are Spent:
+ *    - Cash/Bank Account: $9,000 (Debit) -> Actual cash spent on the approval request
+ *    - Funding Allocation Account: $0 (Debit) -> Funds used up
+ *    - Approval Request Account: $1,000 (Debit) -> Expense incurred
+ *    - Payment Account: $1,000 (Credit) -> Payment made for the approval request
+ * 
+ * The Payment Account is used to record the payment made (credit entry) when funds are spent 
+ * for the approved approval request. 
+ * This completes the accounting entries, showing the flow of funds from the Cash/Bank Account 
+ * to the Funding Allocation Account, Approval Request Account, 
+ * and finally, to the Payment Account.
+ * 
+ * Please note that the specific account names and chart of accounts might vary based on your 
+ * organization's accounting system and practices. 
+ * Always consult with your accounting department or a certified accountant to ensure accurate 
+ * and compliant bookkeeping for your business.
+ * 
+ */
+async function allocateFundingAccount(txdate,description,amount,asset="Cash",equity="FundingAllocation",expense="ApprovalRequest",company_id=0,office_id=0) {
+    try {
+		var coa = new ChartOfAccounts();
+        await coa.add(asset,"Cash");
+        await coa.add(equity,"Equity");
+        await coa.add(expense,"Expense");
+
+        var asset_account = new Asset(asset);
+        var funding_allocation_account = new Equity(equity);
+        var approval_request_account = new Expense(expense);
+
+        await asset_account.addDebit(txdate,description,amount,company_id,office_id);
+        await funding_allocation_account.addCredit(txdate,description,amount,company_id,office_id);
+        await approval_request_account.addCredit(txdate,description,0,company_id,office_id);
+    } catch(err) {
+        error(JSON.stringify(err));        
+    }
+}
+
+/**
+ * Records a funding allocation transaction by updating the relevant accounts:
+ * - Adds the specified accounts to the chart of accounts if they do not exist.
+ * - Credits the payable account.
+ * - Debits the funding allocation (equity) and approval request (expense) accounts.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - The amount to be recorded.
+ * @param {string} [payable="AccountPayable"] - The name of the payable account.
+ * @param {string} [equity="FundingAllocation"] - The name of the equity account.
+ * @param {string} [expense="ApprovalRequest"] - The name of the expense account.
+ * @param {number} [company_id=0] - The company ID (optional, default is 0).
+ * @param {number} [office_id=0] - The office ID (optional, default is 0).
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ */
+async function spendFundingAccount(txdate,description,amount,payable="AccountPayable",equity="FundingAllocation",expense="ApprovalRequest",company_id=0,office_id=0) {
+    try {
+		var coa = new ChartOfAccounts();
+        await coa.add(payable,"AccountPayable");
+        await coa.add(equity,"Equity");
+        await coa.add(expense,"Expense");
+
+        var payable_account = new Expense(payable);
+        var funding_allocation_account = new Equity(equity);
+        var approval_request_account = new Expense(expense);
+
+        await payable_account.addCredit(txdate,description,amount,company_id,office_id);
+        await funding_allocation_account.addDebit(txdate,description,amount,company_id,office_id);
+        await approval_request_account.addDebit(txdate,description,amount,company_id,office_id);
+    } catch(err) {
+        error(JSON.stringify(err));        
+    }
+}
+
+/**
+ * Debit Accounts: Assets &amp; Expenses
+ * From: https://www.keynotesupport.com/accounting/accounting-basics-debits-credits.shtml
+ * 
+ * Because Asset and Expense accounts maintain positive balances, they are positive, or debit 
+ * accounts. Accounting books will say “Accounts that normally have a positive balance are
+ *  increased with a Debit and decreased with a Credit.” Of course they are! Look at the 
+ * number line. If you add a positive number (debit) to a positive number, you get a bigger
+ * positive number. But if you start with a positive number and add a negative number 
+ * (credit), you get a smaller positive number (you move left on the number line). 
+ * The asset account called Cash, or the checking account, is unique in that it routinely
+ * receives debits and credits, but its goal is to maintain a positive balance!
+ */
+
+/**
+ * ELECT a.id,a.name,a.type,a.code,
+(SELECT COUNT(j.id) FROM journal  j JOIN accounts a ON j.account = a.name) AS count,
+IFNULL((SELECT  j.debit-j.credit  FROM journal j JOIN accounts a ON j.account=a.name) ,0.00) AS balance 
+FROM accounts  a WHERE a.company_id=1
+ */
+
+/**
+ * Records a software license transaction involving cryptocurrency, sales, transaction fees, and accounts receivable.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - The amount for the main transaction.
+ * @param {number} fee - The transaction fee amount.
+ * @param {string} [account="Cryptocurrency"] - The asset account to receive the monies
+ * @param {number} [company_id=0] - Optional company identifier.
+ * @param {number} [office_id=0] - Optional office identifier.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * When a software license is sold as an NFT and the payment is made using cryptocurrency, the accounting treatment involves recognizing both the sale of the NFT and the receipt of cryptocurrency. 
+ * Here's a general example based on accrual accounting principles:
+ * 
+ * 1. Record Revenue from NFT Sale:
+ *    - Debit: Cryptocurrency Asset (to recognize the increase in cryptocurrency)
+ *    - Credit: Sales Revenue (to recognize the revenue from the sale of the NFT)
+ * 
+ * 2. Recognize Revenue (if applicable):
+ *    If the software license provides future services or updates, and revenue recognition criteria are not met immediately, you may initially record unearned revenue:
+ *    - Debit: Unearned Revenue
+ *    - Credit: Sales Revenue
+ * 
+ * 3. Recognize Cryptocurrency Received:
+ *    - Debit: Cryptocurrency Asset (to recognize the receipt of cryptocurrency)
+ *    - Credit: Accounts Receivable or Cash (depending on whether the payment is immediate or if there is a delay)
+ * 
+ * 4. Record Any Transaction Fees:
+ *    If there are transaction fees associated with receiving cryptocurrency, record them:
+ *    - Debit: Transaction Fees Expense
+ *    - Credit: Cryptocurrency Asset (to reduce the amount received)
+ * 
+ * 5. Recognize Revenue (if applicable):
+ *    Once the revenue recognition criteria are met, move the unearned revenue to recognized revenue:
+ *    - Debit: Unearned Revenue
+ *    - Credit: Sales Revenue
+ * 
+ * 6. Fair Value Consideration:
+ *    Cryptocurrency values can be volatile, so it's important to consider fair value adjustments. If there are significant fluctuations in the value of the cryptocurrency between
+ *    the time of the sale and receipt, you may need to adjust the value of the cryptocurrency asset.
+ * 
+ * Keep in mind that accounting for cryptocurrency transactions can be complex due to the volatility of cryptocurrency values and regulatory considerations. 
+ * 
+ */
+async function softwareLicense(txdate,description,amount,fee,account="Cryptocurrency",company_id=0,office_id=0) {
+    try {
+		var coa = new ChartOfAccounts();
+        await coa.add(account, "Asset");
+		await coa.add("Sales", "Revenue");
+		await coa.add("Account Receivables", "Asset");
+        await coa.add("Transaction Fee","Expense");
+
+        var asset = new Asset(account);
+        var sales = new Revenue("Sales");
+        var transaction_fee = new Expense("Transaction Fee");
+        var account_receivable = new Expense("Account Receivables");
+
+        await asset.addDebit(txdate,description,amount,company_id,office_id);
+        await sales.addCredit(txdate,description,amount,company_id,office_id);
+        await account_receivable.addCredit(txdate,description,amount,company_id,office_id);
+        await transaction_fee.addDebit(txdate,`fee for ${description}`,fee,company_id,office_id);
+        await asset.addCredit(txdate,`fee for ${description}`,fee,company_id,office_id);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Exchanges cryptocurrency to USD and records the transaction in the accounting system.
+ *
+ * This function handles the accounting entries for exchanging cryptocurrency to USD,
+ * including handling transaction fees and gain/loss on the exchange.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The date of the transaction.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - The amount of cryptocurrency exchanged to USD.
+ * @param {number} fee - The transaction fee for the exchange.
+ * @param {number} [gainLoss=0] - The gain or loss from the exchange (positive for gain, negative for loss).
+ * @param {string} [account='Cash'] - The account to debit/credit (default is 'Cash').
+ * @param {number} [company_id=0] - The company ID associated with the transaction.
+ * @param {number} [office_id=0] - The office ID associated with the transaction.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * When you exchange cryptocurrency for USD (U.S. Dollars), 
+ * you'll need to record the transaction in your accounting records. 
+ * 
+ * Here's a general example based on accrual accounting principles:
+ * 
+ * 1. Record the Sale of Cryptocurrency:
+ *    - Debit: Cash (or Bank Account) - to increase the USD balance
+ *    - Credit: Cryptocurrency Asset - to decrease the value of the cryptocurrency being sold
+ * 
+ * 2. Recognize Gain or Loss:
+ *    If there is a gain or loss on the exchange due to changes in the value of the cryptocurrency, you may need to recognize it:
+ *    - Debit or Credit: Gain or Loss on Cryptocurrency Exchange - to capture any difference between the value of the cryptocurrency when acquired and its value when exchanged
+ * 
+ * 3. Record Any Transaction Fees:
+ *    If there are fees associated with the cryptocurrency exchange, record them separately:
+ *    - Debit: Transaction Fees Expense
+ *    - Credit: Cash (or Bank Account) - to reduce the amount received
+ * 
+ * Here's an example of the journal entry:
+ * 
+ * 
+ * | Account                                 | Debit ($)  | Credit ($) |
+ * |-----------------------------------------|------------|------------|
+ * | Cash or Bank Account                    | XXXX       |            |
+ * | Cryptocurrency Asset                    |            | XXXX       |
+ * | Gain or Loss on Cryptocurrency Exchange |  (or)      |  (or)      |
+ * | Transaction Fees Expense                | XXXX       |            |
+ * 
+ * 
+ * Please note that the specific accounts and amounts will depend on the details of your 
+ * transaction, such as the amount of cryptocurrency exchanged, any fees incurred, 
+ * and whether there is a gain or loss on the exchange.
+ * 
+ * It's essential to consult with an accountant or financial professional, especially when 
+ * dealing with cryptocurrency transactions, 
+ * as accounting treatment may vary based on specific circumstances and regulations. 
+ * Additionally, fair value adjustments may be necessary 
+ * if there are significant fluctuations in the value of the cryptocurrency.
+ * 
+ */
+async function exchangeCryptocurrencyToUSD(txdate,description,amount,fee,gainLoss=0,account='Cash',company_id=0,office_id=0) {
+    try {
+		var coa = new ChartOfAccounts();
+        await coa.add("Cryptocurrency", "Asset");
+		await coa.add(account, "Asset");
+        await coa.add("Transaction Fee","Expense");
+
+        var cryptocurrency = new Asset("Cryptocurrency");
+        var transaction_fee = new Expense("Transaction Fee");
+        var debitAccount = new Expense(account);
+
+        await debitAccount.addDebit(txdate,description,amount,company_id,office_id);
+        await cryptocurrency.addCredit(txdate,description,amount,company_id,office_id);
+        if (gainLoss > 0) {
+            await cryptocurrency.addDebit(txdate,`gain from ${description}`,gainLoss,company_id,office_id);
+        } else if (gainLoss &lt; 0) {
+            await cryptocurrency.addCredit(txdate,`loss from ${description}`,gainLoss,company_id,office_id);
+        }
+        await transaction_fee.addDebit(txdate,`fee for ${description}`,fee,company_id,office_id);
+        await debitAccount.addCredit(txdate,`fee for ${description}`,fee,company_id,office_id);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Exchanges a specified USD amount to cryptocurrency, recording the transaction and associated fee in the accounting system.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The date of the transaction.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The amount in USD to be exchanged for cryptocurrency.
+ * @param {number} fee - The transaction fee in USD.
+ * @param {string} [account='Cash'] - The account name from which the USD is debited.
+ * @param {number} [company_id=0] - The ID of the company associated with the transaction.
+ * @param {number} [office_id=0] - The ID of the office associated with the transaction.
+ * @returns {Promise&lt;void>} Resolves when the transaction is successfully recorded.
+ * @example
+ * When you exchange USD (U.S. Dollars) for cryptocurrency, you'll need to record the transaction in your accounting records. Here's a general example based on accrual accounting principles:
+ * 
+ * 1. Record the Purchase of Cryptocurrency:
+ *    - Debit: Cryptocurrency Asset - to increase the value of the cryptocurrency acquired
+ *    - Credit: Cash (or Bank Account) - to decrease the USD balance
+ * 
+ * 2. Recognize Any Transaction Fees:
+ *    If there are fees associated with the cryptocurrency purchase, record them separately:
+ *    - Debit: Cryptocurrency Asset - to increase the cost basis of the cryptocurrency
+ *    - Credit: Cash (or Bank Account) - to reduce the amount spent
+ * 
+ * Here's an example of the journal entry:
+ * 
+ * 
+ * | Account                            | Debit ($)  | Credit ($) |
+ * |------------------------------------|------------|------------|
+ * | Cryptocurrency Asset               | XXXX       |            |
+ * | Cash or Bank Account               |            | XXXX       |
+ * | Transaction Fees Expense           | XXXX       |            |
+ * 
+ * 
+ * Please note that the specific accounts and amounts will depend on the details of your transaction, such as the amount of cryptocurrency purchased and any associated fees.
+ * 
+ * It's important to consult with an accountant or financial professional when recording cryptocurrency transactions, as accounting treatment may vary based on specific circumstances and regulations. 
+ * Additionally, fair value adjustments may be necessary if there are significant fluctuations in the value of the cryptocurrency.
+ * 
+ */
+async function exchangeUSDToCryptocurrency(txdate,description,amount,fee,account='Cash',company_id=0,office_id=0) {
+    try {
+		var coa = new ChartOfAccounts();
+        await coa.add("Cryptocurrency", "Asset");
+		await coa.add(account, "Asset");
+        await coa.add("Transaction Fee","Expense");
+
+        var cryptocurrency = new Asset("Cryptocurrency");
+        var transaction_fee = new Expense("Transaction Fee");
+        var debitAccount = new Expense(account);
+
+        await cryptocurrency.addDebit(txdate,description,amount,company_id,office_id);
+        await debitAccount.addCredit(txdate,description,amount,company_id,office_id);
+        await transaction_fee.addDebit(txdate,`fee for ${description}`,fee,company_id,office_id);
+        await debitAccount.addCredit(txdate,`fee for ${description}`,fee,company_id,office_id);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a Google AdSense earning as a revenue transaction.
+ *
+ * @async
+ * @function
+ * @param {string|Date} txdate - The transaction date.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - The amount earned.
+ * @param {string} [account='Google Adsense Revenue'] - The account name to credit.
+ * @param {number} [company_id=0] - The company ID associated with the transaction.
+ * @param {number} [office_id=0] - The office ID associated with the transaction.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Bookkeeping Entry for Google AdSense Earnings:
+ * 
+ * Date: [Date of transaction]
+ * 
+ * 1. Initial Google AdSense Earnings:
+ *    - Account Credit: Google AdSense Revenue
+ *    - Amount: [Amount earned from Google AdSense]
+ * 
+ * 2. Upon Reaching Threshold Balance:
+ *    - Account Debit: Google AdSense Revenue
+ *    - Account Credit: Accounts Receivable (or Bank Account)
+ *    - Amount: [Threshold balance reached, typically $100]
+ * 
+ * 3. When Monies Received:
+ *    - Account Debit: Accounts Receivable (if applicable)
+ *    - Account Credit: Bank Account
+ *    - Amount: [Amount received from Google AdSense]
+ * 
+ * Note: Ensure to record the transactions accurately, with appropriate dates and amounts. Adjust accounts based on your specific bookkeeping system and accounting practices.
+ * 
+ * Account Types:
+ * Google AdSense Revenue   Type: Credit (Revenue account)
+ * Accounts Receivable      Type: Debit (Asset account)
+ * Bank Account             Type: Debit (Asset account)
+ * 
+ */
+async function googleAdsenseEarning(txdate,description,amount,account='Google Adsense Revenue',company_id=0,office_id=0) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add(account, "Revenue");
+
+        var adsense = new Revenue(account);
+        await addCredit(adsense,txdate,description,amount,company_id,office_id);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a Google Adsense payout transaction by updating the chart of accounts and creating corresponding debit and credit entries.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - A description of the transaction.
+ * @param {number} amount - The payout amount.
+ * @param {string} [account='Google Adsense Revenue'] - The revenue account name.
+ * @param {number} [company_id=0] - The company ID associated with the transaction.
+ * @param {number} [office_id=0] - The office ID associated with the transaction.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ */
+async function googleAdsensePayout(txdate,description,amount,account='Google Adsense Revenue',company_id=0,office_id=0) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add(account, "Revenue");
+        await coa.add("Account Receivables","Asset");
+
+        var adsense = new Revenue(account);
+        var ar = new Asset("Account Receivables")
+
+        await addDebit(adsense,txdate,description,amount,company_id,office_id);
+        await addCredit(ar,txdate,description,amount,company_id,office_id);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a Google AdSense payout transaction by updating the chart of accounts,
+ * adding the necessary bank and asset accounts, and creating corresponding debit and credit entries.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - The payout amount.
+ * @param {string} [account='Bank'] - The bank account name to receive the payout.
+ * @param {number} [company_id=0] - The company ID associated with the transaction.
+ * @param {number} [office_id=0] - The office ID associated with the transaction.
+ * @returns {Promise&lt;void>} Resolves when the payout is successfully recorded.
+ */
+async function googleAdsenseReceivePayout(txdate,description,amount,account='Bank',company_id=0,office_id=0) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add(account, "Bank");
+        await coa.add("Account Receivables","Asset");
+
+        var bank = new Bank(account);
+        var ar = new Asset("Account Receivables")
+
+        await addDebit(ar,txdate,description,amount,company_id,office_id);
+        await addCredit(bank,txdate,description,amount,company_id,office_id);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Adds funds to the "Postage Debit Account" by recording a debit in the asset account
+ * and a corresponding credit in the specified bank account.
+ *
+ * @async
+ * @function addFundsToPostageDebitAccount
+ * @param {string} txdate - The transaction date in a valid date format.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - The amount to be added to the postage debit account.
+ * @param {string} [account='Bank'] - The name of the bank account to credit.
+ * @param {number} [company_id=0] - The company identifier.
+ * @param {number} [office_id=0] - The office identifier.
+ * @returns {Promise&lt;void>} Resolves when the transaction is successfully recorded.
+ * @example
+ * Initial Transfer Entry
+ * 
+ * Debit: Postage Debit Account ($1,000)
+ * Credit: Cash/Bank Account ($1,000)
+ * 
+ * To record the transactions involving the CFO transferring funds to the postage debit account and the subsequent deductions for each letter or package sent by the mailroom, you would typically use a double-entry bookkeeping system. Here's how you might record these transactions:
+ * 
+ * 1. **Initial Transfer from CFO to Postage Debit Account:**
+ *    
+ *    Debit: Postage Debit Account
+ *    Credit: Cash/Bank Account
+ * 
+ *    This entry reflects the transfer of funds from the CFO to the postage debit account.
+ * 
+ * 2. **Cost Deduction for Sending Mail:**
+ * 
+ *    Debit: Postage Expense Account
+ *    Credit: Postage Debit Account
+ * 
+ * This entry records the expense incurred by the mailroom for sending mail. 
+ * The amount is deducted from the postage debit account.
+ * 
+ * Let's say, for example, the CFO transfers $1,000 to the postage debit account initially, 
+ * and then the mailroom sends a package costing $50 in postage:
+ * 
+ * 1. **Initial Transfer Entry:**
+ *    
+ *    Debit: Postage Debit Account ($1,000)
+ *    Credit: Cash/Bank Account ($1,000)
+ * 
+ * 2. **Cost Deduction Entry for Sending Mail:**
+ * 
+ *    Debit: Postage Expense Account ($50)
+ *    Credit: Postage Debit Account ($50)
+ * 
+ * These entries ensure that the transactions are accurately recorded, 
+ * reflecting both the transfer of funds and the associated expenses incurred by the mailroom.
+ */
+async function addFundsToPostageDebitAccount(txdate,description,amount,account='Bank',company_id=0,office_id=0) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add(account, "Bank");
+        await coa.add("Postage Debit Account","Asset");
+
+        var bank = new Bank(account);
+        var postage = new Asset("Postage Debit Account");
+
+        await postage.addDebit(txdate,description,amount,company_id,office_id);
+        await bank.addCredit(txdate,description,amount,company_id,office_id);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a postage expense transaction by updating the Chart of Accounts and creating corresponding debit and credit entries.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - The amount of the postage expense.
+ * @param {string} [account='Postage Expense Account'] - The expense account name.
+ * @param {number} [company_id=0] - The company identifier.
+ * @param {number} [office_id=0] - The office identifier.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Cost Deduction Entry for Sending Mail
+ * 
+ * Debit: Postage Expense Account ($50)
+ * Credit: Postage Debit Account ($50)
+ * 
+ */
+async function postageExpense(txdate,description,amount,account='Postage Expense Account',company_id=0,office_id=0) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add(account, "Expense");
+        await coa.add("Postage Debit Account","Asset");
+
+        var postageExpense = new Expense(account);
+        var postageDebit = new Asset("Postage Debit Account");
+
+        await postageExpense.addDebit(txdate,description,amount,company_id,office_id);
+        await postageDebit.addCredit(txdate,description,amount,company_id,office_id);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Records a pending purchase transaction by creating necessary chart of accounts entries,
+ * and posting corresponding debit and credit journal entries.
+ *
+ * @async
+ * @function pendingPurchase
+ * @param {string} txdate - The transaction date in a recognized date format.
+ * @param {string} description - A description of the purchase.
+ * @param {number} amount - The amount of the purchase.
+ * @param {string} [expense='Expense Account'] - The name of the expense account to debit.
+ * @param {number} [company_id=0] - The ID of the company associated with the transaction.
+ * @param {number} [office_id=0] - The ID of the office associated with the transaction.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ */
+async function pendingPurchase(txdate,description,amount,expense='Expense Account',company_id=0,office_id=0) {
+    try {
+		var coa = new ChartOfAccounts();
+		await coa.add(expense, "Expense");
+        await coa.add("Pending Purchases","Liability");
+
+        var expenseAccount = new Expense(expense);
+        var pendingPurchases = new Liability("Pending Purchases");
+
+        await addDebit(expenseAccount,txdate,description,amount,company_id,office_id);
+        await addCredit(pendingPurchases,txdate,description,amount,company_id,office_id)
+    } catch(err) {
+        error(JSON.stringify(err))
+    }
+}
+
+/**
+ * Clears a pending purchase by recording the appropriate debit and credit transactions.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - The description of the transaction.
+ * @param {number} amount - The amount of the transaction.
+ * @param {string} [bank='Bank'] - The name of the bank account to use.
+ * @param {number} [company_id=0] - The company ID associated with the transaction.
+ * @param {number} [office_id=0] - The office ID associated with the transaction.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ */
+async function pendingPurchaseCleared(txdate,description,amount,bank='Bank',company_id=0,office_id=0) {
+    try {
+		var coa = new ChartOfAccounts();
+        await coa.add(bank,"Bank");
+        await coa.add("Pending Purchases","Liability");
+
+        var bankAccount = new Bank(bank);
+        var pendingPurchases = new Liability("Pending Purchases");
+
+        await addDebit(pendingPurchases,txdate,description,amount,company_id,office_id);
+        await addCredit(bankAccount,txdate,description,amount,company_id,office_id)
+    } catch(err) {
+        error(JSON.stringify(err))
+    }
+}
+
+/**
+ * Marks a pending purchase as settled by clearing it.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - The description of the purchase.
+ * @param {number} amount - The amount of the purchase.
+ * @param {string} [bank='Bank'] - The bank associated with the purchase.
+ * @param {number} [company_id=0] - The ID of the company.
+ * @param {number} [office_id=0] - The ID of the office.
+ * @returns {Promise&lt;void>} Resolves when the purchase has been settled.
+ */
+async function pendingPurchaseSettled(txdate,description,amount,bank='Bank',company_id=0,office_id=0) {
+    await pendingPurchaseCleared(txdate,description,amount,bank,company_id,office_id);
+}
+
+/**
+ * To calculate the Additional Paid-In Capital (APIC), we need to compute the difference between the price at 
+ * which the shares were sold and the par value of the shares. If the price is greater than the par value, 
+ * that difference multiplied by the number of shares will give the APIC amount.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - Description of the transaction.
+ * @param {number} price - Price per share paid by the investor.
+ * @param {number} numberOfShares - Number of shares issued.
+ * @param {number} [parValue=5] - Par value per share (default is 5).
+ * @param {number} [company_id=0] - ID of the company (default is 0).
+ * @param {number} [office_id=0] - ID of the office (default is 0).
+ * @param {number} [user=0] - ID of the user performing the transaction (default is 0).
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Here's how you can calculate and handle APIC in the contribution method:
+ * 
+ * Formula for APIC:    APIC=(Price−Par Value)×Number of Shares
+ * 
+ * Company issues 1,000 shares at $10/share, par value is $5.
+ * | Account                           | Debit    | Credit  |
+ * | --------------------------------- | -------- | ------- |
+ * | Cash                              |  $10,000 |         |
+ * | Common Stock (Par Value)          |          |  $5,000 |
+ * | Additional Paid-In Capital (APIC) |          |  $5,000 |
+ * 
+ */
+async function apic(txdate, description, price, numberOfShares, parValue = 5, company_id=0, office_id=0, user=0) {
+    //const shareholder = new ShareholderEquity();
+    //shareholder.contribution(txdate,description,price,numberOfShares,user,parValue);
+    const coa = new ChartOfAccounts();
+    await coa.add("Cash", "Asset");
+    await coa.add("Common Stock (Par Value)", "Equity");
+    await coa.add("Additional Paid-In Capital (APIC)", "Equity");
+
+    let amount = Number(price * numberOfShares);  // Total amount paid by the investor
+    let apic = 0;  // Additional Paid-In Capital
+    let parValueAmount = 0;  // Total par value contribution
+
+    const cash = new Cash("Cash");
+    const commonStock = new Equity("Common Stock (Par Value)");
+    const additionalPaidInCapital = new Equity("Additional Paid-In Capital (APIC)");
+    await cash.increase(txdate, description, amount, company_id, office_id);  // Record cash received
+
+    // Check if price is greater than par value to calculate APIC
+    if (price > parValue) {
+        apic = Number(price - parValue) * numberOfShares;  // Calculate APIC
+        parValueAmount = Number(parValue * numberOfShares);  // Par value contribution
+        await commonStock.increase(txdate, description, parValueAmount, company_id, office_id);  // Record common stock at par value
+        await additionalPaidInCapital.increase(txdate, description, apic, company_id, office_id);  // Record APIC
+    } else {
+        parValueAmount = price * numberOfShares;  // If price is less than or equal to par value, use the price
+        await commonStock.increase(txdate, description, parValueAmount, company_id, office_id);  // Record common stock at par value
+    }
+}
+
+/**
+ * Records a new UCC lien transaction by updating relevant accounts:
+ * - Adds necessary accounts to the chart of accounts if they do not exist.
+ * - Decreases revenue, increases accounts receivable, bad debt expense, and allowance for doubtful accounts.
+ *
+ * @async
+ * @function uccLienNew
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - The transaction description.
+ * @param {number} amount - The amount for the transaction.
+ * @param {string} uccNo - The UCC lien number.
+ * @param {string} [account="Account Receivables"] - The account name for receivables.
+ * @param {number} [company_id=0] - The company identifier.
+ * @param {number} [office_id=0] - The office identifier.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * If a business files a **UCC lien** on another business for **unpaid revenue**, 
+ * it likely means the creditor (filing business) is trying to secure payment for money owed, 
+ * such as unpaid invoices or contractual obligations. 
+ * This situation is usually related to **accounts receivable** or a **breach of contract for revenue owed**.  
+ * 
+ * Bookkeeping Entries for the Creditor (Filing Business)
+ * If the business is owed revenue and has filed a UCC lien to secure the claim, it records the receivable:  
+ * 
+ * 1. Recording the Unpaid Revenue (Accounts Receivable)
+ *          Dr. Accounts Receivable         $50,000  
+ *              Cr. Revenue                   $50,000  
+ *
+ *      Dr. Accounts Receivable** → Recognizes the amount the other business owes.  
+ *      Cr. Revenue** → Recognizes the revenue earned but not received.  
+ *
+ * 2. Filing the UCC Lien (Securing the Debt)
+ * The lien itself is not a direct financial transaction but rather a legal claim. However, 
+ * to track the lien, the business may create a memo entry or an "Allowance for Doubtful Accounts" 
+ * if there's uncertainty about collection:  
+ *
+ *          Dr. Bad Debt Expense             $50,000  
+ *              Cr. Allowance for Doubtful Accounts  $50,000  
+ *
+ *      Dr. Bad Debt Expense** → Recognizes potential loss if the debt is uncollectible.  
+ *      Cr. Allowance for Doubtful Accounts** → Adjusts expected collectibility.  
+ * 
+ */
+async function uccLienNew(txdate,description,amount,uccNo,account="Account Receivables",company_id=0,office_id=0) {
+    const coa = new ChartOfAccounts();
+    await coa.add(account,"Asset");
+    await coa.add("Revenue","Revenue");
+    await coa.add("Bad Debt Expense","Expense");
+    await coa.add("Allowance for Doubtful Accounts","ContraAsset");
+
+    const ar = new Asset(account);
+    const revenue = new Revenue("Revenue");
+    const badDebt = new Expense("Bad Debt Expense");
+    const allowance = new ContraAsset("Allowance for Doubtful Accounts");
+
+    description = `${description} UCC Lien No: ${uccNo}`;
+
+    await revenue.decrease(txdate,description,amount,company_id,office_id);
+    await ar.increase(txdate,description,amount,company_id,office_id);
+    await badDebt.increase(txdate,description,amount,company_id,office_id);
+    await allowance.increase(txdate,description,amount,company_id,office_id);
+}
+
+/**
+ * Records accrued interest for a UCC lien transaction by updating the chart of accounts
+ * and adjusting the relevant asset and revenue accounts.
+ *
+ * @async
+ * @function uccLienAccruedInterest
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - The amount to increase in the asset account.
+ * @param {string} [account="Interest Receivable"] - The asset account to be used.
+ * @param {number} [company_id=0] - The company identifier.
+ * @param {number} [office_id=0] - The office identifier.
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * Accruing Interest on the Outstanding Debt
+ * If the lien allows interest to accrue (e.g., 10% annual interest), record the monthly interest earned:
+ *
+ *      Dr. Interest Receivable         $417  
+ *          Cr. Interest Income           $417  
+ * 
+ * (Assuming $50,000 × 10% ÷ 12 months = $417 per month)
+ *
+ *  Dr. Interest Receivable → Tracks interest due from the debtor.
+ *  Cr. Interest Income → Recognizes earned interest.
+ * 
+ *  Repeat this entry each month the debt remains unpaid.
+ * 
+ */
+async function uccLienAccruedInterest(txdate,description,amount,account="Interest Receivable",company_id=0,office_id=0) {
+    const coa = new ChartOfAccounts();
+    await coa.add(account,"Asset");
+    await coa.add("Interest Income","Revenue");
+
+    const ar = new Asset(account);
+    const interestIncome = new Revenue("Interest Income");
+
+    await ar.increase(txdate,description,amount,company_id,office_id);
+    await interestIncome.decrease(txdate,description,amount,company_id,office_id);
+}
+
+/**
+ * Records the payment of a UCC lien by updating relevant asset accounts.
+ *
+ * @async
+ * @function
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - Description of the transaction.
+ * @param {number} amount - The principal amount paid.
+ * @param {number} [interest=0] - The interest amount paid (optional).
+ * @param {string} [account="Account Receivable"] - The receivable account name (optional).
+ * @param {string} uccNo - The UCC lien number.
+ * @param {number} [company_id=0] - The company ID (optional).
+ * @param {number} [office_id=0] - The office ID (optional).
+ * @returns {Promise&lt;void>} Resolves when the transaction is recorded.
+ * @example
+ * If the Debt is Paid After the Lien
+ * When the business receives payment, reverse the receivable and record cash:  
+ *
+ *      Dr. Cash                         $50,000  
+ *          Cr. Accounts Receivable         $50,000  
+ *
+ *  Dr. Cash** → Increases cash balance.  
+ *  Cr. Accounts Receivable** → Clears the debt from the books.  
+ * 
+ */
+async function uccLienPaid(txdate,description,amount,interest=0,account="Account Receivable",uccNo,company_id=0,office_id=0) {
+    const coa = new ChartOfAccounts();
+    await coa.add(account,"Asset");
+    await coa.add("Cash","Asset");
+    await coa.add("Interest Receivable","Asset");
+
+    const ar = new Asset(account);
+    const cash = new Asset("Cash");
+    const interestReceivable = new Asset("Interest Receivable");
+
+    description = `${description} UCC Lien No: ${uccNo}`;
+
+    await ar.decrease(txdate,description,amount,company_id,office_id);
+    await interestReceivable.decrease(txdate,description,interest,company_id,office_id);
+    await cash.increase(txdate,description,amount,company_id,office_id);
+}
+
+/**
+ * Writes off a UCC lien by adjusting the relevant accounts: decreases Accounts Receivable and Interest Receivable,
+ * and increases Allowance for Doubtful Accounts.
+ *
+ * @async
+ * @function uccLienWriteOff
+ * @param {string} txdate - The transaction date.
+ * @param {string} description - The transaction description.
+ * @param {number} amount - The amount to write off.
+ * @param {string} [account="Account Receivable"] - The account to decrease (default is "Account Receivable").
+ * @param {string|number} uccNo - The UCC lien number.
+ * @param {number} [company_id=0] - The company ID (default is 0).
+ * @param {number} [office_id=0] - The office ID (default is 0).
+ * @returns {Promise&lt;void>} Resolves when the write-off is complete.
+ * @example
+ * If the Debt is Written Off
+ * If the debtor fails to pay and the lien does not result in collection:  
+ *
+ *      Dr. Allowance for Doubtful Accounts  $50,000  
+ *          Cr. Accounts Receivable         $50,000  
+ *
+ * Dr. Allowance for Doubtful Accounts** → Removes the expected bad debt.  
+ * Cr. Accounts Receivable** → Writes off the uncollectible balance.  
+ * 
+ */
+async function uccLienWriteOff(txdate,description,amount,account="Account Receivable",uccNo,company_id=0,office_id=0) {
+    const coa = new ChartOfAccounts();
+    await coa.add(account,"Asset");
+    await coa.add("Allowance for Doubtful Accounts","ContraAsset");
+    await coa.add("Interest Receivable","Asset");
+
+    const ar = new Asset(account);
+    const allowance = new ContraAsset("Allowance for Doubtful Accounts");
+    const interestReceivable = new Asset("Interest Receivable");
+
+    description = `${description} UCC Lien No: ${uccNo}`;
+
+    await ar.decrease(txdate,description,amount,company_id,office_id);
+    await interestReceivable.decrease(txdate,description,amount,company_id,office_id);
+    await allowance.increase(txdate,description,amount,company_id,office_id);
+}
+
+/**
+ * MRR: Monthly Recurring Revenue
+ * This function records the MRR by recognizing unearned revenue and increasing accounts receivable.
+ * 
+ * ASC 606 (Revenue from Contracts with Customers) governs the recognition of MRR.
+ * Specifically, ASC 606-10-25 (Recognition: Identifying Performance Obligations) and
+ * ASC 606-10-45 (Presentation: Contract Assets and Contract Liabilities) apply.
+ * 
+ * Under ASC 606, revenue is recognized when control of goods or services is transferred to the customer,
+ * and unearned revenue (contract liability) is recognized when cash or receivable is recorded before performance.
+ */
+async function mrr(txdate,description,amount,account="Unerned Revenue",company_id=0,office_id=0) {
+    const coa = new ChartOfAccounts();
+    await coa.add(account,"Liability");
+    await coa.add("Accounts Receivable","Asset");
+
+    const unearnedRevenue = new Liability(account);
+    const ar = new Asset("Accounts Receivable");
+    await ar.decrease(txdate,description,amount,company_id,office_id);
+    await unearnedRevenue.increase(txdate,description,amount,company_id,office_id);
+}
+
+/**
+ * MRR: Monthly Recurring Revenue Earned
+ * This function records the earned MRR by recognizing revenue and reducing unearned revenue.
+ * 
+ * ASC 606 (Revenue from Contracts with Customers) governs the recognition of earned MRR.
+ * Specifically, ASC 606-10-25 (Recognition: Identifying Performance Obligations) and
+ * ASC 606-10-45 (Presentation: Contract Assets and Contract Liabilities) apply.
+ * 
+ * Under ASC 606, revenue is recognized when control of goods or services is transferred to the customer,
+ * and unearned revenue (contract liability) is reduced as performance obligations are satisfied.
+ */
+async function mrrEarned(txdate,description,amount,account="Subscription Revenue",company_id=0,office_id=0) {
+    const coa = new ChartOfAccounts();
+    await coa.add(account,"Revenue");
+    await coa.add("Unearned Revenue","Liability");
+
+    const revenue = new Revenue(account);
+    const unearnedRevenue = new Liability("Unearned Revenue");
+    await revenue.increase(txdate,description,amount,company_id,office_id);
+    await unearnedRevenue.decrease(txdate,description,amount,company_id,office_id);
+}
+/**
+ * MRR: Monthly Recurring Revenue Received
+ * This function records the received MRR by recognizing cash and reducing accounts receivable.
+ * 
+ * ASC 606-10-25 (Revenue from Contracts with Customers) governs the recognition of revenue, including MRR.
+ * When cash is received for previously invoiced MRR, ASC 606-10-45-1 (Presentation: Contract Assets and Contract Liabilities) applies.
+ * The reduction of accounts receivable and increase in cash is a standard receivables settlement under ASC 606.
+ */
+async function mrrReceived(txdate,description,amount,account="Accounts Receivable",company_id=0,office_id=0) {
+    const coa = new ChartOfAccounts();
+    await coa.add(account,"Asset");
+    await coa.add("Cash","Cash");
+
+    const cash = new Cash("Cash");
+    const ar = new Asset("Accounts Receivable");
+    await ar.decrease(txdate,description,amount,company_id,office_id);
+    await cash.increase(txdate,description,amount,company_id,office_id);
+}
+
+/**
+ * Recording CMRR (Committed Monthly Recurring Revenue)
+ * CMRR adjusts MRR by accounting for committed changes, including:
+ * 
+ * Expansions (Upsells)
+ * Contractions (Downgrades)
+ * Churn (Cancellations)
+ * 
+ * Scenario:
+ * A customer upgrades their subscription from $500 to $700 next month.
+ * Another customer cancels a $200 plan effective next month.
+ * Adjustment Entry for Future Revenue Commitment (CMRR Update):
+ * 
+ *      CMRR Adjustment (Off-Balance Sheet)   $200  
+ * 
+ * This adjustment does not impact financial statements immediately but helps forecast future revenue trends.
+ * 
+ * ASC 606-10-25 (Revenue from Contracts with Customers) governs the recognition of CMRR.
+ */
+
+async function cmrr(changes="Expansions",txdate,description,amount,account="Revenue",company_id=0,office_id=0) {
+    const coa = new ChartOfAccounts();
+    await coa.add(account,"Revenue");
+
+    const revenue = new Revenue(account);
+
+    switch (changes) {
+        case "Expansions":
+            description = `${description} - Upsell`;
+            await revenue.increase(txdate,description,amount,company_id,office_id);        
+            break;
+        case "Contractions":
+            description = `${description} - Downgrade`;
+            await revenue.decrease(txdate,description,amount,company_id,office_id);
+            break;
+        case "Churn":
+            description = `${description} - Cancellation`;
+            await revenue.decrease(txdate,description,amount,company_id,office_id);
+            break;
+    }
+}
+
+/**
+ * Adds a new location with its region to the database, or updates the region if the location already exists.
+ *
+ * @async
+ * @function locationAdd
+ * @param {string} location - The name of the location to add or update.
+ * @param {string} region - The region associated with the location.
+ * @returns {Promise&lt;any>} The result of the database insert or update operation.
+ */
+async function locationAdd(location,region) {
+    try {
+        const model = new Model();
+
+        var sql = `INSERT INTO locations (location,region) VALUES (?,?);`; // ON CONFLICT(location) DO UPDATE SET region=excluded.region;`;
+        const params = [location,region];
+        return await model.insertSync(sql,params);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Updates the location ID for a specific account in the ledger.
+ *
+ * @async
+ * @function locationUpdate
+ * @param {string} name - The name of the account to update.
+ * @param {string} type - The type of the account to update.
+ * @param {number|string} locationId - The new location ID to set for the account.
+ * @returns {Promise&lt;*>} The result of the update operation.
+ */
+async function locationUpdate(name, code, locationId) {
+    try {
+        const model = new Model();
+        var sql = `UPDATE ledger SET location=? WHERE account_name=? AND account_code=?;`;
+        const params = [locationId, name, code];
+        return await model.updateSync(sql,params);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Deletes a location from the database if it does not exist in the ledger table.
+ *
+ * @async
+ * @function locationDelete
+ * @param {number|string} locationId - The ID of the location to delete.
+ * @returns {Promise&lt;*>} The result of the delete operation.
+ * @throws Will log an error if the deletion fails.
+ */
+async function locationDelete(locationId) {
+    try {
+        const model = new Model();
+
+        var sql = `DELETE FROM locations WHERE id=? AND NOT EXISTS (SELECT 1 FROM ledger WHERE location=?);`;
+        const params = [locationId,locationId];
+        return await model.deleteSync(sql,params);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+/**
+ * Deletes a location from the 'locations' table based on the account name,
+ * only if there are no other ledger entries referencing that location.
+ *
+ * @async
+ * @function locationDeleteByName
+ * @param {string} name - The account name used to find the associated location.
+ * @returns {Promise&lt;*>} The result of the delete operation.
+ * @throws Will log an error if the operation fails.
+ */
+async function locationDeleteByName(name) {
+    try {
+        const model = new Model();
+
+        var sql = `DELETE FROM locations WHERE location=? AND NOT EXISTS (SELECT 1 FROM ledger WHERE location=(SELECT id FROM locations WHERE location=?));`;
+        const params = [name,name];
+        return await model.deleteSync(sql,params);
+    } catch(err) {
+        error(JSON.stringify(err));
+    }
+}
+
+
+module.exports = {
+    createAccountInstance,
+    createAccount,
+    getUsersByType,
+    addCredit,
+    addDebit,
+    addJournalTransaction,
+    editJournalTransaction,
+    asset,
+    expense,
+    liability,
+    equity,
+    revenue,
+    isJournalInbalance,
+    investment,
+    encumber,
+    bankfee,
+    loanPayment,
+    payAssetsByCheck,
+    payAssetsByCredit,
+    payExpenseByCheck,
+    payExpenseByCard,
+    cardPayment,
+    cashPayment,
+    salesCash,
+    salesCard,
+    salesViaPaypal,
+    accountsReceivablePayment,
+    distribution,
+    COGS,
+    unearnedRevenue,
+    badDebt,
+    accruedIncome,
+    accruedIncomePayment,
+    accruedExpense,
+    dividendDeclared,
+    dividendPaid,
+    securityDepositReceived,
+    securityDepositPaid,
+    deferredRevenue,
+    recognizeDeferredRevenue,
+    deferredExpense,
+    recognizeDeferredExpense,
+    prepaidSubscriptions,
+    recognizePrepaidSubscription,
+    paidInCapitalStock,
+    stockDividend,
+    cashDividendDeclared,
+    cashDividendPayable,
+    stocksIssuedOtherThanCash,
+    workingHours,
+    payrollPayable,
+    accruedInterest,
+    interestExpense,
+    bondsIssuedWOAccruedInterest,
+    bondsIssuedWithAccruedInterest,
+    bondPremium,
+    bondPremiumInterestPayment,
+    bondDiscount,
+    initializeEquity,
+    commissionPayable,
+    commissionPaid,
+    allocateFundingAccount,
+    spendFundingAccount,
+    softwareLicense,
+    exchangeCryptocurrencyToUSD,
+    exchangeUSDToCryptocurrency,
+    googleAdsenseEarning,
+    googleAdsensePayout,
+    googleAdsenseReceivePayout,
+    addFundsToPostageDebitAccount,
+    postageExpense,
+    pendingPurchase,
+    pendingPurchaseCleared,
+    pendingPurchaseSettled,
+    DynamicPricing: require('./pricing'),
+    apic,
+    uccLienNew,
+    uccLienAccruedInterest,
+    uccLienPaid,
+    uccLienWriteOff,
+    locationAdd,
+    locationDelete,
+    locationDeleteByName,
+    locationUpdate,
+    mrr,
+    mrrEarned,
+    mrrReceived,
+    cmrr,
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="DynamicPricing.html">DynamicPricing</a></li></ul><h3>Global</h3><ul><li><a href="global.html#COGS">COGS</a></li><li><a href="global.html#accountsReceivablePayment">accountsReceivablePayment</a></li><li><a href="global.html#accruedExpense">accruedExpense</a></li><li><a href="global.html#accruedIncome">accruedIncome</a></li><li><a href="global.html#accruedIncomePayment">accruedIncomePayment</a></li><li><a href="global.html#accruedInterest">accruedInterest</a></li><li><a href="global.html#addCredit">addCredit</a></li><li><a href="global.html#addDebit">addDebit</a></li><li><a href="global.html#addFundsToPostageDebitAccount">addFundsToPostageDebitAccount</a></li><li><a href="global.html#addJournalTransaction">addJournalTransaction</a></li><li><a href="global.html#allocateFundingAccount">allocateFundingAccount</a></li><li><a href="global.html#apic">apic</a></li><li><a href="global.html#asset">asset</a></li><li><a href="global.html#badDebt">badDebt</a></li><li><a href="global.html#bankfee">bankfee</a></li><li><a href="global.html#bondDiscount">bondDiscount</a></li><li><a href="global.html#bondPremium">bondPremium</a></li><li><a href="global.html#bondPremiumInterestPayment">bondPremiumInterestPayment</a></li><li><a href="global.html#bondsIssuedWOAccruedInterest">bondsIssuedWOAccruedInterest</a></li><li><a href="global.html#bondsIssuedWithAccruedInterest">bondsIssuedWithAccruedInterest</a></li><li><a href="global.html#cardPayment">cardPayment</a></li><li><a href="global.html#cashDividendDeclared">cashDividendDeclared</a></li><li><a href="global.html#cashDividendPayable">cashDividendPayable</a></li><li><a href="global.html#cashPayment">cashPayment</a></li><li><a href="global.html#cmrr">cmrr</a></li><li><a href="global.html#commissionPaid">commissionPaid</a></li><li><a href="global.html#commissionPayable">commissionPayable</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#createAccountInstance">createAccountInstance</a></li><li><a href="global.html#deferredExpense">deferredExpense</a></li><li><a href="global.html#deferredRevenue">deferredRevenue</a></li><li><a href="global.html#distribution">distribution</a></li><li><a href="global.html#dividendDeclared">dividendDeclared</a></li><li><a href="global.html#dividendPaid">dividendPaid</a></li><li><a href="global.html#editJournalTransaction">editJournalTransaction</a></li><li><a href="global.html#encumber">encumber</a></li><li><a href="global.html#equity">equity</a></li><li><a href="global.html#exchangeCryptocurrencyToUSD">exchangeCryptocurrencyToUSD</a></li><li><a href="global.html#exchangeUSDToCryptocurrency">exchangeUSDToCryptocurrency</a></li><li><a href="global.html#expense">expense</a></li><li><a href="global.html#fs">fs</a></li><li><a href="global.html#getUsersByType">getUsersByType</a></li><li><a href="global.html#googleAdsenseEarning">googleAdsenseEarning</a></li><li><a href="global.html#googleAdsensePayout">googleAdsensePayout</a></li><li><a href="global.html#googleAdsenseReceivePayout">googleAdsenseReceivePayout</a></li><li><a href="global.html#initializeEquity">initializeEquity</a></li><li><a href="global.html#interestExpense">interestExpense</a></li><li><a href="global.html#investment">investment</a></li><li><a href="global.html#isJournalInbalance">isJournalInbalance</a></li><li><a href="global.html#liability">liability</a></li><li><a href="global.html#loanPayment">loanPayment</a></li><li><a href="global.html#locationAdd">locationAdd</a></li><li><a href="global.html#locationDelete">locationDelete</a></li><li><a href="global.html#locationDeleteByName">locationDeleteByName</a></li><li><a href="global.html#locationUpdate">locationUpdate</a></li><li><a href="global.html#mrr">mrr</a></li><li><a href="global.html#mrrEarned">mrrEarned</a></li><li><a href="global.html#mrrReceived">mrrReceived</a></li><li><a href="global.html#paidInCapitalStock">paidInCapitalStock</a></li><li><a href="global.html#payAssetsByCheck">payAssetsByCheck</a></li><li><a href="global.html#payAssetsByCredit">payAssetsByCredit</a></li><li><a href="global.html#payExpenseByCard">payExpenseByCard</a></li><li><a href="global.html#payExpenseByCheck">payExpenseByCheck</a></li><li><a href="global.html#payrollPayable">payrollPayable</a></li><li><a href="global.html#pendingPurchase">pendingPurchase</a></li><li><a href="global.html#pendingPurchaseCleared">pendingPurchaseCleared</a></li><li><a href="global.html#pendingPurchaseSettled">pendingPurchaseSettled</a></li><li><a href="global.html#postageExpense">postageExpense</a></li><li><a href="global.html#prepaidSubscriptions">prepaidSubscriptions</a></li><li><a href="global.html#recognizeDeferredExpense">recognizeDeferredExpense</a></li><li><a href="global.html#recognizeDeferredRevenue">recognizeDeferredRevenue</a></li><li><a href="global.html#recognizePrepaidSubscription">recognizePrepaidSubscription</a></li><li><a href="global.html#revenue">revenue</a></li><li><a href="global.html#salesCard">salesCard</a></li><li><a href="global.html#salesCash">salesCash</a></li><li><a href="global.html#salesViaPaypal">salesViaPaypal</a></li><li><a href="global.html#securityDepositPaid">securityDepositPaid</a></li><li><a href="global.html#securityDepositReceived">securityDepositReceived</a></li><li><a href="global.html#softwareLicense">softwareLicense</a></li><li><a href="global.html#spendFundingAccount">spendFundingAccount</a></li><li><a href="global.html#stockDividend">stockDividend</a></li><li><a href="global.html#stocksIssuedOtherThanCash">stocksIssuedOtherThanCash</a></li><li><a href="global.html#uccLienAccruedInterest">uccLienAccruedInterest</a></li><li><a href="global.html#uccLienNew">uccLienNew</a></li><li><a href="global.html#uccLienPaid">uccLienPaid</a></li><li><a href="global.html#uccLienWriteOff">uccLienWriteOff</a></li><li><a href="global.html#unearnedRevenue">unearnedRevenue</a></li><li><a href="global.html#workingHours">workingHours</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Jun 17 2025 21:02:57 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

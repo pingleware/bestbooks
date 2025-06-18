@@ -1,0 +1,3006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: DynamicPricing</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: DynamicPricing</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>DynamicPricing<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">This class offers methods to calculate prices based on different market factors like demand, supply, competitor prices, user growth, urgency, and environmental factors.It supports industry-specific pricing models and a general pricing formula.</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="DynamicPricing"><span class="type-signature"></span>new DynamicPricing<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="pricing.js.html">pricing.js</a>, <a href="pricing.js.html#line16">line 16</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const pricing = new DynamicPricing(100);const price = pricing.calculatePrice('retail', { demand: 50, supply: 30, maxSupply: 100, competitorPrice: 95 });</code></pre>
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="airlinePricing"><span class="type-signature"></span>airlinePricing<span class="signature">(seatsSold, seatsAvailable, totalSeats, timeLeft, maxTime, sensitivity<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Calculates the dynamic airline ticket price based on seats sold, availability, and time left.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>seatsSold</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The number of seats that have already been sold.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>seatsAvailable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The number of seats currently available for sale.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>totalSeats</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The total number of seats on the flight.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>timeLeft</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The amount of time left (in the same units as maxTime) before the flight departs.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxTime</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The maximum time window for ticket sales (e.g., total time from ticket release to departure).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sensitivity</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0.5
+                
+                </td>
+            
+
+            <td class="description last">A factor that adjusts how sensitive the price is to seat availability.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="pricing.js.html">pricing.js</a>, <a href="pricing.js.html#line77">line 77</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The dynamically calculated ticket price.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="calculatePrice"><span class="type-signature"></span>calculatePrice<span class="signature">(industry, params)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Calculates the price based on the specified industry and parameters.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>industry</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The industry type (e.g., 'retail', 'saas', 'airline', 'gig', 'energy').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The parameters required for the pricing calculation, which vary by industry:
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>demand</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Demand value (used in 'retail' and 'energy').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>supply</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Supply value (used in 'retail' and 'energy').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxSupply</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Maximum supply (used in 'retail', 'energy', and default).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>competitorPrice</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Competitor price (used in 'retail').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sensitivity</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Sensitivity factor (used in all industries).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>newUsers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Number of new users (used in 'saas').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>lostUsers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Number of lost users (used in 'saas').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>totalUsers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Total number of users (used in 'saas').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>lifetimeValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Customer lifetime value (used in 'saas').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>acquisitionCost</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Customer acquisition cost (used in 'saas').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>seatsSold</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Number of seats sold (used in 'airline').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>seatsAvailable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Number of seats available (used in 'airline').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>totalSeats</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Total number of seats (used in 'airline').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>timeLeft</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Time left until departure (used in 'airline').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxTime</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Maximum time window (used in 'airline').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>activeRequests</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Number of active gig requests (used in 'gig').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>availableWorkers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Number of available workers (used in 'gig').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxWorkers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Maximum number of workers (used in 'gig').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>urgencyFactor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Urgency factor (used in 'gig').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>environmentalFactor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Environmental factor (used in 'energy').</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="pricing.js.html">pricing.js</a>, <a href="pricing.js.html#line138">line 138</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The calculated price for the given industry and parameters.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="energyPricing"><span class="type-signature"></span>energyPricing<span class="signature">(demand, supply, maxSupply, environmentalFactor<span class="signature-attributes">opt</span>, sensitivity<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Calculates the dynamic energy price based on demand, supply, maximum supply, environmental factors, and sensitivity.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>demand</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The current energy demand.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>supply</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The current energy supply.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxSupply</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The maximum possible energy supply.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>environmentalFactor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    1.1
+                
+                </td>
+            
+
+            <td class="description last">A multiplier reflecting environmental impact.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sensitivity</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0.5
+                
+                </td>
+            
+
+            <td class="description last">Sensitivity factor for price adjustment.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="pricing.js.html">pricing.js</a>, <a href="pricing.js.html#line107">line 107</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The calculated energy price.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="generalPricing"><span class="type-signature"></span>generalPricing<span class="signature">(demand, supply, maxSupply, sensitivity<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Calculates the general pricing based on demand, supply, maximum supply, and sensitivity.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>demand</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The current demand for the item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>supply</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The current supply of the item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxSupply</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The maximum possible supply of the item.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sensitivity</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0.5
+                
+                </td>
+            
+
+            <td class="description last">The sensitivity factor for price adjustment.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="pricing.js.html">pricing.js</a>, <a href="pricing.js.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The calculated price based on the provided parameters.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="gigPricing"><span class="type-signature"></span>gigPricing<span class="signature">(activeRequests, availableWorkers, maxWorkers, urgencyFactor<span class="signature-attributes">opt</span>, sensitivity<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Calculates the gig pricing based on current demand, worker availability, and urgency.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>activeRequests</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The number of active requests.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>availableWorkers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The number of available workers.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxWorkers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The maximum number of workers.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>urgencyFactor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    1.2
+                
+                </td>
+            
+
+            <td class="description last">A multiplier to adjust price based on urgency.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sensitivity</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0.5
+                
+                </td>
+            
+
+            <td class="description last">Sensitivity factor for price adjustment.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="pricing.js.html">pricing.js</a>, <a href="pricing.js.html#line92">line 92</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The calculated price for the gig.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="retailPricing"><span class="type-signature"></span>retailPricing<span class="signature">(demand, supply, maxSupply, competitorPrice, sensitivity<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Calculates the retail price based on demand, supply, maximum supply, competitor price, and sensitivity.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>demand</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The current demand for the product.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>supply</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The current supply of the product.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxSupply</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The maximum possible supply of the product.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>competitorPrice</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The price set by a competitor.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sensitivity</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0.5
+                
+                </td>
+            
+
+            <td class="description last">The sensitivity factor for price adjustment.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="pricing.js.html">pricing.js</a>, <a href="pricing.js.html#line44">line 44</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The calculated retail price.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="saasPricing"><span class="type-signature"></span>saasPricing<span class="signature">(newUsers, lostUsers, totalUsers, lifetimeValue, acquisitionCost, sensitivity<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Calculates the SaaS pricing based on user growth, lifetime value, and acquisition cost.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>newUsers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The number of new users acquired.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>lostUsers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The number of users lost.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>totalUsers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The total number of users.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>lifetimeValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The average lifetime value of a user.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>acquisitionCost</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The cost to acquire a new user.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sensitivity</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0.5
+                
+                </td>
+            
+
+            <td class="description last">The sensitivity factor for pricing adjustment.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="pricing.js.html">pricing.js</a>, <a href="pricing.js.html#line60">line 60</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The calculated SaaS price.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="DynamicPricing.html">DynamicPricing</a></li></ul><h3>Global</h3><ul><li><a href="global.html#COGS">COGS</a></li><li><a href="global.html#accountsReceivablePayment">accountsReceivablePayment</a></li><li><a href="global.html#accruedExpense">accruedExpense</a></li><li><a href="global.html#accruedIncome">accruedIncome</a></li><li><a href="global.html#accruedIncomePayment">accruedIncomePayment</a></li><li><a href="global.html#accruedInterest">accruedInterest</a></li><li><a href="global.html#addCredit">addCredit</a></li><li><a href="global.html#addDebit">addDebit</a></li><li><a href="global.html#addFundsToPostageDebitAccount">addFundsToPostageDebitAccount</a></li><li><a href="global.html#addJournalTransaction">addJournalTransaction</a></li><li><a href="global.html#allocateFundingAccount">allocateFundingAccount</a></li><li><a href="global.html#apic">apic</a></li><li><a href="global.html#asset">asset</a></li><li><a href="global.html#badDebt">badDebt</a></li><li><a href="global.html#bankfee">bankfee</a></li><li><a href="global.html#bondDiscount">bondDiscount</a></li><li><a href="global.html#bondPremium">bondPremium</a></li><li><a href="global.html#bondPremiumInterestPayment">bondPremiumInterestPayment</a></li><li><a href="global.html#bondsIssuedWOAccruedInterest">bondsIssuedWOAccruedInterest</a></li><li><a href="global.html#bondsIssuedWithAccruedInterest">bondsIssuedWithAccruedInterest</a></li><li><a href="global.html#cardPayment">cardPayment</a></li><li><a href="global.html#cashDividendDeclared">cashDividendDeclared</a></li><li><a href="global.html#cashDividendPayable">cashDividendPayable</a></li><li><a href="global.html#cashPayment">cashPayment</a></li><li><a href="global.html#cmrr">cmrr</a></li><li><a href="global.html#commissionPaid">commissionPaid</a></li><li><a href="global.html#commissionPayable">commissionPayable</a></li><li><a href="global.html#createAccount">createAccount</a></li><li><a href="global.html#createAccountInstance">createAccountInstance</a></li><li><a href="global.html#deferredExpense">deferredExpense</a></li><li><a href="global.html#deferredRevenue">deferredRevenue</a></li><li><a href="global.html#distribution">distribution</a></li><li><a href="global.html#dividendDeclared">dividendDeclared</a></li><li><a href="global.html#dividendPaid">dividendPaid</a></li><li><a href="global.html#editJournalTransaction">editJournalTransaction</a></li><li><a href="global.html#encumber">encumber</a></li><li><a href="global.html#equity">equity</a></li><li><a href="global.html#exchangeCryptocurrencyToUSD">exchangeCryptocurrencyToUSD</a></li><li><a href="global.html#exchangeUSDToCryptocurrency">exchangeUSDToCryptocurrency</a></li><li><a href="global.html#expense">expense</a></li><li><a href="global.html#fs">fs</a></li><li><a href="global.html#getUsersByType">getUsersByType</a></li><li><a href="global.html#googleAdsenseEarning">googleAdsenseEarning</a></li><li><a href="global.html#googleAdsensePayout">googleAdsensePayout</a></li><li><a href="global.html#googleAdsenseReceivePayout">googleAdsenseReceivePayout</a></li><li><a href="global.html#initializeEquity">initializeEquity</a></li><li><a href="global.html#interestExpense">interestExpense</a></li><li><a href="global.html#investment">investment</a></li><li><a href="global.html#isJournalInbalance">isJournalInbalance</a></li><li><a href="global.html#liability">liability</a></li><li><a href="global.html#loanPayment">loanPayment</a></li><li><a href="global.html#locationAdd">locationAdd</a></li><li><a href="global.html#locationDelete">locationDelete</a></li><li><a href="global.html#locationDeleteByName">locationDeleteByName</a></li><li><a href="global.html#locationUpdate">locationUpdate</a></li><li><a href="global.html#mrr">mrr</a></li><li><a href="global.html#mrrEarned">mrrEarned</a></li><li><a href="global.html#mrrReceived">mrrReceived</a></li><li><a href="global.html#paidInCapitalStock">paidInCapitalStock</a></li><li><a href="global.html#payAssetsByCheck">payAssetsByCheck</a></li><li><a href="global.html#payAssetsByCredit">payAssetsByCredit</a></li><li><a href="global.html#payExpenseByCard">payExpenseByCard</a></li><li><a href="global.html#payExpenseByCheck">payExpenseByCheck</a></li><li><a href="global.html#payrollPayable">payrollPayable</a></li><li><a href="global.html#pendingPurchase">pendingPurchase</a></li><li><a href="global.html#pendingPurchaseCleared">pendingPurchaseCleared</a></li><li><a href="global.html#pendingPurchaseSettled">pendingPurchaseSettled</a></li><li><a href="global.html#postageExpense">postageExpense</a></li><li><a href="global.html#prepaidSubscriptions">prepaidSubscriptions</a></li><li><a href="global.html#recognizeDeferredExpense">recognizeDeferredExpense</a></li><li><a href="global.html#recognizeDeferredRevenue">recognizeDeferredRevenue</a></li><li><a href="global.html#recognizePrepaidSubscription">recognizePrepaidSubscription</a></li><li><a href="global.html#revenue">revenue</a></li><li><a href="global.html#salesCard">salesCard</a></li><li><a href="global.html#salesCash">salesCash</a></li><li><a href="global.html#salesViaPaypal">salesViaPaypal</a></li><li><a href="global.html#securityDepositPaid">securityDepositPaid</a></li><li><a href="global.html#securityDepositReceived">securityDepositReceived</a></li><li><a href="global.html#softwareLicense">softwareLicense</a></li><li><a href="global.html#spendFundingAccount">spendFundingAccount</a></li><li><a href="global.html#stockDividend">stockDividend</a></li><li><a href="global.html#stocksIssuedOtherThanCash">stocksIssuedOtherThanCash</a></li><li><a href="global.html#uccLienAccruedInterest">uccLienAccruedInterest</a></li><li><a href="global.html#uccLienNew">uccLienNew</a></li><li><a href="global.html#uccLienPaid">uccLienPaid</a></li><li><a href="global.html#uccLienWriteOff">uccLienWriteOff</a></li><li><a href="global.html#unearnedRevenue">unearnedRevenue</a></li><li><a href="global.html#workingHours">workingHours</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue Jun 17 2025 21:02:57 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
