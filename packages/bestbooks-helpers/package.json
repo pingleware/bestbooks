@@ -6,7 +6,9 @@
   "scripts": {
     "test": "mocha --sort --timeouts 3000",
     "create:tests": "node generateTest.js",
-    "doc": "jsdoc -c jsdoc.json"
+    "doc": "npm run doc:html && npm run doc:md",
+    "doc:html": "jsdoc -c jsdoc.json",
+    "doc:md": "npx jsdoc-to-markdown index.js > docs/README.md"
   },
   "keywords": [
     "bestbooks",
